@@ -8,7 +8,7 @@ import {
   Sparkles,
   ScrollControls,
   Scroll,
-  MeshDistortMaterial,
+  MeshTransmissionMaterial,
 } from "@react-three/drei";
 import { EffectComposer, Bloom, Vignette } from "@react-three/postprocessing";
 import { projects, type Project } from "../data/projects";
@@ -24,6 +24,8 @@ type ExperienceProps = {
 };
 
 function Core() {
+  const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
+
   return (
     <Float speed={1.2} rotationIntensity={0.4} floatIntensity={0.6}>
       <group>
@@ -31,8 +33,8 @@ function Core() {
           <icosahedronGeometry args={[1.1, 4]} />
           <meshStandardMaterial
             color="#111827"
-            emissive="#2563eb"
-            emissiveIntensity={0.5}
+            emissive="#7c3aed"
+            emissiveIntensity={0.45}
             roughness={0.18}
             metalness={0.8}
             wireframe
@@ -41,14 +43,17 @@ function Core() {
 
         <mesh>
           <sphereGeometry args={[0.45, 64, 64]} />
-          <MeshDistortMaterial
-            color="#60a5fa"
-            emissive="#3b82f6"
-            emissiveIntensity={0.6}
-            roughness={0.2}
-            metalness={0.5}
-            distort={0.35}
-            speed={1.4}
+          <MeshTransmissionMaterial
+            color="#a5b4fc"
+            thickness={isMobile ? 0.4 : 0.9}
+            roughness={0.08}
+            transmission={isMobile ? 0.85 : 1}
+            ior={1.35}
+            chromaticAberration={0.04}
+            distortion={0.15}
+            temporalDistortion={0.1}
+            samples={isMobile ? 3 : 6}
+            resolution={isMobile ? 128 : 256}
           />
         </mesh>
 
@@ -85,7 +90,7 @@ function SceneContent({ onSelectProject }: ExperienceProps) {
         scale={8}
         size={2}
         speed={0.4}
-        color="#38bdf8"
+        color="#818cf8"
       />
       <DotWaveField cols={isMobile ? 16 : 28} rows={isMobile ? 12 : 20} />
       <Environment preset="city" />
@@ -116,11 +121,11 @@ function SceneContent({ onSelectProject }: ExperienceProps) {
 export function Experience({ onSelectProject }: ExperienceProps) {
   return (
     <Canvas camera={{ position: [0, 1.4, 7], fov: 50 }} dpr={[1, 1.8]}>
-      <color attach="background" args={["#020617"]} />
+      <color attach="background" args={["#0b1120"]} />
 
       <ambientLight intensity={0.4} />
-      <pointLight position={[4, 4, 4]} intensity={40} color="#38bdf8" />
-      <pointLight position={[-4, -2, -3]} intensity={25} color="#a855f7" />
+      <pointLight position={[4, 4, 4]} intensity={40} color="#22d3ee" />
+      <pointLight position={[-4, -2, -3]} intensity={25} color="#7c3aed" />
 
       <Suspense fallback={null}>
         <SceneContent onSelectProject={onSelectProject} />
