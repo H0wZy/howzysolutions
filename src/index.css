@@ -30,12 +30,22 @@ a {
   overflow: hidden;
 }
 
-.hero-overlay {
-  position: absolute;
-  inset: 0;
+/* Cada seção HTML ocupa uma "página" inteira do ScrollControls (pages=4) */
+.page-section {
+  width: 100%;
+  min-height: 100vh;
   pointer-events: none;
   display: flex;
   align-items: center;
+  box-sizing: border-box;
+}
+
+.section-inner {
+  pointer-events: auto;
+  max-width: 560px;
+}
+
+.hero-overlay {
   padding-left: clamp(24px, 6vw, 96px);
   background: radial-gradient(
       circle at 70% 50%,
@@ -49,6 +59,38 @@ a {
       rgba(2, 6, 23, 0.08) 72%,
       transparent 100%
     );
+}
+
+.about-section,
+.contact-section {
+  padding-left: clamp(24px, 6vw, 96px);
+}
+
+.projects-section {
+  justify-content: flex-end;
+  padding-right: clamp(24px, 6vw, 96px);
+}
+
+.about-section h2,
+.projects-section h2,
+.contact-section h2 {
+  font-size: clamp(28px, 4vw, 44px);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  margin: 0 0 20px;
+}
+
+.about-section p,
+.projects-section p,
+.contact-section p {
+  color: #cbd5e1;
+  font-size: 17px;
+  line-height: 1.7;
+  margin: 0;
+}
+
+.contact-section .hero-actions {
+  margin-top: 28px;
 }
 
 .hero-content {
@@ -207,26 +249,7 @@ h1 span {
   font-size: 13px;
 }
 
-.bottom-hint {
-  position: absolute;
-  left: 50%;
-  bottom: 22px;
-  transform: translateX(-50%);
-  padding: 10px 16px;
-  border-radius: 999px;
-  background: rgba(15, 23, 42, 0.62);
-  border: 1px solid rgba(148, 163, 184, 0.2);
-  backdrop-filter: blur(16px);
-  color: #cbd5e1;
-  font-size: 13px;
-  z-index: 4;
-}
-
 @media (max-width: 900px) {
-  body {
-    overflow: auto;
-  }
-
   .hero-overlay {
     align-items: flex-start;
     padding: 48px 22px;
@@ -248,9 +271,5 @@ h1 span {
     bottom: 16px;
     width: auto;
     max-height: 72vh;
-  }
-
-  .bottom-hint {
-    display: none;
   }
 }

@@ -26,7 +26,7 @@ export const projects: Project[] = [
     impact:
       "Aumentar percepção de valor, destacar diferenciação técnica e ajudar na conquista de novos clientes.",
     color: "#7c3aed",
-    position: [3, 0.8, 0],
+    position: [2.4, 0.7, 1.2],
   },
   {
     id: "future-ai",
@@ -42,7 +42,7 @@ export const projects: Project[] = [
     impact:
       "Redução de esforço operacional, aumento de produtividade e criação de novas oportunidades digitais.",
     color: "#06b6d4",
-    position: [-3, 0.4, 1],
+    position: [-2.2, 0.5, -1.4],
   },
   {
     id: "digital-transformation",
@@ -58,6 +58,6 @@ export const projects: Project[] = [
     impact:
       "Maior maturidade digital, melhor tomada de decisão e posicionamento mais competitivo.",
     color: "#22c55e",
-    position: [0, -1.4, -3],
+    position: [0.6, -0.3, -4],
   },
 ];
