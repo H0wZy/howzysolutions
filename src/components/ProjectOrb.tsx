@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { useFrame } from "@react-three/fiber";
-import { Text, Float, MeshDistortMaterial } from "@react-three/drei";
+import { Text, Float, MeshTransmissionMaterial } from "@react-three/drei";
 import * as THREE from "three";
 import type { Project } from "../data/projects";
 
@@ -8,6 +8,8 @@ type ProjectOrbProps = {
   project: Project;
   onSelect: (project: Project) => void;
 };
+
+const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
 
 export function ProjectOrb({ project, onSelect }: ProjectOrbProps) {
   const meshRef = useRef<THREE.Mesh>(null);
@@ -48,14 +50,16 @@ export function ProjectOrb({ project, onSelect }: ProjectOrbProps) {
           }}
         >
           <sphereGeometry args={[0.45, 64, 64]} />
-          <MeshDistortMaterial
+          <MeshTransmissionMaterial
             color={project.color}
-            emissive={project.color}
-            emissiveIntensity={hovered ? 0.7 : 0.35}
-            roughness={0.25}
-            metalness={0.4}
-            distort={0.3}
-            speed={1.6}
+            thickness={isMobile ? 0.3 : 0.7}
+            roughness={0.1}
+            transmission={isMobile ? 0.75 : 0.95}
+            ior={1.3}
+            chromaticAberration={hovered ? 0.06 : 0.02}
+            distortion={0.1}
+            samples={isMobile ? 3 : 5}
+            resolution={isMobile ? 128 : 200}
           />
         </mesh>
 

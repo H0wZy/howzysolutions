@@ -63,7 +63,7 @@ export function DotWaveField({ cols = 28, rows = 20 }: DotWaveFieldProps) {
       </bufferGeometry>
       <pointsMaterial
         size={0.045}
-        color="#38bdf8"
+        color="#818cf8"
         transparent
         opacity={0.35}
         sizeAttenuation
