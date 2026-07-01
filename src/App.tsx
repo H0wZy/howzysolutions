@@ -1,6 +1,6 @@
 import { useState } from "react";
+import { Loader } from "@react-three/drei";
 import { Experience } from "./components/Experience";
-import { HeroOverlay } from "./components/HeroOverlay";
 import { ProjectPanel } from "./components/ProjectPanel";
 import type { Project } from "./data/projects";
 import "./index.css";
@@ -11,15 +11,16 @@ export default function App() {
   return (
     <main className="app">
       <Experience onSelectProject={setSelectedProject} />
-      <HeroOverlay />
+      <Loader
+        containerStyles={{ background: "#020617" }}
+        innerStyles={{ background: "rgba(148, 163, 184, 0.25)" }}
+        barStyles={{ background: "linear-gradient(135deg, #67e8f9, #8b5cf6)" }}
+        dataStyles={{ color: "#cbd5e1", fontSize: "13px" }}
+      />
       <ProjectPanel
         project={selectedProject}
         onClose={() => setSelectedProject(null)}
       />
-
-      <div className="bottom-hint" id="projects">
-        Clique nos orbes para explorar os projetos
-      </div>
     </main>
   );
 }
