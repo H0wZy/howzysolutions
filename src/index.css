@@ -272,4 +272,15 @@ h1 span {
     width: auto;
     max-height: 72vh;
   }
+
+  .about-section,
+  .contact-section,
+  .projects-section {
+    padding: 0 22px;
+    justify-content: center;
+  }
+
+  .section-inner {
+    max-width: 100%;
+  }
 }
