@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 
 export function HeroOverlay() {
   return (
-    <div className="hero-overlay">
+    <section className="page-section hero-overlay">
       <motion.div
         className="hero-content"
         initial={{ opacity: 0, y: 24 }}
@@ -22,7 +22,11 @@ export function HeroOverlay() {
         </p>
 
         <div className="hero-actions">
-          <a className="primary-button" href="#projects">
+          <a
+            className="primary-button"
+            href="#projects"
+            data-scroll-to="projects"
+          >
             Explorar projetos
           </a>
 
@@ -34,6 +38,6 @@ export function HeroOverlay() {
           </a>
         </div>
       </motion.div>
-    </div>
+    </section>
   );
 }
