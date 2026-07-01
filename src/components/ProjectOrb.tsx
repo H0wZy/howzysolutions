@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { useFrame } from "@react-three/fiber";
-import { Text, Float } from "@react-three/drei";
+import { Text, Float, MeshDistortMaterial } from "@react-three/drei";
 import * as THREE from "three";
 import type { Project } from "../data/projects";
 
@@ -13,7 +13,7 @@ export function ProjectOrb({ project, onSelect }: ProjectOrbProps) {
   const meshRef = useRef<THREE.Mesh>(null);
   const [hovered, setHovered] = useState(false);
 
-  useFrame((state) => {
+  useFrame((state, delta) => {
     if (!meshRef.current) return;
 
     meshRef.current.rotation.y += 0.01;
@@ -21,6 +21,14 @@ export function ProjectOrb({ project, onSelect }: ProjectOrbProps) {
     const t = state.clock.getElapsedTime();
     meshRef.current.position.y =
       project.position[1] + Math.sin(t + project.position[0]) * 0.15;
+
+    // escala suave (lerp) em vez de salto instantâneo no hover
+    const targetScale = hovered ? 1.25 : 1;
+    const smoothing = 1 - Math.pow(0.001, delta);
+    meshRef.current.scale.lerp(
+      new THREE.Vector3(targetScale, targetScale, targetScale),
+      smoothing
+    );
   });
 
   return (
@@ -38,15 +46,16 @@ export function ProjectOrb({ project, onSelect }: ProjectOrbProps) {
             setHovered(false);
             document.body.style.cursor = "auto";
           }}
-          scale={hovered ? 1.25 : 1}
         >
-          <sphereGeometry args={[0.45, 48, 48]} />
-          <meshStandardMaterial
+          <sphereGeometry args={[0.45, 64, 64]} />
+          <MeshDistortMaterial
             color={project.color}
             emissive={project.color}
             emissiveIntensity={hovered ? 0.7 : 0.35}
             roughness={0.25}
             metalness={0.4}
+            distort={0.3}
+            speed={1.6}
           />
         </mesh>
 

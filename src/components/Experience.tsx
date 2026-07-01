@@ -8,6 +8,7 @@ import {
   Sparkles,
   ScrollControls,
   Scroll,
+  MeshDistortMaterial,
 } from "@react-three/drei";
 import { EffectComposer, Bloom, Vignette } from "@react-three/postprocessing";
 import { projects, type Project } from "../data/projects";
@@ -16,6 +17,7 @@ import { ScrollCamera } from "./ScrollCamera";
 import { ScrollNav } from "./ScrollNav";
 import { HeroOverlay } from "./HeroOverlay";
 import { PageSections } from "./PageSections";
+import { DotWaveField } from "./DotWaveField";
 
 type ExperienceProps = {
   onSelectProject: (project: Project) => void;
@@ -38,13 +40,15 @@ function Core() {
         </mesh>
 
         <mesh>
-          <sphereGeometry args={[0.45, 48, 48]} />
-          <meshStandardMaterial
+          <sphereGeometry args={[0.45, 64, 64]} />
+          <MeshDistortMaterial
             color="#60a5fa"
             emissive="#3b82f6"
             emissiveIntensity={0.6}
             roughness={0.2}
             metalness={0.5}
+            distort={0.35}
+            speed={1.4}
           />
         </mesh>
 
@@ -63,10 +67,27 @@ function Core() {
 }
 
 function SceneContent({ onSelectProject }: ExperienceProps) {
+  const isMobile =
+    typeof window !== "undefined" && window.innerWidth < 768;
+
   return (
     <>
-      <Stars radius={80} depth={40} count={3500} factor={4} fade speed={1} />
-      <Sparkles count={120} scale={8} size={2} speed={0.4} color="#38bdf8" />
+      <Stars
+        radius={80}
+        depth={40}
+        count={isMobile ? 1600 : 3500}
+        factor={4}
+        fade
+        speed={1}
+      />
+      <Sparkles
+        count={isMobile ? 50 : 120}
+        scale={8}
+        size={2}
+        speed={0.4}
+        color="#38bdf8"
+      />
+      <DotWaveField cols={isMobile ? 16 : 28} rows={isMobile ? 12 : 20} />
       <Environment preset="city" />
 
       <ScrollControls pages={4} damping={0.25}>
