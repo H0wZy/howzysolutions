@@ -57,7 +57,7 @@ export const projects: Project[] = [
     technologies: ["Cloud", "Data", "Automation", "UX", "Analytics"],
     impact:
       "Maior maturidade digital, melhor tomada de decisão e posicionamento mais competitivo.",
-    color: "#22c55e",
+    color: "#6366f1",
     position: [0.6, -0.3, -4],
   },
 ];
