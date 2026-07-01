@@ -29,15 +29,22 @@ export function ProjectOrb({ project, onSelect }: ProjectOrbProps) {
         <mesh
           ref={meshRef}
           onClick={() => onSelect(project)}
-          onPointerOver={() => setHovered(true)}
-          onPointerOut={() => setHovered(false)}
+          onPointerOver={(event) => {
+            event.stopPropagation();
+            setHovered(true);
+            document.body.style.cursor = "pointer";
+          }}
+          onPointerOut={() => {
+            setHovered(false);
+            document.body.style.cursor = "auto";
+          }}
           scale={hovered ? 1.25 : 1}
         >
           <sphereGeometry args={[0.45, 48, 48]} />
           <meshStandardMaterial
             color={project.color}
             emissive={project.color}
-            emissiveIntensity={hovered ? 1.2 : 0.45}
+            emissiveIntensity={hovered ? 0.7 : 0.35}
             roughness={0.25}
             metalness={0.4}
           />
