@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import type { Project } from "../data/projects";
+import { useLanguage } from "../context/LanguageContext";
 
 type ProjectPanelProps = {
   project: Project | null;
@@ -7,6 +8,8 @@ type ProjectPanelProps = {
 };
 
 export function ProjectPanel({ project, onClose }: ProjectPanelProps) {
+  const { locale, t } = useLanguage();
+
   return (
     <AnimatePresence>
       {project && (
@@ -17,7 +20,7 @@ export function ProjectPanel({ project, onClose }: ProjectPanelProps) {
           exit={{ opacity: 0, x: 80 }}
           transition={{ duration: 0.35 }}
         >
-          <button className="close-button" onClick={onClose}>
+          <button className="close-button" onClick={onClose} aria-label="Close">
             ×
           </button>
 
@@ -26,22 +29,22 @@ export function ProjectPanel({ project, onClose }: ProjectPanelProps) {
           <h2>{project.name}</h2>
 
           <section>
-            <h3>Problema</h3>
-            <p>{project.problem}</p>
+            <h3>{t.panel.problem}</h3>
+            <p>{project.problem[locale]}</p>
           </section>
 
           <section>
-            <h3>Solução</h3>
-            <p>{project.solution}</p>
+            <h3>{t.panel.solution}</h3>
+            <p>{project.solution[locale]}</p>
           </section>
 
           <section>
-            <h3>Meu papel</h3>
-            <p>{project.role}</p>
+            <h3>{t.panel.role}</h3>
+            <p>{project.role[locale]}</p>
           </section>
 
           <section>
-            <h3>Tecnologias</h3>
+            <h3>Tech</h3>
             <div className="tech-list">
               {project.technologies.map((tech) => (
                 <span key={tech}>{tech}</span>
@@ -50,8 +53,8 @@ export function ProjectPanel({ project, onClose }: ProjectPanelProps) {
           </section>
 
           <section>
-            <h3>Impacto</h3>
-            <p>{project.impact}</p>
+            <h3>{t.panel.impact}</h3>
+            <p>{project.impact[locale]}</p>
           </section>
         </motion.aside>
       )}

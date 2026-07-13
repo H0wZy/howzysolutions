@@ -6,8 +6,9 @@ import { useScroll } from "@react-three/drei";
 const PAGE_INDEX: Record<string, number> = {
   hero: 0,
   about: 1,
-  projects: 2,
-  contact: 3,
+  toolkit: 2,
+  projects: 3,
+  contact: 4,
 };
 
 export function ScrollNav() {

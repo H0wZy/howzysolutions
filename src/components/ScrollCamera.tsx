@@ -4,19 +4,21 @@ import { useScroll } from "@react-three/drei";
 import * as THREE from "three";
 
 // Cada ponto representa uma "parada" da câmera, uma por página de scroll.
-// page 0 -> Hero | page 1 -> Sobre | page 2 -> Projetos | page 3 -> Contato
+// page 0 Hero | 1 About | 2 Toolkit | 3 Projects | 4 Contact
 const CAMERA_PATH: [number, number, number][] = [
   [0, 1.4, 7],
-  [2.1, 1.0, 3.0],
-  [-1.6, 0.3, -1.4],
-  [0.4, 1.1, -6],
+  [2.2, 1.0, 3.4],
+  [-2.0, 0.6, 0.4],
+  [-1.6, 0.3, -3.0],
+  [0.4, 1.1, -7.4],
 ];
 
 const LOOK_PATH: [number, number, number][] = [
   [0, 0, 0],
-  [0.2, 0.1, -0.6],
-  [0, -0.1, -2.6],
-  [0, 0, -6.6],
+  [0.3, 0.1, 0.4],
+  [0, 0, -1.2],
+  [0, -0.1, -3.4],
+  [0, 0, -7.8],
 ];
 
 export function ScrollCamera() {

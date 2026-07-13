@@ -1,4 +1,6 @@
 import { motion } from "framer-motion";
+import { useLanguage } from "../context/LanguageContext";
+import { ToolkitSection } from "./ToolkitSection";
 
 const fadeUp = {
   initial: { opacity: 0, y: 32 },
@@ -8,49 +10,59 @@ const fadeUp = {
 };
 
 export function PageSections() {
+  const { t } = useLanguage();
+  const aboutLines = t.about.title.split("\n");
+
   return (
     <>
-      <section className="page-section about-section">
+      <section className="page-section about-section" id="about">
         <motion.div className="section-inner" {...fadeUp}>
-          <div className="eyebrow">Sobre</div>
+          <div className="eyebrow">{t.about.eyebrow}</div>
           <h2>
-            Da estratégia ao código,
-            <br />
-            construindo produtos que importam.
+            {aboutLines.map((line, i) => (
+              <span key={line}>
+                {line}
+                {i < aboutLines.length - 1 && <br />}
+              </span>
+            ))}
           </h2>
-          <p>
-            Atuo na fronteira entre visão de negócio e execução técnica,
-            liderando a criação de plataformas digitais, automações com IA e
-            experiências de produto que geram resultado real.
-          </p>
+          <p>{t.about.body}</p>
         </motion.div>
       </section>
+
+      <ToolkitSection />
 
       <section className="page-section projects-section" id="projects">
         <motion.div className="section-inner" {...fadeUp}>
-          <div className="eyebrow">Projetos</div>
-          <h2>Continue rolando para explorar</h2>
-          <p>
-            Clique em qualquer orbe na cena 3D para abrir os detalhes do
-            projeto: problema, solução, papel e impacto.
-          </p>
+          <div className="eyebrow">{t.projects.eyebrow}</div>
+          <h2>{t.projects.title}</h2>
+          <p>{t.projects.body}</p>
         </motion.div>
       </section>
 
-      <section className="page-section contact-section">
+      <section className="page-section contact-section" id="contact">
         <motion.div className="section-inner" {...fadeUp}>
-          <div className="eyebrow">Contato</div>
-          <h2>Vamos construir algo juntos?</h2>
-          <p>Aberto a novos projetos, parcerias e desafios técnicos.</p>
+          <div className="eyebrow">{t.contact.eyebrow}</div>
+          <h2>{t.contact.title}</h2>
+          <p>{t.contact.body}</p>
 
           <div className="hero-actions">
             <a
               className="primary-button"
               href="mailto:howzysolutions@gmail.com"
             >
-              Fale comigo
+              {t.contact.cta}
             </a>
           </div>
+
+          <footer className="site-footer">
+            <span>
+              © {new Date().getFullYear()} Marcos "H0wZy" Junior. {t.footer.rights}
+            </span>
+            <a href="https://github.com/H0wZy" target="_blank" rel="noreferrer">
+              GitHub
+            </a>
+          </footer>
         </motion.div>
       </section>
     </>
