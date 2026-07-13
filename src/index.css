@@ -321,6 +321,15 @@ a {
   color: var(--muted);
 }
 
+.footer-links {
+  display: flex;
+  gap: 18px;
+}
+
+.footer-links a:hover {
+  color: var(--foreground);
+}
+
 .hero-content {
   pointer-events: auto;
   max-width: 620px;

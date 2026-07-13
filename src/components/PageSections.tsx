@@ -59,9 +59,14 @@ export function PageSections() {
             <span>
               © {new Date().getFullYear()} Marcos "H0wZy" Junior. {t.footer.rights}
             </span>
-            <a href="https://github.com/H0wZy" target="_blank" rel="noreferrer">
-              GitHub
-            </a>
+            <div className="footer-links">
+              <a href="https://github.com/H0wZy" target="_blank" rel="noreferrer">
+                GitHub
+              </a>
+              <a href="https://linktr.ee/h0wzymarcos" target="_blank" rel="noreferrer">
+                Linktree
+              </a>
+            </div>
           </footer>
         </motion.div>
       </section>
