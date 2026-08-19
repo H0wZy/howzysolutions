@@ -1,6 +1,21 @@
 <!--
 SYNC IMPACT REPORT
 ==================
+Version change: 1.0.0 -> 1.1.0
+Rationale: MINOR. Materially expanded the Technology & Design Constraints section with
+two new subsections required by the WakaTime integration. No principle removed or
+redefined; existing compliant guidance is unaffected.
+
+Added (1.1.0):
+  - "Secrets & External Data" under Technology & Design Constraints — credentials are
+    forbidden in the client bundle and in the repository; third-party data is baked at
+    build time from a build-environment secret and committed as a last-known-good artifact.
+  - "Honesty In Self-Reported Metrics" under Technology & Design Constraints — every
+    number about the author MUST carry its source and its period.
+
+----------------------------------------------------------------------
+Previous entry
+----------------------------------------------------------------------
 Version change: (template, unversioned) -> 1.0.0
 Rationale: Initial ratification. First concrete constitution for the howzysolutions
 portfolio; every placeholder in the scaffold replaced with project-specific governance.
@@ -187,6 +202,35 @@ visitor IPs to another party, and can go down independently of the site.
 A change that breaks a budget MUST either be reworked or ship with the budget formally
 amended in this document. Budgets are not aspirations.
 
+**Secrets & external data.** No API key, token, or credential may appear in the client
+bundle, in a `VITE_*` variable, or anywhere in this repository — Vite inlines build-time
+values into public JavaScript, so "not committed" is not the same as "not published".
+
+External data about the author (WakaTime coding statistics) MUST be fetched at **build
+time** by a script that reads the credential from the build environment (Vercel
+environment variable, GitHub Actions secret) and writes a plain JSON artifact consumed as
+ordinary content. The running site MUST NOT hold a credential and MUST NOT call an
+authenticated third-party API from the browser.
+
+Generated data artifacts MUST be committed. A failed, rate-limited, or unauthorized fetch
+MUST degrade to the last known good committed values — it MUST NOT fail the build and MUST
+NOT render an empty or zeroed state to a visitor.
+
+*Rationale*: A leaked read key exposes the author's entire private coding history. Baking
+at build time removes the credential from the attack surface completely, and costs nothing
+a visitor would notice for data that changes daily.
+
+**Honesty in self-reported metrics.** Any number presented about the author — years of
+experience, hours coded, project count, language share — MUST state its source and the
+period it covers, adjacent to the number itself. A metric MUST NOT be presented in a way
+that implies it covers a longer period, or a broader scope, than it actually does.
+Independent metrics with different start dates MUST NOT be placed so that one reads as
+corroborating the other.
+
+*Rationale*: Tracked coding time begins when tracking was installed, not when the career
+began. Showing the two side by side without their periods is the kind of small dishonesty
+that costs all the credibility the rest of the portfolio is trying to build.
+
 **Privacy.** No third-party analytics, tag managers, ad pixels, embedded fonts, or social
 SDKs. If usage measurement becomes necessary it MUST be cookieless and MUST NOT ship
 visitor data to a third party.
@@ -233,4 +277,4 @@ that cannot be justified against Principle II MUST be removed before merge. Perf
 budgets are re-measured on the production build before any deploy that changes the bundle.
 This document is re-read at the start of each new feature spec.
 
-**Version**: 1.0.0 | **Ratified**: 2026-08-19 | **Last Amended**: 2026-08-19
+**Version**: 1.1.0 | **Ratified**: 2026-08-19 | **Last Amended**: 2026-08-19
