@@ -1,0 +1,5 @@
+sidecar: git@github.com:H0wZy/skeeper-specs.git
+namespaces:
+  - name: howzysolutions
+    patterns:
+      - specs/**
