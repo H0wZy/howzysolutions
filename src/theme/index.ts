@@ -1,20 +1,12 @@
 /**
- * Theme resolution and persistence. Application logic only — the visitor-facing
- * control ships in US4. The value applied before first paint is set by the inline
- * script in index.html; this module must agree with it or hydration re-flashes.
+ * Theme resolution and persistence — the impure half. Must agree with the
+ * blocking inline script in index.html or the page would re-flash (FR-021).
  */
 
-export const THEMES = ['dark', 'light'] as const
-export type Theme = (typeof THEMES)[number]
+import { DEFAULT_THEME, isTheme, type Theme } from './types'
 
 const STORAGE_KEY = 'h0wzy.theme'
-export const DEFAULT_THEME: Theme = 'dark'
 
-export function isTheme(value: unknown): value is Theme {
-  return typeof value === 'string' && (THEMES as readonly string[]).includes(value)
-}
-
-/** Reads the stored override, discarding a value this build no longer supports. */
 export function readStoredTheme(): Theme | null {
   try {
     const stored = localStorage.getItem(STORAGE_KEY)
@@ -48,3 +40,5 @@ export function applyTheme(theme: Theme): void {
     /* Storage unavailable: the theme still applies for this session. */
   }
 }
+
+export * from './types'
