@@ -193,6 +193,11 @@ the portfolio claims — but it is decoration over a working product, and it is 
 whose cost, if made mandatory, would break the performance and accessibility commitments that
 every other story depends on.
 
+This story is also where the existing 3D work is preserved. The animated point field and the
+postprocessing glow already built for the current site are reused here as the environment the
+terminal sits inside (FR-038), so the capability stays demonstrable as running code instead of
+becoming a past-tense claim.
+
 **Independent Test**: Measure what a visitor downloads before and after opting in; confirm the
 immersive assets are absent until the choice is made. Run identical commands in both
 presentations and diff the text.
@@ -334,11 +339,16 @@ presentations and diff the text.
 
 **Retirement of the current site**
 
-- **FR-036**: The scroll-driven 3D experience, its placeholder project records, its
-  violet/cyan glass visual language, and the prompt-dump currently serving as project
-  instructions MUST be removed from the published site.
+- **FR-036**: The current site's placeholder project records, its violet/cyan glass visual
+  language, its scroll-driven navigation model, and the prompt-dump currently serving as
+  project instructions MUST be removed from the published site.
 - **FR-037**: The project's own documentation MUST describe this portfolio rather than a
   framework starter template.
+- **FR-038**: The rendering techniques already built for the current 3D experience — the
+  animated point field and the postprocessing glow — MUST be carried into the opt-in
+  immersive presentation of US6 rather than deleted, so the capability they demonstrate
+  survives the rebrand as working code rather than as a claim about the past. The
+  scroll-driven navigation model they currently sit inside is not carried over (FR-036).
 
 ### Key Entities
 
@@ -423,33 +433,59 @@ presentations and diff the text.
   domain howzysolutions.dev intended but not yet acquired. Domain acquisition is out of scope.
 - **Statistics refresh cadence**: Figures refresh on publication, on a schedule of at most
   daily. Figures up to 24 hours old are acceptable for time-coded totals.
-- **Sidecar specification mirror**: Specs under `specs/` are mirrored to a sidecar repository
-  by tooling run on the author's machine. The author named the sidecar `skeeper-docs`, while
-  PROJETOS.md §9 documents the existing sidecar as `skeeper-specs`; the discrepancy is
-  recorded here and resolved before the mirror is configured. This is repository tooling and
-  does not affect the published site.
+- **Sidecar specification mirror**: Specs under `specs/` are mirrored to the existing
+  `skeeper-specs` sidecar repository by tooling run on the author's machine, adding
+  `howzysolutions` as a third namespace alongside `studiobiasantos` and `viralvideogen`. This
+  is repository tooling and does not affect the published site. Two operational constraints
+  already recorded for that sidecar carry over: clone and remote over HTTPS rather than SSH,
+  and specs committed with LF line endings, since a CRLF file normalised inside the sidecar
+  makes the source repository report permanent drift.
 - **Out of scope for this feature**: a content management interface, a blog, comments, search
   across projects, a contact form, and any visitor-facing backend service. The site remains
   fully static.
 
-## Clarifications Needed
+## Clarifications Resolved
 
-- **CL-001** [scope, privacy]: Three projects name real, identifiable client businesses —
-  Telas Paraná, Selzler Arquitetura e Engenharia, and Studio Bia Santos — and the source
-  material for the first two includes detailed security and compliance narrative: a
-  cybersecurity and LGPD audit remediation, a specific credential-hashing migration, a
-  formerly publicly-exposed internal API, and twelve audit findings. Publishing this names a
-  real company's past security posture on a public page. **Which of the following applies:**
-  (a) clients have consented to being named and to this level of engineering detail;
-  (b) clients may be named, but security and audit specifics must be generalised;
-  (c) clients must be anonymised entirely ("a 40-year-old perimeter-security company in
-  Paraná"). This gates how the two strongest projects in the portfolio can be written.
+Both open questions were decided by the author on 2026-08-19 and are recorded here as dated
+decisions, in the same style the portfolio's other repositories use for stack and architecture
+choices.
 
-- **CL-002** [scope]: PROJETOS.md documents the existing scroll-driven 3D experience as this
-  repository's own delivered work — a built experience with camera control, animated point
-  field, and postprocessing. FR-036 retires it from the published site. **Should that work
-  be:** (a) removed entirely, surviving only in git history and as a described past state;
-  (b) preserved at its own address as a demonstrable artifact linked from the howzysolutions
-  project entry; or (c) folded into the opt-in immersive presentation of US6, so its
-  techniques are reused rather than archived. This determines whether evidence of the 3D
-  capability survives the rebrand.
+### CL-001 — Client naming and engineering detail *(privacy)* — RESOLVED: name and detail in full
+
+**Question**: Three projects name real, identifiable client businesses — Telas Paraná, Selzler
+Arquitetura e Engenharia, and Studio Bia Santos — and the source material for the first two
+includes detailed security and compliance narrative: a cybersecurity and LGPD audit
+remediation, a credential-hashing migration from PBKDF2 to Argon2id, an internal API that had
+been publicly reachable and was closed in v2.4.4, and twelve audit findings closed in their
+own commit.
+
+**Decision**: Clients are named and the engineering detail is published in full. Three
+alternatives were presented — full detail, named-but-generalised security narrative, and full
+anonymisation — and the author chose full detail on 2026-08-19.
+
+**Consequence for this feature**: `telasparana` and `selzler-construtora` are written at full
+strength, including the security trail. Both are the portfolio's strongest evidence — 368 and
+119 commits, Terraform-provisioned infrastructure, Workload Identity Federation instead of
+versioned service-account keys, and an audit trail followed through to a validated production
+apply. The remediation narrative is framed as what it demonstrates: an author who finds,
+tracks and closes security findings — not a client who was once insecure.
+
+**Standing obligation**: Published detail about a third party remains the author's
+responsibility. If a client later objects, the affected content is generalised on request,
+which the content model makes a data-only edit (FR-005) rather than a rewrite.
+
+### CL-002 — Fate of the existing 3D experience *(scope)* — RESOLVED: absorbed into US6
+
+**Question**: PROJETOS.md documents the current scroll-driven 3D experience as this
+repository's own delivered work — camera control, an animated point field, real-glass material
+and postprocessing across three merged pull requests. Should it be removed entirely, preserved
+at its own address as an archived artifact, or folded into the opt-in immersive presentation?
+
+**Decision**: Folded into the opt-in immersive presentation (US6), decided 2026-08-19.
+
+**Consequence for this feature**: FR-038 carries the animated point field and the
+postprocessing glow forward as the environment the terminal is rendered inside. The
+scroll-driven navigation model and the violet/cyan glass language are not carried over
+(FR-036). The capability survives as running code a visitor can trigger, rather than as an
+archived page nobody opens or a past-tense claim in a project description. This costs more
+than archiving would, and that cost is accepted deliberately.
