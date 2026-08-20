@@ -20,7 +20,8 @@ that group (`esbuild --bundle --minify --format=esm`, `NODE_ENV=production`, the
 
 | Dependency group | Gzipped |
 |---|---:|
-| `react` + `react-dom/client` | **58.7 KB** |
+| `react` + `react-dom/client` (esbuild — **later found wrong, see D2**) | ~~58.7 KB~~ |
+| `react` + `react-dom/client` (**Vite/rolldown, corrected**) | **117.2 KB** |
 | `three` + `@react-three/fiber` + `@react-three/drei` + `@react-three/postprocessing` | **358.1 KB** |
 | `framer-motion` | **44.5 KB** |
 
@@ -57,35 +58,65 @@ before a single line of this feature's own code is written.
 **Verification**: after removal, `grep -r "framer-motion" src/` returns nothing and the
 dependency is absent from `package.json`.
 
-## D2 — Keep React; move WebGL behind a dynamic import
+## D2 — React leaves the client entirely *(revised 2026-08-20)*
 
-**Decision**: React and `react-dom` stay. `three`, `@react-three/fiber`, `@react-three/drei`
-and `@react-three/postprocessing` stay in the manifest but are reachable only through a
-dynamic `import()` triggered by the visitor's opt-in.
+**Decision**: React and `react-dom` become **build-time only**. `scripts/prerender.mjs`
+renders every page to static markup, the browser receives finished HTML and never hydrates,
+and the client entry is plain TypeScript. React returns to the client only inside the opt-in
+immersive renderer, which is dynamically imported and excluded from the budget by FR-033.
 
-**Rationale**: React costs 58.7 KB, roughly half the budget, which deserves an explicit
-justification rather than an assumption. Three facts settle it. It is the incumbent
-(Principle II favours what is already here). FR-038 requires reusing the existing point field
-and postprocessing glow, which are React Three Fiber components — removing React would mean
-rewriting them in raw Three.js, which is strictly more code, not less. And 58.7 KB plus an
-estimated 40 KB of feature code lands near 99 KB, inside the budget with headroom.
+### The measurement that was wrong
 
-The 358.1 KB WebGL group is 3× the entire budget on its own, so US6's opt-in gate (FR-033) is
-not a nicety — it is the only arrangement in which that code can exist in this project at all.
-A single `const Terminal3D = lazy(() => import('./Terminal3D'))` puts the whole group in a
-separate chunk that is never requested until the visitor asks for it.
+This decision originally read "keep React, 58.7 KB, roughly half the budget". That number came
+from an esbuild probe and **it was wrong**. Building the real application produced a 147.9 KB
+entry chunk, over budget, so the number was re-derived three ways:
+
+| Method | Result |
+|---|---:|
+| esbuild probe bundling `react-dom/client` alone (original) | 58.7 KB gz |
+| Vite production build of a page rendering only an `<h1>` | **117.2 KB gz** |
+| `node_modules/react-dom/cjs/react-dom-client.production.js` on disk | **523.5 KB raw** |
+
+The last two agree; the first does not. esbuild eliminated far more of `react-dom` than
+rolldown does under this project's configuration, so the probe measured a bundle the real
+build never produces. **The correct figure for React 19.2.7 in this toolchain is 117.2 KB
+gzipped — 98% of the 120 KB budget.**
+
+### Why the conclusion inverts
+
+With the corrected number, the original decision is untenable: no React application in this
+toolchain fits a 120 KB budget, so keeping React meant amending the budget. The author was
+given that choice explicitly and chose to keep the budget and drop the framework.
+
+Walking the ladder honestly, rung 1 answers it. **Does this need to exist?** The nine project
+pages have no interactivity whatsoever — they are prerendered documents. The home page's only
+behaviour is a scroll reveal, which is an `IntersectionObserver`, and a command prompt, whose
+engine is *already* pure TypeScript with no framework import because Principle IV required it.
+A DOM renderer over that engine is a legitimate renderer, not a workaround.
+
+So React is doing, at 117 KB, work that the platform does at well under one.
+
+**Measured result**: the client entry is **0.56 KB gzipped** — Vite's modulepreload polyfill
+plus the reveal observer. Against the 519.32 KB baseline that is a 933× reduction, and it
+leaves essentially the whole budget available to the terminal.
+
+**What React still does**: it renders every page at build time through
+`renderToStaticMarkup`, which is why the components stay ordinary `.tsx` files and the prose
+arrives in the HTML payload. And it loads with React Three Fiber inside the US6 opt-in, so
+FR-038's reuse of the existing point field and glow is unaffected.
 
 **Alternatives considered**:
-- *Drop React for vanilla TypeScript*: would free ~55 KB and is genuinely tempting for a site
-  this static. Rejected because FR-038's reuse path runs through R3F, and because rewriting
-  working rendering code to save bytes on a budget already met is the kind of speculative work
-  Principle II exists to prevent.
-- *Preact via alias*: saves ~45 KB, but R3F's reconciler targets React's internals; the
-  compatibility risk lands precisely on the one feature that needs it. Rejected for a saving
-  the budget does not require.
-
-**Verification**: build output shows the WebGL group in its own chunk; loading the site with a
-cold cache and never opting in transfers none of it.
+- *Amend the budget to ~160 KB and keep React* — offered to the author alongside this option
+  and declined. It was the honest alternative, not a strawman: the budget may be raised, but
+  never silently.
+- *Keep React on the home page only, static HTML for project pages* — the intermediate
+  position. Rejected once measured: the home page alone would still be ~125 KB, so it fixes
+  nine pages and leaves the tenth over budget.
+- *Preact via alias* (~10 KB) — would have kept the React programming model, but R3F targets
+  React's internals and US6 is precisely where that risk lands. Moot now that the client ships
+  no framework at all.
+- *Hydrate only interactive islands* — the sophisticated version of the same idea, and more
+  machinery than a site with one interactive region needs. Rung 6: it can be one renderer.
 
 ## D3 — Multi-page output with build-time prerendering, and no router dependency
 
@@ -316,11 +347,11 @@ downstream and would otherwise be discovered as build failures:
 |---|---|---:|---|
 | **Remove** | `framer-motion` | **−44.5 KB** | Rung 4 — CSS and `IntersectionObserver` cover it |
 | Keep, lazy | `three`, `@react-three/*`, `postprocessing` | 0 KB initial (358.1 KB on opt-in) | Required by FR-038; gated by FR-033 |
-| Keep | `react`, `react-dom` | 58.7 KB | Incumbent; also serves prerendering and R3F reuse |
+| Keep, **build-time only** | `react`, `react-dom` | **0 KB initial** (117.2 KB avoided) | Rung 1 — prerendered pages do not need a client framework (D2 revised) |
 | **Add** | `vitest` (dev) | 0 KB | Rung 5 fails — nothing installed runs tests (Principle VII) |
 | **Add** | `@fontsource-variable/jetbrains-mono` | 0 KB JS (one subsetted woff2) | Rung 5 fails — FR-024 forbids font CDNs |
 
-**Net effect on the visitor: −44.5 KB gzipped, before any of this feature's own code is
-written.** Projected initial payload ≈ 58.7 KB (React) + ≈ 40 KB (feature code, content, and
-styles) ≈ **99 KB against a 120 KB budget**, with the 358.1 KB WebGL group behind an explicit
-opt-in.
+**Net effect on the visitor**: the client entry measures **0.56 KB gzipped** against the
+519.32 KB baseline — a 933× reduction — with React's 117.2 KB moved to build time and the
+358.1 KB WebGL group behind an explicit opt-in. Nearly the entire 120 KB budget remains
+available to the terminal.

@@ -15,15 +15,22 @@ JavaScript against a 120 KB budget.** Closing that gap drives every technical de
 `framer-motion` is removed (−44.5 KB measured, replaced by CSS and `IntersectionObserver`), the
 WebGL group is moved behind an opt-in dynamic import (358.1 KB measured, 3× the whole budget),
 and routing is solved by emitting prerendered HTML per route rather than shipping a router.
-React stays (58.7 KB measured) because it is the incumbent and because FR-038's reuse of the
-existing point field and glow runs through React Three Fiber.
 
-The command engine is pure TypeScript with no React, Three.js, or DOM import, so the DOM
-renderer and the immersive renderer share one implementation and one set of facts. Content —
-projects, biography, both locale dictionaries — is typed data, making a missing Portuguese
-translation a compile error rather than a runtime fallback.
+**React itself became the last thing to go.** Its client runtime measures 117.2 KB gzipped in
+this toolchain — 98% of the budget — for pages whose only interactivity is a scroll reveal and
+a command prompt. Since every page is prerendered and the command engine is already pure
+TypeScript, React moved to build time: it renders the HTML and never reaches the browser,
+returning only inside the opt-in immersive renderer where R3F needs it and FR-033 excludes it
+from the budget. Research D2 records the corrected measurement and how the original one was
+wrong.
 
-Projected initial payload: ≈ 99 KB against the 120 KB budget.
+The command engine is pure TypeScript with no framework or DOM import, so the DOM renderer and
+the immersive renderer share one implementation and one set of facts. Content — projects,
+biography, both locale dictionaries — is typed data, making a missing Portuguese translation a
+compile error rather than a runtime fallback.
+
+**Measured initial payload: 0.56 KB gzipped**, against a 519.32 KB baseline and a 120 KB
+budget.
 
 ## Technical Context
 
@@ -31,10 +38,12 @@ Projected initial payload: ≈ 99 KB against the 120 KB budget.
 `verbatimModuleSyntax` are enabled — no `enum`, no parameter properties, `import type` required
 for type-only imports (research D11).
 
-**Primary Dependencies**: React 19 + `react-dom` (kept, 58.7 KB gz). `three` +
-`@react-three/fiber` + `@react-three/drei` + `@react-three/postprocessing` (kept, dynamically
-imported only, 358.1 KB gz). **Removed**: `framer-motion` (44.5 KB gz). **Added**: `vitest`
-(dev, 0 visitor bytes), `@fontsource-variable/jetbrains-mono` (one subsetted woff2, 0 JS).
+**Primary Dependencies**: React 19 + `react-dom` — **build-time only**, used by
+`renderToStaticMarkup` during prerendering and never shipped to the browser (117.2 KB gz
+avoided). `three` + `@react-three/fiber` + `@react-three/drei` + `@react-three/postprocessing`
+(kept, dynamically imported only, 358.1 KB gz). **Removed**: `framer-motion` (44.5 KB gz).
+**Added**: `vitest` (dev, 0 visitor bytes), `@fontsource-variable/jetbrains-mono` (one
+subsetted woff2, 0 JS).
 
 **Storage**: None. All content is typed modules in `src/content/`. The only generated artifact
 is `wakatime.generated.json`, produced at build time and committed as last-known-good.
@@ -46,7 +55,8 @@ was applied and never proves a pixel was painted. Both enumerated in [quickstart
 **Target Platform**: Static site on Vercel; evergreen browsers, mobile first. Destination
 domain `howzysolutions.dev` (acquisition out of scope).
 
-**Project Type**: Static multi-page web application with a client-side interactive component.
+**Project Type**: Prerendered static multi-page site. No client framework; one progressively
+enhanced interactive region.
 
 **Performance Goals**: LCP ≤ 1.8 s and identity readable within 2 s on a mid-range phone
 (SC-001); CLS ≤ 0.05; 60 fps scrolling; Lighthouse mobile ≥ 95 performance, 100 accessibility.
@@ -76,7 +86,7 @@ Against [constitution v1.1.0](../../.specify/memory/constitution.md).
 | **VII. Verified Before Merge** | Build + lint gate; unit tests where logic is pure | ✅ | ✅ | Vitest added specifically because no runner existed. V-001…V-003 gate every merge. |
 | **Secrets & external data** | No credential in bundle or repo; last-known-good fallback | ✅ | ✅ | Build-time fetch from build-env secret; artifact committed; every failure mode exits 0 (contracts/wakatime-snapshot.md). V-011, V-016, V-017. |
 | **Honesty in self-reported metrics** | Every figure carries source and period | ✅ | ✅ | `range` is mandatory on the snapshot; experience and tracked time are separate records with separate periods (data-model). V-040, V-041. |
-| **Performance budgets** | ≤120 KB initial JS gz; LCP ≤1.8 s; CLS ≤0.05 | ⚠️ **baseline fails at 519.3 KB** | ✅ **projected ≈99 KB** | Closing this gap is the plan's organising constraint. V-014 gates it. |
+| **Performance budgets** | ≤120 KB initial JS gz; LCP ≤1.8 s; CLS ≤0.05 | ⚠️ **baseline fails at 519.3 KB** | ✅ **measured 0.56 KB** | Closing this gap is the plan's organising constraint. V-014 gates it, and caught the first attempt at 147.9 KB. |
 | **Privacy** | No third-party analytics, fonts, or SDKs | ✅ | ✅ | Fonts self-hosted (D5); statistics resolved at build time, never from the browser (D10). V-012. |
 
 **Result: PASS.** No violation requires justification, so Complexity Tracking is empty. The one
@@ -126,10 +136,12 @@ src/
 │   ├── commands/                  # one module per command; registry drives `help`
 │   └── __tests__/
 │
-├── components/                    # replaces every current component
+├── enhance/                       # the only code that reaches the browser
+│   └── reveal.ts                  # IntersectionObserver scroll reveal
+│
+├── components/                    # BUILD-TIME ONLY — consumed by entry-server.tsx
 │   ├── Chrome.tsx                 # sticky editor bar: theme + language controls
-│   ├── Terminal2D.tsx             # canonical renderer
-│   ├── Terminal3D.tsx             # dynamically imported; DOM terminal over WebGL (D9)
+│   └── Terminal3D.tsx             # dynamically imported; DOM terminal over WebGL (D9)
 │   ├── PointField.tsx             # carried over from DotWaveField (FR-038)
 │   ├── ProjectList.tsx
 │   ├── ProjectDetail.tsx
@@ -144,7 +156,8 @@ src/
 │   └── base.css
 │
 ├── theme.ts                       # preference resolution + persistence
-└── main.tsx
+├── entry-server.tsx               # build-time render entry for prerender.mjs
+└── main.ts                        # vanilla client entry — no framework
 
 index.html                         # + blocking inline theme script (D6, FR-021)
 public/fonts/                      # self-hosted woff2 (D5, FR-024)

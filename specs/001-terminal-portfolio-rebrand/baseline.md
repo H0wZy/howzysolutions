@@ -21,9 +21,14 @@ Each group bundled alone with `esbuild --bundle --minify --format=esm`,
 
 | Group | Gzipped |
 |---|---:|
-| `react` + `react-dom/client` | 58.7 KB |
+| `react` + `react-dom/client` — esbuild probe, **later found wrong** | ~~58.7 KB~~ |
+| `react` + `react-dom/client` — Vite production build, **corrected** | **117.2 KB** |
 | `three` + `@react-three/fiber` + `@react-three/drei` + `@react-three/postprocessing` | 358.1 KB |
 | `framer-motion` | 44.5 KB |
 
-**Target after this feature**: ≈ 99 KB initial, with the 358.1 KB WebGL group behind the
-opt-in dynamic import required by FR-033.
+**Correction (2026-08-20)**: the esbuild probe understated `react-dom` by roughly half.
+A Vite production build of a page rendering only an `<h1>` measures 117.2 KB gzipped, matching
+the 523.5 KB raw `react-dom-client.production.js` on disk. See research.md D2.
+
+**Result after this feature**: the client entry measures **0.56 KB gzipped**. React moved to
+build time (prerendering), and the WebGL group sits behind the opt-in required by FR-033.

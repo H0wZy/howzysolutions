@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import type { Locale } from '../content/i18n/types'
 import type { ContentBundle } from '../content/types'
 import { experienceSince } from '../content/types'
@@ -7,35 +6,7 @@ import { Chrome } from '../components/Chrome'
 import { SectionLabel } from '../components/SectionLabel'
 import { ProjectList } from '../components/ProjectList'
 
-/**
- * Reveal-on-scroll. Replaces what framer-motion did, at zero transferred bytes
- * (research D1). No-op under prefers-reduced-motion, where CSS already pins the
- * final state.
- */
-function useRevealOnScroll() {
-  useEffect(() => {
-    const targets = document.querySelectorAll('.reveal')
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      targets.forEach((el) => el.classList.add('is-visible'))
-      return
-    }
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return
-          entry.target.classList.add('is-visible')
-          observer.unobserve(entry.target)
-        })
-      },
-      { threshold: 0.12 },
-    )
-    targets.forEach((el) => observer.observe(el))
-    return () => observer.disconnect()
-  }, [])
-}
-
 export function Home({ content, locale }: { content: ContentBundle; locale: Locale }) {
-  useRevealOnScroll()
   const { profile, projects, stats } = content
   const { years, months } = experienceSince(profile.experienceStart)
 
