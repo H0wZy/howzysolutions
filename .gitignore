@@ -10,6 +10,10 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
+
+# SSR bundle used only by scripts/prerender.mjs
+dist-server
+
 *.local
 
 # Editor directories and files
@@ -30,5 +34,7 @@ coverage
 # Vercel
 .vercel
 
-# SSR bundle used only by scripts/prerender.mjs
-dist-server
+# >>> skeeper ignored specs >>>
+.skeeper/
+specs/**
+# <<< skeeper ignored specs <<<

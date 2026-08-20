@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "sidecar": "git@github.com:H0wZy/skeeper-specs.git",
+  "source_branch": "main",
+  "namespaces": [
+    {
+      "name": "howzysolutions",
+      "sidecar_branch": "howzysolutions/__branches__/main",
+      "commit": "9bde34bdb2fe455c3e14020c63816b579d327e69",
+      "digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "files": 0,
+      "bytes": 0
+    }
+  ]
+}
