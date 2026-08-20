@@ -13,7 +13,7 @@
 
 ## Requirement Completeness
 
-- [ ] No [NEEDS CLARIFICATION] markers remain
+- [x] No [NEEDS CLARIFICATION] markers remain
 - [x] Requirements are testable and unambiguous
 - [x] Success criteria are measurable
 - [x] Success criteria are technology-agnostic (no implementation details)
@@ -53,27 +53,27 @@ silently resolved:**
    equivalent to naming "checkout" in a commerce spec. The spec never states how commands are
    parsed, resolved, or rendered.
 
-**One item does not pass, by design:**
+**All items pass as of iteration 2.**
 
-- **No [NEEDS CLARIFICATION] markers remain** — ✗. Two open clarifications are recorded in
-  the spec's `Clarifications Needed` section as **CL-001** and **CL-002** rather than as
-  inline markers, so they read as one reviewable block instead of being scattered through the
-  requirements.
+### Iteration 2 — 2026-08-19
 
-  - **CL-001 (privacy, blocking for two projects)** — Three real, identifiable client
-    businesses are named, and the source material for two of them carries detailed security
-    and compliance narrative including an audit remediation and a formerly exposed internal
-    API. This is a third party's security posture on a public page; there is no safe default
-    and it cannot be guessed. It gates how the two strongest projects can be written, so it
-    blocks the content pass for `telasparana` and `selzler-construtora` — and only those.
+Both open clarifications were answered by the author and written into the spec as dated
+decisions under `Clarifications Resolved`. The final checklist item now passes.
 
-  - **CL-002 (scope, non-blocking)** — Whether the existing scroll-driven 3D experience is
-    removed, preserved at its own address, or folded into the opt-in immersive presentation.
-    Genuinely forked with no dominant default, but it affects only US6 (P5), the lowest
-    priority story.
+- **CL-001 → name and detail in full.** Clients are named and the security and audit
+  narrative is published at full strength. The concern that this publishes a third party's
+  past security posture was raised with three alternatives before the decision; the author
+  chose full detail. Recorded in the spec together with a standing obligation to generalise
+  on request, which FR-005 makes a data-only edit.
 
-**Effect on readiness.** Neither clarification blocks planning for US1–US5. CL-001 blocks
-writing the final copy for two of nine project records; the other seven, the terminal, the
-locale system, the token system, and the statistics pipeline are all fully specified.
-CL-002 blocks only US6. Planning may proceed; both must be resolved before the affected
-content and US6 are implemented.
+- **CL-002 → absorbed into US6.** The existing animated point field and postprocessing glow
+  are carried into the opt-in immersive presentation rather than deleted or archived. This
+  added **FR-038** and revised **FR-036**, which no longer retires the 3D rendering work —
+  only the scroll-driven navigation model, the violet/cyan glass language, the placeholder
+  records, and the prompt-dump. Functional requirements: 37 → 38.
+
+A third answer, outside the two markers, corrected the sidecar repository from `skeeper-docs`
+to the existing `skeeper-specs`, and the assumption now also carries that sidecar's two
+recorded operational constraints (HTTPS remotes, LF line endings).
+
+**Readiness**: 16 of 16 items pass. No open questions. Ready for `/speckit-plan`.
