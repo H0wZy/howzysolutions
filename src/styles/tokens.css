@@ -1,0 +1,55 @@
+/*
+ * Design tokens — the only place in this codebase where a colour is written.
+ * Contract: specs/001-terminal-portfolio-rebrand/contracts/design-tokens.md
+ * Ratios are verified by scripts/check-contrast.mjs, which parses this file.
+ * A literal colour in a component is a defect (FR-022, Principle VI).
+ */
+
+:root,
+:root[data-theme='dark'] {
+  /* Colour — dark is the default and the identity */
+  --bg: #0c0b0a;
+  --surface: #141210;
+  --fg: #e8e2d6;
+  --dim: #968c79;
+  --accent: #e8a33d;
+  --accent-2: #5cc0ad;
+  --danger: #e0705f;
+  --line: #232019;
+  --border: #6b6250;
+}
+
+:root[data-theme='light'] {
+  --bg: #f7f4ec;
+  --surface: #fffdf8;
+  --fg: #1b1916;
+  --dim: #5f584b;
+  --accent: #8a5a0c;
+  --accent-2: #0f6f5e;
+  --danger: #b03a28;
+  --line: #e3ddd0;
+  --border: #8a8070;
+}
+
+:root {
+  /* Typography — one family; hierarchy comes from size and spacing, not a display face */
+  --font-mono: 'JetBrains Mono Variable', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  --fs-base: 15px;
+  --lh-base: 1.7;
+  --fs-sm: 0.86rem;
+  --fs-xs: 0.74rem;
+  --fs-h2: clamp(1.4rem, 4vw, 1.9rem);
+  --fs-h1: clamp(2.4rem, 8vw, 4rem);
+
+  /* Space and measure */
+  --measure: 820px;
+  --gutter: 24px;
+  --space-section: 54px;
+  --radius: 4px;
+  --radius-sm: 2px;
+
+  /* Motion */
+  --dur-fast: 120ms;
+  --dur-base: 280ms;
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+}

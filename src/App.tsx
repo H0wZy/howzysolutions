@@ -1,26 +1,14 @@
-import { useState } from "react";
-import { Loader } from "@react-three/drei";
-import { Experience } from "./components/Experience";
-import { ProjectPanel } from "./components/ProjectPanel";
-import type { Project } from "./data/projects";
-import "./index.css";
+import type { Locale } from './content/i18n/types'
+import { content } from './content'
+import { routeFor } from './route'
+import { Home } from './pages/Home'
+import { Work } from './pages/Work'
 
-export default function App() {
-  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-
-  return (
-    <main className="app">
-      <Experience onSelectProject={setSelectedProject} />
-      <Loader
-        containerStyles={{ background: "#020617" }}
-        innerStyles={{ background: "rgba(148, 163, 184, 0.25)" }}
-        barStyles={{ background: "linear-gradient(135deg, #67e8f9, #8b5cf6)" }}
-        dataStyles={{ color: "#cbd5e1", fontSize: "13px" }}
-      />
-      <ProjectPanel
-        project={selectedProject}
-        onClose={() => setSelectedProject(null)}
-      />
-    </main>
-  );
+export default function App({ pathname, locale }: { pathname: string; locale: Locale }) {
+  const route = routeFor(pathname)
+  return route.page === 'work' ? (
+    <Work content={content} locale={locale} projectId={route.id} />
+  ) : (
+    <Home content={content} locale={locale} />
+  )
 }

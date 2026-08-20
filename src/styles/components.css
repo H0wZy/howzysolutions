@@ -1,0 +1,267 @@
+/* Component layer. Tokens only — a literal colour here is a defect (FR-022). */
+
+/* Editor chrome ----------------------------------------------------------- */
+
+.chrome {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 16px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  font-size: var(--fs-xs);
+}
+
+.dots {
+  display: flex;
+  gap: 7px;
+}
+
+.dots i {
+  display: block;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+}
+
+.dots i:nth-child(1) { background: var(--danger); }
+.dots i:nth-child(2) { background: var(--accent); }
+.dots i:nth-child(3) { background: var(--accent-2); }
+
+.chrome-file {
+  color: var(--dim);
+}
+
+.chrome-controls {
+  margin-left: auto;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+/* Section labels rendered as editor comments ------------------------------ */
+
+.label {
+  color: var(--dim);
+  font-size: var(--fs-sm);
+  margin: 0 0 1.1em;
+  letter-spacing: 0.02em;
+}
+
+.label::before {
+  content: '## ';
+  color: var(--accent-2);
+}
+
+/* Hero -------------------------------------------------------------------- */
+
+.tagline {
+  font-size: clamp(1.05rem, 3vw, 1.4rem);
+  margin: 0.55em 0 0;
+  font-weight: 500;
+  max-width: 34ch;
+}
+
+.sub {
+  color: var(--dim);
+  max-width: 62ch;
+  margin: 1.1em 0 0;
+  font-size: 0.95rem;
+}
+
+.sub strong {
+  color: var(--fg);
+}
+
+.dim {
+  color: var(--dim);
+}
+
+.prose {
+  max-width: 68ch;
+  margin: 0 0 1.1em;
+}
+
+/* Project list ------------------------------------------------------------ */
+
+.project-list {
+  list-style: none;
+  margin: 2em 0 0;
+  padding: 0;
+}
+
+.project-row {
+  padding: 18px 0;
+  border-top: 1px solid var(--line);
+}
+
+.project-row-head {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.project-row-name {
+  font-weight: 700;
+  font-size: 1.05rem;
+  border-bottom: none;
+}
+
+.project-row-summary {
+  margin: 0.5em 0 0.4em;
+  max-width: 68ch;
+}
+
+.project-row-meta {
+  margin: 0;
+  color: var(--dim);
+  font-size: var(--fs-sm);
+}
+
+/* State badges — meaning never carried by colour alone (FR-025) */
+
+.badge {
+  font-size: var(--fs-xs);
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  color: var(--dim);
+  white-space: nowrap;
+}
+
+.badge-production { color: var(--accent-2); border-color: var(--accent-2); }
+.badge-delivered { color: var(--accent-2); border-color: var(--border); }
+.badge-skeleton { color: var(--danger); border-color: var(--danger); }
+
+/* Project detail ---------------------------------------------------------- */
+
+.detail-head {
+  margin-bottom: 2.4em;
+}
+
+.detail-meta {
+  margin: 0.8em 0 0;
+  font-size: var(--fs-sm);
+}
+
+.detail-context {
+  margin: 0.8em 0 0;
+  color: var(--dim);
+  max-width: 68ch;
+}
+
+.detail-block {
+  padding: 26px 0;
+  border-top: 1px solid var(--line);
+}
+
+.detail-block p {
+  max-width: 68ch;
+  margin: 0 0 1.1em;
+}
+
+.detail-block p:last-child {
+  margin-bottom: 0;
+}
+
+.bullets {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-width: 68ch;
+}
+
+.bullets li {
+  padding: 7px 0 7px 1.6ch;
+  position: relative;
+}
+
+.bullets li::before {
+  content: '–';
+  position: absolute;
+  left: 0;
+  color: var(--accent-2);
+}
+
+/*
+ * FR-004: limitations carry the same visual weight as capabilities. The only
+ * difference is the marker colour, so they read as a peer section, not a
+ * disclaimer buried at the bottom.
+ */
+.bullets-limitations li::before {
+  content: '!';
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.stack-groups {
+  display: grid;
+  gap: 14px;
+}
+
+.stack-group h3 {
+  font-size: var(--fs-xs);
+  color: var(--dim);
+  margin: 0 0 4px;
+  font-weight: 500;
+}
+
+.stack-group h3::before {
+  content: '# ';
+  color: var(--accent-2);
+}
+
+.stack-group p {
+  margin: 0;
+}
+
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  margin: 0;
+}
+
+.metric dt {
+  color: var(--dim);
+  font-size: var(--fs-sm);
+}
+
+.metric dd {
+  margin: 4px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.metric dd strong {
+  font-size: 1.5rem;
+  color: var(--accent);
+  line-height: 1.1;
+}
+
+/* FR-027: no figure is published without its source next to it. */
+.metric-source {
+  color: var(--dim);
+  font-size: var(--fs-xs);
+}
+
+.detail-back {
+  padding-top: 26px;
+  border-top: 1px solid var(--line);
+}
+
+.footer {
+  padding: 40px 0 64px;
+  font-size: var(--fs-sm);
+}
+
+/* Wide content scrolls inside itself; the page never scrolls horizontally. */
+.metrics,
+.stack-groups {
+  overflow-x: auto;
+}
