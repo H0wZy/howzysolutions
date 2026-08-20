@@ -2,15 +2,20 @@ import { useMemo, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 
-type DotWaveFieldProps = {
+type PointFieldProps = {
   cols?: number;
   rows?: number;
+  /**
+   * Required: a WebGL material cannot read a CSS custom property, so the caller
+   * resolves the token with readToken() and passes the value in (FR-022).
+   */
+  color: string;
 };
 
 // Grade de pontos com onda senoidal, mesma ideia do template DottedSurface
 // (21st.dev), portada pra dentro do mesmo Canvas R3F em vez de um 2º
 // WebGL context separado (2 canvases simultâneos custa caro em mobile).
-export function DotWaveField({ cols = 28, rows = 20 }: DotWaveFieldProps) {
+export function PointField({ cols = 28, rows = 20, color }: PointFieldProps) {
   const pointsRef = useRef<THREE.Points>(null);
   const clock = useRef(0);
   const gap = 0.55;
@@ -63,7 +68,7 @@ export function DotWaveField({ cols = 28, rows = 20 }: DotWaveFieldProps) {
       </bufferGeometry>
       <pointsMaterial
         size={0.045}
-        color="#818cf8"
+        color={color}
         transparent
         opacity={0.35}
         sizeAttenuation

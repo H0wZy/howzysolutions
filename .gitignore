@@ -23,3 +23,12 @@ dist-ssr
 *.sln
 *.sw?
 .env
+
+# Test coverage
+coverage
+
+# Vercel
+.vercel
+
+# SSR bundle used only by scripts/prerender.mjs
+dist-server

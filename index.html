@@ -1,10 +1,37 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>howzysolutions</title>
+    <title>Marcos "H0wZy" Junior — Developer</title>
+    <meta
+      name="description"
+      content="Developer portfolio. Nine real projects, their stacks, and their declared limitations."
+    />
+    <script>
+      /*
+       * Blocking on purpose: this is the only place a theme decision can run before
+       * first paint. Anything inside React runs after, and that is the flash.
+       * Order: stored preference -> system preference -> dark. (FR-021, research D6)
+       */
+      ;(function () {
+        try {
+          var stored = localStorage.getItem('h0wzy.theme')
+          var theme =
+            stored === 'dark' || stored === 'light'
+              ? stored
+              : window.matchMedia('(prefers-color-scheme: light)').matches
+                ? 'light'
+                : 'dark'
+          document.documentElement.dataset.theme = theme
+          var locale = localStorage.getItem('h0wzy.locale')
+          if (locale === 'en' || locale === 'pt') document.documentElement.lang = locale
+        } catch (e) {
+          /* Private mode blocks storage; the dark default in the markup already stands. */
+        }
+      })()
+    </script>
   </head>
   <body>
     <div id="root"></div>

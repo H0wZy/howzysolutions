@@ -1,0 +1,43 @@
+{
+  "capturedAt": "2026-08-19T23:10:04.000Z",
+  "range": { "start": "2026-03-17", "end": "2026-08-19" },
+  "totalSeconds": 439399.144,
+  "humanReadableTotal": "122 hrs 3 mins",
+  "dailyAverageSeconds": 8291,
+  "languages": [
+    { "name": "Markdown", "percent": 29.07, "seconds": 136800, "text": "38 hrs" },
+    { "name": "TypeScript", "percent": 18.61, "seconds": 87600, "text": "24 hrs 20 mins" },
+    { "name": "Go", "percent": 12.9, "seconds": 60720, "text": "16 hrs 52 mins" },
+    { "name": "JSON", "percent": 8.59, "seconds": 40380, "text": "11 hrs 13 mins" },
+    { "name": "Python", "percent": 7.2, "seconds": 33840, "text": "9 hrs 24 mins" },
+    { "name": "Other", "percent": 6.66, "seconds": 31320, "text": "8 hrs 42 mins" },
+    { "name": "C#", "percent": 3.8, "seconds": 17820, "text": "4 hrs 57 mins" },
+    { "name": "YAML", "percent": 1.89, "seconds": 8880, "text": "2 hrs 28 mins" }
+  ],
+  "editors": [
+    { "name": "Claude Code", "percent": 61.7, "seconds": 290460, "text": "80 hrs 41 mins" },
+    { "name": "VS Code", "percent": 31.41, "seconds": 147840, "text": "41 hrs 4 mins" },
+    { "name": "Antigravity CLI", "percent": 3.51, "seconds": 16500, "text": "4 hrs 35 mins" },
+    { "name": "Codex CLI", "percent": 2.74, "seconds": 12840, "text": "3 hrs 34 mins" },
+    { "name": "Antigravity IDE", "percent": 0.63, "seconds": 2940, "text": "49 mins" }
+  ],
+  "categories": [
+    { "name": "AI Coding", "percent": 81.76, "seconds": 384840, "text": "106 hrs 54 mins" },
+    { "name": "Coding", "percent": 14.42, "seconds": 67860, "text": "18 hrs 51 mins" },
+    { "name": "Writing Docs", "percent": 3.66, "seconds": 17160, "text": "4 hrs 46 mins" },
+    { "name": "Writing Tests", "percent": 0.14, "seconds": 660, "text": "11 mins" },
+    { "name": "Building", "percent": 0.03, "seconds": 120, "text": "2 mins" }
+  ],
+  "projects": [
+    { "name": "generative-ai-e2", "percent": 24.58, "seconds": 115680, "text": "32 hrs 8 mins" },
+    { "name": "authsys", "percent": 15.84, "seconds": 74520, "text": "20 hrs 42 mins" },
+    { "name": "selzler-construtora", "percent": 14.69, "seconds": 69120, "text": "19 hrs 12 mins" },
+    { "name": "viralvideogen", "percent": 11.24, "seconds": 52860, "text": "14 hrs 41 mins" },
+    { "name": "studiobiasantos", "percent": 8.39, "seconds": 39480, "text": "10 hrs 58 mins" },
+    { "name": "telasparana", "percent": 4.78, "seconds": 22440, "text": "6 hrs 14 mins" },
+    { "name": "terminal", "percent": 3.61, "seconds": 16980, "text": "4 hrs 43 mins" },
+    { "name": "howzysolutions", "percent": 1.76, "seconds": 8220, "text": "2 hrs 17 mins" },
+    { "name": "skeeper-specs", "percent": 0.31, "seconds": 1440, "text": "24 mins" }
+  ],
+  "isFallback": false
+}

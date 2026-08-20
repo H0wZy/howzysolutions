@@ -42,12 +42,12 @@ From [research.md](./research.md) D11 — these fail the **build**, not the lint
 
 **Purpose**: Adjust the dependency set and tooling before any code is written.
 
-- [ ] T001 Record the pre-work baseline by running `npm ci && npm run build` and writing the reported entry-chunk gzip size (expected ≈519.3 KB) into `specs/001-terminal-portfolio-rebrand/baseline.md`, so V-014 has a committed number to compare against
-- [ ] T002 Remove `framer-motion` from `package.json` dependencies and run `npm install` to update `package-lock.json` (research D1; gate V-013)
-- [ ] T003 [P] Add `vitest` to devDependencies in `package.json` and create `vitest.config.ts` at the repository root reusing the existing Vite config (research D4)
-- [ ] T004 [P] Add `"test": "vitest run"` and `"test:watch": "vitest"` scripts to `package.json`
-- [ ] T005 [P] Add `@fontsource-variable/jetbrains-mono` to dependencies in `package.json` (research D5)
-- [ ] T006 [P] Extend `eslint.config.js` with a config block covering `scripts/**/*.mjs` as Node ESM, so build scripts are linted rather than excluded
+- [X] T001 Record the pre-work baseline by running `npm ci && npm run build` and writing the reported entry-chunk gzip size (expected ≈519.3 KB) into `specs/001-terminal-portfolio-rebrand/baseline.md`, so V-014 has a committed number to compare against
+- [X] T002 Add `coverage` and `.vercel` to `.gitignore` and to `globalIgnores` in `eslint.config.js`, so the Vitest and Vercel outputs added by this feature are not committed or linted
+- [X] T003 [P] Add `vitest` to devDependencies in `package.json` and create `vitest.config.ts` at the repository root reusing the existing Vite config (research D4)
+- [X] T004 [P] Add `"test": "vitest run"` and `"test:watch": "vitest"` scripts to `package.json`
+- [X] T005 [P] Add `@fontsource-variable/jetbrains-mono` to dependencies in `package.json` (research D5)
+- [X] T006 [P] Extend `eslint.config.js` with a config block covering `scripts/**/*.mjs` as Node ESM, so build scripts are linted rather than excluded
 
 **Checkpoint**: `npm run build`, `npm run lint` and `npm test` all execute (tests trivially pass with no test files yet).
 
@@ -62,26 +62,26 @@ Every user story depends on all four.
 
 ### Design tokens and theming
 
-- [ ] T007 Create `src/styles/tokens.css` declaring every token from [contracts/design-tokens.md](./contracts/design-tokens.md) for both themes — `:root` and `[data-theme="dark"]` for dark, `[data-theme="light"]` for light — covering colour, typography, space, radius and motion
-- [ ] T008 [P] Create `src/styles/base.css` with the reset, `body` defaults reading `--font-mono` and `--fs-base`, the `--measure` container, hairline section rules using `--line`, and a `@media (prefers-reduced-motion: reduce)` block zeroing every duration while preserving final states (FR-025)
-- [ ] T009 [P] Create `scripts/check-contrast.mjs` that parses `src/styles/tokens.css`, recomputes every ratio in the contract with the WCAG relative-luminance formula, and exits non-zero when a text token falls below 4.5:1 or `--border` below 3:1 in either theme (gate V-009)
-- [ ] T010 Add `node scripts/check-contrast.mjs` to the `test` script in `package.json` so token contrast is a merge gate, not a manual check
-- [ ] T011 [P] Import the `latin` subset of `@fontsource-variable/jetbrains-mono` in `src/main.tsx` and set `font-display: swap`, then confirm no request reaches a third-party host (FR-024; gate V-012)
-- [ ] T012 Add the blocking inline theme script to `<head>` in `index.html`, resolving stored preference → `prefers-color-scheme` → dark and setting `data-theme` on `<html>` before first paint (research D6; FR-021)
-- [ ] T013 Create `src/theme.ts` exporting the `Theme` union, the resolution order, and read/write persistence helpers — **application logic only, no UI control** (the control ships in US4)
+- [X] T007 Create `src/styles/tokens.css` declaring every token from [contracts/design-tokens.md](./contracts/design-tokens.md) for both themes — `:root` and `[data-theme="dark"]` for dark, `[data-theme="light"]` for light — covering colour, typography, space, radius and motion
+- [X] T008 [P] Create `src/styles/base.css` with the reset, `body` defaults reading `--font-mono` and `--fs-base`, the `--measure` container, hairline section rules using `--line`, and a `@media (prefers-reduced-motion: reduce)` block zeroing every duration while preserving final states (FR-025)
+- [X] T009 [P] Create `scripts/check-contrast.mjs` that parses `src/styles/tokens.css`, recomputes every ratio in the contract with the WCAG relative-luminance formula, and exits non-zero when a text token falls below 4.5:1 or `--border` below 3:1 in either theme (gate V-009)
+- [X] T010 Add `node scripts/check-contrast.mjs` to the `test` script in `package.json` so token contrast is a merge gate, not a manual check
+- [X] T011 [P] Import the `latin` subset of `@fontsource-variable/jetbrains-mono` in `src/main.tsx` and set `font-display: swap`, then confirm no request reaches a third-party host (FR-024; gate V-012)
+- [X] T012 Add the blocking inline theme script to `<head>` in `index.html`, resolving stored preference → `prefers-color-scheme` → dark and setting `data-theme` on `<html>` before first paint (research D6; FR-021)
+- [X] T013 Create `src/theme.ts` exporting the `Theme` union, the resolution order, and read/write persistence helpers — **application logic only, no UI control** (the control ships in US4)
 
 ### Localization mechanism
 
-- [ ] T014 Create `src/content/i18n/types.ts` defining `LOCALES`, the `Locale` union, and `Localized<T> = Record<Locale, T>` per [data-model.md](./data-model.md) (research D7)
-- [ ] T015 Create `src/content/i18n/en.ts` with the interface-string dictionary and export `StringKey = keyof typeof en`, making English the source of the key set
-- [ ] T016 Create `src/content/i18n/pt.ts` declared `satisfies Record<StringKey, string>`, so a missing or misspelled key fails `tsc -b` (FR-017)
-- [ ] T017 [P] Create `src/content/i18n/__tests__/locales.test.ts` asserting both dictionaries share an identical key set and that no Portuguese value is byte-identical to its English counterpart unless it is a proper noun (gate V-006)
-- [ ] T018 Create `src/locale.ts` exporting the active-locale resolution order, persistence, and a `t(key)` lookup — no React binding yet
+- [X] T014 Create `src/content/i18n/types.ts` defining `LOCALES`, the `Locale` union, and `Localized<T> = Record<Locale, T>` per [data-model.md](./data-model.md) (research D7)
+- [X] T015 Create `src/content/i18n/en.ts` with the interface-string dictionary and export `StringKey = keyof typeof en`, making English the source of the key set
+- [X] T016 Create `src/content/i18n/pt.ts` declared `satisfies Record<StringKey, string>`, so a missing or misspelled key fails `tsc -b` (FR-017)
+- [X] T017 [P] Create `src/content/i18n/__tests__/locales.test.ts` asserting both dictionaries share an identical key set and that no Portuguese value is byte-identical to its English counterpart unless it is a proper noun (gate V-006)
+- [X] T018 Create `src/locale.ts` exporting the active-locale resolution order, persistence, and a `t(key)` lookup — no React binding yet
 
 ### Content schema
 
-- [ ] T019 Create `src/content/types.ts` defining `Project`, `ProjectKind`, `ProjectState`, `StackGroup`, `Metric`, `ProjectLink`, `ProjectImage`, `Technology`, `TechCategory`, `AuthorProfile`, `Contact` and `ContentBundle`, exactly as specified in [data-model.md](./data-model.md), using `const` objects plus `keyof typeof` unions rather than `enum`
-- [ ] T020 [P] Create `src/content/__tests__/schema.test.ts` asserting every validation rule from data-model.md: `limitations` non-empty for every project (FR-004, gate V-004), `authsys` is `state: 'skeleton'` and `kind: 'study'` (FR-003, gate V-005), unique ids matching `/^[a-z0-9-]+$/`, `period.start` before `period.end`, and every `stack` reference resolving to a known Technology
+- [X] T019 Create `src/content/types.ts` defining `Project`, `ProjectKind`, `ProjectState`, `StackGroup`, `Metric`, `ProjectLink`, `ProjectImage`, `Technology`, `TechCategory`, `AuthorProfile`, `Contact` and `ContentBundle`, exactly as specified in [data-model.md](./data-model.md), using `const` objects plus `keyof typeof` unions rather than `enum`
+- [X] T020 [P] Create `src/content/__tests__/schema.test.ts` asserting every validation rule from data-model.md: `limitations` non-empty for every project (FR-004, gate V-004), `authsys` is `state: 'skeleton'` and `kind: 'study'` (FR-003, gate V-005), unique ids matching `/^[a-z0-9-]+$/`, `period.start` before `period.end`, and every `stack` reference resolving to a known Technology
 
 **Checkpoint**: Tokens render in both themes with no flash, contrast passes, the locale mechanism compiles, and the schema test runs (failing only because no content exists yet).
 
@@ -102,37 +102,37 @@ construction; US3 delivers the *switching*, not the translations.
 
 ### Content records
 
-- [ ] T021 [P] [US1] Create `src/content/technologies.ts` with every technology referenced across the nine projects, each with `id`, `name` and `category`
-- [ ] T022 [P] [US1] Create `src/content/profile.ts` with name, handle, tagline, biography, `experienceStart: '2023-01-01'`, location and contacts (email, GitHub, Linktree), plus a build-time-derived experience duration helper — never a stored figure (FR-007)
-- [ ] T023 [P] [US1] Create `src/content/projects/telasparana.ts` — `client`, `production`, 368 commits, 2026-03-24→2026-06-28, including the full security trail per CL-001 and the limitations declared in its README (`AllowedHosts` deferred, shared HS256 secret, e-mail verification pending)
-- [ ] T024 [P] [US1] Create `src/content/projects/selzler-construtora.ts` — `client`, `functional`, 119 commits, 2026-07-14→2026-07-24, including the dated stack lock, the inherited structure from telasparana, and the four-sweep audit
-- [ ] T025 [P] [US1] Create `src/content/projects/generative-ai-e2.ts` — `training`, `delivered`, 71 commits, with the measured link-coverage table and the golden-set metrics as `Metric` entries, and the deliberate limitations (LLM disabled after 1 of 3 injection vectors passed; SLA absent at source; Freshservice against mock)
-- [ ] T026 [P] [US1] Create `src/content/projects/viralvideogen.ts` — `product`, `functional`, 38 commits, including the three defining decisions (no full-chain `generate`, `record` decodes before believing, `assemble` sums measured duration)
-- [ ] T027 [P] [US1] Create `src/content/projects/studiobiasantos.ts` — `client`, `production`, 23 commits, including the single-weight typography constraint and the declared test-suite limit
-- [ ] T028 [P] [US1] Create `src/content/projects/howzysolutions.ts` — `product`, `in-progress`, honestly describing the current state including this rebrand in progress
-- [ ] T029 [P] [US1] Create `src/content/projects/terminal.ts` — `tooling`, `functional`, 7 commits, including what it explicitly does not do (font selection is a manual GUI step)
-- [ ] T030 [P] [US1] Create `src/content/projects/authsys.ts` — `study`, `skeleton`, 6 commits, stating plainly that the auth middleware is an empty package declaration, the Makefile is empty, and there are no tests (FR-003, FR-004)
-- [ ] T031 [P] [US1] Create `src/content/projects/skeeper-specs.ts` — `tooling`, `functional`, 2 commits, including the two operational constraints (HTTPS remotes, LF line endings)
-- [ ] T032 [US1] Create `src/content/projects/index.ts` exporting the ordered array, and `src/content/index.ts` assembling the `ContentBundle` (depends on T021–T031)
-- [ ] T033 [US1] Run `npm test` and confirm `src/content/__tests__/schema.test.ts` now passes against real content (gates V-004, V-005 in `quickstart.md`)
+- [X] T021 [P] [US1] Create `src/content/technologies.ts` with every technology referenced across the nine projects, each with `id`, `name` and `category`
+- [X] T022 [P] [US1] Create `src/content/profile.ts` with name, handle, tagline, biography, `experienceStart: '2023-01-01'`, location and contacts (email, GitHub, Linktree), plus a build-time-derived experience duration helper — never a stored figure (FR-007)
+- [X] T023 [P] [US1] Create `src/content/projects/telasparana.ts` — `client`, `production`, 368 commits, 2026-03-24→2026-06-28, including the full security trail per CL-001 and the limitations declared in its README (`AllowedHosts` deferred, shared HS256 secret, e-mail verification pending)
+- [X] T024 [P] [US1] Create `src/content/projects/selzler-construtora.ts` — `client`, `functional`, 119 commits, 2026-07-14→2026-07-24, including the dated stack lock, the inherited structure from telasparana, and the four-sweep audit
+- [X] T025 [P] [US1] Create `src/content/projects/generative-ai-e2.ts` — `training`, `delivered`, 71 commits, with the measured link-coverage table and the golden-set metrics as `Metric` entries, and the deliberate limitations (LLM disabled after 1 of 3 injection vectors passed; SLA absent at source; Freshservice against mock)
+- [X] T026 [P] [US1] Create `src/content/projects/viralvideogen.ts` — `product`, `functional`, 38 commits, including the three defining decisions (no full-chain `generate`, `record` decodes before believing, `assemble` sums measured duration)
+- [X] T027 [P] [US1] Create `src/content/projects/studiobiasantos.ts` — `client`, `production`, 23 commits, including the single-weight typography constraint and the declared test-suite limit
+- [X] T028 [P] [US1] Create `src/content/projects/howzysolutions.ts` — `product`, `in-progress`, honestly describing the current state including this rebrand in progress
+- [X] T029 [P] [US1] Create `src/content/projects/terminal.ts` — `tooling`, `functional`, 7 commits, including what it explicitly does not do (font selection is a manual GUI step)
+- [X] T030 [P] [US1] Create `src/content/projects/authsys.ts` — `study`, `skeleton`, 6 commits, stating plainly that the auth middleware is an empty package declaration, the Makefile is empty, and there are no tests (FR-003, FR-004)
+- [X] T031 [P] [US1] Create `src/content/projects/skeeper-specs.ts` — `tooling`, `functional`, 2 commits, including the two operational constraints (HTTPS remotes, LF line endings)
+- [X] T032 [US1] Create `src/content/projects/index.ts` exporting the ordered array, and `src/content/index.ts` assembling the `ContentBundle` (depends on T021–T031)
+- [X] T033 [US1] Run `npm test` and confirm `src/content/__tests__/schema.test.ts` now passes against real content (gates V-004, V-005 in `quickstart.md`)
 
 ### Presentation
 
-- [ ] T034 [P] [US1] Create `src/components/Chrome.tsx` — the sticky editor-style bar with the traffic-light dots and the current path label, with slots for the theme and language controls that US3 and US4 will fill
-- [ ] T035 [P] [US1] Create `src/components/SectionLabel.tsx` rendering the `## label` markdown-comment section heading from the design direction
-- [ ] T036 [US1] Create `src/components/ProjectList.tsx` rendering all nine projects with name, summary, state badge, primary stack and period, reading from the content bundle
-- [ ] T037 [US1] Create `src/components/ProjectDetail.tsx` rendering one full project record, giving `limitations` the same visual prominence as `capabilities` (FR-004) and rendering correctly with `images` empty
-- [ ] T038 [US1] Create `src/pages/Home.tsx` composing hero, positioning, project list and contact, with the CSS staggered entry reveal and `IntersectionObserver` scroll reveal replacing what `framer-motion` did (research D1)
-- [ ] T039 [US1] Create `src/pages/Work.tsx` rendering a single project detail page, parameterised by project id
-- [ ] T040 [US1] Rewrite `src/App.tsx` to select the page from the current pathname, and `src/main.tsx` to hydrate the prerendered markup rather than render from empty
+- [X] T034 [P] [US1] Create `src/components/Chrome.tsx` — the sticky editor-style bar with the traffic-light dots and the current path label, with slots for the theme and language controls that US3 and US4 will fill
+- [X] T035 [P] [US1] Create `src/components/SectionLabel.tsx` rendering the `## label` markdown-comment section heading from the design direction
+- [X] T036 [US1] Create `src/components/ProjectList.tsx` rendering all nine projects with name, summary, state badge, primary stack and period, reading from the content bundle
+- [X] T037 [US1] Create `src/components/ProjectDetail.tsx` rendering one full project record, giving `limitations` the same visual prominence as `capabilities` (FR-004) and rendering correctly with `images` empty
+- [X] T038 [US1] Create `src/pages/Home.tsx` composing hero, positioning, project list and contact, with the CSS staggered entry reveal and `IntersectionObserver` scroll reveal replacing what `framer-motion` did (research D1)
+- [X] T039 [US1] Create `src/pages/Work.tsx` rendering a single project detail page, parameterised by project id
+- [X] T040 [US1] Rewrite `src/App.tsx` to select the page from the current pathname, and `src/main.tsx` to hydrate the prerendered markup rather than render from empty
 
 ### Prerendering and retirement
 
-- [ ] T041 [US1] Create `scripts/prerender.mjs` that renders `Home` and one `Work` page per project with `renderToStaticMarkup`, injects each into the built shell, and writes `dist/index.html` and `dist/work/<id>/index.html` with per-page `<title>` and `<meta name="description">` (research D3; FR-006)
-- [ ] T042 [US1] Wire `scripts/prerender.mjs` into the `build` script in `package.json` so it runs after `vite build`
-- [ ] T043 [US1] Delete `src/components/Experience.tsx`, `ScrollCamera.tsx`, `ScrollNav.tsx`, `ProjectOrb.tsx`, `ProjectPanel.tsx`, `HeroOverlay.tsx`, `PageSections.tsx`, plus `src/App.css`, `src/data/projects.ts`, `src/assets/react.svg` and `src/assets/vite.svg` (FR-036)
-- [ ] T044 [US1] Rename `src/components/DotWaveField.tsx` to `src/components/PointField.tsx` and strip its scroll coupling, leaving it unreferenced until US6 consumes it (FR-038)
-- [ ] T045 [US1] Replace `src/index.css` with imports of `src/styles/tokens.css` and `src/styles/base.css`, removing every violet/cyan glass rule (FR-036)
+- [X] T041 [US1] Create `scripts/prerender.mjs` that renders `Home` and one `Work` page per project with `renderToStaticMarkup`, injects each into the built shell, and writes `dist/index.html` and `dist/work/<id>/index.html` with per-page `<title>` and `<meta name="description">` (research D3; FR-006)
+- [X] T042 [US1] Wire `scripts/prerender.mjs` into the `build` script in `package.json` so it runs after `vite build`
+- [X] T043 [US1] Delete `src/components/Experience.tsx`, `ScrollCamera.tsx`, `ScrollNav.tsx`, `ProjectOrb.tsx`, `ProjectPanel.tsx`, `HeroOverlay.tsx`, `PageSections.tsx`, plus `src/App.css`, `src/data/projects.ts`, `src/assets/react.svg` and `src/assets/vite.svg` (FR-036), then in the **same commit** remove `framer-motion` from `package.json` and run `npm install` — `ProjectPanel`, `HeroOverlay` and `PageSections` are its only importers, so removing the dependency before deleting them leaves the build red (research D1; gate V-013)
+- [X] T044 [US1] Rename `src/components/DotWaveField.tsx` to `src/components/PointField.tsx` and strip its scroll coupling, leaving it unreferenced until US6 consumes it (FR-038)
+- [X] T045 [US1] Replace `src/index.css` with imports of `src/styles/tokens.css` and `src/styles/base.css`, removing every violet/cyan glass rule (FR-036)
 - [ ] T046 [US1] Run `npm run build` and confirm the entry chunk is **≤ 120 KB gzipped** against the figure recorded in `specs/001-terminal-portfolio-rebrand/baseline.md` — **the budget gate lands here, before the terminal exists** (gate V-014 in `quickstart.md`)
 - [ ] T047 [US1] Execute procedures V-019 … V-022 from `quickstart.md` in a real browser at 375px and 1440px, including the JavaScript-disabled pass, and attach screenshots
 
@@ -291,6 +291,14 @@ US1 through US5 depend only on the Foundational phase and can be built in any or
 **US6 is the sole exception**: it renders the US2 terminal inside an environment, so US2 must
 exist first. Where a later story touches an earlier one it *adds* to it — T064 mounts, T087
 registers, T067 and T073 fill the slots T034 left — so each story stays independently testable.
+
+### Ordering correction applied during implementation
+
+`framer-motion` removal was originally listed in Phase 1. It cannot run there: `ProjectPanel`,
+`HeroOverlay` and `PageSections` import it and are not deleted until T043, so removing the
+dependency first leaves `npm run build` red for the whole of Phase 2. The removal moved into
+T043 so the deletion and the dependency drop land in one commit and the build is green at
+every boundary. T002 now covers the ignore-file work instead.
 
 ### Within Each Story
 
