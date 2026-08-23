@@ -6,10 +6,10 @@
     {
       "name": "howzysolutions",
       "sidecar_branch": "howzysolutions/__branches__/claude/portfolio-frontend-redesign-ay20gi",
-      "commit": "c9c01293ba7d04543ba9323e463af87f1ba6bdc3",
-      "digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "files": 0,
-      "bytes": 0
+      "commit": "57f072e3ad87b848ad58b45a677e143f644d5b7f",
+      "digest": "sha256:7b756c9914e47fc6855e75799d28e75675cc3adf42fc3ed713f27ac90a2532bb",
+      "files": 11,
+      "bytes": 135933
     }
   ]
 }

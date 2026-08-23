@@ -5,6 +5,7 @@ import { translate } from '../locale'
 import { Chrome } from '../components/Chrome'
 import { SectionLabel } from '../components/SectionLabel'
 import { ProjectList } from '../components/ProjectList'
+import { Terminal } from '../components/Terminal'
 
 export function Home({ content, locale }: { content: ContentBundle; locale: Locale }) {
   const { profile, projects, stats } = content
@@ -43,6 +44,13 @@ export function Home({ content, locale }: { content: ContentBundle; locale: Loca
           </p>
         </div>
       </header>
+
+      <section className="section" id="terminal">
+        <div className="wrap">
+          <SectionLabel id="section.terminal" locale={locale} />
+          <Terminal locale={locale} />
+        </div>
+      </section>
 
       <section className="section" id="about">
         <div className="wrap">
