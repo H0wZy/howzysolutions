@@ -1,7 +1,48 @@
-/** Route parsing. Separate from App so the component file exports only a component. */
+import { DEFAULT_LOCALE, LOCALES, type Locale } from './content/i18n/types'
+
+/**
+ * Routing over prerendered documents. There is no router: every route below is
+ * a real file emitted by scripts/prerender.mjs, and navigation is a link.
+ *
+ * English is canonical and unprefixed; Portuguese lives under /pt/. Real URLs
+ * per locale are what make a Portuguese page shareable and indexable, and what
+ * lets each document carry the right lang attribute with no JavaScript.
+ */
+
 export type Route = { page: 'home' } | { page: 'work'; id: string }
 
-export function routeFor(pathname: string): Route {
-  const match = /^\/work\/([a-z0-9-]+)\/?$/.exec(pathname)
+export type Location = { route: Route; locale: Locale }
+
+const NON_DEFAULT = LOCALES.filter((l) => l !== DEFAULT_LOCALE)
+
+/** Splits a leading locale segment off the path, if there is one. */
+export function splitLocale(pathname: string): { locale: Locale; rest: string } {
+  for (const locale of NON_DEFAULT) {
+    if (pathname === `/${locale}` || pathname.startsWith(`/${locale}/`)) {
+      return { locale, rest: pathname.slice(locale.length + 1) || '/' }
+    }
+  }
+  return { locale: DEFAULT_LOCALE, rest: pathname }
+}
+
+export function parseRoute(rest: string): Route {
+  const match = /^\/work\/([a-z0-9-]+)\/?$/.exec(rest)
   return match ? { page: 'work', id: match[1] } : { page: 'home' }
+}
+
+export function locationFor(pathname: string): Location {
+  const { locale, rest } = splitLocale(pathname)
+  return { route: parseRoute(rest), locale }
+}
+
+/** The canonical path for a route in a given locale. */
+export function pathFor(route: Route, locale: Locale): string {
+  const rest = route.page === 'work' ? `/work/${route.id}/` : '/'
+  if (locale === DEFAULT_LOCALE) return rest
+  return rest === '/' ? `/${locale}/` : `/${locale}${rest}`
+}
+
+/** The same page in another locale — what the language control links to. */
+export function counterpart(pathname: string, locale: Locale): string {
+  return pathFor(locationFor(pathname).route, locale)
 }

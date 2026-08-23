@@ -1,10 +1,10 @@
 /**
- * Emits one real HTML document per route by rendering each page to static markup
- * and injecting it into the built shell (research D3).
+ * Emits one real HTML document per route per locale by rendering each page to
+ * static markup and injecting it into the built shell (research D3).
  *
- * This is what makes SC-001 and the JavaScript-disabled pass of US1 achievable:
- * the prose is in the payload before React parses. It is also why no routing
- * library ships — every URL is a file.
+ * This is what makes SC-001 and the JavaScript-disabled pass achievable: the
+ * prose is in the payload before any script runs. It is also why no routing
+ * library ships — every URL is a file, in every language.
  */
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
@@ -18,7 +18,7 @@ const shell = readFileSync(join(dist, 'index.html'), 'utf8')
 
 const ROOT_DIV = '<div id="root"></div>'
 if (!shell.includes(ROOT_DIV)) {
-  console.error('✗ prerender: could not find the root element in the built shell')
+  console.error('x prerender: could not find the root element in the built shell')
   process.exit(1)
 }
 
@@ -36,30 +36,34 @@ function withMeta(html, { title, description }) {
     )
 }
 
-/** hreflang alternates, one per locale (T070). */
-function withAlternates(html, pathname) {
-  const links = server.LOCALES.map(
-    (l) => `    <link rel="alternate" hreflang="${l}" href="${pathname}" />`,
-  ).join('\n')
-  return html.replace('</head>', `${links}\n  </head>`)
+/**
+ * hreflang alternates pointing at the real counterpart documents, plus the
+ * document's own lang. Both only mean anything because each locale is a real
+ * URL rather than a client-side toggle (FR-018).
+ */
+function withLangs(html, pathname, lang) {
+  const links = server
+    .alternates(pathname)
+    .map((a) => `    <link rel="alternate" hreflang="${a.locale}" href="${a.href}" />`)
+    .join('\n')
+  return html
+    .replace(/<html lang="[^"]*"/, `<html lang="${lang}"`)
+    .replace('</head>', `${links}\n  </head>`)
 }
 
-const DEFAULT_LOCALE = 'en'
 let written = 0
 
-for (const pathname of server.routes()) {
-  const markup = server.render(pathname, DEFAULT_LOCALE)
-  const meta = server.metaFor(pathname, DEFAULT_LOCALE)
-
-  let html = shell.replace(ROOT_DIV, `<div id="root">${markup}</div>`)
+for (const { pathname } of server.routes()) {
+  const meta = server.metaFor(pathname)
+  let html = shell.replace(ROOT_DIV, `<div id="root">${server.render(pathname)}</div>`)
   html = withMeta(html, meta)
-  html = withAlternates(html, pathname)
+  html = withLangs(html, pathname, meta.lang)
 
   const outDir = pathname === '/' ? dist : join(dist, pathname)
   mkdirSync(outDir, { recursive: true })
   writeFileSync(join(outDir, 'index.html'), html, 'utf8')
   written++
-  console.log(`  ${pathname.padEnd(34)} ${(html.length / 1024).toFixed(1)} KB`)
+  console.log(`  ${pathname.padEnd(36)} ${(html.length / 1024).toFixed(1)} KB`)
 }
 
-console.log(`\n✓ prerendered ${written} routes`)
+console.log(`\nok prerendered ${written} documents`)

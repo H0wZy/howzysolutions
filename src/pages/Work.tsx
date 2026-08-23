@@ -7,10 +7,12 @@ export function Work({
   content,
   locale,
   projectId,
+  pathname,
 }: {
   content: ContentBundle
   locale: Locale
   projectId: string
+  pathname: string
 }) {
   const project = content.projects.find((p) => p.id === projectId)
 
@@ -19,7 +21,7 @@ export function Work({
   if (!project) {
     return (
       <>
-        <Chrome locale={locale} path="h0wzy/work" />
+        <Chrome locale={locale} path="h0wzy/work" pathname={pathname} />
         <main className="section">
           <div className="wrap">
             <h1>404</h1>
@@ -34,7 +36,7 @@ export function Work({
 
   return (
     <>
-      <Chrome locale={locale} path={`h0wzy/work/${project.id}`} />
+      <Chrome locale={locale} path={`h0wzy/work/${project.id}`} pathname={pathname} />
       <main className="section">
         <div className="wrap">
           <ProjectDetail
