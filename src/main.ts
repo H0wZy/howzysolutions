@@ -16,12 +16,15 @@ import './index.css'
 import { initReveal } from './enhance/reveal'
 import { mountTerminal } from './enhance/terminal/mount'
 import { initThemeControl } from './enhance/theme-control'
-import { resolveLocale } from './locale'
+import { initLocaleControl } from './enhance/locale-control'
+import { locationFor } from './route'
 
-const locale = resolveLocale()
+// The document's locale is whatever URL served it — no negotiation needed.
+const locale = locationFor(window.location.pathname).locale
 
 initReveal()
 initThemeControl(locale)
+initLocaleControl()
 
 // The terminal is the one interactive region on the site. Everything else is
 // prerendered text, which is why this entry stays under a kilobyte.

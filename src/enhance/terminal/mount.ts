@@ -5,7 +5,7 @@ import { content } from '../../content'
 import { translate } from '../../content/i18n/translate'
 import type { Locale } from '../../content/i18n/types'
 import { applyTheme, resolveTheme } from '../../theme'
-import { persistLocale } from '../../locale'
+import { counterpart } from '../../route'
 import { renderEcho, renderLine } from './render'
 
 /**
@@ -58,12 +58,15 @@ export function mountTerminal(root: HTMLElement, session: TerminalSession): void
         applyTheme(effect.theme)
         break
       case 'set-locale':
-        // Persist and reload: the page's prose is prerendered per locale, so the
-        // honest way to switch is to fetch the other rendering rather than
-        // partially translate what is already on screen. US3 replaces this with
-        // an in-place switch once both locales are emitted.
-        persistLocale(effect.locale)
-        window.location.reload()
+        // Each locale is a real prerendered document, so switching is a
+        // navigation to the counterpart URL — the same thing the chrome's
+        // language link does (FR-015). Scroll is preserved the same way.
+        try {
+          sessionStorage.setItem('h0wzy.scroll', String(window.scrollY))
+        } catch {
+          /* No storage, no restore; the navigation still happens. */
+        }
+        window.location.assign(counterpart(window.location.pathname, effect.locale))
         break
       case 'navigate':
         window.location.assign(effect.href)

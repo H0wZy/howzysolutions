@@ -7,13 +7,21 @@ import { SectionLabel } from '../components/SectionLabel'
 import { ProjectList } from '../components/ProjectList'
 import { Terminal } from '../components/Terminal'
 
-export function Home({ content, locale }: { content: ContentBundle; locale: Locale }) {
+export function Home({
+  content,
+  locale,
+  pathname,
+}: {
+  content: ContentBundle
+  locale: Locale
+  pathname: string
+}) {
   const { profile, projects, stats } = content
   const { years, months } = experienceSince(profile.experienceStart)
 
   return (
     <>
-      <Chrome locale={locale} path="h0wzy" />
+      <Chrome locale={locale} path="h0wzy" pathname={pathname} />
 
       <header className="section">
         <div className="wrap rise">

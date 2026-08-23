@@ -2,6 +2,7 @@ import type { ReactNode } from 'react'
 import type { Locale } from '../content/i18n/types'
 import { translate } from '../content/i18n/translate'
 import { ThemeControl } from './ThemeControl'
+import { LocaleControl } from './LocaleControl'
 import { DEFAULT_THEME } from '../theme/types'
 
 /**
@@ -11,11 +12,13 @@ import { DEFAULT_THEME } from '../theme/types'
 export function Chrome({
   locale,
   path,
+  pathname,
   controls,
   immersive,
 }: {
   locale: Locale
   path: string
+  pathname: string
   controls?: ReactNode
   immersive?: ReactNode
 }) {
@@ -32,6 +35,7 @@ export function Chrome({
       <span className="chrome-controls">
         {immersive}
         {controls}
+        <LocaleControl locale={locale} pathname={pathname} />
         {/* Prerendered in the default theme; enhance() corrects the label if the
             visitor resolved to the other one. */}
         <ThemeControl locale={locale} theme={DEFAULT_THEME} />
