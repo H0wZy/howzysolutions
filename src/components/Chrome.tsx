@@ -1,6 +1,8 @@
 import type { ReactNode } from 'react'
 import type { Locale } from '../content/i18n/types'
-import { translate } from '../locale'
+import { translate } from '../content/i18n/translate'
+import { ThemeControl } from './ThemeControl'
+import { DEFAULT_THEME } from '../theme/types'
 
 /**
  * Sticky editor-style bar. The theme and language controls arrive in US4 and US3
@@ -30,6 +32,9 @@ export function Chrome({
       <span className="chrome-controls">
         {immersive}
         {controls}
+        {/* Prerendered in the default theme; enhance() corrects the label if the
+            visitor resolved to the other one. */}
+        <ThemeControl locale={locale} theme={DEFAULT_THEME} />
       </span>
     </div>
   )

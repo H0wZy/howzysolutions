@@ -32,6 +32,17 @@ export function resolveTheme(): Theme {
   return readStoredTheme() ?? systemTheme()
 }
 
+/** Fired whenever the theme changes, whatever changed it. */
+export const THEME_CHANGE_EVENT = 'h0wzy:themechange'
+
+/**
+ * The single implementation of "change the theme". The chrome button and the
+ * terminal's `theme` command both come through here, which is what makes FR-015
+ * true by construction rather than by two call sites agreeing to behave.
+ *
+ * The event exists so anything reflecting the theme stays in sync without the
+ * caller needing to know it exists.
+ */
 export function applyTheme(theme: Theme): void {
   document.documentElement.dataset.theme = theme
   try {
@@ -39,6 +50,7 @@ export function applyTheme(theme: Theme): void {
   } catch {
     /* Storage unavailable: the theme still applies for this session. */
   }
+  window.dispatchEvent(new CustomEvent<Theme>(THEME_CHANGE_EVENT, { detail: theme }))
 }
 
 export * from './types'
