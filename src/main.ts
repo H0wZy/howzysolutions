@@ -14,5 +14,14 @@
 import '@fontsource-variable/jetbrains-mono/index.css'
 import './index.css'
 import { initReveal } from './enhance/reveal'
+import { mountTerminal } from './enhance/terminal/mount'
+import { resolveLocale } from './locale'
 
 initReveal()
+
+// The terminal is the one interactive region on the site. Everything else is
+// prerendered text, which is why this entry stays under a kilobyte.
+const terminal = document.querySelector<HTMLElement>('[data-term]')
+if (terminal) {
+  mountTerminal(terminal, { history: [], locale: resolveLocale() })
+}

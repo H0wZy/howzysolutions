@@ -47,15 +47,13 @@ export const skeeperSpecs: Project = {
 
   limitations: {
     en: [
-      'Clone and remote must use HTTPS, not SSH: git over SSH to GitHub is blocked on the network where this repository is maintained.',
       'Specifications must be committed with LF line endings. A file committed with CRLF is normalised inside the sidecar, which makes the source repository’s working tree disagree with the pinned blob and report drift permanently.',
-      'Only two namespaces are active so far. This site is the third to be added.',
+      'Three namespaces are active: studiobiasantos, viralvideogen and howzysolutions.',
       'It has no independent value: it is support infrastructure, and it is listed as such.',
     ],
     pt: [
-      'Clone e remote precisam usar HTTPS, não SSH: git sobre SSH ao GitHub é bloqueado na rede onde este repositório é mantido.',
       'Specs precisam ser commitadas com fim de linha LF. Arquivo commitado com CRLF é normalizado dentro do sidecar, o que faz a working tree do repositório de origem discordar do blob travado e reportar drift permanente.',
-      'Só dois namespaces estão ativos até agora. Este site é o terceiro a ser adicionado.',
+      'Três namespaces ativos: studiobiasantos, viralvideogen e howzysolutions.',
       'Não tem valor independente: é infraestrutura de apoio, e está listado como tal.',
     ],
   },

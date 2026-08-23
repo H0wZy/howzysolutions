@@ -9,7 +9,10 @@ import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'node:path'
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
-const css = readFileSync(join(root, 'src/styles/tokens.css'), 'utf8')
+
+// Line endings are normalised because the selector match below is literal and
+// this script runs on both Windows (CRLF checkouts) and Linux.
+const css = readFileSync(join(root, 'src/styles/tokens.css'), 'utf8').split('\r\n').join('\n')
 
 /** Text tokens must clear 4.5:1; interactive boundaries 3:1 (FR-023, WCAG 1.4.11). */
 const FLOORS = {
@@ -62,13 +65,13 @@ let checked = 0
 
 for (const [theme, tokens] of Object.entries(themes)) {
   if (!tokens) {
-    console.error(`✗ could not parse the ${theme} token block in tokens.css`)
+    console.error(`x could not parse the ${theme} token block in tokens.css`)
     failures++
     continue
   }
   const bg = tokens['--bg']
   if (!bg) {
-    console.error(`✗ ${theme}: --bg is not defined`)
+    console.error(`x ${theme}: --bg is not defined`)
     failures++
     continue
   }
@@ -76,7 +79,7 @@ for (const [theme, tokens] of Object.entries(themes)) {
   // Every token must exist in both themes, or the theme is incomplete (Principle VI).
   for (const name of [...Object.keys(FLOORS), ...DECORATIVE]) {
     if (!(name in tokens)) {
-      console.error(`✗ ${theme}: ${name} is missing — every token needs a value in both themes`)
+      console.error(`x ${theme}: ${name} is missing - every token needs a value in both themes`)
       failures++
     }
   }
@@ -85,17 +88,17 @@ for (const [theme, tokens] of Object.entries(themes)) {
     if (!(name in tokens)) continue
     const r = ratio(tokens[name], bg)
     checked++
-    const ok = r >= floor
-    if (!ok) failures++
+    const pass = r >= floor
+    if (!pass) failures++
     console.log(
-      `${ok ? '✓' : '✗'} ${theme.padEnd(5)} ${name.padEnd(11)} ${tokens[name]}  ` +
+      `${pass ? 'ok' : 'XX'} ${theme.padEnd(5)} ${name.padEnd(11)} ${tokens[name]}  ` +
         `${r.toFixed(2)}:1  (floor ${floor}:1)`,
     )
   }
 }
 
 if (failures > 0) {
-  console.error(`\n✗ contrast check failed: ${failures} problem(s)`)
+  console.error(`\nx contrast check failed: ${failures} problem(s)`)
   process.exit(1)
 }
-console.log(`\n✓ contrast check passed: ${checked} token/theme pairs meet their floor`)
+console.log(`\nok contrast check passed: ${checked} token/theme pairs meet their floor`)
