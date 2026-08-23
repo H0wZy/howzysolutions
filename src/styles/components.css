@@ -405,3 +405,28 @@
 .term-input:disabled {
   cursor: not-allowed;
 }
+
+/* Chrome controls --------------------------------------------------------- */
+
+.chrome-btn {
+  font: inherit;
+  font-size: var(--fs-xs);
+  color: var(--dim);
+  background: transparent;
+  /* --border, not --line: this is an interactive boundary and owes 3:1. */
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 2px 10px;
+  cursor: pointer;
+  transition:
+    color var(--dur-fast) var(--ease),
+    border-color var(--dur-fast) var(--ease);
+}
+
+.chrome-btn::before { content: '[ '; }
+.chrome-btn::after { content: ' ]'; }
+
+.chrome-btn:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}

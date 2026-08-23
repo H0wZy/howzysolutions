@@ -7,6 +7,7 @@ export const en = {
   // Chrome
   'chrome.file': 'README.md',
   'chrome.theme': 'theme',
+  'chrome.theme.switchTo': 'switch to {theme} theme',
   'chrome.theme.dark': 'dark',
   'chrome.theme.light': 'light',
   'chrome.lang': 'lang',

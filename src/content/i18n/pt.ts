@@ -9,6 +9,7 @@ export const pt = {
   // Chrome
   'chrome.file': 'LEIAME.md',
   'chrome.theme': 'tema',
+  'chrome.theme.switchTo': 'mudar para o tema {theme}',
   'chrome.theme.dark': 'escuro',
   'chrome.theme.light': 'claro',
   'chrome.lang': 'idioma',
