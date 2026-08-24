@@ -3,6 +3,7 @@ import { execute, type ExecuteContext } from '../engine'
 import { content } from '../../content'
 import { LOCALES } from '../../content/i18n/types'
 import { en } from '../../content/i18n/en'
+import { THEME_JOKE_KEYS } from '../../theme/jokes'
 
 /**
  * FR-010: a fact is authored once. The list, the project page and the terminal
@@ -12,7 +13,6 @@ import { en } from '../../content/i18n/en'
 
 const ctx = (over: Partial<ExecuteContext> = {}): ExecuteContext => ({
   locale: 'en',
-  theme: 'dark',
   content,
   history: [],
   ...over,
@@ -73,10 +73,31 @@ describe('terminal output matches the content records', () => {
 
   it('never renders a raw translation key', () => {
     for (const locale of LOCALES) {
-      for (const input of ['help', 'whoami', 'about', 'stats', 'stack', 'contact', 'nonsense']) {
+      for (const input of [
+        'help',
+        'whoami',
+        'about',
+        'stats',
+        'stack',
+        'contact',
+        'theme',
+        'theme dark',
+        'theme light',
+        'nonsense',
+      ]) {
         expect(rendered(input, { locale }), `${input} in ${locale}`).not.toMatch(
-          /\b(terminal|cmd|stats|project|state|kind|stack|hero|work|contact)\.[a-zA-Z]+\b/,
+          /\b(terminal|cmd|stats|project|state|kind|stack|hero|work|contact|theme)\.[a-zA-Z0-9]+\b/,
         )
+      }
+    }
+  })
+
+  it('refuses "theme light" in-voice in both locales, never in English under pt', () => {
+    const enJokes = new Set(THEME_JOKE_KEYS.map((key) => en[key]))
+    for (const locale of LOCALES) {
+      const output = rendered('theme light', { locale })
+      if (locale === 'pt') {
+        for (const jokeText of enJokes) expect(output).not.toContain(jokeText)
       }
     }
   })

@@ -11,24 +11,17 @@
     />
     <script>
       /*
-       * Blocking on purpose: this is the only place a theme decision can run before
-       * first paint. Anything inside React runs after, and that is the flash.
-       * Order: stored preference -> system preference -> dark. (FR-021, research D6)
+       * Dark is the only theme (research D12) — `data-theme="dark"` above is
+       * static, nothing resolves it. This blocking script now exists only to
+       * apply a stored locale before first paint, same reasoning as before:
+       * anything inside React runs after, and that would be the flash.
        */
       ;(function () {
         try {
-          var stored = localStorage.getItem('h0wzy.theme')
-          var theme =
-            stored === 'dark' || stored === 'light'
-              ? stored
-              : window.matchMedia('(prefers-color-scheme: light)').matches
-                ? 'light'
-                : 'dark'
-          document.documentElement.dataset.theme = theme
           var locale = localStorage.getItem('h0wzy.locale')
           if (locale === 'en' || locale === 'pt') document.documentElement.lang = locale
         } catch (e) {
-          /* Private mode blocks storage; the dark default in the markup already stands. */
+          /* Private mode blocks storage; the lang attribute already stands. */
         }
       })()
     </script>

@@ -1,55 +1,62 @@
-import { THEME_CHANGE_EVENT, applyTheme, resolveTheme } from '../theme'
-import type { Theme } from '../theme/types'
+import { pickJoke } from '../theme/jokes'
 import { translate } from '../content/i18n/translate'
 import type { Locale } from '../content/i18n/types'
+import type { StringKey } from '../content/i18n/en'
 
 /**
- * Wires the chrome's theme button.
- *
- * FR-015: this and the terminal's `theme` command must produce identical
- * results, which they do by both going through applyTheme() — there is one
- * implementation of "change the theme", not two that drift apart.
+ * The one place a theme joke is ever rendered. The chrome button's own click
+ * and the terminal's `joke` effect (from `theme light`) both end up here,
+ * which is what makes FR-015 true the same way `applyTheme` used to make it
+ * true for a real theme change (research D12).
  */
+function renderJokeBubble(locale: Locale, key: StringKey): void {
+  const button = document.querySelector<HTMLButtonElement>('[data-theme-toggle]')
+  if (!button) return
 
-const LABEL_KEY = { dark: 'chrome.theme.dark', light: 'chrome.theme.light' } as const
+  let bubble = document.querySelector<HTMLElement>('[data-theme-joke]')
+  if (!bubble) {
+    bubble = document.createElement('span')
+    bubble.dataset.themeJoke = ''
+    bubble.className = 'theme-joke'
+    bubble.setAttribute('role', 'status')
+    button.insertAdjacentElement('afterend', bubble)
+  }
 
-/** Reflects the theme the button will switch TO, not the one in effect. */
-function paint(button: HTMLElement, locale: Locale, current: Theme): void {
-  const target: Theme = current === 'dark' ? 'light' : 'dark'
-  const label = button.querySelector<HTMLElement>('[data-theme-toggle-label]')
-  const name = translate(locale, LABEL_KEY[target])
-  if (label) label.textContent = name
-  button.setAttribute('aria-label', translate(locale, 'chrome.theme.switchTo', { theme: name }))
+  bubble.textContent = translate(locale, key)
+
+  // Restart the fade-out even if a bubble is already mid-animation from an
+  // earlier click or command.
+  bubble.classList.remove('is-visible')
+  void bubble.offsetWidth
+  bubble.classList.add('is-visible')
+
+  const previousTimer = Number(bubble.dataset.timer)
+  if (previousTimer) window.clearTimeout(previousTimer)
+  const timer = window.setTimeout(() => bubble?.classList.remove('is-visible'), 4000)
+  bubble.dataset.timer = String(timer)
+}
+
+/** The button click has no engine-picked key, so it picks its own from a local counter. */
+export function showThemeJoke(locale: Locale, seed: number): void {
+  renderJokeBubble(locale, pickJoke(seed))
+}
+
+/**
+ * Reused by the terminal's `joke` effect, carrying the exact key `theme light`
+ * already picked and printed — so the bubble never shows a different line than
+ * the one the visitor just read in the terminal output.
+ */
+export function showThemeJokeKey(locale: Locale, key: StringKey): void {
+  renderJokeBubble(locale, key)
 }
 
 export function initThemeControl(locale: Locale): void {
   const button = document.querySelector<HTMLButtonElement>('[data-theme-toggle]')
   if (!button) return
 
-  // The markup was prerendered against the default theme. Correct the label to
-  // whatever the blocking script in index.html actually resolved.
-  paint(button, locale, resolveTheme())
-
+  let clicks = 0
   button.addEventListener('click', () => {
-    applyTheme(resolveTheme() === 'dark' ? 'light' : 'dark')
+    clicks += 1
+    showThemeJoke(locale, clicks)
   })
-
-  // Repaint on ANY theme change, including one the terminal's `theme` command
-  // caused. The button reflects state; it does not own it.
-  window.addEventListener(THEME_CHANGE_EVENT, (event) => {
-    paint(button, locale, (event as CustomEvent<Theme>).detail)
-  })
-
-  // A visitor who has expressed no override should follow their system if it
-  // changes mid-session. An explicit choice is not overridden.
-  try {
-    window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', () => {
-      if (localStorage.getItem('h0wzy.theme')) return
-      const resolved = resolveTheme()
-      document.documentElement.dataset.theme = resolved
-      paint(button, locale, resolved)
-    })
-  } catch {
-    /* matchMedia or storage unavailable: the button still works. */
-  }
 }

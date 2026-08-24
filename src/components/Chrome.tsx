@@ -3,7 +3,6 @@ import type { Locale } from '../content/i18n/types'
 import { translate } from '../content/i18n/translate'
 import { ThemeControl } from './ThemeControl'
 import { LocaleControl } from './LocaleControl'
-import { DEFAULT_THEME } from '../theme/types'
 
 /**
  * Sticky editor-style bar. The theme and language controls arrive in US4 and US3
@@ -36,9 +35,7 @@ export function Chrome({
         {immersive}
         {controls}
         <LocaleControl locale={locale} pathname={pathname} />
-        {/* Prerendered in the default theme; enhance() corrects the label if the
-            visitor resolved to the other one. */}
-        <ThemeControl locale={locale} theme={DEFAULT_THEME} />
+        <ThemeControl locale={locale} />
       </span>
     </div>
   )

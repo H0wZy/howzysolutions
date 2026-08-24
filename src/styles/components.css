@@ -36,6 +36,7 @@
 }
 
 .chrome-controls {
+  position: relative; /* anchors .theme-joke without joining the flex flow */
   margin-left: auto;
   display: flex;
   gap: 8px;
@@ -442,4 +443,35 @@
 .chrome-btn:hover {
   color: var(--accent);
   border-color: var(--accent);
+}
+
+/* Theme joke bubble --------------------------------------------------------
+ * Dark is the only theme (research D12): a click on the theme control never
+ * changes anything, it shows this instead.
+ */
+
+.theme-joke {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 20;
+  max-width: 220px;
+  padding: 7px 11px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--fg);
+  font-size: var(--fs-xs);
+  white-space: normal;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition:
+    opacity var(--dur-fast) var(--ease),
+    transform var(--dur-fast) var(--ease);
+}
+
+.theme-joke.is-visible {
+  opacity: 1;
+  transform: translateY(0);
 }

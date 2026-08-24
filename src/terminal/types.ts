@@ -9,7 +9,6 @@
 
 import type { Locale } from '../content/i18n/types'
 import type { ContentBundle } from '../content/types'
-import type { Theme } from '../theme/types'
 import type { StringKey } from '../content/i18n/en'
 
 export type OutputLine =
@@ -21,12 +20,15 @@ export type OutputLine =
 
 /**
  * Effects are DESCRIBED here and applied by the renderer. Keeping the engine
- * free of side effects is what makes `theme light` and the page's theme control
- * one code path instead of two (FR-015).
+ * free of side effects is what makes `lang pt` and the page's language control
+ * one code path instead of two (FR-015). `theme light` returns a `joke` effect
+ * for the same reason, minus the "change" — there is nothing to apply, only a
+ * refusal to show, and the chrome control's click handler shows the same one
+ * (research D12, FR-039).
  */
 export type Effect =
   | { type: 'set-locale'; locale: Locale }
-  | { type: 'set-theme'; theme: Theme }
+  | { type: 'joke'; key: StringKey }
   | { type: 'clear' }
   | { type: 'navigate'; href: string }
 
@@ -43,9 +45,12 @@ export type CommandContext = {
   args: string[]
   flags: Record<string, string | boolean>
   locale: Locale
-  theme: Theme
   content: ContentBundle
-  /** Supplied by the renderer; the engine never records it itself. */
+  /**
+   * Supplied by the renderer; the engine never records it itself. Also doubles
+   * as the joke pool's deterministic seed (`history.length`) — the theme is
+   * always dark, so there is no `theme` field to carry any more (research D12).
+   */
   history: string[]
 }
 
