@@ -1,5 +1,6 @@
 import { LOCALES, isLocale } from '../../content/i18n/types'
 import { THEMES, isTheme } from '../../theme/types'
+import { pickJoke } from '../../theme/jokes'
 import { translate } from '../../content/i18n/translate'
 import { closest } from '../suggest'
 import { fail, ok, text, type Command } from '../types'
@@ -34,15 +35,22 @@ export const lang: Command = {
   },
 }
 
+/**
+ * Dark is the only theme (research D12). No argument or `dark` confirms it;
+ * `light` is refused in the site's own voice rather than applied — the joke
+ * key is picked from `history.length`, which is already part of the context,
+ * so the command stays pure without reaching for `Math.random()` (FR-039).
+ */
 export const theme: Command = {
   name: 'theme',
   aliases: ['tema'],
   usage: 'theme [dark | light]',
   summaryKey: 'cmd.theme',
-  run: ({ args, locale, theme: current }) => {
+  run: ({ args, locale, history }) => {
     const requested = args[0]
-    if (!requested)
-      return ok([text(translate(locale, 'terminal.currentTheme', { theme: current }))])
+    if (!requested || requested === 'dark') {
+      return ok([text(translate(locale, 'terminal.themeAlwaysDark'))])
+    }
     if (!isTheme(requested)) {
       return fail(
         [
@@ -52,10 +60,8 @@ export const theme: Command = {
         2,
       )
     }
-    return ok([text(translate(locale, 'terminal.themeSet', { theme: requested }), 'accent')], {
-      type: 'set-theme',
-      theme: requested,
-    })
+    const key = pickJoke(history.length)
+    return ok([text(translate(locale, key), 'accent')], { type: 'joke', key })
   },
 }
 

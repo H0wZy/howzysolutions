@@ -1,6 +1,26 @@
 <!--
 SYNC IMPACT REPORT
 ==================
+Version change: 1.1.0 -> 2.0.0
+Rationale: MAJOR. Principle VI redefined in a way that invalidates previously compliant
+code: the fully-supported light theme (tokens, resolution, persistence, toggle) is removed
+in favour of dark being the only theme, with an attempt to leave it met by an honest, in-
+voice refusal instead of a real alternative palette. Principle III's contrast requirement
+and two Workflow gate lines lose their "both themes" qualifier as a direct consequence.
+
+Redefined (2.0.0):
+  - Principle VI, retitled "Dark Only, By Design" — dark default + light alternative
+    replaced by dark as the only theme; the light-theme half of the contract (light
+    tokens, theme resolution/persistence, the real toggle) is gone, not merely deferred.
+
+Amended as a consequence (2.0.0):
+  - Principle III's contrast clause: "in both themes" dropped, one theme to verify.
+  - Development Workflow & Quality Gates: "in both themes" dropped from the rendering-
+    verification bullet and the pull request gate.
+
+----------------------------------------------------------------------
+Previous entry
+----------------------------------------------------------------------
 Version change: 1.0.0 -> 1.1.0
 Rationale: MINOR. Materially expanded the Technology & Design Constraints section with
 two new subsections required by the WakaTime integration. No principle removed or
@@ -94,8 +114,8 @@ screen reader. Specifically:
 - Decorative motion MUST respect `prefers-reduced-motion: reduce`. No animation may be
   required to understand or complete anything.
 - No information may exist only inside a canvas, only in colour, or only on hover.
-- Text MUST meet WCAG 2.2 AA contrast (4.5:1 body, 3:1 for large text and UI borders) in
-  **both** themes. This is verified, not assumed.
+- Text MUST meet WCAG 2.2 AA contrast (4.5:1 body, 3:1 for large text and UI borders). This
+  is verified, not assumed.
 
 *Rationale*: A terminal UI and a 3D scene are the two easiest ways to build something that
 looks impressive and excludes people. Deciding this once, as a non-negotiable, is cheaper
@@ -130,20 +150,22 @@ persist across visits. Locale MUST NOT be inferred and locked from IP or timezon
 *Rationale*: Typing the locale dictionary is what makes "we will translate it later" a
 build failure instead of a broken half-Portuguese page.
 
-### VI. Themed Through Tokens
+### VI. Dark Only, By Design
 
-Dark is the default theme; light is a fully supported alternative, not a courtesy. All
-colour, spacing, radius, and type-scale values MUST be CSS custom properties declared in
-one place. Components MUST reference tokens. A literal colour value (hex, `rgb()`, `hsl()`,
-or a named colour) in a component file is a defect.
+Dark is not the default theme; it is the only theme. There is no light mode to switch to.
+An attempt to leave dark MUST be met with an honest, in-voice refusal — bilingual, per
+Principle V — never with a broken or half-finished alternative palette pretending to be a
+real option. All colour, spacing, radius, and type-scale values MUST still be CSS custom
+properties declared in one place, and a literal colour value (hex, `rgb()`, `hsl()`, or a
+named colour) in a component file remains a defect: one theme is not a licence to hardcode
+it.
 
-Both themes MUST be defined explicitly. Theme MUST follow the OS by default, MUST be
-overridable by the user, MUST persist, and MUST apply on first paint without a flash of the
-wrong theme.
-
-*Rationale*: Two themes are only maintainable if there is exactly one place where a colour
-decision lives. Hardcoded colours are how a light mode becomes unreadable six commits after
-it was added.
+*Rationale*: A second theme that exists only to be technically correct — built, contrast-
+verified, and never actually the one the author or a visitor prefers — is code carried for
+a hypothetical user. Principle II says stop at the first rung that holds; here that rung is
+"no light mode," said outright instead of shipped half-working. The token discipline stands
+regardless of how many themes there are: one palette is still easier to keep consistent
+from a single place than from literals scattered through components.
 
 ### VII. Verified Before Merge
 
@@ -156,7 +178,7 @@ Testing is proportional to risk, not uniform:
   MUST have unit tests. These are the parts where a bug is silent, and they are the parts
   that are cheap to test because they are pure.
 - Rendering and layout MUST be verified by running the site and looking at it, at mobile and
-  desktop widths, in both themes. Screenshots belong in the pull request.
+  desktop widths. Screenshots belong in the pull request.
 - Bug fixes MUST add a test that fails before the fix when the bug is in pure logic.
 
 TypeScript `any`, non-null assertions on values that can legitimately be absent, and
@@ -247,9 +269,9 @@ Commits follow Conventional Commits (`feat:`, `fix:`, `refactor:`, `docs:`, `cho
 describe the change in the imperative.
 
 **Pull request gates.** A pull request MUST NOT merge until: build and lint pass; the
-change was rendered and inspected in both themes and both locales when it touches UI;
-screenshots are attached for visual changes; new runtime dependencies are justified per
-Principle II; and no principle is violated without a recorded amendment.
+change was rendered and inspected in both locales when it touches UI; screenshots are
+attached for visual changes; new runtime dependencies are justified per Principle II; and
+no principle is violated without a recorded amendment.
 
 **Content changes.** Adding or editing a project is a data-only change under `src/content/`
 and MUST update both locales in the same commit.
@@ -277,4 +299,4 @@ that cannot be justified against Principle II MUST be removed before merge. Perf
 budgets are re-measured on the production build before any deploy that changes the bundle.
 This document is re-read at the start of each new feature spec.
 
-**Version**: 1.1.0 | **Ratified**: 2026-08-19 | **Last Amended**: 2026-08-19
+**Version**: 2.0.0 | **Ratified**: 2026-08-19 | **Last Amended**: 2026-08-24

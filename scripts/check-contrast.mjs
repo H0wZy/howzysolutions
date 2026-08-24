@@ -1,6 +1,7 @@
 /**
  * Verifies every colour token in src/styles/tokens.css meets its WCAG floor,
- * in both themes. Gate V-009. A test, not a comment: it exits non-zero.
+ * in the site's one theme (dark — research D12). Gate V-009. A test, not a
+ * comment: it exits non-zero.
  *
  * Contract: specs/001-terminal-portfolio-rebrand/contracts/design-tokens.md
  */
@@ -57,7 +58,6 @@ function ratio(a, b) {
 
 const themes = {
   dark: parseBlock(":root,\n:root[data-theme='dark']"),
-  light: parseBlock(":root[data-theme='light']"),
 }
 
 let failures = 0
@@ -76,10 +76,9 @@ for (const [theme, tokens] of Object.entries(themes)) {
     continue
   }
 
-  // Every token must exist in both themes, or the theme is incomplete (Principle VI).
   for (const name of [...Object.keys(FLOORS), ...DECORATIVE]) {
     if (!(name in tokens)) {
-      console.error(`x ${theme}: ${name} is missing - every token needs a value in both themes`)
+      console.error(`x ${theme}: ${name} is missing - every token needs a value`)
       failures++
     }
   }

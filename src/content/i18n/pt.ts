@@ -13,6 +13,13 @@ export const pt = {
   'chrome.theme.dark': 'escuro',
   'chrome.theme.light': 'claro',
   'chrome.lang': 'idioma',
+  // Pool rotativo. Ver theme/jokes.ts pickJoke() — nunca Math.random(), pra não
+  // quebrar o gate de pureza do engine do terminal (research D12).
+  'theme.joke.0': 'Fechado como wontfix.',
+  'theme.joke.1': "Arquivado em 'algum dia'. Algum dia ainda não foi publicado.",
+  'theme.joke.2': 'Atrás de uma feature flag. A flag é estrutural.',
+  'theme.joke.3': 'Revisei eu mesmo e rejeitei eu mesmo. Pelo menos foi rápido.',
+  'theme.joke.4': 'Tá no roadmap, logo depois do roadmap.',
   'chrome.immersive': 'iniciar 3d',
   'chrome.immersive.exit': 'sair do 3d',
   'chrome.skipToContent': 'Pular para o conteúdo',
@@ -99,9 +106,8 @@ export const pt = {
   'terminal.usage': 'uso: {usage}',
   'terminal.candidates': 'candidatos: {candidates}',
   'terminal.localeSet': 'idioma alterado para {locale}',
-  'terminal.themeSet': 'tema alterado para {theme}',
   'terminal.currentLocale': 'idioma: {locale}',
-  'terminal.currentTheme': 'tema: {theme}',
+  'terminal.themeAlwaysDark': 'escuro — o único tema que existe',
   'terminal.emptyHistory': 'nenhum comando ainda',
 
   // Resumos dos comandos
@@ -114,7 +120,7 @@ export const pt = {
   'cmd.stats': 'atividade de código medida',
   'cmd.contact': 'como falar comigo',
   'cmd.lang': 'mostra ou altera o idioma',
-  'cmd.theme': 'mostra ou altera o tema',
+  'cmd.theme': 'o tema (só existe um)',
   'cmd.open': 'abre a página de um projeto',
   'cmd.ls': 'lista a superfície de conteúdo',
   'cmd.clear': 'limpa a tela',

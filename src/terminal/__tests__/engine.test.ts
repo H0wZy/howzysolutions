@@ -8,7 +8,6 @@ import { LOCALES } from '../../content/i18n/types'
 
 const ctx = (over: Partial<ExecuteContext> = {}): ExecuteContext => ({
   locale: 'en',
-  theme: 'dark',
   content,
   history: [],
   ...over,
@@ -120,8 +119,22 @@ describe('execute — effects are described, never performed', () => {
     expect(execute('lang pt', ctx()).effect).toEqual({ type: 'set-locale', locale: 'pt' })
   })
 
-  it('returns a set-theme descriptor', () => {
-    expect(execute('theme light', ctx()).effect).toEqual({ type: 'set-theme', theme: 'light' })
+  it('refuses "theme light" with a joke effect, never a real switch', () => {
+    const result = execute('theme light', ctx())
+    expect(result.effect?.type).toBe('joke')
+    expect(result.status).toBe(0)
+  })
+
+  it('picks the joke deterministically from history length, not randomness', () => {
+    expect(execute('theme light', ctx({ history: ['a', 'b'] })).effect).toEqual(
+      execute('theme light', ctx({ history: ['a', 'b'] })).effect,
+    )
+  })
+
+  it('confirms dark rather than erroring for "theme dark" and plain "theme"', () => {
+    expect(execute('theme dark', ctx()).status).toBe(0)
+    expect(execute('theme', ctx()).status).toBe(0)
+    expect(execute('theme', ctx()).effect).toBeUndefined()
   })
 
   it('returns a navigate descriptor for a real project', () => {

@@ -3,11 +3,13 @@
  * Contract: specs/001-terminal-portfolio-rebrand/contracts/design-tokens.md
  * Ratios are verified by scripts/check-contrast.mjs, which parses this file.
  * A literal colour in a component is a defect (FR-022, Principle VI).
+ *
+ * Dark is the only theme (research D12) — there is no light block here any
+ * more, and nothing ever sets `data-theme` to anything but "dark".
  */
 
 :root,
 :root[data-theme='dark'] {
-  /* Colour — dark is the default and the identity */
   --bg: #0c0b0a;
   --surface: #141210;
   --fg: #e8e2d6;
@@ -17,18 +19,6 @@
   --danger: #e0705f;
   --line: #232019;
   --border: #6b6250;
-}
-
-:root[data-theme='light'] {
-  --bg: #f7f4ec;
-  --surface: #fffdf8;
-  --fg: #1b1916;
-  --dim: #5f584b;
-  --accent: #8a5a0c;
-  --accent-2: #0f6f5e;
-  --danger: #b03a28;
-  --line: #e3ddd0;
-  --border: #8a8070;
 }
 
 :root {

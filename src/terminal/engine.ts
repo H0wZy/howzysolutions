@@ -5,7 +5,6 @@
 
 import type { ContentBundle } from '../content/types'
 import type { Locale } from '../content/i18n/types'
-import type { Theme } from '../theme/types'
 import { translate } from '../content/i18n/translate'
 import { parse } from './parse'
 import { closest } from './suggest'
@@ -16,7 +15,6 @@ const MAX_INPUT = 512
 
 export type ExecuteContext = {
   locale: Locale
-  theme: Theme
   content: ContentBundle
   history: string[]
 }
@@ -48,7 +46,6 @@ export function execute(input: string, ctx: ExecuteContext): CommandResult {
     args: parsed.args,
     flags: parsed.flags,
     locale: ctx.locale,
-    theme: ctx.theme,
     content: ctx.content,
     history: ctx.history,
   })

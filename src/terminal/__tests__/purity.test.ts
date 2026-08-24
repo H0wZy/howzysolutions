@@ -62,8 +62,9 @@ describe('terminal engine purity', () => {
   })
 
   it('imports only from modules that are themselves pure', () => {
-    // src/locale.ts and src/theme/index.ts touch storage; the engine must reach
-    // their pure counterparts instead.
+    // src/locale.ts touches storage; a hypothetical impure src/theme barrel
+    // would too (there is none since research D12 — dark is the only theme —
+    // but the ban stays as a guard against one reappearing).
     const impure = ['../locale', '../../locale', '../theme', '../../theme']
     for (const file of files) {
       for (const specifier of valueImports(readFileSync(file, 'utf8'))) {

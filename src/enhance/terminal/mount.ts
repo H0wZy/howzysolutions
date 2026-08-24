@@ -4,7 +4,7 @@ import type { Effect } from '../../terminal/types'
 import { content } from '../../content'
 import { translate } from '../../content/i18n/translate'
 import type { Locale } from '../../content/i18n/types'
-import { applyTheme, resolveTheme } from '../../theme'
+import { showThemeJokeKey } from '../theme-control'
 import { counterpart } from '../../route'
 import { renderEcho, renderLine } from './render'
 
@@ -54,8 +54,10 @@ export function mountTerminal(root: HTMLElement, session: TerminalSession): void
       case 'clear':
         output.replaceChildren()
         break
-      case 'set-theme':
-        applyTheme(effect.theme)
+      case 'joke':
+        // The exact line the terminal just printed, not a freshly picked one —
+        // same bubble the chrome button's own click uses (FR-015).
+        showThemeJokeKey(session.locale, effect.key)
         break
       case 'set-locale':
         // Each locale is a real prerendered document, so switching is a
@@ -82,7 +84,6 @@ export function mountTerminal(root: HTMLElement, session: TerminalSession): void
 
     const result = execute(raw, {
       locale: session.locale,
-      theme: resolveTheme(),
       content,
       history: session.history,
     })

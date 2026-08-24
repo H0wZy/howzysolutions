@@ -11,6 +11,13 @@ export const en = {
   'chrome.theme.dark': 'dark',
   'chrome.theme.light': 'light',
   'chrome.lang': 'lang',
+  // A rotating pool. See theme/jokes.ts pickJoke() — never Math.random(), so the terminal
+  // engine's purity gate stays satisfied (research D12).
+  'theme.joke.0': 'Closed as wontfix.',
+  'theme.joke.1': "Filed under 'someday'. Someday hasn't shipped yet.",
+  'theme.joke.2': 'Behind a feature flag. The flag is load-bearing.',
+  'theme.joke.3': 'Reviewed it myself and rejected it myself. At least it was fast.',
+  'theme.joke.4': "It's on the roadmap, right after the roadmap.",
   'chrome.immersive': 'boot 3d',
   'chrome.immersive.exit': 'exit 3d',
   'chrome.skipToContent': 'Skip to content',
@@ -97,9 +104,8 @@ export const en = {
   'terminal.usage': 'usage: {usage}',
   'terminal.candidates': 'candidates: {candidates}',
   'terminal.localeSet': 'language set to {locale}',
-  'terminal.themeSet': 'theme set to {theme}',
   'terminal.currentLocale': 'language: {locale}',
-  'terminal.currentTheme': 'theme: {theme}',
+  'terminal.themeAlwaysDark': 'dark — the only theme there is',
   'terminal.emptyHistory': 'no commands yet',
 
   // Terminal command summaries
@@ -112,7 +118,7 @@ export const en = {
   'cmd.stats': 'measured coding activity',
   'cmd.contact': 'how to reach me',
   'cmd.lang': 'show or change the language',
-  'cmd.theme': 'show or change the theme',
+  'cmd.theme': 'the theme (there is only one)',
   'cmd.open': 'open a project page',
   'cmd.ls': 'list the content surface',
   'cmd.clear': 'clear the screen',
