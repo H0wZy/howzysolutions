@@ -5,9 +5,12 @@ import { describe, expect, it } from 'vitest'
 /**
  * Gate for Principle IV, enforced mechanically rather than by review.
  *
- * The engine's whole value is that one implementation serves the DOM renderer
- * and the immersive renderer. That only holds if it cannot reach for a framework
- * or the document — and a rule nobody checks is a rule that erodes.
+ * The engine's whole value is that one implementation can serve any renderer —
+ * proven when an opt-in WebGL renderer (US6) consumed it, then was withdrawn
+ * without a single change here. That only holds if it cannot reach for a
+ * framework or the document — and a rule nobody checks is a rule that erodes.
+ * The `three` / `@react-three` bans below stay even with no current WebGL
+ * renderer, as a guard against one reappearing unnoticed.
  */
 
 const ROOT = join(process.cwd(), 'src/terminal')

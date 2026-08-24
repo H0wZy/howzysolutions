@@ -23,8 +23,6 @@ export const technologies: Technology[] = [
   { id: 'tailwind', name: 'Tailwind CSS v4', category: 'framework' },
   { id: 'shadcn', name: 'shadcn/ui on Base UI', category: 'framework' },
   { id: 'vite', name: 'Vite', category: 'framework' },
-  { id: 'r3f', name: 'React Three Fiber', category: 'framework' },
-  { id: 'threejs', name: 'Three.js', category: 'framework' },
 
   // Data
   { id: 'postgres', name: 'PostgreSQL 16', category: 'data' },

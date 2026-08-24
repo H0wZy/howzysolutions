@@ -18,8 +18,6 @@ export const en = {
   'theme.joke.2': 'Behind a feature flag. The flag is load-bearing.',
   'theme.joke.3': 'Reviewed it myself and rejected it myself. At least it was fast.',
   'theme.joke.4': "It's on the roadmap, right after the roadmap.",
-  'chrome.immersive': 'boot 3d',
-  'chrome.immersive.exit': 'exit 3d',
   'chrome.skipToContent': 'Skip to content',
 
   // Sections

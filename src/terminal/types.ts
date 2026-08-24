@@ -3,8 +3,9 @@
  * See specs/001-terminal-portfolio-rebrand/contracts/terminal-commands.md
  *
  * Nothing in src/terminal/ may import a framework or touch the DOM (Principle IV).
- * That is what lets the DOM renderer and the opt-in immersive renderer share one
- * implementation and one set of facts.
+ * That separation is what once let the DOM renderer and an opt-in WebGL renderer
+ * (US6, withdrawn 2026-08-24) share one implementation and one set of facts — and
+ * what let the WebGL renderer be removed later without touching this file at all.
  */
 
 import type { Locale } from '../content/i18n/types'
