@@ -266,6 +266,19 @@
   overflow-x: auto;
 }
 
+/* Coding statistics --------------------------------------------------------
+ * Reuses .metrics, .stack-groups, .stack-group and .bullets from the project
+ * detail layout above so the two figure-dense views share one visual grammar.
+ */
+
+.stats-panel > * + * {
+  margin-top: 1.6em;
+}
+
+.stats-panel .stack-groups {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
 /* Terminal ---------------------------------------------------------------- */
 
 .term {
