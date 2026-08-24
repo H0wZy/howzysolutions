@@ -37,7 +37,7 @@ function slices(value: unknown): StatSlice[] {
  * flagged as a fallback rather than throwing — a broken third-party payload must
  * never take the page down with it (FR-031).
  */
-function parse(input: unknown): CodingStatsSnapshot {
+export function parseStats(input: unknown): CodingStatsSnapshot {
   if (typeof input !== 'object' || input === null) return EMPTY
   const d = input as Partial<CodingStatsSnapshot>
   if (!d.range?.start || !d.range?.end || typeof d.totalSeconds !== 'number') return EMPTY
@@ -55,7 +55,7 @@ function parse(input: unknown): CodingStatsSnapshot {
   }
 }
 
-export const stats: CodingStatsSnapshot = parse(raw)
+export const stats: CodingStatsSnapshot = parseStats(raw)
 
 /** Measured time for one project, or undefined — never a zero (data-model rule). */
 export function trackedTimeFor(wakatimeProject?: string): StatSlice | undefined {

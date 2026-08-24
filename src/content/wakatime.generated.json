@@ -1,43 +1,469 @@
 {
-  "capturedAt": "2026-08-19T23:10:04.000Z",
-  "range": { "start": "2026-03-17", "end": "2026-08-19" },
-  "totalSeconds": 439399.144,
-  "humanReadableTotal": "122 hrs 3 mins",
-  "dailyAverageSeconds": 8291,
+  "capturedAt": "2026-08-24T16:03:22.564Z",
+  "range": {
+    "start": "2026-03-17",
+    "end": "2026-08-24"
+  },
+  "totalSeconds": 482524.654,
+  "humanReadableTotal": "134 hrs 2 mins",
+  "dailyAverageSeconds": 8319,
   "languages": [
-    { "name": "Markdown", "percent": 29.07, "seconds": 136800, "text": "38 hrs" },
-    { "name": "TypeScript", "percent": 18.61, "seconds": 87600, "text": "24 hrs 20 mins" },
-    { "name": "Go", "percent": 12.9, "seconds": 60720, "text": "16 hrs 52 mins" },
-    { "name": "JSON", "percent": 8.59, "seconds": 40380, "text": "11 hrs 13 mins" },
-    { "name": "Python", "percent": 7.2, "seconds": 33840, "text": "9 hrs 24 mins" },
-    { "name": "Other", "percent": 6.66, "seconds": 31320, "text": "8 hrs 42 mins" },
-    { "name": "C#", "percent": 3.8, "seconds": 17820, "text": "4 hrs 57 mins" },
-    { "name": "YAML", "percent": 1.89, "seconds": 8880, "text": "2 hrs 28 mins" }
+    {
+      "name": "Markdown",
+      "percent": 31.14,
+      "seconds": 160443.845,
+      "text": "44 hrs 34 mins"
+    },
+    {
+      "name": "TypeScript",
+      "percent": 17.47,
+      "seconds": 90022.842,
+      "text": "25 hrs"
+    },
+    {
+      "name": "Go",
+      "percent": 11.79,
+      "seconds": 60741.67,
+      "text": "16 hrs 52 mins"
+    },
+    {
+      "name": "JSON",
+      "percent": 9.52,
+      "seconds": 49073.726,
+      "text": "13 hrs 37 mins"
+    },
+    {
+      "name": "Python",
+      "percent": 8.04,
+      "seconds": 41419.623,
+      "text": "11 hrs 30 mins"
+    },
+    {
+      "name": "Other",
+      "percent": 6.35,
+      "seconds": 32742.34,
+      "text": "9 hrs 5 mins"
+    },
+    {
+      "name": "C#",
+      "percent": 3.47,
+      "seconds": 17869.837,
+      "text": "4 hrs 57 mins"
+    },
+    {
+      "name": "YAML",
+      "percent": 1.73,
+      "seconds": 8893.548,
+      "text": "2 hrs 28 mins"
+    },
+    {
+      "name": "Bash",
+      "percent": 1.64,
+      "seconds": 8438.871,
+      "text": "2 hrs 20 mins"
+    },
+    {
+      "name": "CSS",
+      "percent": 1.17,
+      "seconds": 6009.993,
+      "text": "1 hr 40 mins"
+    },
+    {
+      "name": "Makefile",
+      "percent": 1,
+      "seconds": 5132.749,
+      "text": "1 hr 25 mins"
+    },
+    {
+      "name": "Git Config",
+      "percent": 0.9,
+      "seconds": 4619.725,
+      "text": "1 hr 16 mins"
+    },
+    {
+      "name": "HTTP",
+      "percent": 0.84,
+      "seconds": 4311.292,
+      "text": "1 hr 11 mins"
+    },
+    {
+      "name": "HTML",
+      "percent": 0.75,
+      "seconds": 3850.974,
+      "text": "1 hr 4 mins"
+    },
+    {
+      "name": "SSH Config",
+      "percent": 0.72,
+      "seconds": 3722.295,
+      "text": "1 hr 2 mins"
+    },
+    {
+      "name": "TOML",
+      "percent": 0.67,
+      "seconds": 3464.923,
+      "text": "57 mins"
+    },
+    {
+      "name": "Docker",
+      "percent": 0.46,
+      "seconds": 2373.508,
+      "text": "39 mins"
+    },
+    {
+      "name": "Text",
+      "percent": 0.38,
+      "seconds": 1957.494,
+      "text": "32 mins"
+    },
+    {
+      "name": "PowerShell",
+      "percent": 0.38,
+      "seconds": 1956.848,
+      "text": "32 mins"
+    },
+    {
+      "name": "SQL",
+      "percent": 0.29,
+      "seconds": 1478.702,
+      "text": "24 mins"
+    },
+    {
+      "name": "Diff",
+      "percent": 0.28,
+      "seconds": 1466.321,
+      "text": "24 mins"
+    },
+    {
+      "name": "JavaScript",
+      "percent": 0.26,
+      "seconds": 1331.311,
+      "text": "22 mins"
+    },
+    {
+      "name": "Desktop file",
+      "percent": 0.26,
+      "seconds": 1326.851,
+      "text": "22 mins"
+    },
+    {
+      "name": "XML",
+      "percent": 0.21,
+      "seconds": 1058.96,
+      "text": "17 mins"
+    },
+    {
+      "name": "Batchfile",
+      "percent": 0.19,
+      "seconds": 976.54,
+      "text": "16 mins"
+    },
+    {
+      "name": "Terraform",
+      "percent": 0.06,
+      "seconds": 331.588,
+      "text": "5 mins"
+    },
+    {
+      "name": "INI",
+      "percent": 0.02,
+      "seconds": 125.073,
+      "text": "2 mins"
+    },
+    {
+      "name": "SRecode Template",
+      "percent": 0.01,
+      "seconds": 72.676,
+      "text": "1 min"
+    },
+    {
+      "name": "TSConfig",
+      "percent": 0.01,
+      "seconds": 31.022,
+      "text": "0 secs"
+    },
+    {
+      "name": "systemd",
+      "percent": 0,
+      "seconds": 21.847,
+      "text": "0 secs"
+    }
   ],
   "editors": [
-    { "name": "Claude Code", "percent": 61.7, "seconds": 290460, "text": "80 hrs 41 mins" },
-    { "name": "VS Code", "percent": 31.41, "seconds": 147840, "text": "41 hrs 4 mins" },
-    { "name": "Antigravity CLI", "percent": 3.51, "seconds": 16500, "text": "4 hrs 35 mins" },
-    { "name": "Codex CLI", "percent": 2.74, "seconds": 12840, "text": "3 hrs 34 mins" },
-    { "name": "Antigravity IDE", "percent": 0.63, "seconds": 2940, "text": "49 mins" }
+    {
+      "name": "Claude Code",
+      "percent": 58.39,
+      "seconds": 300843.107,
+      "text": "83 hrs 34 mins"
+    },
+    {
+      "name": "VS Code",
+      "percent": 32.58,
+      "seconds": 167864.308,
+      "text": "46 hrs 37 mins"
+    },
+    {
+      "name": "Antigravity CLI",
+      "percent": 5.96,
+      "seconds": 30698.826,
+      "text": "8 hrs 31 mins"
+    },
+    {
+      "name": "Codex CLI",
+      "percent": 2.5,
+      "seconds": 12884.717,
+      "text": "3 hrs 34 mins"
+    },
+    {
+      "name": "Antigravity IDE",
+      "percent": 0.58,
+      "seconds": 2964.006,
+      "text": "49 mins"
+    },
+    {
+      "name": "Codex Vscode",
+      "percent": 0,
+      "seconds": 12.03,
+      "text": "0 secs"
+    }
   ],
   "categories": [
-    { "name": "AI Coding", "percent": 81.76, "seconds": 384840, "text": "106 hrs 54 mins" },
-    { "name": "Coding", "percent": 14.42, "seconds": 67860, "text": "18 hrs 51 mins" },
-    { "name": "Writing Docs", "percent": 3.66, "seconds": 17160, "text": "4 hrs 46 mins" },
-    { "name": "Writing Tests", "percent": 0.14, "seconds": 660, "text": "11 mins" },
-    { "name": "Building", "percent": 0.03, "seconds": 120, "text": "2 mins" }
+    {
+      "name": "AI Coding",
+      "percent": 81.47,
+      "seconds": 419804.691,
+      "text": "116 hrs 36 mins"
+    },
+    {
+      "name": "Coding",
+      "percent": 13.33,
+      "seconds": 68686.339,
+      "text": "19 hrs 4 mins"
+    },
+    {
+      "name": "Writing Docs",
+      "percent": 5.04,
+      "seconds": 25969.31,
+      "text": "7 hrs 12 mins"
+    },
+    {
+      "name": "Writing Tests",
+      "percent": 0.13,
+      "seconds": 677.189,
+      "text": "11 mins"
+    },
+    {
+      "name": "Building",
+      "percent": 0.03,
+      "seconds": 129.465,
+      "text": "2 mins"
+    }
   ],
   "projects": [
-    { "name": "generative-ai-e2", "percent": 24.58, "seconds": 115680, "text": "32 hrs 8 mins" },
-    { "name": "authsys", "percent": 15.84, "seconds": 74520, "text": "20 hrs 42 mins" },
-    { "name": "selzler-construtora", "percent": 14.69, "seconds": 69120, "text": "19 hrs 12 mins" },
-    { "name": "viralvideogen", "percent": 11.24, "seconds": 52860, "text": "14 hrs 41 mins" },
-    { "name": "studiobiasantos", "percent": 8.39, "seconds": 39480, "text": "10 hrs 58 mins" },
-    { "name": "telasparana", "percent": 4.78, "seconds": 22440, "text": "6 hrs 14 mins" },
-    { "name": "terminal", "percent": 3.61, "seconds": 16980, "text": "4 hrs 43 mins" },
-    { "name": "howzysolutions", "percent": 1.76, "seconds": 8220, "text": "2 hrs 17 mins" },
-    { "name": "skeeper-specs", "percent": 0.31, "seconds": 1440, "text": "24 mins" }
+    {
+      "name": "generative-ai-e2",
+      "percent": 22.46,
+      "seconds": 115706.817,
+      "text": "32 hrs 8 mins"
+    },
+    {
+      "name": "viralvideogen",
+      "percent": 16.88,
+      "seconds": 86971.924,
+      "text": "24 hrs 9 mins"
+    },
+    {
+      "name": "authsys",
+      "percent": 14.47,
+      "seconds": 74563.301,
+      "text": "20 hrs 42 mins"
+    },
+    {
+      "name": "selzler-construtora",
+      "percent": 13.48,
+      "seconds": 69443.776,
+      "text": "19 hrs 17 mins"
+    },
+    {
+      "name": "studiobiasantos",
+      "percent": 7.71,
+      "seconds": 39728.705,
+      "text": "11 hrs 2 mins"
+    },
+    {
+      "name": "telasparana",
+      "percent": 4.49,
+      "seconds": 23153.494,
+      "text": "6 hrs 25 mins"
+    },
+    {
+      "name": "terminal",
+      "percent": 3.3,
+      "seconds": 17011.973,
+      "text": "4 hrs 43 mins"
+    },
+    {
+      "name": "2983539",
+      "percent": 2.8,
+      "seconds": 14411.729,
+      "text": "4 hrs"
+    },
+    {
+      "name": "RFCs abertas",
+      "percent": 2.38,
+      "seconds": 12266.873,
+      "text": "3 hrs 24 mins"
+    },
+    {
+      "name": "antigravity",
+      "percent": 1.98,
+      "seconds": 10208.106,
+      "text": "2 hrs 50 mins"
+    },
+    {
+      "name": "claude-certifications",
+      "percent": 1.75,
+      "seconds": 9012.926,
+      "text": "2 hrs 30 mins"
+    },
+    {
+      "name": "h0wzy",
+      "percent": 1.6,
+      "seconds": 8265.951,
+      "text": "2 hrs 17 mins"
+    },
+    {
+      "name": "howzysolutions",
+      "percent": 1.23,
+      "seconds": 6323.095,
+      "text": "1 hr 45 mins"
+    },
+    {
+      "name": "Vault",
+      "percent": 1.12,
+      "seconds": 5768.208,
+      "text": "1 hr 36 mins"
+    },
+    {
+      "name": "UserApi",
+      "percent": 1,
+      "seconds": 5137.863,
+      "text": "1 hr 25 mins"
+    },
+    {
+      "name": "vscode",
+      "percent": 0.71,
+      "seconds": 3657.307,
+      "text": "1 hr"
+    },
+    {
+      "name": "scratch",
+      "percent": 0.47,
+      "seconds": 2420.006,
+      "text": "40 mins"
+    },
+    {
+      "name": "watch5lite",
+      "percent": 0.45,
+      "seconds": 2311.458,
+      "text": "38 mins"
+    },
+    {
+      "name": "Unknown Project",
+      "percent": 0.38,
+      "seconds": 1952.056,
+      "text": "32 mins"
+    },
+    {
+      "name": "h0wzy-theme",
+      "percent": 0.35,
+      "seconds": 1804.36,
+      "text": "30 mins"
+    },
+    {
+      "name": "projects",
+      "percent": 0.35,
+      "seconds": 1777.842,
+      "text": "29 mins"
+    },
+    {
+      "name": "Code",
+      "percent": 0.26,
+      "seconds": 1336.592,
+      "text": "22 mins"
+    },
+    {
+      "name": "skeeper-specs",
+      "percent": 0.09,
+      "seconds": 444.352,
+      "text": "7 mins"
+    },
+    {
+      "name": "goosetest",
+      "percent": 0.06,
+      "seconds": 301.944,
+      "text": "5 mins"
+    },
+    {
+      "name": "microsoft vs code",
+      "percent": 0.05,
+      "seconds": 238.667,
+      "text": "3 mins"
+    },
+    {
+      "name": "restore-test",
+      "percent": 0.04,
+      "seconds": 212.671,
+      "text": "3 mins"
+    },
+    {
+      "name": "data-receiver",
+      "percent": 0.04,
+      "seconds": 186.566,
+      "text": "3 mins"
+    },
+    {
+      "name": "restore-test2",
+      "percent": 0.03,
+      "seconds": 164.261,
+      "text": "2 mins"
+    },
+    {
+      "name": "LocalState",
+      "percent": 0.03,
+      "seconds": 146.865,
+      "text": "2 mins"
+    },
+    {
+      "name": "skeeper",
+      "percent": 0.02,
+      "seconds": 126.223,
+      "text": "2 mins"
+    },
+    {
+      "name": "service",
+      "percent": 0.02,
+      "seconds": 111.561,
+      "text": "1 min"
+    },
+    {
+      "name": "asdf",
+      "percent": 0.02,
+      "seconds": 77.834,
+      "text": "1 min"
+    },
+    {
+      "name": "timesheet-maira",
+      "percent": 0,
+      "seconds": 21.686,
+      "text": "0 secs"
+    },
+    {
+      "name": "controller",
+      "percent": 0,
+      "seconds": 0.002,
+      "text": "0 secs"
+    }
   ],
   "isFallback": false
 }

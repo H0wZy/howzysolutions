@@ -5,6 +5,7 @@ import { translate } from '../locale'
 import { Chrome } from '../components/Chrome'
 import { SectionLabel } from '../components/SectionLabel'
 import { ProjectList } from '../components/ProjectList'
+import { StatsPanel } from '../components/StatsPanel'
 import { Terminal } from '../components/Terminal'
 
 export function Home({
@@ -77,6 +78,14 @@ export function Home({
           <h2>{translate(locale, 'work.heading')}</h2>
           <p className="prose">{translate(locale, 'work.intro')}</p>
           <ProjectList projects={projects} locale={locale} />
+        </div>
+      </section>
+
+      <section className="section" id="stats">
+        <div className="wrap">
+          <SectionLabel id="section.stats" locale={locale} />
+          <h2>{translate(locale, 'stats.heading')}</h2>
+          <StatsPanel stats={stats} locale={locale} />
         </div>
       </section>
 
