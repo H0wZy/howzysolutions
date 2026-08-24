@@ -38,6 +38,7 @@ export const en = {
   'work.intro':
     'Every entry states its problem, its stack, its honest current state, and the limitations its own documentation declares.',
   'work.commits': 'commits',
+  'work.period': '{start} to {end}',
   'work.viewProject': 'open project',
   'work.backToAll': 'back to all work',
 
@@ -98,12 +99,12 @@ export const en = {
   'terminal.noSuchProject': 'no such project: {id}',
   'terminal.noSuchTech': 'no technology matches: {id}',
   'terminal.badValue': 'accepted values: {values}',
-  'terminal.tooLong': 'input too long — 512 characters maximum',
+  'terminal.tooLong': 'input too long. 512 characters maximum',
   'terminal.usage': 'usage: {usage}',
   'terminal.candidates': 'candidates: {candidates}',
   'terminal.localeSet': 'language set to {locale}',
   'terminal.currentLocale': 'language: {locale}',
-  'terminal.themeAlwaysDark': 'dark — the only theme there is',
+  'terminal.themeAlwaysDark': 'dark. the only theme there is',
   'terminal.emptyHistory': 'no commands yet',
 
   // Terminal command summaries

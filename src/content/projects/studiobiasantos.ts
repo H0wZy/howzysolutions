@@ -14,13 +14,13 @@ export const studiobiasantos: Project = {
   wakatimeProject: 'studiobiasantos',
 
   summary: {
-    en: 'A single static page with no backend, where the booking card composes a WhatsApp message instead of reserving a calendar — the right product decision for the business.',
-    pt: 'Página única estática sem backend, onde o card de agendamento monta uma mensagem de WhatsApp em vez de reservar agenda — a decisão de produto certa para o negócio.',
+    en: 'A single static page with no backend, where the booking card composes a WhatsApp message instead of reserving a calendar, which is the right product decision for the business.',
+    pt: 'Página única estática sem backend, onde o card de agendamento monta uma mensagem de WhatsApp em vez de reservar agenda, que é a decisão de produto certa para o negócio.',
   },
 
   problem: {
-    en: 'A self-employed professional with no digital presence, whose booking happened entirely through loose WhatsApp conversation — no service context, no visible pricing, no organised social proof.',
-    pt: 'Uma profissional autônoma sem presença digital, cujo agendamento acontecia inteiramente por conversa solta no WhatsApp — sem contexto do serviço, sem preço visível, sem prova social organizada.',
+    en: 'A self-employed professional with no digital presence, whose booking happened entirely through loose WhatsApp conversation: no service context, no visible pricing, no organised social proof.',
+    pt: 'Uma profissional autônoma sem presença digital, cujo agendamento acontecia inteiramente por conversa solta no WhatsApp: sem contexto do serviço, sem preço visível, sem prova social organizada.',
   },
 
   capabilities: {
@@ -47,14 +47,14 @@ export const studiobiasantos: Project = {
     en: [
       'Spec-driven with four specifications, a project constitution prevailing over everything else, and a living product specification kept beside it.',
       'The rebrand from neighbourhood salon to boutique is documented as its own specification, and the rules that survived it are written prohibitively: a named typeface "is gone, do not reintroduce it"; the old wine, ivory and blush palette "is over, do not reintroduce it". Components read semantic tokens, never a literal hex.',
-      'The typographic detail is the project’s signature: the display face has exactly one weight. Hierarchy comes from size, letter-spacing and breathing room, never from a heavier weight — headings are pinned to weight 400 with weight synthesis disabled, because faux-bold smears a didone.',
+      'The typographic detail is the project’s signature: the display face has exactly one weight. Hierarchy comes from size, letter-spacing and breathing room, never from a heavier weight. Headings are pinned to weight 400 with weight synthesis disabled, because faux-bold smears a didone.',
       'Typography is self-hosted. Google Fonts at runtime is prohibited in the project, including when a tool tries to inject it.',
       'A single configuration module is the sole source of contact details, services, prices, hours and availability.',
     ],
     pt: [
       'Spec-driven com quatro specs, uma constituição de projeto que prevalece sobre todo o resto, e uma especificação viva do produto mantida ao lado.',
       'O rebranding de salão de bairro para boutique está documentado como spec própria, e as regras que sobraram dela estão escritas de forma proibitiva: uma fonte nomeada "acabou, não reintroduzir"; a paleta antiga vinho, marfim e blush "acabou, não reintroduzir". Componentes leem tokens semânticos, nunca um hex literal.',
-      'O detalhe tipográfico é a assinatura do projeto: a fonte de display tem exatamente um peso. Hierarquia vem de tamanho, entreletra e respiro, nunca de peso mais forte — headings ficam fixos em peso 400 com síntese de peso desligada, porque faux-bold borra uma didone.',
+      'O detalhe tipográfico é a assinatura do projeto: a fonte de display tem exatamente um peso. Hierarquia vem de tamanho, entreletra e respiro, nunca de peso mais forte. Headings ficam fixos em peso 400 com síntese de peso desligada, porque faux-bold borra uma didone.',
       'A tipografia é auto-hospedada. Google Fonts em tempo de execução é proibido no projeto, inclusive quando uma ferramenta tenta injetar.',
       'Um único módulo de configuração é a fonte exclusiva de contato, serviços, preços, horários e disponibilidade.',
     ],
@@ -62,14 +62,14 @@ export const studiobiasantos: Project = {
 
   limitations: {
     en: [
-      'The booking card does not reserve anything. This is a product decision, not a missing feature — there is no system for the client to operate.',
-      'The test suite covers structural invariants — label counts, the six section headings, anchor integrity — and explicitly does not cover appearance. jsdom does not load the stylesheet, so a test proves a token was applied and never proves a pixel was painted.',
+      'The booking card does not reserve anything. This is a product decision, not a missing feature: there is no system for the client to operate.',
+      'The test suite covers structural invariants (label counts, the six section headings, anchor integrity) and explicitly does not cover appearance. jsdom does not load the stylesheet, so a test proves a token was applied and never proves a pixel was painted.',
       'Because of that limit, layout and accessibility validation stays a mandatory manual measurement in a real browser, with twenty-five numbered procedures rather than an automated substitute.',
       'Content rules are not stylistic: there are two services and exactly two, no social proof is invented, and every published number derives from real data at runtime.',
     ],
     pt: [
-      'O card de agendamento não reserva nada. É decisão de produto, não funcionalidade faltando — não há sistema para a cliente operar.',
-      'A suíte de testes cobre invariantes estruturais — contagem de rótulos, os seis cabeçalhos de seção, integridade das âncoras — e explicitamente não cobre aparência. O jsdom não carrega a folha de estilo, então o teste prova que o token foi aplicado e nunca que o pixel foi pintado.',
+      'O card de agendamento não reserva nada. É decisão de produto, não funcionalidade faltando: não há sistema para a cliente operar.',
+      'A suíte de testes cobre invariantes estruturais (contagem de rótulos, os seis cabeçalhos de seção, integridade das âncoras) e explicitamente não cobre aparência. O jsdom não carrega a folha de estilo, então o teste prova que o token foi aplicado e nunca que o pixel foi pintado.',
       'Por causa desse limite, a validação de layout e acessibilidade continua sendo medição manual obrigatória em navegador real, com vinte e cinco procedimentos numerados em vez de um substituto automatizado.',
       'Regras de conteúdo não são estilísticas: existem dois serviços e apenas dois, nenhuma prova social é inventada, e todo número publicado deriva de dado real em tempo de execução.',
     ],

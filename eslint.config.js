@@ -6,7 +6,9 @@ import tseslint from 'typescript-eslint'
 import { defineConfig, globalIgnores } from 'eslint/config'
 
 export default defineConfig([
-  globalIgnores(['dist', 'coverage']),
+  // `.claude` can hold nested git worktrees. Linting into one presents eslint with
+  // two candidate tsconfig roots, which fails the parse of every file in the repo.
+  globalIgnores(['dist', 'coverage', '.claude']),
   {
     files: ['scripts/**/*.mjs'],
     extends: [js.configs.recommended],

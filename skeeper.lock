@@ -6,10 +6,10 @@
     {
       "name": "howzysolutions",
       "sidecar_branch": "howzysolutions/__branches__/main",
-      "commit": "8b46da485b879ec14eba46ce56246b49def12a4b",
-      "digest": "sha256:adbe02a3508e09369e1a310c0c79fc668b284ec5c0e51ddfd7e0f1ed6dd70e4e",
-      "files": 11,
-      "bytes": 143784
+      "commit": "bb77148ca30007cefbfc02c91a063708a5627613",
+      "digest": "sha256:9589fac4abe3eb25f67cf436591b55b31704f73c0711849b5771160dd369eb3d",
+      "files": 21,
+      "bytes": 248678
     }
   ]
 }

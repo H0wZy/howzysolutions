@@ -21,16 +21,16 @@ export const skeeperSpecs: Project = {
 
   capabilities: {
     en: [
-      'Content organised by namespace, one per source project, each published on its own branch. The default branch holds only the README — the tool never writes to it.',
+      'Content organised by namespace, one per source project, each published on its own branch. The default branch holds only the README, and the tool never writes to it.',
       'Every commit in a source repository pins an exact sidecar commit through a lock file, so any historical state is recoverable.',
       'Editing a namespace branch by hand makes the source repository report drift on its next status check, so manual tampering is visible rather than silent.',
-      'The specification stays auditable through normal git history, log and blame — just in its own repository.',
+      'The specification stays auditable through normal git history, log and blame, just in its own repository.',
     ],
     pt: [
-      'Conteúdo organizado por namespace, um por projeto de origem, cada um publicado na própria branch. A branch padrão guarda só o README — a ferramenta nunca escreve nela.',
+      'Conteúdo organizado por namespace, um por projeto de origem, cada um publicado na própria branch. A branch padrão guarda só o README, e a ferramenta nunca escreve nela.',
       'Cada commit no repositório de origem fixa um commit exato do sidecar através de um lock file, então qualquer estado histórico é recuperável.',
       'Editar uma branch de namespace à mão faz o repositório de origem reportar drift no próximo status, então adulteração manual fica visível em vez de silenciosa.',
-      'A especificação continua auditável por histórico, log e blame normais do git — só que no repositório dela.',
+      'A especificação continua auditável por histórico, log e blame normais do git, só que no repositório dela.',
     ],
   },
 
@@ -38,10 +38,10 @@ export const skeeperSpecs: Project = {
 
   development: {
     en: [
-      'Written by tooling rather than by hand, which is why it has two commits and no source of its own. It is included here because the practice it supports — keeping specifications auditable but out of the code review path — is part of how the other projects were built.',
+      'Written by tooling rather than by hand, which is why it has two commits and no source of its own. It is included here because the practice it supports, keeping specifications auditable but out of the code review path, is part of how the other projects were built.',
     ],
     pt: [
-      'Escrito por ferramenta e não à mão, que é por que tem dois commits e nenhum código próprio. Está aqui porque a prática que ele sustenta — manter specs auditáveis mas fora do caminho da revisão de código — faz parte de como os outros projetos foram construídos.',
+      'Escrito por ferramenta e não à mão, que é por que tem dois commits e nenhum código próprio. Está aqui porque a prática que ele sustenta, manter specs auditáveis mas fora do caminho da revisão de código, faz parte de como os outros projetos foram construídos.',
     ],
   },
 

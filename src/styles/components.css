@@ -31,6 +31,15 @@
 .dots i:nth-child(2) { background: var(--accent); }
 .dots i:nth-child(3) { background: var(--accent-2); }
 
+.chrome-file-kind::before {
+  content: '';
+  display: inline-block;
+  width: 1px;
+  height: 0.9em;
+  margin: 0 7px -0.1em 1px;
+  background: var(--line);
+}
+
 .chrome-file {
   color: var(--dim);
 }
@@ -119,8 +128,29 @@
 
 .project-row-meta {
   margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/*
+ * FR-003: fields are separated by a drawn rule, not by a typed character. Uniform
+ * for every relationship on the page, so the same shape always means the same thing.
+ */
+.meta-list {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 11px;
+  margin: 0;
+  padding: 0;
   color: var(--dim);
   font-size: var(--fs-sm);
+}
+
+.meta-list li + li {
+  border-left: 1px solid var(--line);
+  padding-left: 11px;
 }
 
 /* State badges — meaning never carried by colour alone (FR-025) */
@@ -475,3 +505,32 @@
   opacity: 1;
   transform: translateY(0);
 }
+
+/* Terminal spacing =========================================================
+ *
+ * FR-011 to FR-013. Two consecutive hyphens used to read as one long dash. It is
+ * not a ligature: JetBrains Mono has no `--` ligature, proved by `=>` collapsing
+ * to a single glyph in the same render while `--` stays two. The real cause is
+ * sub-pixel. At the computed 13.76px the two hyphens draw 3.63px of ink each with
+ * a 1.00px gap, sitting exactly on one device pixel with no margin. At weight 700,
+ * next to the bold prompt, the gap is 0.50px and the merge is total.
+ *
+ * 0.05em clears one device pixel at BOTH weights: the gap goes to 1.63px at 400
+ * and 1.13px at 700, measured on the running site. Uniform tracking keeps the
+ * monospace grid intact, because every advance grows by the same amount.
+ *
+ * Method and the full measurement table: research.md D1.
+ */
+
+.term-output,
+.term-echo,
+.term-text,
+.term-input,
+.term-pairs,
+.term-table {
+  letter-spacing: 0.05em;
+}
+
+/* Pagination =============================================================== */
+
+/* Activity visuals ======================================================== */

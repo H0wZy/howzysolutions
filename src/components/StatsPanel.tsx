@@ -27,7 +27,7 @@ function StatGroup({
       <ul className="bullets">
         {slices.map((slice) => (
           <li key={slice.name}>
-            {slice.name} <span className="dim">— {slice.percent.toFixed(1)}% · {slice.text}</span>
+            {slice.name} <span className="dim">{slice.percent.toFixed(1)}% · {slice.text}</span>
           </li>
         ))}
       </ul>
