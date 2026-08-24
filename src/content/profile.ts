@@ -33,8 +33,8 @@ export const profile: AuthorProfile = {
   contacts: [
     {
       kind: 'email',
-      href: 'mailto:h0wzymarcos@gmail.com',
-      label: 'h0wzymarcos@gmail.com',
+      href: 'mailto:howzysolutions@gmail.com',
+      label: 'howzysolutions@gmail.com',
       labelKey: 'contact.email',
     },
     {
