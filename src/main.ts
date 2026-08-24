@@ -2,9 +2,9 @@
  * Client entry. Deliberately framework-free.
  *
  * React is a BUILD-TIME dependency here: scripts/prerender.mjs renders every page
- * to static markup, so the browser receives finished HTML and never hydrates.
- * React returns to the client only inside the opt-in immersive renderer (US6),
- * which is dynamically imported and excluded from the budget by FR-033.
+ * to static markup, so the browser receives finished HTML and never hydrates. It
+ * never returns to the client at all — an opt-in WebGL renderer once did (US6),
+ * built, reviewed, and withdrawn 2026-08-24 (spec.md CL-002).
  *
  * Measured reason: React 19.2.7's client runtime is 117 KB gzipped under this
  * toolchain — 98% of the 120 KB budget — for pages whose only interactivity is a

@@ -20,8 +20,6 @@ export const pt = {
   'theme.joke.2': 'Atrás de uma feature flag. A flag é estrutural.',
   'theme.joke.3': 'Revisei eu mesmo e rejeitei eu mesmo. Pelo menos foi rápido.',
   'theme.joke.4': 'Tá no roadmap, logo depois do roadmap.',
-  'chrome.immersive': 'iniciar 3d',
-  'chrome.immersive.exit': 'sair do 3d',
   'chrome.skipToContent': 'Pular para o conteúdo',
 
   // Seções
