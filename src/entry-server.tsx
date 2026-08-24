@@ -31,13 +31,13 @@ export function metaFor(pathname: string): { title: string; description: string;
     route.page === 'work' ? content.projects.find((p) => p.id === route.id) : undefined
   if (project) {
     return {
-      title: `${project.name} — ${content.profile.name}`,
+      title: `${project.name} · ${content.profile.name}`,
       description: project.summary[locale],
       lang: locale,
     }
   }
   return {
-    title: `${content.profile.name} — ${translate(locale, 'hero.role')}`,
+    title: `${content.profile.name} · ${translate(locale, 'hero.role')}`,
     description: content.profile.tagline[locale],
     lang: locale,
   }

@@ -45,8 +45,8 @@ export function Home({
             <span className="dim">({translate(locale, 'hero.experienceSince')})</span>
           </p>
           <p className="sub dim">
-            {stats.humanReadableTotal} {translate(locale, 'stats.total')} —{' '}
-            {translate(locale, 'stats.range', {
+            {stats.humanReadableTotal} {translate(locale, 'stats.total')},{' '}
+            {translate(locale, 'work.period', {
               start: stats.range.start,
               end: stats.range.end,
             })}

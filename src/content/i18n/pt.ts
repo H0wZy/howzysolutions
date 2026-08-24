@@ -36,10 +36,11 @@ export const pt = {
   'hero.location': 'Londrina, Paraná, Brasil',
 
   // Listagem de projetos
-  'work.heading': 'Nove projetos — e o que cada um não faz.',
+  'work.heading': 'Nove projetos, e o que cada um não faz.',
   'work.intro':
     'Cada entrada declara o problema, a stack, o estado real e as limitações que a própria documentação do projeto registra.',
   'work.commits': 'commits',
+  'work.period': 'de {start} a {end}',
   'work.viewProject': 'abrir projeto',
   'work.backToAll': 'voltar para todos os trabalhos',
 
@@ -100,12 +101,12 @@ export const pt = {
   'terminal.noSuchProject': 'projeto inexistente: {id}',
   'terminal.noSuchTech': 'nenhuma tecnologia corresponde a: {id}',
   'terminal.badValue': 'valores aceitos: {values}',
-  'terminal.tooLong': 'entrada longa demais — máximo de 512 caracteres',
+  'terminal.tooLong': 'entrada longa demais. máximo de 512 caracteres',
   'terminal.usage': 'uso: {usage}',
   'terminal.candidates': 'candidatos: {candidates}',
   'terminal.localeSet': 'idioma alterado para {locale}',
   'terminal.currentLocale': 'idioma: {locale}',
-  'terminal.themeAlwaysDark': 'escuro — o único tema que existe',
+  'terminal.themeAlwaysDark': 'escuro. o único tema que existe',
   'terminal.emptyHistory': 'nenhum comando ainda',
 
   // Resumos dos comandos

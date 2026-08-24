@@ -27,7 +27,7 @@ export function Chrome({
         <i />
       </span>
       <span className="chrome-file">
-        ~/{path} — {translate(locale, 'chrome.file')}
+        ~/{path} <span className="chrome-file-kind">{translate(locale, 'chrome.file')}</span>
       </span>
       <span className="chrome-controls">
         {controls}
