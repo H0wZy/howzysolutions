@@ -43,6 +43,11 @@ export const pt = {
   'work.period': 'de {start} a {end}',
   'work.viewProject': 'abrir projeto',
   'work.backToAll': 'voltar para todos os trabalhos',
+  'work.page': 'Páginas de trabalhos',
+  'work.pagePrev': 'página anterior',
+  'work.pageNext': 'próxima página',
+  'work.allWork': 'todos os trabalhos',
+  'work.listingTitle': 'Todos os trabalhos',
 
   // Detalhe do projeto
   'project.problem': 'o_problema',

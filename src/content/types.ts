@@ -153,6 +153,29 @@ export type ContentBundle = {
 
 /* -- Derived helpers ------------------------------------------------------ */
 
+/** Entries per work listing page (FR-015). */
+export const PAGE_SIZE = 5
+
+export type WorkPage = {
+  /** 1-based, and always a valid page — never below 1 or above `total`. */
+  number: number
+  /** A contiguous slice, at most `PAGE_SIZE` long, preserving published order. */
+  projects: Project[]
+  total: number
+}
+
+/**
+ * Slices `projects` into page `requested`, clamping to the nearest valid page
+ * rather than rendering an empty listing for a deep link to a shrunken set
+ * (data-model.md, WorkPage rule 3).
+ */
+export function workPage(projects: Project[], requested: number): WorkPage {
+  const total = Math.max(1, Math.ceil(projects.length / PAGE_SIZE))
+  const number = Math.min(Math.max(1, requested), total)
+  const start = (number - 1) * PAGE_SIZE
+  return { number, projects: projects.slice(start, start + PAGE_SIZE), total }
+}
+
 export type ExperienceDuration = { years: number; months: number }
 
 /**

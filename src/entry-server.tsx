@@ -3,15 +3,19 @@ import App from './App'
 import { content } from './content'
 import { LOCALES, type Locale } from './content/i18n/types'
 import { translate } from './content/i18n/translate'
+import { workPage } from './content/types'
 import { locationFor, pathFor, type Route } from './route'
 
 /**
  * Every route this site emits as a real document, in every locale (FR-006,
- * FR-016). English is unprefixed; Portuguese lives under /pt/.
+ * FR-016). English is unprefixed; Portuguese lives under /pt/. The listing
+ * page count is derived from the data, never hardcoded (FR-020).
  */
 export function routes(): Array<{ pathname: string; locale: Locale }> {
+  const { total } = workPage(content.projects, 1)
   const pages: Route[] = [
     { page: 'home' },
+    ...Array.from({ length: total }, (_, i) => ({ page: 'workIndex' as const, number: i + 1 })),
     ...content.projects.map((p) => ({ page: 'work' as const, id: p.id })),
   ]
   return LOCALES.flatMap((locale) =>
@@ -33,6 +37,13 @@ export function metaFor(pathname: string): { title: string; description: string;
     return {
       title: `${project.name} · ${content.profile.name}`,
       description: project.summary[locale],
+      lang: locale,
+    }
+  }
+  if (route.page === 'workIndex') {
+    return {
+      title: `${translate(locale, 'work.listingTitle')} · ${content.profile.name}`,
+      description: translate(locale, 'work.intro'),
       lang: locale,
     }
   }

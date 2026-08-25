@@ -9,7 +9,10 @@ import { DEFAULT_LOCALE, LOCALES, type Locale } from './content/i18n/types'
  * lets each document carry the right lang attribute with no JavaScript.
  */
 
-export type Route = { page: 'home' } | { page: 'work'; id: string }
+export type Route =
+  | { page: 'home' }
+  | { page: 'workIndex'; number: number }
+  | { page: 'work'; id: string }
 
 export type Location = { route: Route; locale: Locale }
 
@@ -25,9 +28,17 @@ export function splitLocale(pathname: string): { locale: Locale; rest: string } 
   return { locale: DEFAULT_LOCALE, rest: pathname }
 }
 
+/**
+ * A purely numeric segment is a page number, checked before the project id
+ * pattern — the schema test guarantees no project id is purely numeric, which
+ * is what makes this order unambiguous (research D6).
+ */
 export function parseRoute(rest: string): Route {
-  const match = /^\/work\/([a-z0-9-]+)\/?$/.exec(rest)
-  return match ? { page: 'work', id: match[1] } : { page: 'home' }
+  if (rest === '/work/' || rest === '/work') return { page: 'workIndex', number: 1 }
+  const pageMatch = /^\/work\/(\d+)\/?$/.exec(rest)
+  if (pageMatch) return { page: 'workIndex', number: Number(pageMatch[1]) }
+  const workMatch = /^\/work\/([a-z0-9-]+)\/?$/.exec(rest)
+  return workMatch ? { page: 'work', id: workMatch[1] } : { page: 'home' }
 }
 
 export function locationFor(pathname: string): Location {
@@ -37,7 +48,14 @@ export function locationFor(pathname: string): Location {
 
 /** The canonical path for a route in a given locale. */
 export function pathFor(route: Route, locale: Locale): string {
-  const rest = route.page === 'work' ? `/work/${route.id}/` : '/'
+  const rest =
+    route.page === 'work'
+      ? `/work/${route.id}/`
+      : route.page === 'workIndex'
+        ? route.number <= 1
+          ? '/work/'
+          : `/work/${route.number}/`
+        : '/'
   if (locale === DEFAULT_LOCALE) return rest
   return rest === '/' ? `/${locale}/` : `/${locale}${rest}`
 }

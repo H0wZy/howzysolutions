@@ -5,6 +5,7 @@ import { PROJECT_KIND, PROJECT_STATE, STACK_GROUP } from '../content/types'
 import { trackedTimeFor } from '../content/stats'
 import { stats } from '../content/stats'
 import { translate } from '../locale'
+import { pathFor } from '../route'
 
 function Block({
   labelKey,
@@ -151,7 +152,9 @@ export function ProjectDetail({
       ) : null}
 
       <p className="detail-back">
-        <a href="/">← {translate(locale, 'work.backToAll')}</a>
+        <a href={pathFor({ page: 'workIndex', number: 1 }, locale)}>
+          ← {translate(locale, 'work.backToAll')}
+        </a>
       </p>
     </article>
   )

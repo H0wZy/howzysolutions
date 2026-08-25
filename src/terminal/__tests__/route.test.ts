@@ -55,3 +55,34 @@ describe('locationFor', () => {
     expect(locationFor('/nonsense/')).toEqual({ route: { page: 'home' }, locale: 'en' })
   })
 })
+
+describe('work listing route (research D6)', () => {
+  it('resolves /work/ and /work/1/ both to listing page 1', () => {
+    expect(locationFor('/work/').route).toEqual({ page: 'workIndex', number: 1 })
+    expect(locationFor('/work/1/').route).toEqual({ page: 'workIndex', number: 1 })
+  })
+
+  it('resolves /work/2/ to listing page 2, not to a project with id 2', () => {
+    expect(locationFor('/work/2/').route).toEqual({ page: 'workIndex', number: 2 })
+  })
+
+  it('still resolves a real project id to the detail route', () => {
+    expect(locationFor('/work/telasparana/').route).toEqual({
+      page: 'work',
+      id: 'telasparana',
+    })
+  })
+
+  it('resolves /pt/work/2/ to page 2 in Portuguese', () => {
+    expect(locationFor('/pt/work/2/')).toEqual({
+      route: { page: 'workIndex', number: 2 },
+      locale: 'pt',
+    })
+  })
+
+  it('builds listing paths per locale, page 1 canonically unnumbered', () => {
+    expect(pathFor({ page: 'workIndex', number: 1 }, 'en')).toBe('/work/')
+    expect(pathFor({ page: 'workIndex', number: 2 }, 'en')).toBe('/work/2/')
+    expect(pathFor({ page: 'workIndex', number: 2 }, 'pt')).toBe('/pt/work/2/')
+  })
+})
