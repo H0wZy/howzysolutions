@@ -38,6 +38,11 @@ describe('project records', () => {
     each((p) => expect(p.id, `bad id: ${p.id}`).toMatch(/^[a-z0-9-]+$/))
   })
 
+  /* research D6 — a purely numeric id would collide with /work/{n}/ */
+  it('never uses a purely numeric id', () => {
+    each((p) => expect(p.id, p.id).not.toMatch(/^\d+$/))
+  })
+
   it('uses only the defined kind and state vocabularies', () => {
     each((p) => {
       expect(Object.keys(PROJECT_KIND)).toContain(p.kind)

@@ -533,4 +533,52 @@
 
 /* Pagination =============================================================== */
 
+.pagination {
+  margin-top: 2.4em;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+}
+
+.pagination-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.pagination-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.2em;
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--dim);
+  font-size: var(--fs-sm);
+  transition:
+    color var(--dur-fast) var(--ease),
+    border-color var(--dur-fast) var(--ease),
+    background var(--dur-fast) var(--ease);
+}
+
+.pagination-link:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.pagination-link[aria-current='page'] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--bg);
+  font-weight: 700;
+}
+
+.pagination-edge {
+  color: var(--dim);
+}
+
 /* Activity visuals ======================================================== */

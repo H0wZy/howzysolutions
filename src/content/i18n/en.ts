@@ -41,6 +41,11 @@ export const en = {
   'work.period': '{start} to {end}',
   'work.viewProject': 'open project',
   'work.backToAll': 'back to all work',
+  'work.page': 'Work pages',
+  'work.pagePrev': 'previous page',
+  'work.pageNext': 'next page',
+  'work.allWork': 'all work',
+  'work.listingTitle': 'All work',
 
   // Project detail
   'project.problem': 'the_problem',

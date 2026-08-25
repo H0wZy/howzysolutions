@@ -1,7 +1,8 @@
 import type { Locale } from '../content/i18n/types'
 import type { ContentBundle } from '../content/types'
-import { experienceSince } from '../content/types'
+import { experienceSince, workPage } from '../content/types'
 import { translate } from '../locale'
+import { pathFor } from '../route'
 import { Chrome } from '../components/Chrome'
 import { SectionLabel } from '../components/SectionLabel'
 import { ProjectList } from '../components/ProjectList'
@@ -19,6 +20,7 @@ export function Home({
 }) {
   const { profile, projects, stats } = content
   const { years, months } = experienceSince(profile.experienceStart)
+  const { projects: pageOneProjects } = workPage(projects, 1)
 
   return (
     <>
@@ -77,7 +79,12 @@ export function Home({
           <SectionLabel id="section.work" locale={locale} />
           <h2>{translate(locale, 'work.heading')}</h2>
           <p className="prose">{translate(locale, 'work.intro')}</p>
-          <ProjectList projects={projects} locale={locale} />
+          <ProjectList projects={pageOneProjects} locale={locale} />
+          <p className="prose">
+            <a href={pathFor({ page: 'workIndex', number: 1 }, locale)}>
+              {translate(locale, 'work.allWork')} →
+            </a>
+          </p>
         </div>
       </section>
 
