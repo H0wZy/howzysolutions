@@ -95,6 +95,15 @@ export const en = {
   'stats.experienceNote':
     'Experience is counted from January 2023. Tracked coding time begins when tracking was installed, in March 2026. They measure different things over different periods.',
 
+  // Contribution calendar (a different source, unit and period from the stats above)
+  'contrib.heading': 'public commits, day by day',
+  'contrib.source': 'Source: GitHub',
+  'contrib.window': '{start} to {end}',
+  'contrib.cell': '{count} contributions on {date}',
+  'contrib.stale': 'Grid is from the last successful capture, on {date}.',
+  'contrib.scopePublic': 'public contributions',
+  'contrib.scopeAll': 'public and private contributions',
+
   // Terminal
   'terminal.hint': "Type 'help' and press Enter.",
   'terminal.label': 'Interactive terminal',

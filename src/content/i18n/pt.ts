@@ -97,6 +97,15 @@ export const pt = {
   'stats.experienceNote':
     'A experiência é contada desde janeiro de 2023. O tempo de código rastreado começa quando o rastreamento foi instalado, em março de 2026. São medidas diferentes, em períodos diferentes.',
 
+  // Calendário de contribuições (fonte, unidade e período diferentes das estatísticas acima)
+  'contrib.heading': 'commits públicos, dia a dia',
+  'contrib.source': 'Fonte: GitHub',
+  'contrib.window': 'de {start} a {end}',
+  'contrib.cell': '{count} contribuições em {date}',
+  'contrib.stale': 'Grade da última captura bem-sucedida, em {date}.',
+  'contrib.scopePublic': 'contribuições públicas',
+  'contrib.scopeAll': 'contribuições públicas e privadas',
+
   // Terminal
   'terminal.hint': "Digite 'help' e pressione Enter.",
   'terminal.label': 'Terminal interativo',

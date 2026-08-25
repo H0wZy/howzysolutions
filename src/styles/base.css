@@ -65,6 +65,23 @@ pre {
   font-family: var(--font-mono);
 }
 
+/*
+ * Off-screen but present: keyboard and screen-reader users reach this text
+ * without hovering anything (FR-044). Content, not decoration, so it is
+ * never `display: none`.
+ */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* Layout ------------------------------------------------------------------ */
 
 .wrap {
