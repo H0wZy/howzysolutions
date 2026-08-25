@@ -21,6 +21,7 @@ const FLOORS = {
   '--dim': 4.5,
   '--accent': 4.5,
   '--accent-2': 4.5,
+  '--term-user': 4.5,
   '--danger': 4.5,
   '--border': 3,
   '--bar-ink': 3,

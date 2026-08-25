@@ -65,9 +65,14 @@ export function renderLine(line: OutputLine): HTMLElement {
   }
 }
 
-/** The echoed command, shown above its output the way a shell does. */
+/**
+ * The echoed command, shown above its output the way a shell does. Just the
+ * caret, not the full multi-segment prompt the input line wears: scrollback
+ * repeating session, path and shell on every command would bury the output
+ * it exists to introduce.
+ */
 export function renderEcho(input: string): HTMLElement {
   const line = el('div', 'term-echo')
-  line.append(el('span', 'term-prompt', '$'), el('span', undefined, ` ${input}`))
+  line.append(el('span', 'term-prompt', '❯'), el('span', undefined, ` ${input}`))
   return line
 }

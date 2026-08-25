@@ -106,6 +106,11 @@ export const en = {
 
   // Terminal
   'terminal.hint': "Type 'help' and press Enter.",
+  // Prompt connectives. The author's own oh-my-posh prompt reads as a sentence
+  // ("user@host in ~/ w/ bash"), so these are words and get translated; the
+  // segments between them (handle, path, shell) are shell tokens and do not.
+  'terminal.promptIn': 'in',
+  'terminal.promptWith': 'w/',
   'terminal.label': 'Interactive terminal',
   'terminal.inputLabel': 'Terminal command input',
   'terminal.outputLabel': 'Terminal output',

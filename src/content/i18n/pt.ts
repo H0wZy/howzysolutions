@@ -108,6 +108,8 @@ export const pt = {
 
   // Terminal
   'terminal.hint': "Digite 'help' e pressione Enter.",
+  'terminal.promptIn': 'em',
+  'terminal.promptWith': 'c/',
   'terminal.label': 'Terminal interativo',
   'terminal.inputLabel': 'Entrada de comando do terminal',
   'terminal.outputLabel': 'Saída do terminal',
