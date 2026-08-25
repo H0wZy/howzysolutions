@@ -17,7 +17,11 @@ function Block({
 }) {
   return (
     <section className="detail-block">
-      <p className="label">{translate(locale, labelKey)}</p>
+      {/* The only heading this region has — styled as a "## " comment via
+          .label, but it must be a real heading: the stack block's per-group
+          h3s (frontend/backend/...) need an h2 ancestor or the page's
+          heading order breaks (WCAG 1.3.1 / Lighthouse heading-order). */}
+      <h2 className="label">{translate(locale, labelKey)}</h2>
       {children}
     </section>
   )

@@ -51,6 +51,33 @@ function withLangs(html, pathname, lang) {
     .replace('</head>', `${links}\n  </head>`)
 }
 
+/**
+ * The Latin subset covers every character both locales actually render (it
+ * includes the Latin-1 Supplement, so Portuguese diacritics are in range).
+ * Without a preload, this file is only discovered once the browser has
+ * parsed the stylesheet and reached its @font-face, so text first paints in
+ * the fallback face and reflows into JetBrains Mono once the download
+ * lands — a measured CLS regression (T065). The filename is content-hashed
+ * by Vite, so it is read out of the shell's own built CSS rather than
+ * hardcoded.
+ */
+function findLatinFontHref() {
+  const cssHref = shell.match(/<link rel="stylesheet"[^>]*href="([^"]+\.css)"/)?.[1]
+  const css = cssHref ? readFileSync(join(dist, cssHref), 'utf8') : ''
+  return css.match(/url\((\/assets\/jetbrains-mono-latin-wght-normal-[^)]+\.woff2)\)/)?.[1]
+}
+
+const fontHref = findLatinFontHref()
+if (!fontHref) {
+  console.warn('! prerender: could not locate the Latin JetBrains Mono file to preload')
+}
+
+function withFontPreload(html) {
+  if (!fontHref) return html
+  const link = `    <link rel="preload" as="font" type="font/woff2" href="${fontHref}" crossorigin />`
+  return html.replace('</head>', `${link}\n  </head>`)
+}
+
 let written = 0
 
 for (const { pathname } of server.routes()) {
@@ -58,6 +85,7 @@ for (const { pathname } of server.routes()) {
   let html = shell.replace(ROOT_DIV, `<div id="root">${server.render(pathname)}</div>`)
   html = withMeta(html, meta)
   html = withLangs(html, pathname, meta.lang)
+  html = withFontPreload(html)
 
   const outDir = pathname === '/' ? dist : join(dist, pathname)
   mkdirSync(outDir, { recursive: true })
