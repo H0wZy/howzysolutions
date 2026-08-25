@@ -582,3 +582,92 @@
 }
 
 /* Activity visuals ======================================================== */
+
+/*
+ * Bars are ink on the page ground, no filled track behind them (research D4).
+ * The row's percentage arrives as the inline --pct custom property; every
+ * colour is a token, never a literal, per Principle VI.
+ */
+.bar-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/*
+ * Two lines per row: name, percentage and duration share the first, the bar
+ * takes the second at its own full inline size. A single-line grid starves
+ * the bar's percentage-based track to zero as soon as a column narrows
+ * (verified against the stack-groups grid at 220px) — wrapping avoids that
+ * at any container width, 320px included, with no media query needed.
+ */
+.bar-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: 10px;
+  row-gap: 4px;
+  padding: 7px 0;
+}
+
+.bar-name {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+  font-size: var(--fs-sm);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bar-lane {
+  flex: 1 1 100%;
+  order: 1;
+  display: block;
+  block-size: 6px;
+}
+
+.bar-fill {
+  display: block;
+  block-size: 100%;
+  border-radius: var(--radius-sm);
+  background: var(--bar-ink);
+  /* A row rounding to 0.0% still shows a visible sliver, distinct from an absent row. */
+  inline-size: clamp(3px, calc(var(--pct) * 1%), 100%);
+}
+
+.bar-percent,
+.bar-duration {
+  flex: 0 0 auto;
+  font-size: var(--fs-sm);
+  color: var(--dim);
+  white-space: nowrap;
+}
+
+.bar-percent {
+  min-inline-size: 3.8ch;
+  text-align: right;
+}
+
+.bar-more {
+  margin-top: 8px;
+}
+
+.bar-more summary {
+  cursor: pointer;
+  color: var(--dim);
+  font-size: var(--fs-sm);
+  width: fit-content;
+}
+
+.bar-more summary:hover {
+  color: var(--accent);
+}
+
+.bar-more[open] summary {
+  margin-bottom: 6px;
+}
+
+.bar-list,
+.bar-more {
+  overflow-x: auto;
+}

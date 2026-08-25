@@ -88,8 +88,10 @@ export const en = {
   'stats.categories': 'activity',
   'stats.projects': 'by project',
   'stats.source': 'Source: WakaTime',
-  'stats.range': 'tracked {start} to {end}',
+  'stats.range': 'tracked {start} to current',
+  'stats.rangeStale': 'tracked {start} to {date}',
   'stats.stale': 'Figures are from the last successful capture on {date}.',
+  'stats.showAll': 'show all',
   'stats.experienceNote':
     'Experience is counted from January 2023. Tracked coding time begins when tracking was installed, in March 2026. They measure different things over different periods.',
 

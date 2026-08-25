@@ -3,6 +3,8 @@ import { execute, type ExecuteContext } from '../engine'
 import { content } from '../../content'
 import { LOCALES } from '../../content/i18n/types'
 import { en } from '../../content/i18n/en'
+import { periodLabel } from '../../content/stats'
+import { translate } from '../../content/i18n/translate'
 import { THEME_JOKE_KEYS } from '../../theme/jokes'
 
 /**
@@ -65,10 +67,10 @@ describe('terminal output matches the content records', () => {
     expect(output).toContain(en['kind.study'])
   })
 
-  it('cites the statistics period alongside the figures', () => {
+  it('cites the statistics period alongside the figures, in the shared wording (FR-036, research D10)', () => {
     const output = rendered('stats')
-    expect(output).toContain(content.stats.range.start)
-    expect(output).toContain(content.stats.range.end)
+    const period = periodLabel(content.stats)
+    expect(output).toContain(translate('en', period.key, period.params))
   })
 
   it('never renders a raw translation key', () => {

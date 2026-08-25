@@ -16,6 +16,8 @@
   --dim: #968c79;
   --accent: #e8a33d;
   --accent-2: #5cc0ad;
+  /* Same ink as --accent-2 (research D4): bars are measured data, not a new hue. */
+  --bar-ink: #5cc0ad;
   --danger: #e0705f;
   --line: #232019;
   --border: #6b6250;

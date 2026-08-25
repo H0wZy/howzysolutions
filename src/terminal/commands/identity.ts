@@ -1,4 +1,5 @@
 import { experienceSince } from '../../content/types'
+import { periodLabel } from '../../content/stats'
 import { translate } from '../../content/i18n/translate'
 import { blank, ok, pairs, text, type Command } from '../types'
 
@@ -11,6 +12,7 @@ export const version: Command = {
   run: ({ content, locale }) => {
     const { years, months } = experienceSince(content.profile.experienceStart)
     const { stats } = content
+    const period = periodLabel(stats)
     return ok([
       text(`${content.profile.handle} ${years}.${months}.0`, 'accent'),
       // FR-028: two measurements, two periods, never presented as one claim.
@@ -23,8 +25,8 @@ export const version: Command = {
       text(
         `${stats.humanReadableTotal} ${translate(locale, 'stats.total')} — ${translate(
           locale,
-          'stats.range',
-          { start: stats.range.start, end: stats.range.end },
+          period.key,
+          period.params,
         )}`,
         'dim',
       ),

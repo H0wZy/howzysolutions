@@ -1,6 +1,7 @@
 import type { Locale } from '../content/i18n/types'
 import type { ContentBundle } from '../content/types'
 import { experienceSince, workPage } from '../content/types'
+import { periodLabel } from '../content/stats'
 import { translate } from '../locale'
 import { pathFor } from '../route'
 import { Chrome } from '../components/Chrome'
@@ -21,6 +22,7 @@ export function Home({
   const { profile, projects, stats } = content
   const { years, months } = experienceSince(profile.experienceStart)
   const { projects: pageOneProjects } = workPage(projects, 1)
+  const period = periodLabel(stats)
 
   return (
     <>
@@ -46,12 +48,9 @@ export function Home({
             <strong>{translate(locale, 'hero.experience', { years, months })}</strong>{' '}
             <span className="dim">({translate(locale, 'hero.experienceSince')})</span>
           </p>
+          {/* FR-036: the same period wording as the activity section, never a second phrasing. */}
           <p className="sub dim">
-            {stats.humanReadableTotal} {translate(locale, 'stats.total')},{' '}
-            {translate(locale, 'work.period', {
-              start: stats.range.start,
-              end: stats.range.end,
-            })}
+            {stats.humanReadableTotal}, {translate(locale, period.key, period.params)}
           </p>
         </div>
       </header>

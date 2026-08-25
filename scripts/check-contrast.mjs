@@ -23,6 +23,7 @@ const FLOORS = {
   '--accent-2': 4.5,
   '--danger': 4.5,
   '--border': 3,
+  '--bar-ink': 3,
 }
 /** Decorative only. Exempt by WCAG, and must never be used on a control boundary. */
 const DECORATIVE = new Set(['--line', '--surface'])
