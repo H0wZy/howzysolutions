@@ -1,3 +1,4 @@
+import type { StringKey } from './i18n/en'
 import type { CodingStatsSnapshot, StatSlice } from './types'
 import raw from './wakatime.generated.json'
 
@@ -61,4 +62,25 @@ export const stats: CodingStatsSnapshot = parseStats(raw)
 export function trackedTimeFor(wakatimeProject?: string): StatSlice | undefined {
   if (!wakatimeProject) return undefined
   return stats.projects.find((p) => p.name === wakatimeProject)
+}
+
+export type PeriodLabel = {
+  key: Extract<StringKey, 'stats.range' | 'stats.rangeStale'>
+  params: Record<string, string>
+}
+
+/**
+ * Picks the fresh ("to current") or retained ("to {date}") wording from
+ * `isFallback`, so the hero one-liner and the activity section can never
+ * disagree (FR-034, FR-036, research D10) — both call this instead of
+ * branching on the flag themselves.
+ */
+export function periodLabel(snapshot: CodingStatsSnapshot): PeriodLabel {
+  if (snapshot.isFallback) {
+    return {
+      key: 'stats.rangeStale',
+      params: { start: snapshot.range.start, date: snapshot.capturedAt.slice(0, 10) },
+    }
+  }
+  return { key: 'stats.range', params: { start: snapshot.range.start } }
 }

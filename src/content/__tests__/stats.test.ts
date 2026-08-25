@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { parseStats, stats, trackedTimeFor } from '../stats'
+import { parseStats, periodLabel, stats, trackedTimeFor } from '../stats'
+import { translate } from '../../locale'
 
 /**
  * Gate: FR-031 (the build never crashes on a broken third-party payload) and
@@ -68,4 +69,50 @@ describe('trackedTimeFor', () => {
     if (!first) return // no projects in the committed artifact — nothing to assert
     expect(trackedTimeFor(first.name)).toEqual(first)
   })
+})
+
+/**
+ * Gate: FR-034 (a retained snapshot never claims to be current) and FR-036
+ * (the hero one-liner and the activity section agree on the same wording).
+ */
+describe('periodLabel', () => {
+  const fresh = parseStats({
+    capturedAt: '2026-08-19T23:10:04.000Z',
+    range: { start: '2026-03-17', end: '2026-08-19' },
+    totalSeconds: 439399,
+    isFallback: false,
+  })
+  const retained = parseStats({
+    capturedAt: '2026-08-10T08:00:00.000Z',
+    range: { start: '2026-03-17', end: '2026-08-09' },
+    totalSeconds: 400000,
+    isFallback: true,
+  })
+
+  it('picks the ongoing key for a fresh capture', () => {
+    expect(periodLabel(fresh)).toEqual({ key: 'stats.range', params: { start: '2026-03-17' } })
+  })
+
+  it('picks the stale key, naming the capture date, for a retained snapshot', () => {
+    expect(periodLabel(retained)).toEqual({
+      key: 'stats.rangeStale',
+      params: { start: '2026-03-17', date: '2026-08-10' },
+    })
+  })
+
+  for (const locale of ['en', 'pt'] as const) {
+    it(`renders the ongoing wording for a fresh capture (${locale})`, () => {
+      const { key, params } = periodLabel(fresh)
+      const rendered = translate(locale, key, params)
+      expect(rendered).toContain('2026-03-17')
+      expect(rendered).not.toContain('2026-08-10')
+    })
+
+    it(`renders the capture date, not "current", for a retained snapshot (${locale})`, () => {
+      const { key, params } = periodLabel(retained)
+      const rendered = translate(locale, key, params)
+      expect(rendered).toContain('2026-03-17')
+      expect(rendered).toContain('2026-08-10')
+    })
+  }
 })

@@ -2,8 +2,7 @@ import type { ReactNode } from 'react'
 import type { Locale } from '../content/i18n/types'
 import type { Project, Technology } from '../content/types'
 import { PROJECT_KIND, PROJECT_STATE, STACK_GROUP } from '../content/types'
-import { trackedTimeFor } from '../content/stats'
-import { stats } from '../content/stats'
+import { periodLabel, stats, trackedTimeFor } from '../content/stats'
 import { translate } from '../locale'
 import { pathFor } from '../route'
 
@@ -35,6 +34,7 @@ export function ProjectDetail({
 }) {
   const nameOf = (id: string) => technologies.find((t) => t.id === id)?.name ?? id
   const tracked = trackedTimeFor(project.wakatimeProject)
+  const period = periodLabel(stats)
 
   return (
     <article className="detail">
@@ -128,10 +128,7 @@ export function ProjectDetail({
             <strong>{tracked.text}</strong>{' '}
             <span className="metric-source">
               {translate(locale, 'stats.source')} ·{' '}
-              {translate(locale, 'stats.range', {
-                start: stats.range.start,
-                end: stats.range.end,
-              })}
+              {translate(locale, period.key, period.params)}
             </span>
           </p>
         </Block>

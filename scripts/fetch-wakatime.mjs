@@ -12,12 +12,18 @@
  * Contract: specs/001-terminal-portfolio-rebrand/contracts/wakatime-snapshot.md
  *
  * Every row of the failure contract warns and exits 0 rather than failing the
- * build. On every row the committed artifact is left byte-identical (verified
- * by V-016/V-017) — "keep the last known good" is satisfied simply by not
- * writing. The one exception is a missing artifact (nothing committed yet, as
- * on a fresh checkout before the first successful fetch), where an empty
- * snapshot flagged `isFallback: true` is written so the build still has a
- * file to import.
+ * build. The measured figures are left byte-identical on every row — "keep
+ * the last known good" never rewrites `capturedAt` or the numbers. What does
+ * change on the first failure after a success is `isFallback`, flipped to
+ * `true` so the interface can say figures are from the last successful
+ * capture instead of implying they are current (FR-034, research D10 of
+ * specs/002-portfolio-craft-pass) — the artifact-shape contract already
+ * promised this per failure row; only the write path was missing it. A
+ * repeated failure is then a true no-op, since the flag is already set. The
+ * other exception is a missing artifact (nothing committed yet, as on a
+ * fresh checkout before the first successful fetch), where an empty snapshot
+ * flagged `isFallback: true` is written so the build still has a file to
+ * import.
  */
 import { existsSync, readFileSync, writeFileSync } from 'node:fs'
 import { homedir } from 'node:os'
@@ -48,7 +54,13 @@ function warn(message) {
   if (!existsSync(ARTIFACT)) {
     console.warn('! wakatime: no committed artifact exists yet — writing an empty fallback')
     writeFileSync(ARTIFACT, `${JSON.stringify(EMPTY_FALLBACK, null, 2)}\n`)
+    return
   }
+  // capturedAt and every measured figure stay exactly as last written; only
+  // the flag changes, and only on the first failure after a success.
+  const existing = JSON.parse(readFileSync(ARTIFACT, 'utf8'))
+  if (existing.isFallback) return
+  writeFileSync(ARTIFACT, `${JSON.stringify({ ...existing, isFallback: true }, null, 2)}\n`)
 }
 
 function toSlice(entry) {

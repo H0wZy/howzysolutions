@@ -1,4 +1,5 @@
 import { TECH_CATEGORY } from '../../content/types'
+import { periodLabel } from '../../content/stats'
 import { translate } from '../../content/i18n/translate'
 import { blank, ok, table, text, type Command } from '../types'
 
@@ -38,11 +39,9 @@ export const stats: Command = {
   summaryKey: 'cmd.stats',
   run: ({ flags, content, locale }) => {
     const s = content.stats
-    // FR-027: the range prints with the figures, every time, in every section.
-    const range = translate(locale, 'stats.range', {
-      start: s.range.start,
-      end: s.range.end,
-    })
+    // FR-027, FR-034: the range prints with the figures, every time, honest about staleness.
+    const period = periodLabel(s)
+    const range = translate(locale, period.key, period.params)
 
     const section = (key: 'languages' | 'editors' | 'projects' | 'categories') =>
       table(

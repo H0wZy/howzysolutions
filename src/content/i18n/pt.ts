@@ -90,8 +90,10 @@ export const pt = {
   'stats.categories': 'atividade',
   'stats.projects': 'por projeto',
   'stats.source': 'Fonte: WakaTime',
-  'stats.range': 'rastreado de {start} a {end}',
+  'stats.range': 'rastreado desde {start} até agora',
+  'stats.rangeStale': 'rastreado desde {start} até {date}',
   'stats.stale': 'Números da última captura bem-sucedida, em {date}.',
+  'stats.showAll': 'ver tudo',
   'stats.experienceNote':
     'A experiência é contada desde janeiro de 2023. O tempo de código rastreado começa quando o rastreamento foi instalado, em março de 2026. São medidas diferentes, em períodos diferentes.',
 
