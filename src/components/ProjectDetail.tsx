@@ -15,13 +15,25 @@ function Block({
   locale: Locale
   children: ReactNode
 }) {
+  // `project.problem` -> `problem`: a stable, readable fragment id per topic,
+  // so a detail page is linkable section by section the way documentation is
+  // (research D8, resolved).
+  const anchor = labelKey.split('.')[1] ?? labelKey
+
   return (
-    <section className="detail-block">
-      {/* The only heading this region has — styled as a "## " comment via
+    <section className="detail-block" id={anchor}>
+      {/* The only heading this region has — styled as a "##" comment via
           .label, but it must be a real heading: the stack block's per-group
           h3s (frontend/backend/...) need an h2 ancestor or the page's
           heading order breaks (WCAG 1.3.1 / Lighthouse heading-order). */}
-      <h2 className="label">{translate(locale, labelKey)}</h2>
+      <h2 className="label">
+        <a className="label-link" href={`#${anchor}`}>
+          <span className="label-hash" aria-hidden="true">
+            ##
+          </span>
+          {translate(locale, labelKey)}
+        </a>
+      </h2>
       {children}
     </section>
   )
