@@ -105,12 +105,12 @@ export const en = {
   'contrib.scopeAll': 'public and private contributions',
 
   // Terminal
-  'terminal.hint': "Type 'help' and press Enter.",
-  // Prompt connectives. The author's own oh-my-posh prompt reads as a sentence
-  // ("user@host in ~/ w/ bash"), so these are words and get translated; the
-  // segments between them (handle, path, shell) are shell tokens and do not.
+  // The one prompt connective. The author's own oh-my-posh prompt reads as a
+  // sentence ("user@host in ~"), so this word is translated; the segments around
+  // it (handle, host, path) are shell tokens and are not.
   'terminal.promptIn': 'in',
-  'terminal.promptWith': 'w/',
+  // Names the region for a screen reader. The visible title bar it used to
+  // duplicate is gone; the accessible name still has to be there.
   'terminal.label': 'Interactive terminal',
   'terminal.inputLabel': 'Terminal command input',
   'terminal.outputLabel': 'Terminal output',
