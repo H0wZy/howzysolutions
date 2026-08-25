@@ -29,7 +29,7 @@ export function mountTerminal(root: HTMLElement, session: TerminalSession): void
   const outputEl = root.querySelector<HTMLElement>('[data-term-output]')
   const formEl = root.querySelector<HTMLFormElement>('[data-term-form]')
   const inputEl = root.querySelector<HTMLInputElement>('[data-term-input]')
-  const hint = root.querySelector<HTMLElement>('[data-term-hint]')
+  const promptEl = root.querySelector<HTMLElement>('[data-term-ps1]')
   if (!outputEl || !formEl || !inputEl) return
 
   // Narrowing does not survive into the hoisted function declarations below.
@@ -45,8 +45,20 @@ export function mountTerminal(root: HTMLElement, session: TerminalSession): void
 
   let cursor = session.history.length
 
+  // `root` is the scroll region: scrollback and prompt share it, so output
+  // pushes the prompt down the way it does in a terminal rather than sliding
+  // under a pinned input bar.
   const scrollToEnd = () => {
-    output.scrollTop = output.scrollHeight
+    root.scrollTop = root.scrollHeight
+  }
+
+  /**
+   * Scrollback repeats the prompt each command, as a shell does — and repeats it
+   * by CLONING the live one, so the markup has a single definition
+   * (src/components/Terminal.tsx) and cannot drift from what sits below it.
+   */
+  function echoPrompt(): HTMLElement | null {
+    return promptEl ? (promptEl.cloneNode(true) as HTMLElement) : null
   }
 
   function applyEffect(effect: Effect): void {
@@ -90,13 +102,14 @@ export function mountTerminal(root: HTMLElement, session: TerminalSession): void
 
     const block = document.createElement('div')
     block.className = `term-block${result.status === 0 ? '' : ' is-error'}`
+    const prompt = echoPrompt()
+    if (prompt) block.append(prompt)
     block.append(renderEcho(trimmed))
     for (const line of result.lines) block.append(renderLine(line))
     output.append(block)
 
     session.history.push(trimmed)
     cursor = session.history.length
-    if (hint) hint.hidden = true
 
     if (result.effect) applyEffect(result.effect)
     scrollToEnd()

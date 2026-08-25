@@ -1,15 +1,15 @@
 {
   "version": 1,
   "sidecar": "git@github.com:H0wZy/skeeper-specs.git",
-  "source_branch": "main",
+  "source_branch": "terminal-chrome-and-flow",
   "namespaces": [
     {
       "name": "howzysolutions",
-      "sidecar_branch": "howzysolutions/__branches__/main",
-      "commit": "10268459f377488cbe949ff4671b2e93da5307e8",
-      "digest": "sha256:4d08a1e223d8434a04cac567ece5dcb0968767a8e2ae45e14a00bf0054dd5dde",
+      "sidecar_branch": "howzysolutions/__branches__/terminal-chrome-and-flow",
+      "commit": "097d7c52db0debaaa0233eff530a9e8d5af1679d",
+      "digest": "sha256:b751032c25708a018325e26f3bc12df5dafd2811a547d5e41226fb4116cc8a72",
       "files": 21,
-      "bytes": 261110
+      "bytes": 264465
     }
   ]
 }
