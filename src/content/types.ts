@@ -151,6 +151,30 @@ export type ContentBundle = {
   stats: CodingStatsSnapshot
 }
 
+/** One day of the public code contribution calendar (data-model.md). */
+export type ContributionDay = {
+  date: string
+  count: number
+}
+
+/**
+ * The committed, build-time capture. Mirrors `CodingStatsSnapshot` field for
+ * field wherever the two share a concept, so the two sources read as
+ * siblings in the code even though they must never read as siblings on the
+ * page (FR-039, research D11).
+ */
+export type ContributionCalendar = {
+  capturedAt: string
+  /** Mandatory: the trailing-year window the grid actually covers. */
+  window: { start: string; end: string }
+  /** The source's own figure. Never recomputed by summing `days` (FR-040). */
+  totalContributions: number
+  includesPrivate: boolean
+  /** Ascending by date. May contain gaps; gaps are not filled. */
+  days: ContributionDay[]
+  isFallback: boolean
+}
+
 /* -- Derived helpers ------------------------------------------------------ */
 
 /** Entries per work listing page (FR-015). */

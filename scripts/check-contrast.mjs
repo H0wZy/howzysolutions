@@ -24,6 +24,11 @@ const FLOORS = {
   '--danger': 4.5,
   '--border': 3,
   '--bar-ink': 3,
+  '--grid-0': 3,
+  '--grid-1': 3,
+  '--grid-2': 3,
+  '--grid-3': 3,
+  '--grid-4': 3,
 }
 /** Decorative only. Exempt by WCAG, and must never be used on a control boundary. */
 const DECORATIVE = new Set(['--line', '--surface'])

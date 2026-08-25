@@ -2,12 +2,14 @@ import type { Locale } from '../content/i18n/types'
 import type { ContentBundle } from '../content/types'
 import { experienceSince, workPage } from '../content/types'
 import { periodLabel } from '../content/stats'
+import { calendar } from '../content/contributions'
 import { translate } from '../locale'
 import { pathFor } from '../route'
 import { Chrome } from '../components/Chrome'
 import { SectionLabel } from '../components/SectionLabel'
 import { ProjectList } from '../components/ProjectList'
 import { StatsPanel } from '../components/StatsPanel'
+import { ContributionGrid } from '../components/ContributionGrid'
 import { Terminal } from '../components/Terminal'
 
 export function Home({
@@ -92,6 +94,7 @@ export function Home({
           <SectionLabel id="section.stats" locale={locale} />
           <h2>{translate(locale, 'stats.heading')}</h2>
           <StatsPanel stats={stats} locale={locale} />
+          <ContributionGrid calendar={calendar} locale={locale} />
         </div>
       </section>
 

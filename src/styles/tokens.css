@@ -18,6 +18,17 @@
   --accent-2: #5cc0ad;
   /* Same ink as --accent-2 (research D4): bars are measured data, not a new hue. */
   --bar-ink: #5cc0ad;
+  /*
+   * Contribution grid intensity, five steps (research D11). Step 0 is a real
+   * measured zero, not empty space, so it still clears the 3:1 non-text
+   * floor. Step 4 is the same ink as --bar-ink and --accent-2 on purpose:
+   * this is the same "measured data" hue, not a second scale.
+   */
+  --grid-0: #306b60;
+  --grid-1: #3d8376;
+  --grid-2: #499c8c;
+  --grid-3: #54b09f;
+  --grid-4: #5cc0ad;
   --danger: #e0705f;
   --line: #232019;
   --border: #6b6250;
