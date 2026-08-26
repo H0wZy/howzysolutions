@@ -87,7 +87,7 @@ export const en = {
   'stats.editors': 'editors',
   'stats.categories': 'activity',
   'stats.projects': 'by project',
-  'stats.source': 'Source: WakaTime',
+  'stats.sourceLabel': 'Source:',
   'stats.range': 'tracked {start} to current',
   'stats.rangeStale': 'tracked {start} to {date}',
   'stats.stale': 'Figures are from the last successful capture on {date}.',

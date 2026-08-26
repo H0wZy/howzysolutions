@@ -1,7 +1,7 @@
 import { TECH_CATEGORY } from '../../content/types'
-import { periodLabel } from '../../content/stats'
+import { periodLabel, WAKATIME } from '../../content/stats'
 import { translate } from '../../content/i18n/translate'
-import { blank, ok, table, text, type Command } from '../types'
+import { blank, link, ok, table, text, type Command } from '../types'
 
 export const stack: Command = {
   name: 'stack',
@@ -55,7 +55,14 @@ export const stats: Command = {
 
     const lines = [
       text(`${s.humanReadableTotal} ${translate(locale, 'stats.total')}`, 'accent'),
-      text(`${translate(locale, 'stats.source')} — ${range}`, 'dim'),
+      /*
+       * The source is a link here for the same reason it is one on the page,
+       * and the period drops to its own dim line rather than riding an em dash
+       * into the anchor text — which is the shape the --languages/--editors
+       * branches above already print.
+       */
+      link(`${translate(locale, 'stats.sourceLabel')} ${WAKATIME.name}`, WAKATIME.profileUrl),
+      text(range, 'dim'),
     ]
     if (s.isFallback) {
       lines.push(text(translate(locale, 'stats.stale', { date: s.capturedAt.slice(0, 10) }), 'dim'))

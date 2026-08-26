@@ -3,6 +3,21 @@ import type { CodingStatsSnapshot, StatSlice } from './types'
 import raw from './wakatime.generated.json'
 
 /**
+ * The account these figures were measured on. FR-027 says a figure never
+ * appears without its source; naming a source a visitor can open is that rule
+ * kept honestly, since the generated snapshot in this repo is otherwise the
+ * only thing to take on trust.
+ *
+ * The product name is not a translated string — it is identical in both
+ * dictionaries, which is the reason it does not live in either. The
+ * translatable half is `stats.sourceLabel`, and only that half.
+ */
+export const WAKATIME = {
+  name: 'WakaTime',
+  profileUrl: 'https://wakatime.com/@4d2dcfae-71d8-4031-a960-db6cd1b3d46d',
+} as const
+
+/**
  * Typed view over the build-time artifact. The site never calls WakaTime from a
  * browser (FR-029) and never holds a credential (FR-030) — see
  * specs/001-terminal-portfolio-rebrand/contracts/wakatime-snapshot.md.

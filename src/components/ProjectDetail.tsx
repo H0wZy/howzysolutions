@@ -3,6 +3,7 @@ import type { Locale } from '../content/i18n/types'
 import type { Project, Technology } from '../content/types'
 import { PROJECT_KIND, PROJECT_STATE, STACK_GROUP } from '../content/types'
 import { periodLabel, stats, trackedTimeFor } from '../content/stats'
+import { SourceLink } from './SourceLink'
 import { translate } from '../locale'
 import { pathFor } from '../route'
 
@@ -143,8 +144,8 @@ export function ProjectDetail({
           <p>
             <strong>{tracked.text}</strong>{' '}
             <span className="metric-source">
-              {translate(locale, 'stats.source')} ·{' '}
-              {translate(locale, period.key, period.params)}
+              <SourceLink locale={locale} />
+              {` · ${translate(locale, period.key, period.params)}`}
             </span>
           </p>
         </Block>
