@@ -89,7 +89,7 @@ export const pt = {
   'stats.editors': 'editores',
   'stats.categories': 'atividade',
   'stats.projects': 'por projeto',
-  'stats.source': 'Fonte: WakaTime',
+  'stats.sourceLabel': 'Fonte:',
   'stats.range': 'rastreado desde {start} até agora',
   'stats.rangeStale': 'rastreado desde {start} até {date}',
   'stats.stale': 'Números da última captura bem-sucedida, em {date}.',

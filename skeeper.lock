@@ -1,12 +1,12 @@
 {
   "version": 1,
   "sidecar": "git@github.com:H0wZy/skeeper-specs.git",
-  "source_branch": "terminal-chrome-and-flow",
+  "source_branch": "feat/wakatime-source-link",
   "namespaces": [
     {
       "name": "howzysolutions",
-      "sidecar_branch": "howzysolutions/__branches__/terminal-chrome-and-flow",
-      "commit": "097d7c52db0debaaa0233eff530a9e8d5af1679d",
+      "sidecar_branch": "howzysolutions/__branches__/feat/wakatime-source-link",
+      "commit": "9b78f8d2cd8ccfa00cb1d5b8931d3921f88e51ad",
       "digest": "sha256:b751032c25708a018325e26f3bc12df5dafd2811a547d5e41226fb4116cc8a72",
       "files": 21,
       "bytes": 264465

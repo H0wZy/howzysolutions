@@ -3,6 +3,7 @@ import type { Locale } from '../content/i18n/types'
 import type { StringKey } from '../content/i18n/en'
 import type { CodingStatsSnapshot, StatSlice } from '../content/types'
 import { periodLabel } from '../content/stats'
+import { SourceLink } from './SourceLink'
 import { translate } from '../locale'
 
 /** Rows visible before the rest folds into the disclosure (research D5). */
@@ -95,7 +96,9 @@ export function StatsPanel({ stats, locale }: { stats: CodingStatsSnapshot; loca
           <dt>{translate(locale, 'stats.total')}</dt>
           <dd>
             <strong>{stats.humanReadableTotal}</strong>
-            <span className="metric-source">{translate(locale, 'stats.source')}</span>
+            <span className="metric-source">
+              <SourceLink locale={locale} />
+            </span>
           </dd>
         </div>
         <div className="metric">
