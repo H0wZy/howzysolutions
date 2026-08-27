@@ -3,5 +3,9 @@
   "references": [
     { "path": "./tsconfig.app.json" },
     { "path": "./tsconfig.node.json" }
-  ]
+  ],
+  "_comment": "A solution file. compilerOptions.paths below is not used by tsc -b, which follows the references above; it is here so that tools reading tsconfig.json for aliases resolve @/* instead of writing to a literal @ directory (research D15).",
+  "compilerOptions": {
+    "paths": { "@/*": ["./src/*"] }
+  }
 }

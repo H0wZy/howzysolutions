@@ -1,4 +1,4 @@
-import { experienceSince } from '../../content/types'
+import { experienceDuration } from '../../content/profile'
 import { periodLabel } from '../../content/stats'
 import { translate } from '../../content/i18n/translate'
 import { blank, ok, pairs, text, type Command } from '../types'
@@ -10,7 +10,8 @@ export const version: Command = {
   usage: 'h0wzy --version',
   summaryKey: 'cmd.version',
   run: ({ content, locale }) => {
-    const { years, months } = experienceSince(content.profile.experienceStart)
+    // Same build-time value the page renders, so the two cannot disagree.
+    const { years, months } = experienceDuration
     const { stats } = content
     const period = periodLabel(stats)
     return ok([

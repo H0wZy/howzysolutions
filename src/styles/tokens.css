@@ -43,6 +43,68 @@
   --border: #6b6250;
 }
 
+/*
+ * shadcn's semantic names, declared as REFERENCES to the palette above and
+ * never as colour values (research D2, FR-049, SC-003). A component library
+ * that ships its own palette would give this site two, one of which
+ * check-contrast.mjs has never seen — so the mapping lives here, in the file
+ * that gate already parses, and the gate follows one level of var().
+ *
+ * --accent is the collision worth naming. shadcn means "a subtle emphasis
+ * background" by it; this palette has meant "the one primary accent" since
+ * 1.0.0 and every existing surface uses it that way. The site's meaning wins:
+ * a name resolves to one colour here, and the constitution's rule that an
+ * accent carries meaning consistently outranks a component library's habit.
+ * --border and --line already exist above and are NOT redefined.
+ */
+:root,
+:root[data-theme='dark'] {
+  --background: var(--bg);
+  --foreground: var(--fg);
+  --card: var(--surface);
+  --card-foreground: var(--fg);
+  --popover: var(--surface);
+  --popover-foreground: var(--fg);
+  --primary: var(--accent);
+  --primary-foreground: var(--bg);
+  --secondary: var(--surface);
+  --secondary-foreground: var(--fg);
+  --muted: var(--surface);
+  --muted-foreground: var(--dim);
+  --accent-foreground: var(--bg);
+  --destructive: var(--danger);
+  --destructive-foreground: var(--bg);
+  --input: var(--border);
+  --ring: var(--accent);
+}
+
+/*
+ * What turns the names above into `text-muted-foreground`, `border-border` and
+ * the rest of the utilities a generated component arrives already using.
+ * `inline` because the values are var() references rather than literals.
+ */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+}
+
 :root {
   /* Typography — one family; hierarchy comes from size and spacing, not a display face */
   --font-mono: 'JetBrains Mono Variable', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;

@@ -1,3 +1,21 @@
+/*
+ * Tailwind is imported WITHOUT preflight, deliberately.
+ *
+ * `@import 'tailwindcss'` pulls theme + preflight + utilities. Preflight is a
+ * reset, and styles/base.css below is already this site's reset: it sets the
+ * box model, the body type, link and focus treatment, heading sizes, and the
+ * scrollbar, and its colours are the ones scripts/check-contrast.mjs verifies.
+ * Layering a second reset over it changes h3 sizing, list markers and block
+ * margins on all 24 existing documents — which is precisely the regression
+ * SC-001 forbids, bought for nothing, since shadcn components need utilities
+ * and not preflight.
+ *
+ * The layer order below is Tailwind's own, minus that one import.
+ */
+@layer theme, base, components, utilities;
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/utilities.css' layer(utilities);
+
 @import './styles/tokens.css';
 @import './styles/base.css';
 @import './styles/components.css';
