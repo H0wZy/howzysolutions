@@ -824,6 +824,20 @@
   min-width: 0;
 }
 
+/*
+ * `.section`'s own bottom padding and hairline are redundant here: the very
+ * next element is the first CV section, which is ALSO `.section` and adds its
+ * own top padding and hairline immediately after. Left alone that is a
+ * doubled ~108px gap holding one orphaned rule for no visual gain — trimmed to
+ * the single transition the site's other section boundaries already use.
+ * Measured, not guessed: this is what closed the last few pixels SC-005
+ * needed on a real small-phone viewport (360x667).
+ */
+.cv-body > header.section {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
 .rail {
   position: sticky;
   top: 0;
@@ -832,10 +846,39 @@
   font-size: var(--fs-sm);
 }
 
+/*
+ * Closed by default below 1000px, following the `.bar-more` disclosure
+ * pattern (StatsPanel's "show all"). `<details>` needs no script either way,
+ * so FR-073 holds with scripting unavailable regardless of width.
+ */
+.rail-details summary {
+  cursor: pointer;
+  color: var(--dim);
+  list-style: revert;
+}
+
+.rail-details summary:hover {
+  color: var(--fg);
+}
+
+.rail-details[open] summary {
+  margin-bottom: 8px;
+}
+
 .rail ul {
   list-style: none;
   margin: 0;
   padding: 0;
+}
+
+/*
+ * `display` lives ONLY on the `[open]`-qualified selector below 1000px.
+ * An unconditional `display: flex` here previously beat the browser's native
+ * "hide a closed <details>'s content" behaviour — verified in the browser:
+ * `open` read `false` and the list still rendered at full height regardless.
+ * `<details>`'s own default is what does the collapsing; this must not fight it.
+ */
+.rail-details[open] > ul {
   display: flex;
   flex-wrap: wrap;
   gap: 4px 14px;
@@ -871,7 +914,23 @@
     padding-top: var(--space-section);
   }
 
-  .rail ul {
+  /*
+   * Forced open regardless of the `open` attribute, so the disclosure stays
+   * genuinely closed-by-default below this width and genuinely an always-open
+   * sidebar above it, from the same markup. Two properties are overridden
+   * because browsers hide a closed <details>'s content one of two ways
+   * depending on engine version: older engines set `display: none`; current
+   * engines set `content-visibility: hidden`, which `display` alone does not
+   * undo. `!important` on both beats either mechanism without touching the
+   * `open` attribute itself.
+   */
+  .rail-details > summary {
+    display: none;
+  }
+
+  .rail-details > ul {
+    content-visibility: visible !important;
+    display: flex !important;
     flex-direction: column;
     gap: 8px;
   }
