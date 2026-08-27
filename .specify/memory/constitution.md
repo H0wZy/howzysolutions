@@ -1,6 +1,41 @@
 <!--
 SYNC IMPACT REPORT
 ==================
+Version change: 2.0.0 -> 2.1.0
+Rationale: MINOR. Existing guidance materially expanded; no principle removed or redefined,
+and no budget raised. The site adopts a hydrated React client, Tailwind and the shadcn
+breadcrumb primitive (spec 003, FR-045), reversing the CL-002 decision that removed React
+from the client in spec 001. Principle II requires a new runtime dependency to be justified
+naming the rung of the ladder that failed; that justification is recorded here rather than
+left in a pull request body.
+
+The amendment this feature was planned to carry — a raised JavaScript budget — is NOT made,
+because the measurement it was to be argued from falsified the projection it rested on. See
+below.
+
+Amended (2.1.0):
+  - Technology & Design Constraints -> Stack: names Tailwind and the shadcn/Radix breadcrumb
+    primitive as installed, hydration as shipped, and records the Principle II justification.
+  - Technology & Design Constraints -> Performance budgets: the 120 KB gzipped ceiling is
+    UNCHANGED. Added the measured figure behind it and the requirement that the measurement
+    run as a gate on every change that adds a component (spec 003 FR-050), not as a note.
+
+Not amended, deliberately:
+  - The 120 KB initial-JavaScript budget. Spec 003 was planned around a projection of
+    150.7 KB gzipped for hydration, drawn from spec 001's recorded 117.2 KB figure for
+    React's client runtime. A measured spike on 2026-08-27 - the real App, hydrated, with
+    Tailwind and the breadcrumb, built for production - returned 104.76 KB gzipped. The
+    budget survives hydration with 15.24 KB to spare, so there is no increase to argue.
+    Raising the ceiling anyway would loosen a budget against the evidence, which is worse
+    than the silent raise the Governance section already forbids.
+  - Principle II. Adopting these dependencies is an exception justified under its existing
+    procedure, not a weakening of the rule. The honest justification is recorded in
+    specs/003-cv-experience-page/plan.md Complexity Tracking: the capability was reachable
+    at 0 KB, and what is bought is the toolchain rather than the feature.
+
+----------------------------------------------------------------------
+Previous entry
+----------------------------------------------------------------------
 Version change: 1.1.0 -> 2.0.0
 Rationale: MAJOR. Principle VI redefined in a way that invalidates previously compliant
 code: the fully-supported light theme (tokens, resolution, persistence, toggle) is removed
@@ -190,9 +225,23 @@ that survives contact with a solo maintainer's schedule.
 
 ## Technology & Design Constraints
 
-**Stack.** React 19 + TypeScript + Vite. Routing, styling, and state are solved with the
-platform and with what is already installed before any library is considered (Principle II).
+**Stack.** React 19 + TypeScript + Vite, prerendered to static documents and **hydrated on the
+client**. Routing is still solved with the platform — every route is a real emitted document and
+navigation is a link, with no client-side router. Tailwind is the styling layer over the tokens
+declared in `src/styles/tokens.css`, and `radix-ui` arrives with the shadcn breadcrumb primitive.
 Deployment is Vercel, custom domain `howzysolutions.dev`.
+
+*Principle II justification for these three, recorded rather than left in a pull request body*:
+no rung of the ladder failed. The breadcrumb is markup and the section rail's follow-along mark
+is an `IntersectionObserver` that `src/enhance/reveal.ts` already demonstrates in a framework-free
+module; the capability was reachable at 0 KB. What is bought at +71.28 KB gzipped is the
+toolchain, and the reason is that the author decided to work in it (spec 003, CL-005). For a
+personal portfolio that is a legitimate reason and a poor one to leave unwritten. It is not a
+precedent: the ladder still binds every dependency that arrives without an amendment behind it.
+
+A dependency whose job is icons as a package remains forbidden. The shadcn breadcrumb generator
+emits `lucide-react` imports; they are replaced with inline SVG. Measured cost of keeping them
+would have been 0.52 KB gzipped — the rule is the reason, not the weight.
 
 **Broader competencies represented in portfolio content.** Azure OpenAI and generative-AI
 solutioning, Microsoft 365 and Power Platform, cloud and integration/API work, automation,
@@ -216,13 +265,21 @@ visitor IPs to another party, and can go down independently of the site.
 **Performance budgets.** Measured on the production build, mobile throttling:
 
 - Initial JavaScript transferred: **≤ 120 KB gzipped**, excluding any lazily imported
-  WebGL renderer.
+  WebGL renderer. Last measured **104.76 KB** on 2026-08-27, hydrated, with Tailwind and the
+  breadcrumb primitive. **15.24 KB of headroom, which is roughly two more components.**
 - Largest Contentful Paint: **≤ 1.8 s**. Cumulative Layout Shift: **≤ 0.05**.
 - Lighthouse mobile: **≥ 95** Performance, **100** Accessibility.
 - Every route MUST be usable at 60 fps while scrolling on a mid-range phone.
 
+The JavaScript budget MUST be measured by an automated gate on every change that adds a
+component, and that gate MUST fail the build rather than print a warning. A ceiling nobody
+re-measures is decoration, and the headroom above is now small enough that one careless import
+consumes it.
+
 A change that breaks a budget MUST either be reworked or ship with the budget formally
-amended in this document. Budgets are not aspirations.
+amended in this document. Budgets are not aspirations — and a budget MUST NOT be raised
+merely because a raise was anticipated. An amendment that loosens one MUST rest on a
+measurement of the change that needs the room, taken before the amendment is written.
 
 **Secrets & external data.** No API key, token, or credential may appear in the client
 bundle, in a `VITE_*` variable, or anywhere in this repository — Vite inlines build-time
@@ -299,4 +356,4 @@ that cannot be justified against Principle II MUST be removed before merge. Perf
 budgets are re-measured on the production build before any deploy that changes the bundle.
 This document is re-read at the start of each new feature spec.
 
-**Version**: 2.0.0 | **Ratified**: 2026-08-19 | **Last Amended**: 2026-08-24
+**Version**: 2.1.0 | **Ratified**: 2026-08-19 | **Last Amended**: 2026-08-27
