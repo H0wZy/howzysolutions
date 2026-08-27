@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "node scripts/stamp-build.mjs && node scripts/fetch-wakatime.mjs && node scripts/fetch-github.mjs && tsc -b && vite build && vite build --ssr src/entry-server.tsx --outDir dist-server && node scripts/prerender.mjs && node scripts/check-bundle.mjs",
+    "cv:extract": "node scripts/extract-cv.mjs",
+    "build": "node scripts/stamp-build.mjs && node scripts/fetch-wakatime.mjs && node scripts/fetch-github.mjs && node scripts/extract-cv.mjs && tsc -b && vite build && vite build --ssr src/entry-server.tsx --outDir dist-server && node scripts/prerender.mjs && node scripts/check-bundle.mjs",
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest run && node scripts/check-contrast.mjs && node scripts/check-bundle.mjs",

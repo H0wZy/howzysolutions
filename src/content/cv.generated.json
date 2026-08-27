@@ -1,0 +1,469 @@
+{
+  "capturedAt": "2026-08-27T15:36:48.705Z",
+  "sourceCommit": "1205bd2",
+  "sourceRef": "C:\\Users\\2983539\\projects\\curriculum-vitae\\overleaf\\main.tex",
+  "isFallback": false,
+  "headline": {
+    "en": "SOFTWARE ENGINEER | BACKEND & FULL STACK",
+    "pt": "SOFTWARE ENGINEER | BACKEND & FULL STACK"
+  },
+  "summary": {
+    "en": "Software Engineer at TCS (Copel account), focused on backend with Java/JSF and .NET/Golang. Two-time TCS AI Friday champion for solutions built with LLMs and predictive models. Experienced in modernizing legacy systems to the cloud (GCP/AWS) and building REST APIs with Clean Code, SOLID and testing.",
+    "pt": "Engenheiro de Software na TCS (conta Copel), com foco em backend Java/JSF e .NET/Golang. Bicampeão do TCS AI Friday por soluções com LLMs e modelos preditivos. Experiência em modernização de sistemas legados para cloud (GCP/AWS) e construção de APIs REST com Clean Code, SOLID e testes."
+  },
+  "documents": [
+    {
+      "locale": "en",
+      "filename": "ENG_CV_Marcos_Junior_Bueno_Selzler.pdf",
+      "href": "/cv/ENG_CV_Marcos_Junior_Bueno_Selzler.pdf",
+      "bytes": 34872,
+      "present": true
+    },
+    {
+      "locale": "pt",
+      "filename": "PTBR_CV_Marcos_Junior_Bueno_Selzler.pdf",
+      "href": "/cv/PTBR_CV_Marcos_Junior_Bueno_Selzler.pdf",
+      "bytes": 35623,
+      "present": true
+    }
+  ],
+  "sections": [
+    {
+      "id": "professional-experience",
+      "kind": "experience",
+      "title": {
+        "en": "Professional Experience",
+        "pt": "Experiência Profissional"
+      },
+      "entries": [
+        {
+          "employer": "Tata Consultancy Services",
+          "client": "Copel",
+          "title": {
+            "en": "Software Engineer",
+            "pt": "Software Engineer"
+          },
+          "location": {
+            "en": "Londrina, PR",
+            "pt": "Londrina, PR"
+          },
+          "start": "2025-05",
+          "end": null,
+          "responsibilities": {
+            "en": [
+              "I develop and maintain Java 8 / JSF applications on WildFly/JBoss servers.",
+              "Optimized critical SQL queries, improving performance and stability.",
+              "Migrated applications from JBoss 7 to WildFly 23.",
+              "Modernize on-premise legacy systems to GCP, with integrations via Denodo.",
+              "Build backend services in Golang.",
+              "Work across cloud environments (GCP and AWS)."
+            ],
+            "pt": [
+              "Desenvolvo e mantenho aplicações Java 8 com JSF em servidores WildFly/JBoss.",
+              "Otimizei queries SQL críticas, melhorando performance e estabilidade.",
+              "Migrei aplicações de JBoss 7 para WildFly 23.",
+              "Modernizo sistemas legados on-premise para o GCP, com integrações via Denodo.",
+              "Desenvolvo serviços de backend em Golang.",
+              "Atuo em ambientes cloud (GCP e AWS)."
+            ]
+          }
+        },
+        {
+          "employer": "Tata Consultancy Services",
+          "client": "Bootcamp 2x2y",
+          "title": {
+            "en": "Bootcamper Software Engineer",
+            "pt": "Bootcamper Software Engineer"
+          },
+          "location": {
+            "en": "Londrina, PR",
+            "pt": "Londrina, PR"
+          },
+          "start": "2025-05",
+          "end": "2025-11",
+          "responsibilities": {
+            "en": [
+              "Intensive full-stack software engineering training at TCS.",
+              "Built hands-on projects applying layered architecture and Clean Code."
+            ],
+            "pt": [
+              "Formação intensiva em engenharia de software full stack pela TCS.",
+              "Desenvolvi projetos práticos aplicando arquitetura em camadas e Clean Code."
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "awards-and-highlights",
+      "kind": "awards",
+      "title": {
+        "en": "Awards & Highlights",
+        "pt": "Prêmios e Destaques"
+      },
+      "entries": [
+        {
+          "title": {
+            "en": "Two-time TCS AI Friday Champion",
+            "pt": "Bicampeão TCS AI Friday"
+          },
+          "date": "2026-05",
+          "project": {
+            "en": "Pipeverse Project",
+            "pt": "Projeto Pipeverse"
+          },
+          "evidence": {
+            "href": "https://www.linkedin.com/posts/marcosh0wzy_tcs-tcsai-aifriday-activity-7463971325016006657-WzoZ",
+            "label": {
+              "en": "LinkedIn",
+              "pt": "LinkedIn"
+            }
+          },
+          "detail": {
+            "en": [
+              "Predictive system to estimate the probability of failure in AI projects (data quality, problem definition, adoption and monitoring)."
+            ],
+            "pt": [
+              "Sistema preditivo para estimar a probabilidade de falha em projetos de IA (qualidade de dados, definição do problema, adoção e monitoramento)."
+            ]
+          }
+        },
+        {
+          "title": {
+            "en": "TCS AI Friday Champion",
+            "pt": "Campeão TCS AI Friday"
+          },
+          "date": "2026-02",
+          "project": {
+            "en": "Energy Saver Project",
+            "pt": "Projeto Energy Saver"
+          },
+          "evidence": {
+            "href": "https://www.linkedin.com/posts/marcosh0wzy_ai-llm-dataanalysis-activity-7439643718057385985--a7G",
+            "label": {
+              "en": "LinkedIn",
+              "pt": "LinkedIn"
+            }
+          },
+          "detail": {
+            "en": [
+              "LLM-based solution for energy-consumption analysis from CSV data: anomaly detection and automated recommendations to reduce waste."
+            ],
+            "pt": [
+              "Solução com LLM para análise de consumo energético a partir de CSV: detecção de anomalias e recomendações automatizadas para redução de desperdício."
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "skills",
+      "kind": "skills",
+      "title": {
+        "en": "Skills",
+        "pt": "Habilidades"
+      },
+      "entries": [
+        {
+          "label": {
+            "en": "Tech Stack",
+            "pt": "Tech Stack"
+          },
+          "items": {
+            "en": [
+              ".NET",
+              "C#",
+              "Golang",
+              "Java",
+              "Spring Boot",
+              "React",
+              "Next.js",
+              "TypeScript",
+              "SQL/NoSQL",
+              "Docker"
+            ],
+            "pt": [
+              ".NET",
+              "C#",
+              "Golang",
+              "Java",
+              "Spring Boot",
+              "React",
+              "Next.js",
+              "TypeScript",
+              "SQL/NoSQL",
+              "Docker"
+            ]
+          },
+          "order": 0
+        },
+        {
+          "label": {
+            "en": "Cloud & DevOps",
+            "pt": "Cloud & DevOps"
+          },
+          "items": {
+            "en": [
+              "GCP (Cloud Run",
+              "Cloud SQL",
+              "GCS)",
+              "AWS",
+              "Terraform (IaC)",
+              "Docker",
+              "CI/CD",
+              "Git/GitHub"
+            ],
+            "pt": [
+              "GCP (Cloud Run",
+              "Cloud SQL",
+              "GCS)",
+              "AWS",
+              "Terraform (IaC)",
+              "Docker",
+              "CI/CD",
+              "Git/GitHub"
+            ]
+          },
+          "order": 1
+        },
+        {
+          "label": {
+            "en": "AI & LLMs",
+            "pt": "IA & LLMs"
+          },
+          "items": {
+            "en": [
+              "data analysis with LLMs",
+              "predictive models",
+              "prompt engineering"
+            ],
+            "pt": [
+              "análise de dados com LLMs",
+              "modelos preditivos",
+              "prompt engineering"
+            ]
+          },
+          "order": 2
+        },
+        {
+          "label": {
+            "en": "Concepts",
+            "pt": "Conceitos"
+          },
+          "items": {
+            "en": [
+              "Clean Code",
+              "SOLID",
+              "DDD",
+              "OOP",
+              "REST APIs",
+              "Observability",
+              "Unit Testing (xUnit",
+              "Moq)"
+            ],
+            "pt": [
+              "Clean Code",
+              "SOLID",
+              "DDD",
+              "POO",
+              "APIs REST",
+              "Observabilidade",
+              "Testes Unitários (xUnit",
+              "Moq)"
+            ]
+          },
+          "order": 3
+        },
+        {
+          "label": {
+            "en": "Languages",
+            "pt": "Idiomas"
+          },
+          "items": {
+            "en": [
+              "English (Intermediate)",
+              "Portuguese (Native)"
+            ],
+            "pt": [
+              "Inglês (Intermediário)",
+              "Português (Nativo)"
+            ]
+          },
+          "order": 4
+        }
+      ]
+    },
+    {
+      "id": "projects",
+      "kind": "projects",
+      "title": {
+        "en": "Projects",
+        "pt": "Projetos"
+      },
+      "entries": [
+        {
+          "name": {
+            "en": "Telas Paraná: Institutional Website",
+            "pt": "Telas Paraná: Site Institucional"
+          },
+          "links": [
+            {
+              "href": "https://frontend-4mxyivrfva-rj.a.run.app/",
+              "label": {
+                "en": "Live",
+                "pt": "Produção"
+              }
+            },
+            {
+              "href": "https://telasearamesparana.com.br",
+              "label": {
+                "en": "previous site",
+                "pt": "site anterior"
+              }
+            }
+          ],
+          "detail": {
+            "en": [
+              "Full-stack redesign of the company's institutional website, replacing the legacy site.",
+              "React / Next.js front-end and two .NET/C# microservices (Users.Api, Leads.Api), all deployed on GCP Cloud Run.",
+              "Cloud SQL database, Cloud Storage (GCS) for media, and infrastructure provisioned as code with Terraform."
+            ],
+            "pt": [
+              "Redesign full-stack do site institucional da empresa, substituindo o site legado.",
+              "Front-end em React / Next.js e dois microsserviços .NET/C# (Users.Api, Leads.Api), todos implantados no GCP Cloud Run.",
+              "Banco no Cloud SQL, mídia no Cloud Storage (GCS) e infraestrutura provisionada como código com Terraform."
+            ]
+          }
+        },
+        {
+          "name": {
+            "en": "C# User API",
+            "pt": "C# User API"
+          },
+          "links": [
+            {
+              "href": "https://github.com/H0wZy/UserApi",
+              "label": {
+                "en": "GitHub",
+                "pt": "GitHub"
+              }
+            }
+          ],
+          "detail": {
+            "en": [
+              "REST API in C#/.NET with Entity Framework and PostgreSQL, layered architecture and user CRUD.",
+              "JWT authentication, authorization control and test coverage with xUnit and Moq."
+            ],
+            "pt": [
+              "API REST em C#/.NET com Entity Framework e PostgreSQL, arquitetura em camadas e CRUD de usuários.",
+              "Autenticação JWT, controle de autorização e cobertura de testes com xUnit e Moq."
+            ]
+          }
+        },
+        {
+          "name": {
+            "en": "Golang User API",
+            "pt": "Golang User API"
+          },
+          "links": [
+            {
+              "href": "https://github.com/H0wZy/user-api",
+              "label": {
+                "en": "GitHub",
+                "pt": "GitHub"
+              }
+            }
+          ],
+          "detail": {
+            "en": [
+              "REST API in Golang with Gin and Gorm: user CRUD, authentication and authorization.",
+              "Backend structured with a focus on performance and code organization."
+            ],
+            "pt": [
+              "API REST em Golang com Gin e Gorm: CRUD de usuários, autenticação e autorização.",
+              "Backend estruturado com foco em performance e organização de código."
+            ]
+          }
+        },
+        {
+          "name": {
+            "en": "Web EasyDonate",
+            "pt": "Web EasyDonate"
+          },
+          "links": [
+            {
+              "href": "https://github.com/H0wZy/web.easydonate",
+              "label": {
+                "en": "GitHub",
+                "pt": "GitHub"
+              }
+            }
+          ],
+          "detail": {
+            "en": [
+              "Donation marketplace in .NET with PostgreSQL, oriented to circular economy and scalability."
+            ],
+            "pt": [
+              "Marketplace de doações em .NET com PostgreSQL, voltado a economia circular e escalabilidade."
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "education",
+      "kind": "education",
+      "title": {
+        "en": "Education",
+        "pt": "Formação Acadêmica"
+      },
+      "entries": [
+        {
+          "degree": {
+            "en": "Technologist in Systems Analysis and Development",
+            "pt": "Tecnólogo em Análise e Desenvolvimento de Sistemas"
+          },
+          "end": "2025",
+          "institution": "Unicesumar",
+          "location": {
+            "en": "Londrina, PR",
+            "pt": "Londrina, PR"
+          }
+        }
+      ]
+    },
+    {
+      "id": "certifications",
+      "kind": "certifications",
+      "title": {
+        "en": "Certifications",
+        "pt": "Certificações"
+      },
+      "entries": [
+        {
+          "name": "Foundational C# with Microsoft",
+          "date": "2025-06",
+          "subject": {
+            "en": ".NET and C# fundamentals",
+            "pt": "Fundamentos de .NET e C#"
+          },
+          "issuer": {
+            "href": "https://freecodecamp.org/certification/h0wzy/foundational-c-sharp-with-microsoft",
+            "label": {
+              "en": "freeCodeCamp",
+              "pt": "freeCodeCamp"
+            }
+          },
+          "detail": {
+            "en": [
+              "C# syntax and control structures, OOP, collections, exception handling and .NET best practices."
+            ],
+            "pt": [
+              "Sintaxe e estruturas de C#, POO, coleções, tratamento de exceções e boas práticas em .NET."
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
