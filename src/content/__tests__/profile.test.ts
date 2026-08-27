@@ -3,6 +3,9 @@ import { join } from 'node:path'
 import { describe, expect, it } from 'vitest'
 import { experienceDuration, profile } from '../profile'
 import { experienceSince } from '../types'
+import { en } from '../i18n/en'
+import { pt } from '../i18n/pt'
+import { LOCALES } from '../i18n/types'
 import buildStamp from '../build.generated.json'
 
 /**
@@ -31,6 +34,35 @@ describe('the experience duration is derived once, at build time', () => {
     // The two clocks measure different things and must never be collapsed into
     // one number (constitution, Honesty in Self-Reported Metrics; FR-063).
     expect(profile.experienceStart).toBe('2023-01-01')
+  })
+})
+
+/**
+ * SC-010, FR-063. Three clocks, three periods: time in IT from the 2023
+ * degree, the degree's own range, and employment from May 2025. A later copy
+ * edit that drops a scope reintroduces exactly the overstatement this feature
+ * removed, and prose is the easiest thing in the repository to change without
+ * noticing what it was load-bearing for.
+ */
+describe('every clock states what it counts', () => {
+  it.each(LOCALES)('%s names the 2023 start beside the duration', (locale) => {
+    const dictionary = locale === 'en' ? en : pt
+    expect(dictionary['hero.experienceSince']).toContain('2023')
+    expect(dictionary['hero.experienceSince']).toMatch(/2025/)
+  })
+
+  it.each(LOCALES)('%s does not let the duration claim to be time employed', (locale) => {
+    const dictionary = locale === 'en' ? en : pt
+    // The figure counts time in the field, which began with the degree. It is
+    // not time spent building software professionally, which began May 2025.
+    expect(dictionary['hero.experience']).not.toMatch(/building software|construindo software/)
+  })
+
+  it.each(LOCALES)('%s names all three periods where they appear together', (locale) => {
+    const note = (locale === 'en' ? en : pt)['stats.experienceNote']
+    for (const year of ['2023', '2025', '2026']) {
+      expect(note, `${locale} note is missing ${year}`).toContain(year)
+    }
   })
 })
 

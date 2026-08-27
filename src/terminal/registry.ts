@@ -1,4 +1,5 @@
 import { about, contact, version, whoami } from './commands/identity'
+import { cv } from './commands/cv'
 import { projects } from './commands/projects'
 import { ls, stack, stats } from './commands/surface'
 import { clear, history, lang, open, theme } from './commands/effects'
@@ -47,6 +48,7 @@ export const commands: Command[] = [
   projects,
   stack,
   stats,
+  cv,
   contact,
   open,
   ls,

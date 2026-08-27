@@ -36,7 +36,14 @@ export function Work({
 
   return (
     <>
-      <Chrome locale={locale} path={`h0wzy/work/${project.id}`} pathname={pathname} />
+      {/* The leaf crumb is the project's own name: data, not a dictionary
+          string, because it is identical in both locales (FR-054). */}
+      <Chrome
+        locale={locale}
+        path={`h0wzy/work/${project.id}`}
+        pathname={pathname}
+        leafLabel={project.name}
+      />
       <main className="section">
         <div className="wrap">
           <ProjectDetail
