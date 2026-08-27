@@ -1,6 +1,7 @@
 import type { Locale } from '../content/i18n/types'
 import type { ContentBundle } from '../content/types'
-import { experienceSince, workPage } from '../content/types'
+import { workPage } from '../content/types'
+import { experienceDuration } from '../content/profile'
 import { periodLabel } from '../content/stats'
 import { calendar } from '../content/contributions'
 import { translate } from '../locale'
@@ -22,7 +23,9 @@ export function Home({
   pathname: string
 }) {
   const { profile, projects, stats } = content
-  const { years, months } = experienceSince(profile.experienceStart)
+  // Build-time value, not `new Date()`: nothing under App may derive from the
+  // clock during render, or prerender and hydration disagree (FR-047).
+  const { years, months } = experienceDuration
   const { projects: pageOneProjects } = workPage(projects, 1)
   const period = periodLabel(stats)
 

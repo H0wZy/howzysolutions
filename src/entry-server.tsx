@@ -1,4 +1,4 @@
-import { renderToStaticMarkup } from 'react-dom/server'
+import { renderToString } from 'react-dom/server'
 import App from './App'
 import { content } from './content'
 import { LOCALES, type Locale } from './content/i18n/types'
@@ -54,8 +54,15 @@ export function metaFor(pathname: string): { title: string; description: string;
   }
 }
 
+/*
+ * `renderToString`, not `renderToStaticMarkup`. Static markup is for HTML that
+ * will never be hydrated: it strips the boundary comments hydrateRoot uses to
+ * line the tree up, so hydrating it is how a page double-renders without ever
+ * logging a mismatch. The client hydrates now (src/main.tsx), so this pass has
+ * to emit markup that hydration can attach to.
+ */
 export function render(pathname: string): string {
-  return renderToStaticMarkup(<App pathname={pathname} />)
+  return renderToString(<App pathname={pathname} />)
 }
 
 export { LOCALES }

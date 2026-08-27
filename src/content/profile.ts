@@ -1,4 +1,5 @@
-import type { AuthorProfile } from './types'
+import { experienceSince, type AuthorProfile, type ExperienceDuration } from './types'
+import buildStamp from './build.generated.json'
 
 export const profile: AuthorProfile = {
   name: 'Marcos "H0wZy" Junior',
@@ -22,7 +23,13 @@ export const profile: AuthorProfile = {
     ],
   },
 
-  // Derived on every build, never stored (FR-007).
+  /*
+   * When this author entered IT — the Systems Analysis and Development degree
+   * at Unicesumar, 2023. It is NOT when employment began; that is May 2025 at
+   * TCS and it is stated on the CV page. The two count different things and the
+   * constitution's Honesty in Self-Reported Metrics clause forbids placing them
+   * so one reads as corroborating the other (spec 003, FR-063).
+   */
   experienceStart: '2023-01-01',
 
   location: {
@@ -51,3 +58,23 @@ export const profile: AuthorProfile = {
     },
   ],
 }
+
+/**
+ * Derived ONCE, from the committed build stamp — never from the clock the
+ * render happens to be running on.
+ *
+ * FR-007 asked for this figure to be derived on every build instead of
+ * hand-maintained, and it still is: scripts/stamp-build.mjs rewrites the stamp
+ * whenever a build runs on a new day. What changed with hydration is that
+ * "every build" acquired a second meaning. Prerender and the visitor's browser
+ * are different instants, so `new Date()` under App would eventually have the
+ * server rendering "3y 6mo" and the client rendering "3y 7mo" — a hydration
+ * mismatch on a number nobody touched (FR-047, research D3).
+ *
+ * Nothing under App may call `new Date()` during render. This is the value it
+ * reads instead.
+ */
+export const experienceDuration: ExperienceDuration = experienceSince(
+  profile.experienceStart,
+  new Date(`${buildStamp.builtOn}T00:00:00Z`),
+)
