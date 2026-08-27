@@ -805,3 +805,114 @@
   margin: 10px 0 0;
   padding: 0;
 }
+
+/* CV page ----------------------------------------------------------------- */
+
+/*
+ * Rail beside prose at desk widths, rail above prose when there is not room
+ * for both. FR-074: it must not displace or crowd the prose at narrow
+ * viewports, and no section may become unreachable — so this reflows rather
+ * than hiding, and the page never gains a horizontal scrollbar at 320px.
+ */
+.cv-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--gutter);
+}
+
+.cv-body {
+  min-width: 0;
+}
+
+.rail {
+  position: sticky;
+  top: 0;
+  align-self: start;
+  padding: var(--gutter) var(--gutter) 0;
+  font-size: var(--fs-sm);
+}
+
+.rail ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+}
+
+.rail a {
+  color: var(--dim);
+  border-bottom: 1px solid transparent;
+}
+
+.rail a:hover {
+  color: var(--fg);
+  border-color: var(--line);
+}
+
+/*
+ * The follow-along mark. aria-current is what carries it, not a class, so the
+ * state is programmatic first and painted second (FR-075, Principle III) and
+ * a screen reader is told the same thing the eye is.
+ */
+.rail a[aria-current='true'] {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+@media (min-width: 1000px) {
+  .cv-layout {
+    grid-template-columns: 210px minmax(0, 1fr);
+  }
+
+  .rail {
+    top: 48px;
+    padding-top: var(--space-section);
+  }
+
+  .rail ul {
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+
+.cv-entry {
+  margin: 0 0 26px;
+}
+
+.cv-entry:last-child {
+  margin-bottom: 0;
+}
+
+.cv-entry h3 {
+  font-size: 1rem;
+  margin: 0 0 2px;
+}
+
+.cv-skills {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+  margin: 8px 0 0;
+  padding: 0;
+  font-size: var(--fs-sm);
+  color: var(--dim);
+}
+
+.cv-skills li::after {
+  content: ' ·';
+}
+
+.cv-skills li:last-child::after {
+  content: '';
+}
+
+.cv-downloads {
+  margin: 22px 0 0;
+}
+
+.cv-downloads .btn {
+  display: inline-block;
+}

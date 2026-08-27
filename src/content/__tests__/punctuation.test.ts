@@ -3,6 +3,7 @@ import { en } from '../i18n/en'
 import { pt } from '../i18n/pt'
 import { profile } from '../profile'
 import { projects } from '../projects'
+import { cv } from '../cv'
 import { LOCALES } from '../i18n/types'
 import type { Localized } from '../i18n/types'
 import { metaFor, routes } from '../../entry-server'
@@ -63,6 +64,40 @@ function visibleStrings(): Array<[where: string, text: string]> {
       localized(`${at}.image[${i}].alt`, image.alt)
     }
   }
+
+  /*
+   * The CV record (spec 003, V5, research D6).
+   *
+   * Without this the newest page would be the one page the gate does not
+   * cover, and it is the page most likely to reintroduce what the gate exists
+   * to remove: the CV source writes `Telas Paraná --- Institutional Website`
+   * and `Londrina - PR`, both of which this test forbids. Extraction
+   * normalises them; this is what proves it kept doing so.
+   *
+   * Walked generically rather than field by field, because the entry shapes
+   * are discriminated by section kind and a per-shape walker would silently
+   * cover nothing the day a new kind is added.
+   */
+  const walk = (where: string, node: unknown) => {
+    if (typeof node === 'string') {
+      out.push([where, node])
+      return
+    }
+    if (Array.isArray(node)) {
+      node.forEach((child, i) => walk(`${where}[${i}]`, child))
+      return
+    }
+    if (node && typeof node === 'object') {
+      for (const [key, child] of Object.entries(node)) walk(`${where}.${key}`, child)
+    }
+  }
+
+  for (const section of cv.sections) {
+    walk(`cv.${section.id}.title`, section.title)
+    walk(`cv.${section.id}.entries`, section.entries)
+  }
+  walk('cv.headline', cv.headline)
+  walk('cv.summary', cv.summary)
 
   return out
 }
