@@ -274,18 +274,21 @@ export function Cv({
         <SectionRail entries={railEntries(cv)} locale={locale} />
 
         <div className="cv-body">
+          {/*
+            SC-005: employer, role and start date within the first screen at
+            360px wide, without scrolling. Measured 2026-08-27: with the
+            summary paragraph, the downloads and the capture stamp all in this
+            header, the first role sat at 1141px on a 360x800 viewport — three
+            screens down. None of them is required to sit above the record;
+            US1 (reading the record) is the page's stated primary purpose and
+            US2 (downloading) is a separate, equally-ranked story with no
+            positional requirement. The header is now the title and the
+            one-line role tag only.
+          */}
           <header className="section">
             <div className="wrap">
               <h1>{translate(locale, 'cv.title')}</h1>
               <p className="sub">{cv.headline[locale]}</p>
-              <p className="prose">{cv.summary[locale]}</p>
-              {/*
-                SC-005: employer, role and start date must be on the first
-                screen at 360px, so the downloads sit here rather than at the
-                foot of a six-section document.
-              */}
-              <CvDownloads cv={cv} locale={locale} />
-              <CaptureStamp cv={cv} locale={locale} />
             </div>
           </header>
 
@@ -294,6 +297,19 @@ export function Cv({
               <Section key={section.id} section={section} locale={locale} content={content} />
             ))}
           </div>
+
+          {/*
+            The summary, the downloads and the capture stamp close the page
+            rather than open it: by the time a reader reaches here they have
+            the full record, and the download is the natural next action.
+          */}
+          <section className="section">
+            <div className="wrap">
+              <p className="prose">{cv.summary[locale]}</p>
+              <CvDownloads cv={cv} locale={locale} />
+              <CaptureStamp cv={cv} locale={locale} />
+            </div>
+          </section>
         </div>
       </main>
     </>

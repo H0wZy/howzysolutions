@@ -31,17 +31,35 @@ const MINIMUM_ENTRIES = 4
 export function SectionRail({ entries, locale }: { entries: RailEntry[]; locale: Locale }) {
   if (entries.length < MINIMUM_ENTRIES) return null
 
+  const label = translate(locale, 'nav.onThisPage')
+  const list = (
+    <ul>
+      {entries.map((entry) => (
+        <li key={entry.id}>
+          <a href={`#${entry.id}`} data-rail-link={entry.id}>
+            {entry.label[locale]}
+          </a>
+        </li>
+      ))}
+    </ul>
+  )
+
   return (
-    <nav className="rail" aria-label={translate(locale, 'nav.onThisPage')} data-rail>
-      <ul>
-        {entries.map((entry) => (
-          <li key={entry.id}>
-            <a href={`#${entry.id}`} data-rail-link={entry.id}>
-              {entry.label[locale]}
-            </a>
-          </li>
-        ))}
-      </ul>
+    <nav className="rail" aria-label={label} data-rail>
+      {/*
+        `<details>`, closed by default, following the same platform-native
+        disclosure `src/components/StatsPanel.tsx` already uses for its own
+        "show all" list (research D10's ladder: no library reaches for this).
+        At narrow widths this is what makes the rail cost one line instead of
+        six before the reader gets to the record — see the measurement in
+        `styles/components.css` beside the media query that forces it open
+        again past 1000px, where the rail is a sidebar rather than a stack.
+        Works identically with scripting unavailable: `<details>` needs none.
+      */}
+      <details className="rail-details">
+        <summary>{label}</summary>
+        {list}
+      </details>
     </nav>
   )
 }

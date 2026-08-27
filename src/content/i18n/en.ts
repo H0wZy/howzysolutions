@@ -199,6 +199,10 @@ export const en = {
   'nav.breadcrumb': 'Breadcrumb',
   'nav.onThisPage': 'On this page',
   'nav.home': 'Home',
+  // FR-084. Lowercase, matching the chrome bar's other controls (theme, lang)
+  // and the terminal's own command vocabulary — not a dictionary word so much
+  // as a filename in the chrome bar's own idiom.
+  'nav.cv': 'cv',
 
   // Contact
   'contact.heading': 'Open to work and to interesting problems.',

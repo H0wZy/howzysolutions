@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 import type { Locale } from '../content/i18n/types'
 import { translate } from '../content/i18n/translate'
-import { locationFor } from '../route'
+import { locationFor, pathFor } from '../route'
 import { ThemeControl } from './ThemeControl'
 import { LocaleControl } from './LocaleControl'
 import { Breadcrumb } from './Breadcrumb'
@@ -13,6 +13,13 @@ import { Breadcrumb } from './Breadcrumb'
  * trail derived from the route needs no page to remember to ask for it —
  * which is the same reason FR-069 says it is derived rather than authored.
  * It renders nothing on the home page (FR-070).
+ *
+ * FR-084: a link to the CV also lives here, for the same reason. Every page
+ * renders Chrome, so this is one line that makes the CV reachable in one
+ * activation from anywhere, rather than a link authored on Home, on the work
+ * listing and on every project page separately. Suppressed on the CV page
+ * itself — the current page is not a link, the same rule the breadcrumb's
+ * final crumb follows (FR-069).
  */
 export function Chrome({
   locale,
@@ -43,6 +50,11 @@ export function Chrome({
         </span>
         <span className="chrome-controls">
           {controls}
+          {route.page !== 'cv' ? (
+            <a className="chrome-btn" href={pathFor({ page: 'cv' }, locale)}>
+              {translate(locale, 'nav.cv')}
+            </a>
+          ) : null}
           <LocaleControl locale={locale} pathname={pathname} />
           <ThemeControl locale={locale} />
         </span>
