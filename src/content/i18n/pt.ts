@@ -31,8 +31,8 @@ export const pt = {
 
   // Hero
   'hero.role': 'Desenvolvedor full-stack',
-  'hero.experience': '{years}a {months}m construindo software',
-  'hero.experienceSince': 'desde janeiro de 2023',
+  'hero.experience': '{years}a {months}m em TI',
+  'hero.experienceSince': 'desde a graduação na Unicesumar em 2023; empregado desde maio de 2025',
   'hero.location': 'Londrina, Paraná, Brasil',
 
   // Listagem de projetos
@@ -95,7 +95,7 @@ export const pt = {
   'stats.stale': 'Números da última captura bem-sucedida, em {date}.',
   'stats.showAll': 'ver tudo',
   'stats.experienceNote':
-    'A experiência é contada desde janeiro de 2023. O tempo de código rastreado começa quando o rastreamento foi instalado, em março de 2026. São medidas diferentes, em períodos diferentes.',
+    'O tempo em TI é contado desde a graduação na Unicesumar, em 2023. O emprego começou em maio de 2025 na TCS. O tempo de código rastreado cobre apenas o intervalo que o rastreador reporta, que começa em março de 2026. Três medidas, três períodos, e nenhuma delas é evidência da outra.',
 
   // Calendário de contribuições (fonte, unidade e período diferentes das estatísticas acima)
   'contrib.heading': 'commits públicos, dia a dia',

@@ -916,3 +916,33 @@
 .cv-downloads .btn {
   display: inline-block;
 }
+
+/*
+ * Breadcrumb. The primitive brings its own flex/gap utilities; what it does
+ * not know is where the trail sits in this site's layout, which is the same
+ * measure the prose uses so the path lines up with the heading below it.
+ */
+.breadcrumb {
+  max-width: var(--measure);
+  margin: 0 auto;
+  padding: 14px var(--gutter) 0;
+  font-size: var(--fs-sm);
+}
+
+.breadcrumb a {
+  border-bottom: 1px solid transparent;
+}
+
+.breadcrumb a:hover {
+  border-color: var(--line);
+}
+
+/* The current page is not a link, so it does not take the link colour. */
+.breadcrumb [data-slot='breadcrumb-page'] {
+  color: var(--dim);
+}
+
+/* The CV page owns its own measure, so the trail follows the rail's gutter. */
+.cv-layout .breadcrumb {
+  margin: 0;
+}

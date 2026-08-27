@@ -91,7 +91,10 @@ export const ls: Command = {
   summaryKey: 'cmd.ls',
   run: ({ content }) =>
     ok([
-      text('about.md   contact.md   stack   stats'),
+      // cv.md sits in the alphabetical position it belongs in, beside
+      // contact.md (FR-066). This is the one pinned output this feature
+      // changes on purpose, and engine.test.ts changes with it.
+      text('about.md   contact.md   cv.md   stack   stats'),
       text(`work/      ${content.projects.length} entries`),
     ]),
 }

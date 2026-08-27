@@ -16,6 +16,7 @@ import './index.css'
 import { hydrateRoot } from 'react-dom/client'
 import { HydratedApp } from './HydratedApp'
 import { initReveal } from './enhance/reveal'
+import { initSectionRail } from './enhance/section-rail'
 import { mountTerminal } from './enhance/terminal/mount'
 import { initThemeControl } from './enhance/theme-control'
 import { initLocaleControl } from './enhance/locale-control'
@@ -41,6 +42,9 @@ const root = document.getElementById('root')
  */
 function enhance() {
   initReveal()
+  // Adds the rail's follow-along mark and nothing else. The rail is already a
+  // working list of anchors without it (FR-073).
+  initSectionRail()
   initThemeControl(locale)
   initLocaleControl()
 

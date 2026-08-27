@@ -1,5 +1,4 @@
 import * as React from 'react'
-import { Slot } from 'radix-ui'
 
 import { cn } from '@/lib/utils'
 
@@ -15,7 +14,15 @@ import { cn } from '@/lib/utils'
  *   2. BreadcrumbPage no longer carries `role="link" aria-disabled="true"`.
  *      contracts/cv-navigation.md requires the current page to not be a link,
  *      and a disabled link is still announced as a link (FR-069).
- *   3. Quote and semicolon style follow this repository, not the generator's.
+ *   3. `radix-ui` is not installed either. The generator imports it for one
+ *      thing: a Slot backing `asChild` on BreadcrumbLink. Nothing in this
+ *      repository passes `asChild` — there is no routing library to hand the
+ *      anchor to, because every route here is a real document and navigation
+ *      is a plain link. Removing it measured 1.04 KB gzipped, which is a small
+ *      number and not the reason: Principle II's first rung is "does this need
+ *      to exist at all", and a dependency carried for a prop no caller uses
+ *      fails it whatever it weighs.
+ *   4. Quote and semicolon style follow this repository, not the generator's.
  *
  * Every class name here resolves through the shadcn variable mapping in
  * styles/tokens.css. No literal colour enters this file (Principle VI).
@@ -84,15 +91,9 @@ function BreadcrumbItem({ className, ...props }: React.ComponentProps<'li'>) {
   )
 }
 
-function BreadcrumbLink({
-  asChild,
-  className,
-  ...props
-}: React.ComponentProps<'a'> & { asChild?: boolean }) {
-  const Comp = asChild ? Slot.Root : 'a'
-
+function BreadcrumbLink({ className, ...props }: React.ComponentProps<'a'>) {
   return (
-    <Comp
+    <a
       data-slot="breadcrumb-link"
       className={cn('transition-colors hover:text-foreground', className)}
       {...props}

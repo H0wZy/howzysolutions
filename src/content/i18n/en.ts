@@ -29,8 +29,19 @@ export const en = {
 
   // Hero
   'hero.role': 'Full-stack developer',
-  'hero.experience': '{years}y {months}mo building software',
-  'hero.experienceSince': 'since January 2023',
+  /*
+   * FR-063, and the constitution's Honesty in Self-Reported Metrics clause.
+   *
+   * This read '{years}y {months}mo building software' beside 'since January
+   * 2023', which invited a reader to take three and a half years of
+   * professional software work from a figure that counts time in the field.
+   * Employment began in May 2025. Both facts are true, they count different
+   * things, and the clause forbids placing them so one reads as corroborating
+   * the other — so the figure now names its own scope and the employment date
+   * travels with it rather than being left for the reader to assume.
+   */
+  'hero.experience': '{years}y {months}mo in IT',
+  'hero.experienceSince': 'since the Unicesumar degree in 2023; employed since May 2025',
   'hero.location': 'Londrina, Paraná, Brazil',
 
   // Project listing
@@ -93,7 +104,7 @@ export const en = {
   'stats.stale': 'Figures are from the last successful capture on {date}.',
   'stats.showAll': 'show all',
   'stats.experienceNote':
-    'Experience is counted from January 2023. Tracked coding time begins when tracking was installed, in March 2026. They measure different things over different periods.',
+    'Time in IT is counted from the Unicesumar degree in 2023. Employment began in May 2025 at TCS. Tracked coding time covers only the range the tracker reports, which starts in March 2026. Three measures over three periods, and none of them is evidence for another.',
 
   // Contribution calendar (a different source, unit and period from the stats above)
   'contrib.heading': 'public commits, day by day',
