@@ -287,6 +287,32 @@ function localized(tex, lineOf) {
   }
 }
 
+/**
+ * Splits a skills list on commas that are NOT inside parentheses.
+ *
+ * A plain `split(',')` turns `GCP (Cloud Run, Cloud SQL, GCS)` into three
+ * skills, two of which are fragments with an unbalanced bracket. The CV uses
+ * that construct four times, so this is the ordinary case and not an edge one.
+ */
+function splitTopLevel(text) {
+  const out = []
+  let depth = 0
+  let current = ''
+  for (const ch of text) {
+    if (ch === '(' || ch === '[') depth++
+    else if (ch === ')' || ch === ']') depth = Math.max(0, depth - 1)
+
+    if (ch === ',' && depth === 0) {
+      out.push(current)
+      current = ''
+    } else {
+      current += ch
+    }
+  }
+  out.push(current)
+  return out.map((s) => s.trim()).filter(Boolean)
+}
+
 /* ----------------------------------------------------------------- dates */
 
 const MONTH_YEAR = /^(\d{2})\/(\d{4})$/
@@ -468,11 +494,7 @@ function parseSection(kind, body, lineOf) {
       if (split === -1) fail(`skill group without a label at ${sourceRef}:${lineOf(0)}`)
       const label = localized(item.slice(0, split), lineOf)
       const values = item.slice(split + 1)
-      const items = (locale) =>
-        clean(resolveTr(values, locale, lineOf), locale)
-          .split(',')
-          .map((s) => s.trim())
-          .filter(Boolean)
+      const items = (locale) => splitTopLevel(clean(resolveTr(values, locale, lineOf), locale))
       return { label, items: { en: items('en'), pt: items('pt') }, order: i }
     })
   }

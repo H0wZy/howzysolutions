@@ -1,5 +1,5 @@
 {
-  "capturedAt": "2026-08-27T15:36:48.705Z",
+  "capturedAt": "2026-08-27T18:08:59.786Z",
   "sourceCommit": "1205bd2",
   "sourceRef": "C:\\Users\\2983539\\projects\\curriculum-vitae\\overleaf\\main.tex",
   "isFallback": false,
@@ -204,9 +204,7 @@
           },
           "items": {
             "en": [
-              "GCP (Cloud Run",
-              "Cloud SQL",
-              "GCS)",
+              "GCP (Cloud Run, Cloud SQL, GCS)",
               "AWS",
               "Terraform (IaC)",
               "Docker",
@@ -214,9 +212,7 @@
               "Git/GitHub"
             ],
             "pt": [
-              "GCP (Cloud Run",
-              "Cloud SQL",
-              "GCS)",
+              "GCP (Cloud Run, Cloud SQL, GCS)",
               "AWS",
               "Terraform (IaC)",
               "Docker",
@@ -258,8 +254,7 @@
               "OOP",
               "REST APIs",
               "Observability",
-              "Unit Testing (xUnit",
-              "Moq)"
+              "Unit Testing (xUnit, Moq)"
             ],
             "pt": [
               "Clean Code",
@@ -268,8 +263,7 @@
               "POO",
               "APIs REST",
               "Observabilidade",
-              "Testes Unitários (xUnit",
-              "Moq)"
+              "Testes Unitários (xUnit, Moq)"
             ]
           },
           "order": 3

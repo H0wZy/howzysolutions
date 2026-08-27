@@ -15,6 +15,7 @@ export function routes(): Array<{ pathname: string; locale: Locale }> {
   const { total } = workPage(content.projects, 1)
   const pages: Route[] = [
     { page: 'home' },
+    { page: 'cv' },
     ...Array.from({ length: total }, (_, i) => ({ page: 'workIndex' as const, number: i + 1 })),
     ...content.projects.map((p) => ({ page: 'work' as const, id: p.id })),
   ]
@@ -44,6 +45,18 @@ export function metaFor(pathname: string): { title: string; description: string;
     return {
       title: `${translate(locale, 'work.listingTitle')} · ${content.profile.name}`,
       description: translate(locale, 'work.intro'),
+      lang: locale,
+    }
+  }
+  /*
+   * Without this branch the CV page would inherit the home page's title and
+   * description, and the punctuation test over route metadata would not catch
+   * it because that test only looks for dashes (research D13).
+   */
+  if (route.page === 'cv') {
+    return {
+      title: `${translate(locale, 'cv.title')} · ${content.profile.name}`,
+      description: translate(locale, 'cv.metaDescription'),
       lang: locale,
     }
   }

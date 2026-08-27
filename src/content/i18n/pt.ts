@@ -140,8 +140,48 @@ export const pt = {
   'cmd.ls': 'lista a superfície de conteúdo',
   'cmd.clear': 'limpa a tela',
   'cmd.history': 'mostra os comandos desta sessão',
+  'cmd.cv': 'imprime a trajetória profissional e o download do currículo',
+  'cv.heading': 'Trajetória profissional',
+  'cv.downloadHint': 'o PDF neste idioma',
+  'cv.counts.awards': 'prêmios',
+  'cv.counts.education': 'formação',
+  'cv.counts.certifications': 'certificações',
 
   // Contato
+  // CV
+  //
+  // Nomes próprios ficam FORA deste dicionário, seguindo o precedente de
+  // WAKATIME.name em stats.ts: empregador, cliente, instituição e nomes de
+  // tecnologia são idênticos nos dois idiomas, e uma string idêntica nos dois
+  // não pertence a nenhum (FR-054).
+  'cv.title': 'Trajetória profissional',
+  'cv.intro':
+    'Onde trabalho, desde quando, e para quê fui contratado. Os mesmos fatos do PDF, em texto que dá para ler no celular.',
+  'cv.metaDescription':
+    'Trajetória profissional de Marcos "H0wZy" Junior: cargos, prêmios, habilidades, formação e certificações, com o currículo disponível em inglês e português.',
+  'cv.present': 'presente',
+  'cv.captured': 'Fatos do currículo capturados de {source} em {date}.',
+  'cv.capturedFallback':
+    'Os fatos do currículo são da última captura bem-sucedida. A fonte estava inacessível no build.',
+  'cv.siteHeld': 'ano de início registrado por este site, não pelo currículo',
+  'cv.ongoing': 'em andamento',
+  'cv.seeProject': 'ler o registro completo do projeto',
+
+  // Downloads do CV
+  'cv.download.heading': 'Baixar o currículo',
+  'cv.download.primary': 'Baixar o currículo em {language}',
+  'cv.download.other': 'Também disponível em {language}',
+  'cv.language.en': 'inglês',
+  'cv.language.pt': 'português do Brasil',
+  'cv.unavailable': 'Apenas o arquivo em {language} está disponível neste build.',
+  'cv.unavailableAll': 'Nenhum arquivo de currículo está disponível neste build.',
+
+  // Navegação
+  'nav.breadcrumb': 'Trilha de navegação',
+  'nav.onThisPage': 'Nesta página',
+  'nav.home': 'Início',
+
+  // Contact
   'contact.heading': 'Aberto a trabalho e a problemas interessantes.',
   'contact.email': 'e-mail',
   'contact.github': 'github',

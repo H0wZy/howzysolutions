@@ -143,6 +143,51 @@ export const en = {
   'cmd.ls': 'list the content surface',
   'cmd.clear': 'clear the screen',
   'cmd.history': 'show this session’s commands',
+  'cmd.cv': 'print the professional record and the CV download',
+  'cv.heading': 'Professional record',
+  'cv.downloadHint': 'the PDF in this language',
+  'cv.counts.awards': 'awards',
+  'cv.counts.education': 'education',
+  'cv.counts.certifications': 'certifications',
+
+  // CV
+  //
+  // Proper nouns stay OUT of this dictionary, following the precedent stats.ts
+  // set for WAKATIME.name: employer, client, institution and technology names
+  // are identical in both locales, and a string identical in both belongs in
+  // neither (FR-054).
+  'cv.title': 'Professional record',
+  'cv.intro':
+    'Where I work, since when, and what I was hired to do. The same facts as the PDF, in text you can read on a phone.',
+  'cv.metaDescription':
+    'Professional record of Marcos "H0wZy" Junior: roles, awards, skills, education and certifications, with the CV downloadable in English and Portuguese.',
+  // FR-055: an ongoing role ends in a translated word, never a computed date.
+  'cv.present': 'present',
+  // FR-056, FR-080. Same wording grammar as the statistics panel's period line,
+  // because a visitor reading both should not have to learn two ways of being
+  // told when a figure was taken.
+  'cv.captured': 'CV facts captured from {source} on {date}.',
+  'cv.capturedFallback':
+    'CV facts are from the last successful capture. The source was unreachable at build time.',
+  // FR-081: a fact this site holds and the CV does not must read as this
+  // site's, never as having come from the CV.
+  'cv.siteHeld': 'start year recorded by this site, not by the CV',
+  'cv.ongoing': 'ongoing',
+  'cv.seeProject': 'read the full project record',
+
+  // CV downloads
+  'cv.download.heading': 'Download the CV',
+  'cv.download.primary': 'Download the CV in {language}',
+  'cv.download.other': 'Also available in {language}',
+  'cv.language.en': 'English',
+  'cv.language.pt': 'Brazilian Portuguese',
+  'cv.unavailable': 'Only the {language} file is available in this build.',
+  'cv.unavailableAll': 'No CV file is available in this build.',
+
+  // Navigation
+  'nav.breadcrumb': 'Breadcrumb',
+  'nav.onThisPage': 'On this page',
+  'nav.home': 'Home',
 
   // Contact
   'contact.heading': 'Open to work and to interesting problems.',
