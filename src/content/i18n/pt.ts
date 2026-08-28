@@ -181,6 +181,7 @@ export const pt = {
   'nav.onThisPage': 'Nesta página',
   'nav.home': 'Início',
   'nav.cv': 'cv',
+  'nav.work': 'work',
 
   // Contact
   'contact.heading': 'Aberto a trabalho e a problemas interessantes.',

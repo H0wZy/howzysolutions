@@ -1,7 +1,8 @@
 import type { ReactNode } from 'react'
 import type { Locale } from '../content/i18n/types'
 import { translate } from '../content/i18n/translate'
-import { locationFor, pathFor } from '../route'
+import { locationFor } from '../route'
+import { topLevelLinks } from '../navigation'
 import { ThemeControl } from './ThemeControl'
 import { LocaleControl } from './LocaleControl'
 import { Breadcrumb } from './Breadcrumb'
@@ -12,14 +13,10 @@ import { Breadcrumb } from './Breadcrumb'
  * The breadcrumb lives here because every page already renders Chrome, and a
  * trail derived from the route needs no page to remember to ask for it —
  * which is the same reason FR-069 says it is derived rather than authored.
- * It renders nothing on the home page (FR-070).
  *
- * FR-084: a link to the CV also lives here, for the same reason. Every page
- * renders Chrome, so this is one line that makes the CV reachable in one
- * activation from anywhere, rather than a link authored on Home, on the work
- * listing and on every project page separately. Suppressed on the CV page
- * itself — the current page is not a link, the same rule the breadcrumb's
- * final crumb follows (FR-069).
+ * The top-level links do the same job for the same reason (FR-084, SC-012).
+ * Which ones render is `topLevelLinks`, next to the trail it mirrors, so the
+ * reachability guarantee is a unit test rather than markup nobody can assert.
  */
 export function Chrome({
   locale,
@@ -50,11 +47,11 @@ export function Chrome({
         </span>
         <span className="chrome-controls">
           {controls}
-          {route.page !== 'cv' ? (
-            <a className="chrome-btn" href={pathFor({ page: 'cv' }, locale)}>
-              {translate(locale, 'nav.cv')}
+          {topLevelLinks(route, locale).map((link) => (
+            <a key={link.href} className="chrome-btn" href={link.href}>
+              {translate(locale, link.labelKey)}
             </a>
-          ) : null}
+          ))}
           <LocaleControl locale={locale} pathname={pathname} />
           <ThemeControl locale={locale} />
         </span>
