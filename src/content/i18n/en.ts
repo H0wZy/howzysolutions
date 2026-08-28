@@ -203,6 +203,12 @@ export const en = {
   // and the terminal's own command vocabulary — not a dictionary word so much
   // as a filename in the chrome bar's own idiom.
   'nav.cv': 'cv',
+  // Identical in both locales for the same reason `nav.cv` is: this is the URL
+  // segment `/work/` in the bar's filename idiom, not prose. `trabalhos` was
+  // tried and pushed the bar past 360px into a horizontal document scrollbar,
+  // which the spec forbids outright. The breadcrumb below still says
+  // "Todos os trabalhos" in Portuguese, where the words ARE prose.
+  'nav.work': 'work',
 
   // Contact
   'contact.heading': 'Open to work and to interesting problems.',

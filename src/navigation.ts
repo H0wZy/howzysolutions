@@ -34,6 +34,40 @@ export type Crumb = {
 }
 
 /**
+ * The site's top-level destinations, in the order the chrome bar shows them.
+ * Home is not among them: it is already the breadcrumb's first crumb on every
+ * page below the top level, and the trail is where a visitor looks for the way
+ * up.
+ */
+const TOP_LEVEL: { route: Route; labelKey: StringKey }[] = [
+  { route: { page: 'workIndex', number: 1 }, labelKey: 'nav.work' },
+  { route: { page: 'cv' }, labelKey: 'nav.cv' },
+]
+
+/**
+ * The top-level links the chrome bar renders (FR-084, SC-012).
+ *
+ * A destination is dropped when it IS the current page, by the same rule the
+ * trail's final crumb follows: the current page is not a link. Everything else
+ * is present, which is what makes every top-level destination one activation
+ * from every other — Chrome renders on every page, so this list is the whole
+ * guarantee rather than a link authored per page and forgotten on the next one.
+ *
+ * Pure, and over `Route`, so the guarantee is a unit test rather than a comment
+ * (Principle VII). The CV page shipped reachable from nowhere precisely because
+ * nothing here could be asserted.
+ */
+export function topLevelLinks(
+  route: Route,
+  locale: Locale,
+): { labelKey: StringKey; href: string }[] {
+  return TOP_LEVEL.filter((entry) => entry.route.page !== route.page).map((entry) => ({
+    labelKey: entry.labelKey,
+    href: pathFor(entry.route, locale),
+  }))
+}
+
+/**
  * @param leafLabel The current page's own name, when that name is data rather
  *   than a dictionary string. Only the project route needs it.
  */
@@ -42,11 +76,15 @@ export function trailFor(route: Route, locale: Locale, leafLabel?: string): Crum
 
   switch (route.page) {
     /*
-     * FR-070: a path with one element is not a path. The home page shows no
-     * breadcrumb at all rather than a breadcrumb containing only itself.
+     * FR-070 as amended 2026-08-27: the home page carries the trail too, so the
+     * strip under the chrome bar holds navigation on every page rather than
+     * appearing only once a visitor has gone somewhere. The trail is still the
+     * page's own ancestry, which on the home page is the home page — so the
+     * single crumb is the current page and therefore not a link, the same rule
+     * every other trail's final crumb follows.
      */
     case 'home':
-      return []
+      return [{ ...home, href: null }]
 
     case 'workIndex':
       return [home, { labelKey: 'work.listingTitle', href: null }]

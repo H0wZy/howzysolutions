@@ -13,7 +13,7 @@ import {
 } from './ui/breadcrumb'
 
 /**
- * The path to the current page (FR-069, FR-070, FR-075).
+ * The path to the current page (FR-069, FR-075).
  *
  * Every ancestor is a real `a[href]`; the final item is not a link and carries
  * `aria-current="page"`, so the current position is programmatic rather than

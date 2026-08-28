@@ -917,15 +917,24 @@
   /*
    * Forced open regardless of the `open` attribute, so the disclosure stays
    * genuinely closed-by-default below this width and genuinely an always-open
-   * sidebar above it, from the same markup. Two properties are overridden
-   * because browsers hide a closed <details>'s content one of two ways
-   * depending on engine version: older engines set `display: none`; current
-   * engines set `content-visibility: hidden`, which `display` alone does not
-   * undo. `!important` on both beats either mechanism without touching the
-   * `open` attribute itself.
+   * sidebar above it, from the same markup. Three rules, because a closed
+   * `<details>` is hidden by THREE different boxes depending on engine
+   * version: older engines set `display: none` on the slotted children;
+   * current Chromium instead wraps them in an anonymous `::details-content`
+   * box and hides THAT box with `content-visibility: hidden` — a child's own
+   * `content-visibility` cannot override an ancestor's, so overriding the
+   * `<ul>` alone (verified in the browser: computed style on the child showed
+   * `visible` while the pseudo-element wrapping it still measured 0px tall)
+   * left the sidebar collapsed above 1000px. All three targets get
+   * `!important` so none can win by mechanism alone.
    */
   .rail-details > summary {
     display: none;
+  }
+
+  .rail-details::details-content {
+    content-visibility: visible !important;
+    block-size: auto !important;
   }
 
   .rail-details > ul {
