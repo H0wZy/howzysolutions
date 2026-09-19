@@ -42,6 +42,7 @@ export type Crumb = {
 const TOP_LEVEL: { route: Route; labelKey: StringKey }[] = [
   { route: { page: 'workIndex', number: 1 }, labelKey: 'nav.work' },
   { route: { page: 'cv' }, labelKey: 'nav.cv' },
+  { route: { page: 'privacy' }, labelKey: 'nav.privacy' },
 ]
 
 /**

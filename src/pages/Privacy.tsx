@@ -1,16 +1,38 @@
 import type { Locale } from '../content/i18n/types'
-import type { ContentBundle } from '../content/types'
+import type { ContentBundle, PrivacySection } from '../content/types'
 import { translate } from '../locale'
+import { pathFor } from '../route'
 import { Chrome } from '../components/Chrome'
 
 /**
- * The privacy policy (src/content/privacy.ts). Its URL is what TikTok Shop's
- * Data Security and Privacy Review links to, so the path is a promise: it
- * stays /privacy/ for as long as the app exists.
+ * The privacy policy (src/content/privacy.ts): the general policy, then one
+ * block per project that handles data of its own. TikTok Shop's Data Security
+ * and Privacy Review links here, so the path is a promise: it stays /privacy/
+ * for as long as that app exists.
  *
  * The contact is the profile's email contact rather than a second copy of the
  * address, so the two cannot drift apart.
  */
+
+function Body({ section, locale }: { section: PrivacySection; locale: Locale }) {
+  return (
+    <>
+      {section.body[locale].map((paragraph) => (
+        <p key={paragraph} className="prose">
+          {paragraph}
+        </p>
+      ))}
+      {section.items ? (
+        <ul className="prose">
+          {section.items[locale].map((item) => (
+            <li key={item}>{item}</li>
+          ))}
+        </ul>
+      ) : null}
+    </>
+  )
+}
+
 export function Privacy({
   content,
   locale,
@@ -42,6 +64,16 @@ export function Privacy({
                 </>
               ) : null}
             </p>
+            {/* A reader sent here for one project finds it in one activation. */}
+            <p className="sub dim">
+              {translate(locale, 'privacy.projects')}:{' '}
+              {privacy.projects.map((project, i) => (
+                <span key={project.id}>
+                  {i > 0 ? ', ' : null}
+                  <a href={`#${project.id}`}>{project.name}</a>
+                </span>
+              ))}
+            </p>
           </div>
         </header>
 
@@ -49,21 +81,42 @@ export function Privacy({
           <section key={section.id} className="section" id={section.id}>
             <div className="wrap">
               <h2>{section.heading[locale]}</h2>
-              {section.body[locale].map((paragraph) => (
-                <p key={paragraph} className="prose">
-                  {paragraph}
-                </p>
-              ))}
-              {section.items ? (
-                <ul className="prose">
-                  {section.items[locale].map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
-              ) : null}
+              <Body section={section} locale={locale} />
             </div>
           </section>
         ))}
+
+        {privacy.projects.map((project) => {
+          const record = content.projects.find((p) => p.id === project.id)
+          return (
+            <section key={project.id} className="section" id={project.id}>
+              <div className="wrap">
+                <p className="sub dim">{translate(locale, 'privacy.projects')}</p>
+                <h2>
+                  {project.name} <span className="dim">· {project.tagline[locale]}</span>
+                </h2>
+                {project.summary[locale].map((paragraph) => (
+                  <p key={paragraph} className="prose">
+                    {paragraph}
+                  </p>
+                ))}
+                {record ? (
+                  <p className="prose">
+                    <a href={pathFor({ page: 'work', id: record.id }, locale)}>
+                      {translate(locale, 'privacy.aboutProject')} →
+                    </a>
+                  </p>
+                ) : null}
+                {project.sections.map((section) => (
+                  <div key={section.id} id={section.id} className="detail-block">
+                    <h3>{section.heading[locale]}</h3>
+                    <Body section={section} locale={locale} />
+                  </div>
+                ))}
+              </div>
+            </section>
+          )
+        })}
       </main>
     </>
   )

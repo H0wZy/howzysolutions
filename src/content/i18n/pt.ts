@@ -32,7 +32,7 @@ export const pt = {
   // Hero
   'hero.role': 'Desenvolvedor full-stack',
   'hero.experience': '{years}a {months}m em TI',
-  'hero.experienceSince': 'desde a graduação na Unicesumar em 2023; empregado desde maio de 2025',
+  'hero.experienceSince': 'desde a graduação na Unicesumar em 2023; empregado de maio de 2025 a agosto de 2026',
   'hero.location': 'Londrina, Paraná, Brasil',
 
   // Listagem de projetos
@@ -182,6 +182,7 @@ export const pt = {
   'nav.home': 'Início',
   'nav.cv': 'cv',
   'nav.work': 'work',
+  'nav.privacy': 'privacy',
 
   // Contact
   'contact.heading': 'Aberto a trabalho e a problemas interessantes.',
@@ -193,12 +194,13 @@ export const pt = {
   'footer.builtWith':
     'Feito com React, TypeScript e Vite. Sem rastreadores, sem fontes de terceiros.',
   'footer.source': 'código no github',
-  'footer.privacy': 'política de privacidade',
 
   // Página de privacidade
   'privacy.title': 'Política de privacidade',
   'privacy.metaDescription':
-    'Como a H0wZy Solutions trata dados pessoais no viralvideogen, seu app privado do TikTok Shop, e neste site.',
+    'Como a H0wZy Solutions trata dados pessoais neste site e em cada um dos seus projetos, incluindo o viralvideogen, seu app privado do TikTok Shop.',
   'privacy.updated': 'Atualizada em {date}.',
   'privacy.contact': 'Contato:',
+  'privacy.projects': 'Políticas por projeto',
+  'privacy.aboutProject': 'ler a página do projeto',
 } satisfies Record<StringKey, string>

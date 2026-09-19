@@ -7,6 +7,9 @@
   top: 0;
   z-index: 10;
   display: flex;
+  /* Narrow or zoomed: the controls take a second row instead of the page
+     scrolling sideways or each button breaking over three lines. */
+  flex-wrap: wrap;
   align-items: center;
   gap: 10px;
   padding: 9px 16px;
@@ -48,6 +51,8 @@
   position: relative; /* anchors .theme-joke without joining the flex flow */
   margin-left: auto;
   display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
   gap: 8px;
   align-items: center;
 }
@@ -532,6 +537,10 @@
   transition:
     color var(--dur-fast) var(--ease),
     border-color var(--dur-fast) var(--ease);
+}
+
+.chrome-btn {
+  white-space: nowrap;
 }
 
 .chrome-btn::before { content: '[ '; }

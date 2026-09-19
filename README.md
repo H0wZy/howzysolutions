@@ -19,7 +19,10 @@ npm run preview  # serve the built dist/
 
 ## Deploy
 
-Live at <https://howzysolutions.com>, served by Cloudflare as an assets-only Worker (`wrangler.jsonc`):
+Live at <https://howzysolutions.com>, served by Cloudflare as an assets-only Worker (`wrangler.jsonc`).
+Every push to `main`, plus a daily run, goes through `.github/workflows/ci.yml`: lint, tests, a build
+with fresh data, then `wrangler deploy`. It needs the repository secrets `CLOUDFLARE_API_TOKEN` and
+`WAKATIME_API_KEY`; `GITHUB_TOKEN` is the one Actions provides. By hand:
 
 ```bash
 npm run build
@@ -37,7 +40,7 @@ fails and the page never invents data it doesn't have:
 | `WAKATIME_API_KEY` | Tracked coding time (`src/content/wakatime.generated.json`) | Falls back to `~/.wakatime.cfg` locally (the file WakaTime's editor plugins already write); if neither is set, the last committed artifact is kept and the page marks it stale |
 | `GITHUB_TOKEN` | The public contribution calendar (`src/content/github.generated.json`) | The last committed artifact is kept and the page marks it stale; if none has ever been committed, the calendar section is absent from the page entirely |
 
-Set both in the deploy environment (Cloudflare Workers Builds, GitHub Actions, etc.) as real secrets — never as a
+Set both in the deploy environment (GitHub Actions secrets here) as real secrets — never as a
 `VITE_*` variable, since that prefix gets inlined into the shipped JavaScript and would publish the
 credential. `GITHUB_TOKEN` needs only a classic personal access token with the `read:user` scope (or
 a fine-grained token with read access to the account's profile); it authenticates the GraphQL
