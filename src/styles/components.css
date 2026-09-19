@@ -997,6 +997,17 @@
   font-size: var(--fs-sm);
 }
 
+/*
+ * Tailwind runs without preflight (index.css), so this <ol> keeps the user
+ * agent's decimal markers and 40px indent. The items are inline-flex and show
+ * no marker, but the separator <li>s are plain list items and painted "1."
+ * and "2." over the neighbouring crumbs.
+ */
+.breadcrumb ol {
+  list-style: none;
+  padding-left: 0;
+}
+
 .breadcrumb a {
   border-bottom: 1px solid transparent;
 }
