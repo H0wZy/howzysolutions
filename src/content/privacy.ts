@@ -1,14 +1,15 @@
 import type { PrivacyPolicy } from './types'
 
 /**
- * The privacy policy of H0wZy Solutions, served at /privacy/.
+ * The privacy policy of H0wZy Solutions, served at /privacy-policy/.
  *
  * A general policy first (who we are, this website, rights, security), then
  * one section per project that handles personal data beyond the website. A
  * project with no entry here collects none.
  *
- * TikTok Shop's Data Security and Privacy Review for viralvideogen links to
- * /privacy/, so neither the path nor the `viralvideogen` anchor may move.
+ * TikTok Shop's Data Security and Privacy Review for viralvideogen was sent
+ * with /privacy/, which public/_redirects 301s here. Neither that redirect
+ * nor the `viralvideogen` anchor may go away.
  * That project's section is the same text as viralvideogen's
  * docs/tiktok-shop/partner-center/PRIVACY_POLICY.md; a change to either is a
  * change to both, and `updated` moves with it.

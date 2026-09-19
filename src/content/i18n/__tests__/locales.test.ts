@@ -38,9 +38,13 @@ describe('locale dictionaries', () => {
   it('does not leave English prose sitting in the Portuguese dictionary', () => {
     // Proper nouns and terms the Brazilian dev community uses untranslated are expected
     // to match; anything longer than that matching byte-for-byte was never translated.
+    // Chrome-bar labels are URL segments by design (`nav.work` in en.ts says
+    // why), identical in both locales because the path is: /pt/privacy-policy/.
+    const urlSegment = (key: string, value: string) =>
+      key.startsWith('nav.') && /^[a-z-]+$/.test(value)
     const identical = enKeys.filter((key) => {
       const k = key as keyof typeof en
-      return en[k] === pt[k] && en[k].length > 12
+      return en[k] === pt[k] && en[k].length > 12 && !urlSegment(key, en[k])
     })
     expect(identical, `untranslated: ${identical.join(', ')}`).toEqual([])
   })

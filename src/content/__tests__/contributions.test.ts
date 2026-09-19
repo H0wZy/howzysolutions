@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { parseContributions } from '../contributions'
+import { contributionLevels, parseContributions } from '../contributions'
 
 /**
  * Gate: FR-043 (a broken or missing artifact renders no grid, never a partial
@@ -96,5 +96,25 @@ describe('parseContributions', () => {
       { date: '2026-01-01', count: 3 },
       { date: '2026-01-05', count: 7 },
     ])
+  })
+})
+
+describe('contributionLevels', () => {
+  it('keeps a zero at 0 and never shades an active day as empty', () => {
+    const level = contributionLevels([0, 0, 1, 5, 9])
+    expect(level(0)).toBe(0)
+    for (const count of [1, 5, 9]) expect(level(count)).toBeGreaterThan(0)
+  })
+
+  it('does not let one outlier flatten every other day into one step', () => {
+    const counts = [0, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 92]
+    const level = contributionLevels(counts)
+    expect(new Set(counts.filter((c) => c > 0).map(level))).toEqual(new Set([1, 2, 3, 4]))
+    expect(level(92)).toBe(4)
+  })
+
+  it('handles a year with no activity at all', () => {
+    expect(contributionLevels([0, 0, 0])(0)).toBe(0)
+    expect(contributionLevels([])(0)).toBe(0)
   })
 })

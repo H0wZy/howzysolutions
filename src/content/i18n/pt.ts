@@ -182,7 +182,7 @@ export const pt = {
   'nav.home': 'Início',
   'nav.cv': 'cv',
   'nav.work': 'work',
-  'nav.privacy': 'privacy',
+  'nav.privacy': 'privacy-policy',
 
   // Contact
   'contact.heading': 'Aberto a trabalho e a problemas interessantes.',

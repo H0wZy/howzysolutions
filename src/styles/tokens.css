@@ -30,13 +30,16 @@
   /*
    * Contribution grid intensity, five steps (research D11). Step 0 is a real
    * measured zero, not empty space, so it still clears the 3:1 non-text
-   * floor. Step 4 is the same ink as --bar-ink and --accent-2 on purpose:
-   * this is the same "measured data" hue, not a second scale.
+   * floor, but in the neutral --border ink and drawn as an outline: when it
+   * was the darkest teal, 195 empty days read as filled and the whole year
+   * looked like one colour. Steps 1-4 are the teal, spread wide enough to
+   * tell apart, and step 4 is the same ink as --bar-ink and --accent-2 on
+   * purpose: this is the same "measured data" hue, not a second scale.
    */
-  --grid-0: #306b60;
-  --grid-1: #3d8376;
-  --grid-2: #499c8c;
-  --grid-3: #54b09f;
+  --grid-0: #6b6250;
+  --grid-1: #306b60;
+  --grid-2: #3f8a7b;
+  --grid-3: #4fa594;
   --grid-4: #5cc0ad;
   --danger: #e0705f;
   --line: #232019;

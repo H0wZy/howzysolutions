@@ -787,8 +787,10 @@
   border-radius: var(--radius-sm);
 }
 
+/* A zero is an outline: an empty square, not a dark one. */
 .contrib-level-0 {
-  background: var(--grid-0);
+  background: transparent;
+  box-shadow: inset 0 0 0 1px var(--grid-0);
 }
 
 .contrib-level-1 {

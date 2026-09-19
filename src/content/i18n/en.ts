@@ -210,7 +210,7 @@ export const en = {
   // "Todos os trabalhos" in Portuguese, where the words ARE prose.
   'nav.work': 'work',
   // Same idiom as `nav.work`: the URL segment, identical in both locales.
-  'nav.privacy': 'privacy',
+  'nav.privacy': 'privacy-policy',
 
   // Contact
   'contact.heading': 'Open to work and to interesting problems.',
