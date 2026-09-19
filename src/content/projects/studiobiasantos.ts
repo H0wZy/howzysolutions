@@ -40,7 +40,7 @@ export const studiobiasantos: Project = {
 
   stack: [
     { group: 'frontend', items: ['nextjs', 'react', 'typescript', 'tailwind', 'shadcn', 'vitest'] },
-    { group: 'other', items: ['vercel', 'spec-kit', 'skeeper'] },
+    { group: 'other', items: ['vercel', 'spec-kit'] },
   ],
 
   development: {
