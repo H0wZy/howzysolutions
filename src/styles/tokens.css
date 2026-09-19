@@ -28,15 +28,17 @@
   /* Same ink as --accent-2 (research D4): bars are measured data, not a new hue. */
   --bar-ink: #5cc0ad;
   /*
-   * Contribution grid intensity, five steps (research D11). Step 0 is a real
-   * measured zero, not empty space, so it still clears the 3:1 non-text
-   * floor, but in the neutral --border ink and drawn as an outline: when it
-   * was the darkest teal, 195 empty days read as filled and the whole year
-   * looked like one colour. Steps 1-4 are the teal, spread wide enough to
-   * tell apart, and step 4 is the same ink as --bar-ink and --accent-2 on
-   * purpose: this is the same "measured data" hue, not a second scale.
+   * Contribution grid intensity, five steps (research D11). Step 0 is a quiet
+   * neutral fill with no outline, the way GitHub draws an empty day: when it
+   * was the darkest teal, 195 empty days read as filled, and as an outline it
+   * read as a border on every square. It is decorative (check-contrast.mjs):
+   * each day's value is text in its cell and in the tooltip, and a focused
+   * cell's boundary is its --accent outline. Steps 1-4 are the teal, spread
+   * wide enough to tell apart and each clearing 3:1, and step 4 is the same
+   * ink as --bar-ink and --accent-2 on purpose: the same "measured data" hue,
+   * not a second scale.
    */
-  --grid-0: #6b6250;
+  --grid-0: #211e19;
   --grid-1: #306b60;
   --grid-2: #3f8a7b;
   --grid-3: #4fa594;

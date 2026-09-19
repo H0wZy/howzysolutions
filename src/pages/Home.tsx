@@ -2,13 +2,13 @@ import type { Locale } from '../content/i18n/types'
 import type { ContentBundle } from '../content/types'
 import { experienceDuration } from '../content/profile'
 import { periodLabel } from '../content/stats'
-import { calendar } from '../content/contributions'
+import { activity } from '../content/contributions'
 import { translate } from '../locale'
 import { pathFor } from '../route'
 import { Chrome } from '../components/Chrome'
 import { SectionLabel } from '../components/SectionLabel'
 import { StatsPanel } from '../components/StatsPanel'
-import { ContributionGrid } from '../components/ContributionGrid'
+import { GithubActivity } from '../components/GithubActivity'
 import { Terminal } from '../components/Terminal'
 
 export function Home({
@@ -94,9 +94,18 @@ export function Home({
             <SectionLabel id="section.stats" anchor="stats" locale={locale} />
             <h2>{translate(locale, 'stats.heading')}</h2>
             <StatsPanel stats={stats} locale={locale} />
-            <ContributionGrid calendar={calendar} locale={locale} />
           </div>
         </section>
+
+        {/* FR-043: no artifact ever captured means no section, never an empty one. */}
+        {activity.periods['last-year'] ? (
+          <section className="section" id="github">
+            <div className="wrap">
+              <SectionLabel id="section.github" anchor="github" locale={locale} />
+              <GithubActivity activity={activity} locale={locale} />
+            </div>
+          </section>
+        ) : null}
 
         <section className="section" id="contact">
           <div className="wrap">

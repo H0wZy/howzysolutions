@@ -25,14 +25,18 @@ const FLOORS = {
   '--danger': 4.5,
   '--border': 3,
   '--bar-ink': 3,
-  '--grid-0': 3,
   '--grid-1': 3,
   '--grid-2': 3,
   '--grid-3': 3,
   '--grid-4': 3,
 }
-/** Decorative only. Exempt by WCAG, and must never be used on a control boundary. */
-const DECORATIVE = new Set(['--line', '--surface'])
+/**
+ * Decorative only. Exempt by WCAG, and must never be used on a control boundary.
+ * --grid-0 is the empty-day fill: the day's value is carried as text (the
+ * cell's hidden sentence and its tooltip), so under WCAG 1.4.11 the swatch is
+ * supplementary, and a focused cell's boundary is its --accent outline.
+ */
+const DECORATIVE = new Set(['--line', '--surface', '--grid-0'])
 
 /**
  * Every block written under this selector. There are two: the palette, whose

@@ -1,101 +1,124 @@
 import { describe, expect, it } from 'vitest'
-import { contributionLevels, parseContributions } from '../contributions'
+import { activity, contributionLevels, parseActivity } from '../contributions'
+import committed from '../github.generated.json'
 
 /**
- * Gate: FR-043 (a broken or missing artifact renders no grid, never a partial
- * or invented one) and data-model.md's ContributionDay/ContributionCalendar
- * invariants (totalContributions is the source's own figure, gaps stay gaps).
+ * Gate: FR-043 (a broken or missing artifact renders no section, never a
+ * partial or invented one), and the artifact invariants the page relies on:
+ * one count per day of the window, days that add up to the source's total,
+ * repository names that can only ever link to github.com, and colours that can
+ * only ever be a colour.
  */
-describe('parseContributions', () => {
+
+function period(overrides: Record<string, unknown> = {}) {
+  return {
+    start: '2026-01-01',
+    end: '2026-01-03',
+    total: 5,
+    counts: [2, 0, 3],
+    types: { commits: 4, pullRequests: 1, issues: 0, reviews: 0, private: 0 },
+    contributedTo: ['H0wZy/howzysolutions'],
+    months: [
+      {
+        month: '2026-01',
+        commits: [['H0wZy/howzysolutions', 4]],
+        created: [['H0wZy/howzysolutions', '2026-01-02', 0, 'TypeScript', '#3178c6']],
+        pullRequests: [['H0wZy/howzysolutions', 1]],
+        private: [3, '2026-01-01', '2026-01-03'],
+      },
+    ],
+    ...overrides,
+  }
+}
+
+function artifact(overrides: Record<string, unknown> = {}, periodOverrides: Record<string, unknown> = {}) {
+  return {
+    capturedAt: '2026-09-19T12:00:00.000Z',
+    isFallback: false,
+    includesPrivate: true,
+    utcOffset: '-03:00',
+    years: [2026],
+    periods: { 'last-year': period(periodOverrides), '2026': period() },
+    ...overrides,
+  }
+}
+
+describe('parseActivity', () => {
   it('degrades undefined, null and garbage input to the empty fallback rather than throwing', () => {
     for (const input of [undefined, null, 42, 'nonsense', [], {}]) {
-      expect(() => parseContributions(input)).not.toThrow()
-      const result = parseContributions(input)
+      expect(() => parseActivity(input)).not.toThrow()
+      const result = parseActivity(input)
       expect(result.isFallback).toBe(true)
-      expect(result.days).toEqual([])
+      expect(result.periods).toEqual({})
     }
   })
 
-  it('accepts a well-formed payload and preserves every field', () => {
-    const result = parseContributions({
-      capturedAt: '2026-08-24T16:03:22.564Z',
-      window: { start: '2025-08-25', end: '2026-08-24' },
-      totalContributions: 1593,
-      includesPrivate: false,
-      days: [
-        { date: '2025-08-25', count: 0 },
-        { date: '2025-08-26', count: 7 },
-      ],
-      isFallback: false,
-    })
-    expect(result).toEqual({
-      capturedAt: '2026-08-24T16:03:22.564Z',
-      window: { start: '2025-08-25', end: '2026-08-24' },
-      totalContributions: 1593,
-      includesPrivate: false,
-      days: [
-        { date: '2025-08-25', count: 0 },
-        { date: '2025-08-26', count: 7 },
-      ],
-      isFallback: false,
-    })
+  it('accepts a well-formed artifact and keeps only the periods it declares', () => {
+    const result = parseActivity({ ...artifact(), periods: { ...artifact().periods, 1999: period() } })
+    expect(result.isFallback).toBe(false)
+    expect(result.includesPrivate).toBe(true)
+    expect(result.years).toEqual([2026])
+    expect(Object.keys(result.periods).sort()).toEqual(['2026', 'last-year'])
+    expect(result.periods['last-year']).toEqual(period())
   })
 
-  it('rejects a payload missing the window or totalContributions', () => {
-    expect(parseContributions({ totalContributions: 5, days: [] }).isFallback).toBe(true)
+  it('invalidates the whole artifact when a declared year has no period', () => {
+    expect(parseActivity(artifact({ years: [2026, 2025] })).periods).toEqual({})
+  })
+
+  it('invalidates the whole artifact when the counts do not cover the window, day for day', () => {
+    expect(parseActivity(artifact({}, { counts: [2, 3], total: 5 })).periods).toEqual({})
+  })
+
+  it('invalidates the whole artifact when the days do not add up to the total', () => {
+    expect(parseActivity(artifact({}, { total: 6 })).periods).toEqual({})
+  })
+
+  it('invalidates the whole artifact on a negative or fractional count', () => {
+    expect(parseActivity(artifact({}, { counts: [2, -1, 4] })).periods).toEqual({})
+    expect(parseActivity(artifact({}, { counts: [2, 0.5, 2.5] })).periods).toEqual({})
+  })
+
+  it('refuses a repository name that could leave github.com as an href', () => {
+    for (const name of ['javascript:alert(1)', 'H0wZy', 'a/b/c', 'evil.com/x?y', 'H0wZy/re po']) {
+      expect(parseActivity(artifact({}, { contributedTo: [name] })).periods, name).toEqual({})
+    }
+  })
+
+  it('refuses a language colour that could inject CSS through the inline custom property', () => {
+    for (const color of ['red', '#fff', '#3178c6;background:url(x)', 'var(--accent)']) {
+      const months = [{ month: '2026-01', created: [['H0wZy/a', '2026-01-02', 0, 'Go', color]] }]
+      expect(parseActivity(artifact({}, { months })).periods, color).toEqual({})
+    }
+    const none = [{ month: '2026-01', created: [['H0wZy/a', '2026-01-02', 1, '', '']] }]
+    expect(parseActivity(artifact({}, { months: none })).periods).not.toEqual({})
+  })
+
+  it('refuses a malformed month or private range', () => {
+    expect(parseActivity(artifact({}, { months: [{ month: '2026-1' }] })).periods).toEqual({})
     expect(
-      parseContributions({ window: { start: '2026-01-01', end: '2026-01-02' }, days: [] }).isFallback,
-    ).toBe(true)
+      parseActivity(artifact({}, { months: [{ month: '2026-01', private: [3, 'soon', '2026-01-03'] }] })).periods,
+    ).toEqual({})
+    expect(
+      parseActivity(artifact({}, { months: [{ month: '2026-01', private: [3, '2026-01-01'] }] })).periods,
+    ).toEqual({})
   })
 
-  it('invalidates the whole artifact on a negative or non-integer day count, rather than dropping the bad day', () => {
-    const negative = parseContributions({
-      window: { start: '2026-01-01', end: '2026-01-03' },
-      totalContributions: 3,
-      days: [
-        { date: '2026-01-01', count: 3 },
-        { date: '2026-01-02', count: -1 },
-      ],
-    })
-    expect(negative.isFallback).toBe(true)
-    expect(negative.days).toEqual([])
+  it('accepts a private count GitHub did not date', () => {
+    const months = [{ month: '2026-01', private: [3] }]
+    expect(parseActivity(artifact({}, { months })).periods).not.toEqual({})
+  })
+})
 
-    const fractional = parseContributions({
-      window: { start: '2026-01-01', end: '2026-01-03' },
-      totalContributions: 3,
-      days: [{ date: '2026-01-01', count: 1.5 }],
-    })
-    expect(fractional.isFallback).toBe(true)
-    expect(fractional.days).toEqual([])
+describe('the committed artifact', () => {
+  it('is a real capture, not the empty fallback', () => {
+    expect(activity.periods['last-year']?.total).toBeGreaterThan(0)
+    expect(activity.years.length).toBeGreaterThan(0)
   })
 
-  it('takes totalContributions from the source figure, never recomputed by summing days', () => {
-    // The window is clipped relative to what the source actually counted, so the
-    // two numbers legitimately disagree (data-model.md, ContributionCalendar rule 2).
-    const result = parseContributions({
-      window: { start: '2026-01-01', end: '2026-01-02' },
-      totalContributions: 1593,
-      days: [
-        { date: '2026-01-01', count: 3 },
-        { date: '2026-01-02', count: 7 },
-      ],
-    })
-    expect(result.totalContributions).toBe(1593)
-  })
-
-  it('leaves gaps in days as gaps, never synthesising a zero-count entry for an absent date', () => {
-    const result = parseContributions({
-      window: { start: '2026-01-01', end: '2026-01-05' },
-      totalContributions: 10,
-      days: [
-        { date: '2026-01-01', count: 3 },
-        { date: '2026-01-05', count: 7 },
-      ],
-    })
-    expect(result.days).toEqual([
-      { date: '2026-01-01', count: 3 },
-      { date: '2026-01-05', count: 7 },
-    ])
+  it('parses whole: every declared year survived validation', () => {
+    expect(Object.keys(activity.periods).length).toBe(activity.years.length + 1)
+    expect(committed.years).toEqual(activity.years)
   })
 })
 
