@@ -21,10 +21,13 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run lint
-      # Both secrets are optional: without them the build keeps the committed
-      # WakaTime and GitHub artifacts (README, Environment variables).
+      # Tests first: they assert the COMMITTED artifacts are real captures, and
+      # a runner with no CV checkout or WakaTime key rewrites them as fallbacks
+      # during the build. `npm test` is these two plus check-bundle, which the
+      # build already ends with.
+      - run: npx vitest run
+      - run: node scripts/check-contrast.mjs
       - run: npm run build
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           WAKATIME_API_KEY: ${{ secrets.WAKATIME_API_KEY }}
-      - run: npm test
