@@ -7,7 +7,6 @@ import { studiobiasantos } from './studiobiasantos'
 import { howzysolutions } from './howzysolutions'
 import { terminal } from './terminal'
 import { authsys } from './authsys'
-import { skeeperSpecs } from './skeeper-specs'
 
 /** Ordered as presented: production client work first, study and tooling last. */
 export const projects: Project[] = [
@@ -19,7 +18,6 @@ export const projects: Project[] = [
   howzysolutions,
   terminal,
   authsys,
-  skeeperSpecs,
 ]
 
 export function findProject(id: string): Project | undefined {

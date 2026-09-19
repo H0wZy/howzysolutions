@@ -57,8 +57,6 @@ export const technologies: Technology[] = [
   { id: 'xunit', name: 'xUnit + Moq', category: 'tooling' },
   { id: 'pytest', name: 'pytest', category: 'tooling' },
   { id: 'spec-kit', name: 'GitHub Spec Kit', category: 'tooling' },
-  { id: 'skeeper', name: 'Skeeper', category: 'tooling' },
   { id: 'make', name: 'GNU Make', category: 'tooling' },
   { id: 'oh-my-posh', name: 'Oh My Posh', category: 'tooling' },
-  { id: 'git', name: 'Git', category: 'tooling' },
 ]

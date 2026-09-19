@@ -34,7 +34,3 @@ coverage
 # Vercel
 .vercel
 
-# >>> skeeper ignored specs >>>
-.skeeper/
-specs/**
-# <<< skeeper ignored specs <<<
