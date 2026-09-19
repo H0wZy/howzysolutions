@@ -7,8 +7,8 @@ import { Chrome } from '../components/Chrome'
 /**
  * The privacy policy (src/content/privacy.ts): the general policy, then one
  * block per project that handles data of its own. TikTok Shop's Data Security
- * and Privacy Review links here, so the path is a promise: it stays /privacy/
- * for as long as that app exists.
+ * and Privacy Review was sent with /privacy/, which public/_redirects sends
+ * here with a 301; that redirect stays for as long as the app exists.
  *
  * The contact is the profile's email contact rather than a second copy of the
  * address, so the two cannot drift apart.
@@ -47,7 +47,7 @@ export function Privacy({
 
   return (
     <>
-      <Chrome locale={locale} path="h0wzy/privacy" pathname={pathname} />
+      <Chrome locale={locale} path="h0wzy/privacy-policy" pathname={pathname} />
       <main>
         <header className="section">
           <div className="wrap">

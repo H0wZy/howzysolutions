@@ -1,22 +1,9 @@
 import type { Locale } from '../content/i18n/types'
 import type { ContributionCalendar } from '../content/types'
 import { translate } from '../locale'
+import { contributionLevels } from '../content/contributions'
 
 const WEEKDAYS = 7
-
-/**
- * Intensity step from a day's count relative to the busiest day in the
- * window. 0 is reserved for a real reported zero — never for an absent day,
- * which is not rendered at all (data-model.md, cell rendering contract).
- */
-function levelFor(count: number, max: number): 0 | 1 | 2 | 3 | 4 {
-  if (count === 0 || max <= 0) return 0
-  const ratio = count / max
-  if (ratio <= 0.25) return 1
-  if (ratio <= 0.5) return 2
-  if (ratio <= 0.75) return 3
-  return 4
-}
 
 /** Column = week index from the grid's Sunday anchor, row = weekday (0 Sun .. 6 Sat). */
 function cellPosition(date: string, gridStart: Date): { column: number; row: number } {
@@ -46,7 +33,7 @@ export function ContributionGrid({
   const gridStart = new Date(start)
   gridStart.setUTCDate(gridStart.getUTCDate() - start.getUTCDay())
 
-  const max = Math.max(...calendar.days.map((d) => d.count))
+  const levelFor = contributionLevels(calendar.days.map((d) => d.count))
   const scope = translate(
     locale,
     calendar.includesPrivate ? 'contrib.scopeAll' : 'contrib.scopePublic',
@@ -83,7 +70,7 @@ export function ContributionGrid({
             return (
               <span
                 key={day.date}
-                className={`contrib-cell contrib-level-${levelFor(day.count, max)}`}
+                className={`contrib-cell contrib-level-${levelFor(day.count)}`}
                 style={{ gridColumn: column, gridRow: row }}
               >
                 <span className="visually-hidden">

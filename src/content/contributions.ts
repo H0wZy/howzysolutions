@@ -59,3 +59,24 @@ export function parseContributions(input: unknown): ContributionCalendar {
 }
 
 export const calendar: ContributionCalendar = parseContributions(raw)
+
+export type ContributionLevel = 0 | 1 | 2 | 3 | 4
+
+/**
+ * Intensity step per day, by quartiles of the non-zero days, the way GitHub
+ * shades its own calendar. Scaling against the busiest day instead let one
+ * 92-contribution day push nearly every other active day into step 1. A zero
+ * is always 0 and any positive count is at least 1.
+ */
+export function contributionLevels(counts: number[]): (count: number) => ContributionLevel {
+  const active = counts.filter((c) => c > 0).sort((a, b) => a - b)
+  const at = (q: number) => active[Math.floor((active.length - 1) * q)] ?? 0
+  const [q1, q2, q3] = [at(0.25), at(0.5), at(0.75)]
+  return (count) => {
+    if (count <= 0) return 0
+    if (count <= q1) return 1
+    if (count <= q2) return 2
+    if (count <= q3) return 3
+    return 4
+  }
+}

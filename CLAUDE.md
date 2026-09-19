@@ -102,6 +102,8 @@ does the same, so the activity grid never freezes on the last commit. By hand:
 npm run build && npx wrangler deploy
 ```
 
-`/privacy/` is the link TikTok Shop's Data Security and Privacy Review points
-at. Moving or renaming that route breaks an app review, not just a page. Non-trivial work starts as a spec-kit
+The privacy policy lives at `/privacy-policy/`, but TikTok Shop's Data
+Security and Privacy Review was sent with `/privacy/`. `public/_redirects`
+301s the old path (both locales) and `src/__tests__/redirects.test.ts` fails
+if it stops pointing at the route. Dropping it breaks an app review. Non-trivial work starts as a spec-kit
 feature under `specs/`; commits follow Conventional Commits.

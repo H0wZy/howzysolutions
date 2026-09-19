@@ -39,7 +39,7 @@ export function parseRoute(rest: string): Route {
   // `/cv/`, not `/resume/`: the American term for a document this one is not
   // shaped like, and the word a recruiter scans for in both languages.
   if (rest === '/cv/' || rest === '/cv') return { page: 'cv' }
-  if (rest === '/privacy/' || rest === '/privacy') return { page: 'privacy' }
+  if (rest === '/privacy-policy/' || rest === '/privacy-policy') return { page: 'privacy' }
   if (rest === '/work/' || rest === '/work') return { page: 'workIndex', number: 1 }
   const pageMatch = /^\/work\/(\d+)\/?$/.exec(rest)
   if (pageMatch) return { page: 'workIndex', number: Number(pageMatch[1]) }
@@ -60,7 +60,7 @@ export function pathFor(route: Route, locale: Locale): string {
       : route.page === 'cv'
         ? '/cv/'
         : route.page === 'privacy'
-          ? '/privacy/'
+          ? '/privacy-policy/'
           : route.page === 'workIndex'
             ? route.number <= 1
               ? '/work/'

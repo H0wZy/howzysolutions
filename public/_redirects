@@ -1,0 +1,7 @@
+# TikTok Shop's Data Security and Privacy Review for viralvideogen was sent
+# with /privacy/ on 2026-09-19 and cannot be edited. Keep these for as long as
+# the app exists; src/__tests__/redirects.test.ts checks them.
+/privacy /privacy-policy/ 301
+/privacy/ /privacy-policy/ 301
+/pt/privacy /pt/privacy-policy/ 301
+/pt/privacy/ /pt/privacy-policy/ 301
