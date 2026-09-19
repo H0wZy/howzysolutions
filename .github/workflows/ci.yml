@@ -1,11 +1,16 @@
-# Checks every push and pull request. Deploying is not done here: Cloudflare
-# Workers Builds watches main and runs `npx wrangler deploy` itself, so a
-# deploy step here would publish every commit twice.
+# Checks every push and pull request; deploys main to howzysolutions.com.
+#
+# The daily run exists for the data, not the code: the activity grid, the
+# WakaTime figures and the CV are captured at build time, so a site nobody
+# pushes to would otherwise freeze on the day of its last commit.
 name: ci
 
 on:
   push:
   pull_request:
+  schedule:
+    - cron: '0 9 * * *' # 06:00 in Londrina (UTC-3)
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -30,4 +35,30 @@ jobs:
       - run: npm run build
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  deploy:
+    needs: check
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    concurrency: deploy
+    steps:
+      - uses: actions/checkout@v4
+      # The CV record is extracted from the LaTeX source on every deploy.
+      - uses: actions/checkout@v4
+        with:
+          repository: H0wZy/curriculum-vitae
+          path: .cv-source
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           WAKATIME_API_KEY: ${{ secrets.WAKATIME_API_KEY }}
+          CV_SOURCE_DIR: ${{ github.workspace }}/.cv-source
+      - run: npx wrangler deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: 20be850405e672a89316739f155c6853

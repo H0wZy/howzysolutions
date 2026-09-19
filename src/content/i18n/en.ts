@@ -41,7 +41,7 @@ export const en = {
    * travels with it rather than being left for the reader to assume.
    */
   'hero.experience': '{years}y {months}mo in IT',
-  'hero.experienceSince': 'since the Unicesumar degree in 2023; employed since May 2025',
+  'hero.experienceSince': 'since the Unicesumar degree in 2023; employed May 2025 to August 2026',
   'hero.location': 'Londrina, Paraná, Brazil',
 
   // Project listing
@@ -209,6 +209,8 @@ export const en = {
   // which the spec forbids outright. The breadcrumb below still says
   // "Todos os trabalhos" in Portuguese, where the words ARE prose.
   'nav.work': 'work',
+  // Same idiom as `nav.work`: the URL segment, identical in both locales.
+  'nav.privacy': 'privacy',
 
   // Contact
   'contact.heading': 'Open to work and to interesting problems.',
@@ -219,14 +221,15 @@ export const en = {
   // Footer
   'footer.builtWith': 'Built with React, TypeScript and Vite. No trackers, no third-party fonts.',
   'footer.source': 'source on github',
-  'footer.privacy': 'privacy policy',
 
   // Privacy page
   'privacy.title': 'Privacy policy',
   'privacy.metaDescription':
-    'How H0wZy Solutions handles personal data in viralvideogen, its private TikTok Shop app, and on this website.',
+    'How H0wZy Solutions handles personal data on this website and in each of its projects, including viralvideogen, its private TikTok Shop app.',
   'privacy.updated': 'Last updated {date}.',
   'privacy.contact': 'Contact:',
+  'privacy.projects': 'Project policies',
+  'privacy.aboutProject': 'read the project record',
 } as const
 
 export type StringKey = keyof typeof en

@@ -93,9 +93,14 @@ describe('the top-level links in the chrome bar', () => {
     { page: 'workIndex', number: 1 },
     { page: 'work', id: 'telasparana' },
     { page: 'cv' },
+    { page: 'privacy' },
   ]
 
-  const destinations: Route[] = [{ page: 'workIndex', number: 1 }, { page: 'cv' }]
+  const destinations: Route[] = [
+    { page: 'workIndex', number: 1 },
+    { page: 'cv' },
+    { page: 'privacy' },
+  ]
 
   it.each(LOCALES)(
     '%s: reaches every top-level destination from every page in one activation (FR-084, SC-012)',

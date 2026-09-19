@@ -154,16 +154,31 @@ export type ContentBundle = {
   privacy: PrivacyPolicy
 }
 
-/** The /privacy/ page. Prose paragraphs, then an optional list, per section. */
+/** Prose paragraphs, then an optional list. `id` is the section's anchor. */
+export type PrivacySection = {
+  id: string
+  heading: Localized
+  body: Localized<string[]>
+  items?: Localized<string[]>
+}
+
+/**
+ * The /privacy/ page: a general policy, then one entry per project that
+ * handles personal data beyond the website. A project's `id` is both its
+ * anchor on the page and, when it has one, its record in src/content/projects.
+ */
 export type PrivacyPolicy = {
   /** ISO date, rendered as-is. Moves whenever the text does. */
   updated: string
   intro: Localized
-  sections: Array<{
+  sections: PrivacySection[]
+  projects: Array<{
     id: string
-    heading: Localized
-    body: Localized<string[]>
-    items?: Localized<string[]>
+    name: string
+    tagline: Localized
+    /** What the project is, for a reader who has never heard of it. */
+    summary: Localized<string[]>
+    sections: PrivacySection[]
   }>
 }
 

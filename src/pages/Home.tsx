@@ -1,6 +1,5 @@
 import type { Locale } from '../content/i18n/types'
 import type { ContentBundle } from '../content/types'
-import { workPage } from '../content/types'
 import { experienceDuration } from '../content/profile'
 import { periodLabel } from '../content/stats'
 import { calendar } from '../content/contributions'
@@ -8,7 +7,6 @@ import { translate } from '../locale'
 import { pathFor } from '../route'
 import { Chrome } from '../components/Chrome'
 import { SectionLabel } from '../components/SectionLabel'
-import { ProjectList } from '../components/ProjectList'
 import { StatsPanel } from '../components/StatsPanel'
 import { ContributionGrid } from '../components/ContributionGrid'
 import { Terminal } from '../components/Terminal'
@@ -22,11 +20,10 @@ export function Home({
   locale: Locale
   pathname: string
 }) {
-  const { profile, projects, stats } = content
+  const { profile, stats } = content
   // Build-time value, not `new Date()`: nothing under App may derive from the
   // clock during render, or prerender and hydration disagree (FR-047).
   const { years, months } = experienceDuration
-  const { projects: pageOneProjects } = workPage(projects, 1)
   const period = periodLabel(stats)
 
   return (
@@ -84,9 +81,8 @@ export function Home({
             <SectionLabel id="section.work" anchor="work" locale={locale} />
             <h2>{translate(locale, 'work.heading')}</h2>
             <p className="prose">{translate(locale, 'work.intro')}</p>
-            <ProjectList projects={pageOneProjects} locale={locale} />
             <p className="prose">
-              <a href={pathFor({ page: 'workIndex', number: 1 }, locale)}>
+              <a className="btn" href={pathFor({ page: 'workIndex', number: 1 }, locale)}>
                 {translate(locale, 'work.allWork')} →
               </a>
             </p>
@@ -121,9 +117,6 @@ export function Home({
       <footer className="footer">
         <div className="wrap">
           <p className="dim">{translate(locale, 'footer.builtWith')}</p>
-          <p className="dim">
-            <a href={pathFor({ page: 'privacy' }, locale)}>{translate(locale, 'footer.privacy')}</a>
-          </p>
         </div>
       </footer>
     </>
