@@ -4,11 +4,15 @@ import { Home } from './pages/Home'
 import { Work } from './pages/Work'
 import { WorkIndex } from './pages/WorkIndex'
 import { Cv } from './pages/Cv'
+import { Privacy } from './pages/Privacy'
 
 export default function App({ pathname }: { pathname: string }) {
   const { route, locale } = locationFor(pathname)
   if (route.page === 'cv') {
     return <Cv content={content} locale={locale} pathname={pathname} />
+  }
+  if (route.page === 'privacy') {
+    return <Privacy content={content} locale={locale} pathname={pathname} />
   }
   if (route.page === 'work') {
     return <Work content={content} locale={locale} projectId={route.id} pathname={pathname} />

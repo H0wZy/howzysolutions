@@ -1,0 +1,21 @@
+// Assets-only Worker: dist/ is served as-is, there is no script.
+// Docs: developers.cloudflare.com/workers/static-assets/
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "howzysolutions",
+  "compatibility_date": "2026-09-18",
+  "assets": {
+    "directory": "./dist",
+    // /cv -> 307 -> /cv/, which serves dist/cv/index.html. Every internal link
+    // already ends in a slash, so a visitor never takes the extra hop.
+    "html_handling": "auto-trailing-slash",
+    // No 404.html is emitted yet, so an unknown path is a plain 404. Never
+    // "single-page-application": that answers every unknown path with the
+    // home page and a 200.
+    "not_found_handling": "none"
+  },
+  "routes": [{ "pattern": "howzysolutions.com", "custom_domain": true }],
+  // One public origin. www is a redirect rule on the zone, not a second copy.
+  "workers_dev": false,
+  "preview_urls": false
+}

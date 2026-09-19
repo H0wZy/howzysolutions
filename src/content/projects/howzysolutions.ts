@@ -40,7 +40,8 @@ export const howzysolutions: Project = {
 
   stack: [
     { group: 'frontend', items: ['react', 'typescript', 'vite'] },
-    { group: 'other', items: ['vercel', 'spec-kit', 'vitest'] },
+    { group: 'infra', items: ['cloudflare-workers'] },
+    { group: 'other', items: ['spec-kit', 'vitest'] },
   ],
 
   development: {
@@ -62,13 +63,11 @@ export const howzysolutions: Project = {
     en: [
       'In progress. This entry describes a rebrand under construction, and it is the least finished project on this site, which is exactly why it says so rather than waiting to be described in the past tense.',
       'No screenshots exist for any project yet. Every layout is built to read correctly with no image, so they can be added later without a layout change, but the site currently shows no screens.',
-      'The domain howzysolutions.dev is intended and not yet acquired.',
       'An opt-in 3D/WebGL renderer was built and then removed after review. This site does not currently demonstrate that capability as running code, only as this account of building and then cutting it.',
     ],
     pt: [
       'Em construção. Esta entrada descreve um rebranding em andamento, e é o projeto menos acabado deste site, que é exatamente por que ela diz isso em vez de esperar para ser descrita no passado.',
       'Ainda não existem screenshots de nenhum projeto. Todo layout é construído para ler corretamente sem imagem, então podem ser adicionados depois sem mudança de layout, mas o site hoje não mostra telas.',
-      'O domínio howzysolutions.dev é pretendido e ainda não foi comprado.',
       'Um renderer 3D/WebGL opt-in foi construído e depois removido após revisão. Este site não demonstra essa capacidade como código rodando no momento, só como este relato de construir e depois cortar.',
     ],
   },
@@ -91,5 +90,8 @@ export const howzysolutions: Project = {
     },
   ],
 
-  links: [{ kind: 'repo', href: 'https://github.com/H0wZy/howzysolutions', label: 'H0wZy/howzysolutions' }],
+  links: [
+    { kind: 'live', href: 'https://howzysolutions.com/', label: 'howzysolutions.com' },
+    { kind: 'repo', href: 'https://github.com/H0wZy/howzysolutions', label: 'H0wZy/howzysolutions' },
+  ],
 }

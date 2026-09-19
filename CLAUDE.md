@@ -1,6 +1,6 @@
 # howzysolutions
 
-Personal portfolio of Marcos "H0wZy" Junior, shipping to `howzysolutions.dev`.
+Personal portfolio of Marcos "H0wZy" Junior, live at `howzysolutions.com`.
 
 **`.specify/memory/constitution.md` is the authority.** Where this file and the
 constitution disagree, the constitution wins and this file is the one that gets
@@ -64,7 +64,7 @@ last known good copy; it never empties a page.
 
 The CV extraction is the one with teeth: **absence degrades, corruption fails.**
 No CV checkout means keep the committed artifact and exit 0 — which is the
-ordinary case, since the Vercel builder has no checkout. A source that is
+ordinary case, since the Cloudflare builder has no checkout. A source that is
 present but will not parse names the construct and its line and stops the build.
 
 ```bash
@@ -85,5 +85,18 @@ npm test
 npm run lint
 ```
 
-All three must pass before a merge. Non-trivial work starts as a spec-kit
+All three must pass before a merge.
+
+## Deploy
+
+`wrangler.jsonc` publishes `dist/` as an assets-only Cloudflare Worker (no
+script) on `howzysolutions.com`. `public/_headers` sets the security headers
+and the long cache on `/assets/*`.
+
+```bash
+npm run build && npx wrangler deploy
+```
+
+`/privacy/` is the link TikTok Shop's Data Security and Privacy Review points
+at. Moving or renaming that route breaks an app review, not just a page. Non-trivial work starts as a spec-kit
 feature under `specs/`; commits follow Conventional Commits.

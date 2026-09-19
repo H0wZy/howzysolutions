@@ -167,10 +167,9 @@ describe('the surfaces derived from the record', () => {
 
 /** FR-055: the ongoing state is the ABSENCE of an end date, never a flag. */
 describe('an ongoing role', () => {
-  it('records end as null rather than a computed or hardcoded date', () => {
+  it('records end as null or as a month, never a computed date', () => {
     const experience = cv.sections.find((s) => s.kind === 'experience')
     const roles = (experience?.entries ?? []) as Array<{ end: string | null; start: string }>
-    expect(roles.some((r) => r.end === null)).toBe(true)
     for (const role of roles) {
       expect(role.start).toMatch(/^\d{4}-\d{2}$/)
       if (role.end !== null) expect(role.end).toMatch(/^\d{4}-\d{2}$/)

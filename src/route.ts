@@ -14,6 +14,7 @@ export type Route =
   | { page: 'workIndex'; number: number }
   | { page: 'work'; id: string }
   | { page: 'cv' }
+  | { page: 'privacy' }
 
 export type Location = { route: Route; locale: Locale }
 
@@ -38,6 +39,7 @@ export function parseRoute(rest: string): Route {
   // `/cv/`, not `/resume/`: the American term for a document this one is not
   // shaped like, and the word a recruiter scans for in both languages.
   if (rest === '/cv/' || rest === '/cv') return { page: 'cv' }
+  if (rest === '/privacy/' || rest === '/privacy') return { page: 'privacy' }
   if (rest === '/work/' || rest === '/work') return { page: 'workIndex', number: 1 }
   const pageMatch = /^\/work\/(\d+)\/?$/.exec(rest)
   if (pageMatch) return { page: 'workIndex', number: Number(pageMatch[1]) }
@@ -57,11 +59,13 @@ export function pathFor(route: Route, locale: Locale): string {
       ? `/work/${route.id}/`
       : route.page === 'cv'
         ? '/cv/'
-        : route.page === 'workIndex'
-          ? route.number <= 1
-            ? '/work/'
-            : `/work/${route.number}/`
-          : '/'
+        : route.page === 'privacy'
+          ? '/privacy/'
+          : route.page === 'workIndex'
+            ? route.number <= 1
+              ? '/work/'
+              : `/work/${route.number}/`
+            : '/'
   if (locale === DEFAULT_LOCALE) return rest
   return rest === '/' ? `/${locale}/` : `/${locale}${rest}`
 }

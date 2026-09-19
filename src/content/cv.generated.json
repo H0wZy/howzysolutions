@@ -1,29 +1,29 @@
 {
-  "capturedAt": "2026-08-27T20:02:05.872Z",
-  "sourceCommit": "1205bd2",
-  "sourceRef": "C:\\Users\\2983539\\projects\\curriculum-vitae\\overleaf\\main.tex",
+  "capturedAt": "2026-09-19T09:26:01.593Z",
+  "sourceCommit": "fdcd01a",
+  "sourceRef": "C:\\Users\\h0wzy\\projects\\curriculum-vitae\\overleaf\\main.tex",
   "isFallback": false,
   "headline": {
     "en": "SOFTWARE ENGINEER | BACKEND & FULL STACK",
     "pt": "SOFTWARE ENGINEER | BACKEND & FULL STACK"
   },
   "summary": {
-    "en": "Software Engineer at TCS (Copel account), focused on backend with Java/JSF and .NET/Golang. Two-time TCS AI Friday champion for solutions built with LLMs and predictive models. Experienced in modernizing legacy systems to the cloud (GCP/AWS) and building REST APIs with Clean Code, SOLID and testing.",
-    "pt": "Engenheiro de Software na TCS (conta Copel), com foco em backend Java/JSF e .NET/Golang. Bicampeão do TCS AI Friday por soluções com LLMs e modelos preditivos. Experiência em modernização de sistemas legados para cloud (GCP/AWS) e construção de APIs REST com Clean Code, SOLID e testes."
+    "en": "Software Engineer focused on backend with Java/JSF and .NET/Golang, most recently at TCS on the Copel account. Two-time TCS AI Friday champion for solutions built with LLMs and predictive models. Experienced in modernizing legacy systems to the cloud (GCP/AWS) and building REST APIs with Clean Code, SOLID and testing.",
+    "pt": "Engenheiro de Software com foco em backend Java/JSF e .NET/Golang, mais recentemente na TCS, na conta Copel. Bicampeão do TCS AI Friday por soluções com LLMs e modelos preditivos. Experiência em modernização de sistemas legados para cloud (GCP/AWS) e construção de APIs REST com Clean Code, SOLID e testes."
   },
   "documents": [
     {
       "locale": "en",
       "filename": "ENG_CV_Marcos_Junior_Bueno_Selzler.pdf",
       "href": "/cv/ENG_CV_Marcos_Junior_Bueno_Selzler.pdf",
-      "bytes": 34872,
+      "bytes": 33443,
       "present": true
     },
     {
       "locale": "pt",
       "filename": "PTBR_CV_Marcos_Junior_Bueno_Selzler.pdf",
       "href": "/cv/PTBR_CV_Marcos_Junior_Bueno_Selzler.pdf",
-      "bytes": 35623,
+      "bytes": 34187,
       "present": true
     }
   ],
@@ -48,23 +48,23 @@
             "pt": "Londrina, PR"
           },
           "start": "2025-05",
-          "end": null,
+          "end": "2026-08",
           "responsibilities": {
             "en": [
-              "I develop and maintain Java 8 / JSF applications on WildFly/JBoss servers.",
+              "Developed and maintained Java 8 / JSF applications on WildFly/JBoss servers.",
               "Optimized critical SQL queries, improving performance and stability.",
               "Migrated applications from JBoss 7 to WildFly 23.",
-              "Modernize on-premise legacy systems to GCP, with integrations via Denodo.",
-              "Build backend services in Golang.",
-              "Work across cloud environments (GCP and AWS)."
+              "Modernized on-premise legacy systems to GCP, with integrations via Denodo.",
+              "Built backend services in Golang.",
+              "Worked across cloud environments (GCP and AWS)."
             ],
             "pt": [
-              "Desenvolvo e mantenho aplicações Java 8 com JSF em servidores WildFly/JBoss.",
+              "Desenvolvi e mantive aplicações Java 8 com JSF em servidores WildFly/JBoss.",
               "Otimizei queries SQL críticas, melhorando performance e estabilidade.",
               "Migrei aplicações de JBoss 7 para WildFly 23.",
-              "Modernizo sistemas legados on-premise para o GCP, com integrações via Denodo.",
-              "Desenvolvo serviços de backend em Golang.",
-              "Atuo em ambientes cloud (GCP e AWS)."
+              "Modernizei sistemas legados on-premise para o GCP, com integrações via Denodo.",
+              "Desenvolvi serviços de backend em Golang.",
+              "Atuei em ambientes cloud (GCP e AWS)."
             ]
           }
         },

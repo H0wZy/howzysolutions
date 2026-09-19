@@ -95,7 +95,7 @@ export const pt = {
   'stats.stale': 'Números da última captura bem-sucedida, em {date}.',
   'stats.showAll': 'ver tudo',
   'stats.experienceNote':
-    'O tempo em TI é contado desde a graduação na Unicesumar, em 2023. O emprego começou em maio de 2025 na TCS. O tempo de código rastreado cobre apenas o intervalo que o rastreador reporta, que começa em março de 2026. Três medidas, três períodos, e nenhuma delas é evidência da outra.',
+    'O tempo em TI é contado desde a graduação na Unicesumar, em 2023. O emprego na TCS foi de maio de 2025 a agosto de 2026. O tempo de código rastreado cobre apenas o intervalo que o rastreador reporta, que começa em março de 2026. Três medidas, três períodos, e nenhuma delas é evidência da outra.',
 
   // Calendário de contribuições (fonte, unidade e período diferentes das estatísticas acima)
   'contrib.heading': 'commits públicos, dia a dia',
@@ -193,4 +193,12 @@ export const pt = {
   'footer.builtWith':
     'Feito com React, TypeScript e Vite. Sem rastreadores, sem fontes de terceiros.',
   'footer.source': 'código no github',
+  'footer.privacy': 'política de privacidade',
+
+  // Página de privacidade
+  'privacy.title': 'Política de privacidade',
+  'privacy.metaDescription':
+    'Como a H0wZy Solutions trata dados pessoais no viralvideogen, seu app privado do TikTok Shop, e neste site.',
+  'privacy.updated': 'Atualizada em {date}.',
+  'privacy.contact': 'Contato:',
 } satisfies Record<StringKey, string>

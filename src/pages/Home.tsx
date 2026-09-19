@@ -121,6 +121,9 @@ export function Home({
       <footer className="footer">
         <div className="wrap">
           <p className="dim">{translate(locale, 'footer.builtWith')}</p>
+          <p className="dim">
+            <a href={pathFor({ page: 'privacy' }, locale)}>{translate(locale, 'footer.privacy')}</a>
+          </p>
         </div>
       </footer>
     </>
