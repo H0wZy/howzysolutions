@@ -42,9 +42,12 @@ describe('locale dictionaries', () => {
     // why), identical in both locales because the path is: /pt/privacy-policy/.
     const urlSegment = (key: string, value: string) =>
       key.startsWith('nav.') && /^[a-z-]+$/.test(value)
+    // "Pull request" is GitHub's own term, which Brazilian developers use
+    // untranslated: it names the thing on the page the activity links to.
+    const githubTerm = new Set(['contrib.type.pullRequests', 'contrib.n.pr.one', 'contrib.n.pr.other'])
     const identical = enKeys.filter((key) => {
       const k = key as keyof typeof en
-      return en[k] === pt[k] && en[k].length > 12 && !urlSegment(key, en[k])
+      return en[k] === pt[k] && en[k].length > 12 && !urlSegment(key, en[k]) && !githubTerm.has(key)
     })
     expect(identical, `untranslated: ${identical.join(', ')}`).toEqual([])
   })

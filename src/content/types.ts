@@ -182,28 +182,63 @@ export type PrivacyPolicy = {
   }>
 }
 
-/** One day of the public code contribution calendar (data-model.md). */
-export type ContributionDay = {
-  date: string
-  count: number
+/*
+ * The GitHub activity section (src/content/github.generated.json, written by
+ * scripts/fetch-github.mjs). Tuples rather than objects because the whole
+ * file ships in the entry chunk. Only PUBLIC repository names ever appear:
+ * private work is a count and a date range, nothing else.
+ */
+
+/** `[owner/name, count]`. */
+export type RepoCount = [repo: string, count: number]
+
+/** `[owner/name, local date, 1 when a fork, language, colour]`; '' when GitHub names none. */
+export type CreatedRepo = [repo: string, date: string, fork: 0 | 1, language: string, color: string]
+
+/** One calendar month of the timeline. Absent lists mean none that month. */
+export type ActivityMonth = {
+  /** `YYYY-MM`. */
+  month: string
+  commits?: RepoCount[]
+  created?: CreatedRepo[]
+  pullRequests?: RepoCount[]
+  issues?: RepoCount[]
+  reviews?: RepoCount[]
+  /** Contributions in private repositories: the count, and its first and last day when GitHub dated them. */
+  private?: [count: number, from?: string, to?: string]
 }
 
-/**
- * The committed, build-time capture. Mirrors `CodingStatsSnapshot` field for
- * field wherever the two share a concept, so the two sources read as
- * siblings in the code even though they must never read as siblings on the
- * page (FR-039, research D11).
- */
-export type ContributionCalendar = {
+/** Public repositories only, except `private`, which is only ever a count. */
+export type ContributionTypes = {
+  commits: number
+  pullRequests: number
+  issues: number
+  reviews: number
+  private: number
+}
+
+export type ActivityPeriod = {
+  start: string
+  end: string
+  /** The source's own figure, and the heading's number. Equals the sum of `counts`. */
+  total: number
+  /** One per day from `start` to `end`. */
+  counts: number[]
+  types: ContributionTypes
+  /** Public repositories, most contributions first. */
+  contributedTo: string[]
+  /** Newest first; months with no activity are omitted. */
+  months: ActivityMonth[]
+}
+
+export type GithubActivity = {
   capturedAt: string
-  /** Mandatory: the trailing-year window the grid actually covers. */
-  window: { start: string; end: string }
-  /** The source's own figure. Never recomputed by summing `days` (FR-040). */
-  totalContributions: number
-  includesPrivate: boolean
-  /** Ascending by date. May contain gaps; gaps are not filled. */
-  days: ContributionDay[]
   isFallback: boolean
+  /** True when the owner shares private contribution counts, which the totals then include. */
+  includesPrivate: boolean
+  /** Newest first. Each has a period keyed by its number; `last-year` is the rolling default. */
+  years: number[]
+  periods: Record<string, ActivityPeriod>
 }
 
 /* -- Derived helpers ------------------------------------------------------ */
@@ -219,16 +254,23 @@ export type WorkPage = {
   total: number
 }
 
+export type Page<T> = { number: number; items: T[]; total: number }
+
 /**
- * Slices `projects` into page `requested`, clamping to the nearest valid page
- * rather than rendering an empty listing for a deep link to a shrunken set
- * (data-model.md, WorkPage rule 3).
+ * Slices `items` into page `requested` of `size`, clamping to the nearest
+ * valid page rather than rendering an empty listing for a deep link to a
+ * shrunken set (data-model.md, WorkPage rule 3).
  */
-export function workPage(projects: Project[], requested: number): WorkPage {
-  const total = Math.max(1, Math.ceil(projects.length / PAGE_SIZE))
+export function pageOf<T>(items: T[], requested: number, size: number): Page<T> {
+  const total = Math.max(1, Math.ceil(items.length / size))
   const number = Math.min(Math.max(1, requested), total)
-  const start = (number - 1) * PAGE_SIZE
-  return { number, projects: projects.slice(start, start + PAGE_SIZE), total }
+  const start = (number - 1) * size
+  return { number, items: items.slice(start, start + size), total }
+}
+
+export function workPage(projects: Project[], requested: number): WorkPage {
+  const { number, items, total } = pageOf(projects, requested, PAGE_SIZE)
+  return { number, projects: items, total }
 }
 
 /* -- CV record ------------------------------------------------------------ */

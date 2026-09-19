@@ -749,48 +749,132 @@
 }
 
 /*
- * Contribution grid — a second, separate source (FR-039), reusing the same
- * hairline block used between project-detail sections (research: two
- * sources, one pattern). Colour is never the only carrier: each cell holds
- * real, visually-hidden text (FR-030), and the swatches below are decorative.
+ * GitHub activity: its own section, a second, separate source (FR-039).
+ * Colour is never the only carrier: each day's cell holds its sentence as
+ * visually hidden text (FR-030), which the tooltip repeats.
  */
-.contrib p {
-  margin: 0 0 1.1em;
+.gh-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px 16px;
+  margin-bottom: 8px;
 }
 
-.contrib p:last-of-type {
-  margin-bottom: 0.6em;
+.gh-head h2 {
+  margin: 0;
+  max-width: none;
+  font-size: 1.05rem;
 }
 
-/* FR-044: the grid scrolls inside itself, the document never scrolls sideways. */
+.gh-years {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+/* Filled, as .pagination-link marks the current page: a cue that is not only a
+   hue, and one hover (colour and border) cannot imitate. */
+.chrome-btn[aria-pressed='true'] {
+  color: var(--accent-foreground);
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+/* Before hydration the chips cannot do anything yet: no hover promise. */
+.chrome-btn:disabled {
+  cursor: default;
+  pointer-events: none;
+}
+
+.contrib-body {
+  position: relative;
+  margin-top: 14px;
+}
+
+/* FR-044: the grid scrolls inside itself, the document never scrolls sideways.
+   The padding keeps a focused cell's outline inside the clip, and the scroll
+   padding keeps a focused cell from scrolling in under the sticky weekdays. */
 .contrib-scroll {
   overflow-x: auto;
+  padding: 3px;
+  scroll-padding-left: 32px;
 }
 
-.contrib-grid {
-  display: grid;
-  grid-template-rows: repeat(7, 1fr);
-  grid-auto-columns: 11px;
-  gap: 3px;
+.contrib-table {
+  /* Without this a narrow screen shrinks the empty cells toward zero rather
+     than letting the box scroll: a cell's width is a preference, not a floor. */
   width: max-content;
-  padding-bottom: 2px;
+  border-collapse: separate;
+  border-spacing: 3px;
+  font-size: var(--fs-xs);
+  line-height: 1;
+  color: var(--dim);
 }
 
-.contrib-cell {
-  /* Gives the per-cell .visually-hidden text a containing block of its own,
-     so its absolute positioning stays inside .contrib-scroll's clip instead
-     of escaping to the viewport (FR-044) — see cellPosition in the component. */
+.contrib-table td,
+.contrib-table th {
   position: relative;
-  display: block;
-  inline-size: 11px;
-  block-size: 11px;
+  padding: 0;
+  font-weight: 400;
+}
+
+.contrib-table thead td {
+  height: 1.3em;
+}
+
+/* Labels are positioned out of flow, so their text never widens a column. */
+.contrib-month,
+.contrib-weekday [aria-hidden] {
+  position: absolute;
+  left: 0;
+  white-space: nowrap;
+}
+
+.contrib-month {
+  bottom: 3px;
+}
+
+/* px, not ch: a ch-sized column would shift the whole grid when the web font swaps in.
+   Sticky, with the corner above it, so Mon/Wed/Fri stay in view on a phone,
+   where the grid opens scrolled to the newest weeks. The shadow covers the
+   box's padding strip, so no cell shows through beside the labels. */
+.contrib-table .contrib-weekday,
+.contrib-table thead td:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: var(--bg);
+  box-shadow: -3px 0 0 var(--bg);
+}
+
+.contrib-weekday {
+  width: 26px;
+}
+
+.contrib-weekday [aria-hidden] {
+  top: -1px;
+}
+
+.contrib-cell,
+.contrib-swatch {
+  width: 10px;
+  height: 10px;
   border-radius: var(--radius-sm);
 }
 
-/* A zero is an outline: an empty square, not a dark one. */
+.contrib-cell {
+  cursor: default;
+}
+
+.contrib-cell:focus-visible {
+  outline-offset: 1px;
+}
+
+/* A zero is a quiet neutral fill, no outline: it reads as an empty square. */
 .contrib-level-0 {
-  background: transparent;
-  box-shadow: inset 0 0 0 1px var(--grid-0);
+  background: var(--grid-0);
 }
 
 .contrib-level-1 {
@@ -809,12 +893,198 @@
   background: var(--grid-4);
 }
 
-.contrib-legend {
-  list-style: none;
+/* The theme-joke bubble's recipe, placed above the day it describes. */
+.contrib-tip {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 20;
+  padding: 4px 9px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--fg);
+  font-size: var(--fs-xs);
+  line-height: 1.5;
+  /* One line wherever it fits; wrapped, never past the grid's edges, where a
+     long Portuguese date would otherwise run off a 320px screen. */
+  width: max-content;
+  max-width: 100%;
+  text-align: center;
+  pointer-events: none;
+  transform: translate(-50%, calc(-100% - 6px));
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity var(--dur-fast) var(--ease),
+    visibility var(--dur-fast);
+}
+
+.contrib-tip.is-visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.contrib-foot {
   display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+  margin-top: 6px;
+  padding: 0 3px;
+}
+
+.contrib-legend {
+  display: inline-flex;
+  align-items: center;
   gap: 3px;
-  margin: 10px 0 0;
+}
+
+.contrib-swatch:first-child {
+  margin-left: 4px;
+}
+
+.contrib-swatch:last-child {
+  margin-right: 4px;
+}
+
+.contrib-swatch {
+  display: inline-block;
+}
+
+.gh-block {
+  margin-top: 26px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+}
+
+.gh-block h3 {
+  font-size: var(--fs-sm);
+  margin: 0 0 12px;
+}
+
+.gh-block p {
+  margin: 0 0 4px;
+  font-size: var(--fs-sm);
+}
+
+.gh-month + .gh-month {
+  margin-top: 20px;
+}
+
+/* Tighter than the stats panel's rows: a busy month lists many repositories,
+   and the pager exists so the box stays short. */
+.gh-month .bar-row {
+  padding: 2px 0;
+  row-gap: 3px;
+}
+
+.gh-month .bar-lane {
+  block-size: 4px;
+}
+
+.gh-month p + .bar-list,
+.gh-month p + .gh-created {
+  margin-top: 4px;
+}
+
+.gh-month .bar-list + p,
+.gh-month .gh-created + p {
+  margin-top: 10px;
+}
+
+/* The month headings borrow .stack-group h3's `# ` marker. */
+.gh-month h4 {
+  font-size: var(--fs-xs);
+  color: var(--dim);
+  font-weight: 500;
+  margin: 0 0 8px;
+}
+
+.gh-month h4::before {
+  content: '# ';
+  color: var(--accent-2);
+}
+
+.gh-created {
+  list-style: none;
+  margin: 0;
   padding: 0;
+  font-size: var(--fs-sm);
+}
+
+.gh-created li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 14px;
+  padding: 2px 0;
+}
+
+/* The colour is GitHub's language colour, data carried in --lang, not a token. */
+.lang-dot {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  margin-right: 6px;
+  border-radius: 50%;
+  background: var(--lang);
+}
+
+/* The pager sits above the months, not below them: a page of different
+   height then never moves the button that was just pressed. */
+.gh-tl-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+  margin-bottom: 14px;
+}
+
+.gh-tl-head h3 {
+  margin: 0;
+}
+
+.gh-pages {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  font-size: var(--fs-sm);
+}
+
+/* Capped, and scrolled inside: one month has no upper size, so a page count
+   alone does not keep the section short (the spec's point of paging). When
+   there are pages the height is fixed, so a short page moves nothing below. */
+.gh-months {
+  max-height: 28rem;
+  overflow-y: auto;
+  padding-right: 6px;
+}
+
+.gh-months.is-paged {
+  height: 28rem;
+}
+
+button.pagination-link {
+  font: inherit;
+  background: transparent;
+  cursor: pointer;
+}
+
+/* An end of the list, or not hydrated yet: dashed, the one cue that is not colour. */
+.pagination-link:disabled,
+.pagination-link[aria-disabled='true'] {
+  border-style: dashed;
+  cursor: default;
+}
+
+.pagination-link:disabled:hover,
+.pagination-link[aria-disabled='true']:hover {
+  color: var(--dim);
+  border-color: var(--border);
 }
 
 /* CV page ----------------------------------------------------------------- */

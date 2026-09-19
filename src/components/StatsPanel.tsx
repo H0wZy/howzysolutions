@@ -21,12 +21,27 @@ function formatSeconds(seconds: number): string {
  * One breakdown row: name, a trackless ink bar sized by `--pct`, then the
  * percentage and duration as real text (FR-026, FR-027, research D4). The
  * custom property carries a number, never a colour — the colour lives in
- * src/styles/components.css.
+ * src/styles/components.css. Also the GitHub activity's rows, where the name
+ * links to the repository.
  */
-function BarRow({ slice }: { slice: StatSlice }) {
+export function BarRow({
+  slice,
+  href,
+}: {
+  slice: Pick<StatSlice, 'name' | 'percent' | 'text'>
+  href?: string
+}) {
   return (
     <li className="bar-row">
-      <span className="bar-name">{slice.name}</span>
+      <span className="bar-name">
+        {href ? (
+          <a href={href} target="_blank" rel="noreferrer">
+            {slice.name}
+          </a>
+        ) : (
+          slice.name
+        )}
+      </span>
       <span className="bar-lane">
         <span className="bar-fill" style={{ '--pct': slice.percent } as CSSProperties} />
       </span>

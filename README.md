@@ -38,7 +38,7 @@ fails and the page never invents data it doesn't have:
 | Variable | Feeds | If unset or invalid |
 |---|---|---|
 | `WAKATIME_API_KEY` | Tracked coding time (`src/content/wakatime.generated.json`) | Falls back to `~/.wakatime.cfg` locally (the file WakaTime's editor plugins already write); if neither is set, the last committed artifact is kept and the page marks it stale |
-| `GITHUB_TOKEN` | The public contribution calendar (`src/content/github.generated.json`) | The last committed artifact is kept and the page marks it stale; if none has ever been committed, the calendar section is absent from the page entirely |
+| `GITHUB_TOKEN` | The GitHub activity section: contribution calendar, activity overview and monthly timeline for the last year and each contribution year (`src/content/github.generated.json`). Private repositories appear only as counts, never by name | The last committed artifact is kept and the page marks it stale; if none has ever been committed, the section is absent from the page entirely |
 
 Set both in the deploy environment (GitHub Actions secrets here) as real secrets — never as a
 `VITE_*` variable, since that prefix gets inlined into the shipped JavaScript and would publish the
@@ -46,5 +46,5 @@ credential. `GITHUB_TOKEN` needs only a classic personal access token with the `
 a fine-grained token with read access to the account's profile); it authenticates the GraphQL
 request and nothing more.
 
-Full failure-mode contracts: `specs/002-portfolio-craft-pass/contracts/github-contributions.md` and
+Full failure-mode contracts: the header of `scripts/fetch-github.mjs` and
 `specs/001-terminal-portfolio-rebrand/contracts/wakatime-snapshot.md`.
