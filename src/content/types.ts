@@ -151,6 +151,20 @@ export type ContentBundle = {
   stats: CodingStatsSnapshot
   /** One module, read by the page, the rail and the terminal alike (FR-067). */
   cv: CvView
+  privacy: PrivacyPolicy
+}
+
+/** The /privacy/ page. Prose paragraphs, then an optional list, per section. */
+export type PrivacyPolicy = {
+  /** ISO date, rendered as-is. Moves whenever the text does. */
+  updated: string
+  intro: Localized
+  sections: Array<{
+    id: string
+    heading: Localized
+    body: Localized<string[]>
+    items?: Localized<string[]>
+  }>
 }
 
 /** One day of the public code contribution calendar (data-model.md). */

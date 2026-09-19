@@ -16,6 +16,7 @@ export function routes(): Array<{ pathname: string; locale: Locale }> {
   const pages: Route[] = [
     { page: 'home' },
     { page: 'cv' },
+    { page: 'privacy' },
     ...Array.from({ length: total }, (_, i) => ({ page: 'workIndex' as const, number: i + 1 })),
     ...content.projects.map((p) => ({ page: 'work' as const, id: p.id })),
   ]
@@ -57,6 +58,13 @@ export function metaFor(pathname: string): { title: string; description: string;
     return {
       title: `${translate(locale, 'cv.title')} · ${content.profile.name}`,
       description: translate(locale, 'cv.metaDescription'),
+      lang: locale,
+    }
+  }
+  if (route.page === 'privacy') {
+    return {
+      title: `${translate(locale, 'privacy.title')} · ${content.profile.name}`,
+      description: translate(locale, 'privacy.metaDescription'),
       lang: locale,
     }
   }

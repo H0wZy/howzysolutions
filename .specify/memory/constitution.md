@@ -1,6 +1,19 @@
 <!--
 SYNC IMPACT REPORT
 ==================
+Version change: 2.1.0 -> 2.1.1
+Rationale: PATCH. A deployment fact corrected; no principle, budget or gate changed.
+The site ships to howzysolutions.com on Cloudflare Workers (static assets, no script)
+instead of the planned Vercel + howzysolutions.dev. The .com was registered on
+2026-09-19; the .dev was never bought.
+
+Amended (2.1.1):
+  - Opening paragraph and Technology & Design Constraints -> Stack: domain and host.
+  - Secrets & external data: the build environment named is Cloudflare Workers Builds.
+
+----------------------------------------------------------------------
+Previous entry
+----------------------------------------------------------------------
 Version change: 2.0.0 -> 2.1.0
 Rationale: MINOR. Existing guidance materially expanded; no principle removed or redefined,
 and no budget raised. The site adopts a hydrated React client, Tailwind and the shadcn
@@ -99,7 +112,7 @@ Deferred TODOs: none. All governance dates known; 2026-08-19 is the adoption dat
 
 The public portfolio of Marcos "H0wZy" Junior — a developer portfolio that presents each
 project together with its frontend, its backend, its screen demonstrations and its
-documentation. It ships to `howzysolutions.dev`. Its visual and editorial direction is
+documentation. It ships to `howzysolutions.com`. Its visual and editorial direction is
 terminal-minimal: a developer showing work in the idiom developers read.
 
 ## Core Principles
@@ -229,7 +242,8 @@ that survives contact with a solo maintainer's schedule.
 client**. Routing is still solved with the platform — every route is a real emitted document and
 navigation is a link, with no client-side router. Tailwind is the styling layer over the tokens
 declared in `src/styles/tokens.css`, and `radix-ui` arrives with the shadcn breadcrumb primitive.
-Deployment is Vercel, custom domain `howzysolutions.dev`.
+Deployment is Cloudflare Workers serving `dist/` as static assets with no Worker script, custom
+domain `howzysolutions.com`.
 
 *Principle II justification for these three, recorded rather than left in a pull request body*:
 no rung of the ladder failed. The breadcrumb is markup and the section rail's follow-along mark
@@ -286,8 +300,8 @@ bundle, in a `VITE_*` variable, or anywhere in this repository — Vite inlines 
 values into public JavaScript, so "not committed" is not the same as "not published".
 
 External data about the author (WakaTime coding statistics) MUST be fetched at **build
-time** by a script that reads the credential from the build environment (Vercel
-environment variable, GitHub Actions secret) and writes a plain JSON artifact consumed as
+time** by a script that reads the credential from the build environment (Cloudflare
+Workers Builds variable, GitHub Actions secret) and writes a plain JSON artifact consumed as
 ordinary content. The running site MUST NOT hold a credential and MUST NOT call an
 authenticated third-party API from the browser.
 
@@ -356,4 +370,4 @@ that cannot be justified against Principle II MUST be removed before merge. Perf
 budgets are re-measured on the production build before any deploy that changes the bundle.
 This document is re-read at the start of each new feature spec.
 
-**Version**: 2.1.0 | **Ratified**: 2026-08-19 | **Last Amended**: 2026-08-27
+**Version**: 2.1.1 | **Ratified**: 2026-08-19 | **Last Amended**: 2026-09-19

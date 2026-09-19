@@ -76,9 +76,20 @@ describe('the terminal and the page cannot state different facts (V11)', () => {
   })
 
   it.each(LOCALES)('%s: ends an ongoing role in a translated word, not a date', (locale) => {
-    const output = outputText(ctx(locale, 'cv').lines)
-    const ongoing = roles.find((r) => r.end === null)
-    expect(ongoing, 'the fixture needs an ongoing role to be meaningful').toBeDefined()
+    // The real record has no ongoing role since the TCS role closed at
+    // 2026-08, so the first role is reopened here rather than the assertion
+    // depending on whoever happens to be employed on the day the tests run.
+    const reopened = {
+      ...record,
+      sections: record.sections.map((s) =>
+        s.kind === 'experience'
+          ? { ...s, entries: s.entries.map((e, i) => (i === 0 ? { ...(e as CvRole), end: null } : e)) }
+          : s,
+      ),
+    }
+    const output = outputText(
+      execute('cv', { locale, content: { ...content, cv: reopened }, history: [] }).lines,
+    )
     // FR-055. The word differs by locale; a computed end date would not.
     expect(output).toContain(locale === 'en' ? 'present' : 'presente')
   })

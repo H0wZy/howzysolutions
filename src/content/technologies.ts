@@ -42,6 +42,7 @@ export const technologies: Technology[] = [
   { id: 'docker', name: 'Docker', category: 'infra' },
   { id: 'cloudflare-r2', name: 'Cloudflare R2', category: 'infra' },
   { id: 'vercel', name: 'Vercel', category: 'infra' },
+  { id: 'cloudflare-workers', name: 'Cloudflare Workers', category: 'infra' },
   { id: 'jwt', name: 'JWT', category: 'infra' },
 
   // AI

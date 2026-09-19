@@ -104,7 +104,7 @@ export const en = {
   'stats.stale': 'Figures are from the last successful capture on {date}.',
   'stats.showAll': 'show all',
   'stats.experienceNote':
-    'Time in IT is counted from the Unicesumar degree in 2023. Employment began in May 2025 at TCS. Tracked coding time covers only the range the tracker reports, which starts in March 2026. Three measures over three periods, and none of them is evidence for another.',
+    'Time in IT is counted from the Unicesumar degree in 2023. Employment at TCS ran from May 2025 to August 2026. Tracked coding time covers only the range the tracker reports, which starts in March 2026. Three measures over three periods, and none of them is evidence for another.',
 
   // Contribution calendar (a different source, unit and period from the stats above)
   'contrib.heading': 'public commits, day by day',
@@ -219,6 +219,14 @@ export const en = {
   // Footer
   'footer.builtWith': 'Built with React, TypeScript and Vite. No trackers, no third-party fonts.',
   'footer.source': 'source on github',
+  'footer.privacy': 'privacy policy',
+
+  // Privacy page
+  'privacy.title': 'Privacy policy',
+  'privacy.metaDescription':
+    'How H0wZy Solutions handles personal data in viralvideogen, its private TikTok Shop app, and on this website.',
+  'privacy.updated': 'Last updated {date}.',
+  'privacy.contact': 'Contact:',
 } as const
 
 export type StringKey = keyof typeof en

@@ -34,3 +34,6 @@ coverage
 # Vercel
 .vercel
 
+
+# Wrangler local state
+.wrangler

@@ -17,6 +17,15 @@ npm run build    # fetches data, typechecks, builds, prerenders every route to d
 npm run preview  # serve the built dist/
 ```
 
+## Deploy
+
+Live at <https://howzysolutions.com>, served by Cloudflare as an assets-only Worker (`wrangler.jsonc`):
+
+```bash
+npm run build
+npx wrangler deploy   # first time: npx wrangler login
+```
+
 ## Environment variables
 
 Two build-time secrets feed real measured data into the site. Both are read only during
@@ -28,7 +37,7 @@ fails and the page never invents data it doesn't have:
 | `WAKATIME_API_KEY` | Tracked coding time (`src/content/wakatime.generated.json`) | Falls back to `~/.wakatime.cfg` locally (the file WakaTime's editor plugins already write); if neither is set, the last committed artifact is kept and the page marks it stale |
 | `GITHUB_TOKEN` | The public contribution calendar (`src/content/github.generated.json`) | The last committed artifact is kept and the page marks it stale; if none has ever been committed, the calendar section is absent from the page entirely |
 
-Set both in the deploy environment (Vercel, GitHub Actions, etc.) as real secrets — never as a
+Set both in the deploy environment (Cloudflare Workers Builds, GitHub Actions, etc.) as real secrets — never as a
 `VITE_*` variable, since that prefix gets inlined into the shipped JavaScript and would publish the
 credential. `GITHUB_TOKEN` needs only a classic personal access token with the `read:user` scope (or
 a fine-grained token with read access to the account's profile); it authenticates the GraphQL
