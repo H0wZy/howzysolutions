@@ -1,0 +1,30 @@
+# Checks every push and pull request. Deploying is not done here: Cloudflare
+# Workers Builds watches main and runs `npx wrangler deploy` itself, so a
+# deploy step here would publish every commit twice.
+name: ci
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      # Both secrets are optional: without them the build keeps the committed
+      # WakaTime and GitHub artifacts (README, Environment variables).
+      - run: npm run build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WAKATIME_API_KEY: ${{ secrets.WAKATIME_API_KEY }}
+      - run: npm test
