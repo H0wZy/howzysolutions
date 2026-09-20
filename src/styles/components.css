@@ -11,6 +11,7 @@
      scrolling sideways or each button breaking over three lines. */
   flex-wrap: wrap;
   align-items: center;
+  justify-content: space-between;
   gap: 10px;
   padding: 9px 16px;
   background: var(--surface);
@@ -18,13 +19,24 @@
   font-size: var(--fs-xs);
 }
 
-.navigation-menu {
+.chrome-brand {
   display: flex;
-  flex: 1 1 32rem;
-  min-width: 0;
   flex-wrap: wrap;
   align-items: center;
   gap: 8px 14px;
+}
+
+.chrome-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 10px;
+  margin-left: auto;
+}
+
+.navigation-menu {
+  display: flex;
+  align-items: center;
 }
 
 .navigation-menu-list {
@@ -59,7 +71,6 @@
 
 .chrome-controls {
   position: relative; /* anchors .theme-joke without joining the flex flow */
-  margin-left: auto;
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-end;
@@ -201,11 +212,45 @@
   }
 }
 
-.tagline {
-  font-size: clamp(1.05rem, 3vw, 1.4rem);
-  margin: 0.55em 0 0;
+.hero-title {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15em;
+  margin: 0;
+}
+
+.hero-greeting {
+  font-size: clamp(1.1rem, 2.5vw, 1.4rem);
   font-weight: 500;
-  max-width: 34ch;
+  color: var(--dim);
+  letter-spacing: -0.01em;
+}
+
+.hero-handle {
+  font-size: var(--fs-h1);
+  font-weight: 700;
+  color: var(--fg);
+  line-height: 1;
+}
+
+.tagline {
+  font-size: clamp(1.05rem, 3vw, 1.35rem);
+  margin: 0.6em 0 0;
+  font-weight: 500;
+  max-width: 44ch;
+  min-height: 2.8em;
+}
+
+.typewriter {
+  display: inline;
+}
+
+.typewriter-text {
+  color: var(--fg);
+}
+
+.typewriter .cursor {
+  margin-left: 1px;
 }
 
 .sub {
@@ -1321,6 +1366,14 @@ button.pagination-link {
 .cv-body,
 .document-body {
   min-width: 0;
+}
+
+.privacy-project-title {
+  max-width: none;
+}
+
+.nowrap {
+  white-space: nowrap;
 }
 
 /*

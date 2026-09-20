@@ -10,6 +10,25 @@ export const profile: AuthorProfile = {
     pt: 'Construo software que declara o que não consegue fazer.',
   },
 
+  taglines: {
+    en: [
+      'I build software that states what it cannot do.',
+      'Software Engineer at @tcsglobal',
+      'Full-Stack | Backend | Cloud',
+      'Two-time TCS AI Friday Champion 🏆',
+      'Go | .NET C# | Java | React',
+      'Always Building, Always Learning',
+    ],
+    pt: [
+      'Construo software que declara o que não consegue fazer.',
+      'Engenheiro de Software na @tcsglobal',
+      'Full-Stack | Backend | Cloud',
+      'Bicampeão do TCS AI Friday 🏆',
+      'Go | .NET C# | Java | React',
+      'Sempre Construindo, Sempre Aprendendo',
+    ],
+  },
+
   bio: {
     en: [
       'Full-stack developer working across Next.js and .NET for client products, Python for AI and pipeline work, and infrastructure defined in Terraform rather than clicked into a console.',

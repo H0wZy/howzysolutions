@@ -116,6 +116,7 @@ export type AuthorProfile = {
   name: string
   handle: string
   tagline: Localized
+  taglines: Localized<string[]>
   bio: Localized<string[]>
   /** Duration is derived at build time, never stored (FR-007). */
   experienceStart: string

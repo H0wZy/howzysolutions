@@ -30,6 +30,7 @@ export const en = {
   'section.contact': 'get_in_touch',
 
   // Hero
+  'hero.greeting': "Hi, I'm",
   'hero.role': 'Full-stack developer',
   /*
    * FR-063, and the constitution's Honesty in Self-Reported Metrics clause.
