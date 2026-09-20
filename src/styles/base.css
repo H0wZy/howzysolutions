@@ -292,10 +292,4 @@ pre {
     animation-duration: 1s !important;
     animation-iteration-count: infinite !important;
   }
-
-  .term-cursor {
-    animation: term-cursor-blink 1s step-end infinite !important;
-    animation-duration: 1s !important;
-    animation-iteration-count: infinite !important;
-  }
 }

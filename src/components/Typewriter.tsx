@@ -8,11 +8,6 @@ export function Typewriter({ phrases }: { phrases: string[] }) {
   useEffect(() => {
     if (!phrases || phrases.length <= 1) return
 
-    // Honor reduced-motion preference: keep static full text
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      return
-    }
-
     const current = phrases[index] ?? ''
 
     if (!isDeleting && subIndex === current.length) {
