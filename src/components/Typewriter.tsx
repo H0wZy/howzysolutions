@@ -2,16 +2,22 @@ import { useEffect, useState } from 'react'
 
 export function Typewriter({ phrases }: { phrases: string[] }) {
   const [index, setIndex] = useState(0)
-  const [subIndex, setSubIndex] = useState(phrases[0]?.length ?? 0)
+  const [subIndex, setSubIndex] = useState(0)
   const [isDeleting, setIsDeleting] = useState(false)
+  const [started, setStarted] = useState(false)
 
   useEffect(() => {
-    if (!phrases || phrases.length <= 1) return
+    const startTimeout = setTimeout(() => setStarted(true), 300)
+    return () => clearTimeout(startTimeout)
+  }, [])
+
+  useEffect(() => {
+    if (!started || !phrases || phrases.length === 0) return
 
     const current = phrases[index] ?? ''
 
     if (!isDeleting && subIndex === current.length) {
-      const timeout = setTimeout(() => setIsDeleting(true), 2000)
+      const timeout = setTimeout(() => setIsDeleting(true), 2200)
       return () => clearTimeout(timeout)
     }
 
@@ -23,13 +29,13 @@ export function Typewriter({ phrases }: { phrases: string[] }) {
       return () => clearTimeout(timeout)
     }
 
-    const speed = isDeleting ? 30 : 65
+    const speed = isDeleting ? 25 : 55
     const timeout = setTimeout(() => {
       setSubIndex((prev) => prev + (isDeleting ? -1 : 1))
     }, speed)
 
     return () => clearTimeout(timeout)
-  }, [subIndex, isDeleting, index, phrases])
+  }, [started, subIndex, isDeleting, index, phrases])
 
   if (!phrases || phrases.length === 0) return null
 

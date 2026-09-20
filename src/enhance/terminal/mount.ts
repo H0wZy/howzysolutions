@@ -45,12 +45,13 @@ export function mountTerminal(root: HTMLElement, session: TerminalSession): void
 
   let cursor = session.history.length
   const ghostEl = root.querySelector<HTMLElement>('[data-term-ghost]')
+  const SUGGESTIONS = ['whoami', 'projects', 'stats', 'stack', 'cv', 'contact', 'about', 'clear', 'help']
 
   const syncCursor = () => {
     if (!ghostEl) return
     const val = input.value
     if (val.length === 0) {
-      ghostEl.textContent = 'help'
+      ghostEl.textContent = ''
     } else {
       const pos = input.selectionStart ?? val.length
       ghostEl.textContent = val.slice(0, pos)
@@ -70,7 +71,10 @@ export function mountTerminal(root: HTMLElement, session: TerminalSession): void
   // pushes the prompt down the way it does in a terminal rather than sliding
   // under a pinned input bar.
   const scrollToEnd = () => {
-    root.scrollTop = root.scrollHeight
+    root.scrollTo({
+      top: root.scrollHeight,
+      behavior: 'smooth',
+    })
   }
 
   /**
@@ -134,6 +138,11 @@ export function mountTerminal(root: HTMLElement, session: TerminalSession): void
 
     if (result.effect) applyEffect(result.effect)
     scrollToEnd()
+    block.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+
+    // Auto-focus the output block for clarity and accessibility
+    block.setAttribute('tabindex', '-1')
+    block.focus({ preventScroll: true })
   }
 
   form.addEventListener('submit', (event) => {
@@ -163,11 +172,19 @@ export function mountTerminal(root: HTMLElement, session: TerminalSession): void
       return
     }
 
-    // Completion: unique match completes, several report the candidates (FR-012).
+    // Completion: loop through suggestions when empty, or complete prefix (FR-012).
     if (event.key === 'Tab') {
       event.preventDefault()
       const partial = input.value.trim()
-      if (partial.length === 0) return
+      const idx = SUGGESTIONS.indexOf(partial)
+      if (partial.length === 0 || idx !== -1) {
+        const nextIdx = idx === -1 ? 0 : (idx + 1) % SUGGESTIONS.length
+        const next = SUGGESTIONS[nextIdx]
+        input.value = `${next} `
+        syncCursor()
+        return
+      }
+
       const matches = completions(partial, invocableNames())
       if (matches.length === 1) {
         input.value = `${matches[0]} `
@@ -186,6 +203,15 @@ export function mountTerminal(root: HTMLElement, session: TerminalSession): void
         )
         output.append(block)
         scrollToEnd()
+      }
+    }
+  })
+
+  // Typing while output or terminal has focus redirects back to the input seamlessly
+  root.addEventListener('keydown', (event) => {
+    if (document.activeElement !== input && !event.ctrlKey && !event.metaKey && !event.altKey) {
+      if (event.key.length === 1 || event.key === 'Backspace' || event.key === 'Tab') {
+        input.focus()
       }
     }
   })
