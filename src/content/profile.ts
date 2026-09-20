@@ -12,16 +12,18 @@ export const profile: AuthorProfile = {
 
   taglines: {
     en: [
+      'Software Engineer · Open to Work',
       'I build software that states what it cannot do.',
-      'Software Engineer at @tcsglobal',
+      'Worked at TCS for 16 months',
       'Full-Stack | Backend | Cloud',
       'Two-time TCS AI Friday Champion 🏆',
       'Go | .NET C# | Java | React',
       'Always Building, Always Learning',
     ],
     pt: [
+      'Engenheiro de Software · Open to Work',
       'Construo software que declara o que não consegue fazer.',
-      'Engenheiro de Software na @tcsglobal',
+      'Atuei na TCS por 16 meses',
       'Full-Stack | Backend | Cloud',
       'Bicampeão do TCS AI Friday 🏆',
       'Go | .NET C# | Java | React',
