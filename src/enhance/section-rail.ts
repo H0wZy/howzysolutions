@@ -61,7 +61,10 @@ export function initSectionRail(): void {
      * decides rather than callback order, so the answer does not depend on
      * which entry the observer happened to report first.
      */
-    const current = [...sections].reverse().find((section) => visible.has(section.id))?.id ?? previous
+    const atBottom = window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 2
+    const current = atBottom
+      ? sections.at(-1)?.id
+      : [...sections].reverse().find((section) => visible.has(section.id))?.id ?? previous
 
     // Nothing in the band happens above the first heading and between two
     // sections. Holding the previous mark there beats flickering the rail
@@ -73,7 +76,7 @@ export function initSectionRail(): void {
         // aria-current carries the state; CSS reads it. The mark is
         // programmatic first and painted second, never colour alone
         // (FR-075, Principle III).
-        link.setAttribute('aria-current', 'true')
+        link.setAttribute('aria-current', 'location')
       } else {
         link.removeAttribute('aria-current')
       }

@@ -269,11 +269,11 @@ export function Cv({
 
   return (
     <>
-      <Chrome locale={locale} path="h0wzy/cv" pathname={pathname} />
-      <main className="cv-layout">
+      <Chrome locale={locale} pathname={pathname} />
+      <main className="document-layout cv-layout">
         <SectionRail entries={railEntries(cv)} locale={locale} />
 
-        <div className="cv-body">
+        <div className="document-body cv-body">
           {/*
             SC-005: employer, role and start date within the first screen at
             360px wide, without scrolling. Measured 2026-08-27: with the

@@ -4,7 +4,6 @@ import { trailFor } from '../navigation'
 import { translate } from '../locale'
 import type { Route } from '../route'
 import {
-  Breadcrumb as Root,
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
@@ -38,7 +37,7 @@ export function Breadcrumb({
   if (trail.length === 0) return null
 
   return (
-    <Root className="breadcrumb" aria-label={translate(locale, 'nav.breadcrumb')}>
+    <div className="breadcrumb">
       <BreadcrumbList>
         {trail.map((crumb, index) => {
           const text = crumb.labelKey ? translate(locale, crumb.labelKey) : (crumb.label ?? '')
@@ -59,6 +58,6 @@ export function Breadcrumb({
           )
         })}
       </BreadcrumbList>
-    </Root>
+    </div>
   )
 }

@@ -21,6 +21,7 @@ export const pt = {
   'theme.joke.3': 'Revisei eu mesmo e rejeitei eu mesmo. Pelo menos foi rápido.',
   'theme.joke.4': 'Tá no roadmap, logo depois do roadmap.',
   'chrome.skipToContent': 'Pular para o conteúdo',
+  'meta.socialImageAlt': 'Retrato em grafite de Marcos H0wZy Junior ao lado da marca h0wzy com cursor.',
 
   // Seções
   'section.terminal': 'o_terminal',
@@ -37,7 +38,7 @@ export const pt = {
   'hero.location': 'Londrina, Paraná, Brasil',
 
   // Listagem de projetos
-  'work.heading': 'Nove projetos, e o que cada um não faz.',
+  'work.heading': 'Meus projetos',
   'work.intro':
     'Cada entrada declara o problema, a stack, o estado real e as limitações que a própria documentação do projeto registra.',
   'work.commits': 'commits',
@@ -83,7 +84,7 @@ export const pt = {
   'stack.other': 'outros',
 
   // Estatísticas
-  'stats.heading': 'Medido, não afirmado.',
+  'stats.heading': 'Minha atividade',
   'stats.total': 'total rastreado',
   'stats.dailyAverage': 'média diária',
   'stats.languages': 'linguagens',
@@ -218,6 +219,7 @@ export const pt = {
 
   // Navegação
   'nav.breadcrumb': 'Trilha de navegação',
+  'nav.primary': 'Navegação principal',
   'nav.onThisPage': 'Nesta página',
   'nav.home': 'Início',
   'nav.cv': 'cv',

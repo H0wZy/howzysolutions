@@ -6,21 +6,20 @@ import { periodLabel, stats, trackedTimeFor } from '../content/stats'
 import { SourceLink } from './SourceLink'
 import { translate } from '../locale'
 import { pathFor } from '../route'
+import { projectTopicAnchors } from '../navigation'
+import { Badge } from './ui/badge'
 
 function Block({
+  anchor,
   labelKey,
   locale,
   children,
 }: {
+  anchor: string
   labelKey: Parameters<typeof translate>[1]
   locale: Locale
   children: ReactNode
 }) {
-  // `project.problem` -> `problem`: a stable, readable fragment id per topic,
-  // so a detail page is linkable section by section the way documentation is
-  // (research D8, resolved).
-  const anchor = labelKey.split('.')[1] ?? labelKey
-
   return (
     <section className="detail-block" id={anchor}>
       {/* The only heading this region has — styled as a "##" comment via
@@ -52,16 +51,87 @@ export function ProjectDetail({
   const nameOf = (id: string) => technologies.find((t) => t.id === id)?.name ?? id
   const tracked = trackedTimeFor(project.wakatimeProject)
   const period = periodLabel(stats)
+  const sections = projectTopicAnchors(project, Boolean(tracked))
+  const content: Record<string, ReactNode> = {
+    problem: <p>{project.problem[locale]}</p>,
+    capabilities: (
+      <ul className="bullets">
+        {project.capabilities[locale].map((line) => (
+          <li key={line}>{line}</li>
+        ))}
+      </ul>
+    ),
+    stack: (
+      <div className="stack-groups">
+        {project.stack.map((group) => (
+          <div key={group.group} className="stack-group">
+            <h3>{translate(locale, STACK_GROUP[group.group])}</h3>
+            <p>{group.items.map(nameOf).join(' · ')}</p>
+          </div>
+        ))}
+      </div>
+    ),
+    metrics: project.metrics?.length ? (
+      <dl className="metrics">
+        {project.metrics.map((metric) => (
+          <div key={metric.label[locale]} className="metric">
+            <dt>{metric.label[locale]}</dt>
+            <dd>
+              <strong>{metric.value}</strong>
+              <span className="metric-source">{metric.source[locale]}</span>
+            </dd>
+          </div>
+        ))}
+      </dl>
+    ) : null,
+    development: project.development[locale].map((paragraph) => (
+      <p key={paragraph.slice(0, 40)}>{paragraph}</p>
+    )),
+    limitations: (
+      <ul className="bullets bullets-limitations">
+        {project.limitations[locale].map((line) => (
+          <li key={line}>{line}</li>
+        ))}
+      </ul>
+    ),
+    roadmap: project.roadmap ? (
+      <ul className="bullets">
+        {project.roadmap[locale].map((line) => (
+          <li key={line}>{line}</li>
+        ))}
+      </ul>
+    ) : null,
+    trackedTime: tracked ? (
+      <p>
+        <strong>{tracked.text}</strong>{' '}
+        <span className="metric-source">
+          <SourceLink locale={locale} />
+          {` · ${translate(locale, period.key, period.params)}`}
+        </span>
+      </p>
+    ) : null,
+    links: project.links?.length ? (
+      <ul className="bullets">
+        {project.links.map((link) => (
+          <li key={link.href}>
+            <a href={link.href} target="_blank" rel="noreferrer noopener">
+              {link.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    ) : null,
+  }
 
   return (
     <article className="detail">
       <header className="detail-head">
         <h1>{project.name}</h1>
         <p className="detail-meta">
-          <span className={`badge badge-${project.state}`}>
+          <Badge>{translate(locale, PROJECT_KIND[project.kind])}</Badge>{' '}
+          <Badge className={`badge-${project.state}`}>
             {translate(locale, PROJECT_STATE[project.state])}
-          </span>{' '}
-          <span className="dim">{translate(locale, PROJECT_KIND[project.kind])}</span>
+          </Badge>
         </p>
         {project.context ? <p className="detail-context">{project.context[locale]}</p> : null}
         <p className="detail-meta dim">
@@ -70,100 +140,11 @@ export function ProjectDetail({
         </p>
       </header>
 
-      <Block labelKey="project.problem" locale={locale}>
-        <p>{project.problem[locale]}</p>
-      </Block>
-
-      <Block labelKey="project.capabilities" locale={locale}>
-        <ul className="bullets">
-          {project.capabilities[locale].map((line) => (
-            <li key={line}>{line}</li>
-          ))}
-        </ul>
-      </Block>
-
-      <Block labelKey="project.stack" locale={locale}>
-        <div className="stack-groups">
-          {project.stack.map((group) => (
-            <div key={group.group} className="stack-group">
-              <h3>{translate(locale, STACK_GROUP[group.group])}</h3>
-              <p>{group.items.map(nameOf).join(' · ')}</p>
-            </div>
-          ))}
-        </div>
-      </Block>
-
-      {project.metrics?.length ? (
-        <Block labelKey="project.metrics" locale={locale}>
-          <dl className="metrics">
-            {project.metrics.map((m) => (
-              <div key={m.label[locale]} className="metric">
-                <dt>{m.label[locale]}</dt>
-                <dd>
-                  <strong>{m.value}</strong>
-                  {/* FR-027: a figure never appears without its source. */}
-                  <span className="metric-source">{m.source[locale]}</span>
-                </dd>
-              </div>
-            ))}
-          </dl>
+      {sections.map((section) => (
+        <Block key={section.id} anchor={section.id} labelKey={section.labelKey} locale={locale}>
+          {content[section.id]}
         </Block>
-      ) : null}
-
-      <Block labelKey="project.development" locale={locale}>
-        {project.development[locale].map((para) => (
-          <p key={para.slice(0, 40)}>{para}</p>
-        ))}
-      </Block>
-
-      {/*
-        FR-004: limitations get the same prominence as capabilities. This is the
-        editorial rule the whole portfolio is built on, not a disclaimer section.
-      */}
-      <Block labelKey="project.limitations" locale={locale}>
-        <ul className="bullets bullets-limitations">
-          {project.limitations[locale].map((line) => (
-            <li key={line}>{line}</li>
-          ))}
-        </ul>
-      </Block>
-
-      {project.roadmap?.[locale].length ? (
-        <Block labelKey="project.roadmap" locale={locale}>
-          <ul className="bullets">
-            {project.roadmap[locale].map((line) => (
-              <li key={line}>{line}</li>
-            ))}
-          </ul>
-        </Block>
-      ) : null}
-
-      {/* Rendered only when a measured figure exists — never a zero (data-model rule). */}
-      {tracked ? (
-        <Block labelKey="project.trackedTime" locale={locale}>
-          <p>
-            <strong>{tracked.text}</strong>{' '}
-            <span className="metric-source">
-              <SourceLink locale={locale} />
-              {` · ${translate(locale, period.key, period.params)}`}
-            </span>
-          </p>
-        </Block>
-      ) : null}
-
-      {project.links?.length ? (
-        <Block labelKey="project.links" locale={locale}>
-          <ul className="bullets">
-            {project.links.map((link) => (
-              <li key={link.href}>
-                <a href={link.href} target="_blank" rel="noreferrer noopener">
-                  {link.label}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </Block>
-      ) : null}
+      ))}
 
       <p className="detail-back">
         <a href={pathFor({ page: 'workIndex', number: 1 }, locale)}>

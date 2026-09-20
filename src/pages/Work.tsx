@@ -2,6 +2,9 @@ import type { Locale } from '../content/i18n/types'
 import type { ContentBundle } from '../content/types'
 import { Chrome } from '../components/Chrome'
 import { ProjectDetail } from '../components/ProjectDetail'
+import { SectionRail } from '../components/SectionRail'
+import { trackedTimeFor } from '../content/stats'
+import { projectTopicAnchors } from '../navigation'
 
 export function Work({
   content,
@@ -21,7 +24,7 @@ export function Work({
   if (!project) {
     return (
       <>
-        <Chrome locale={locale} path="h0wzy/work" pathname={pathname} />
+        <Chrome locale={locale} pathname={pathname} />
         <main className="section">
           <div className="wrap">
             <h1>404</h1>
@@ -40,17 +43,22 @@ export function Work({
           string, because it is identical in both locales (FR-054). */}
       <Chrome
         locale={locale}
-        path={`h0wzy/work/${project.id}`}
         pathname={pathname}
         leafLabel={project.name}
       />
-      <main className="section">
-        <div className="wrap">
-          <ProjectDetail
-            project={project}
-            technologies={content.technologies}
-            locale={locale}
-          />
+      <main className="document-layout">
+        <SectionRail
+          entries={projectTopicAnchors(project, Boolean(trackedTimeFor(project.wakatimeProject)))}
+          locale={locale}
+        />
+        <div className="document-body section">
+          <div className="wrap">
+            <ProjectDetail
+              project={project}
+              technologies={content.technologies}
+              locale={locale}
+            />
+          </div>
         </div>
       </main>
     </>

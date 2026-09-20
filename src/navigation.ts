@@ -1,5 +1,6 @@
-import type { Locale } from './content/i18n/types'
+import type { Locale, Localized } from './content/i18n/types'
 import type { StringKey } from './content/i18n/en'
+import type { PrivacyPolicy, Project } from './content/types'
 import { pathFor, type Route } from './route'
 
 /**
@@ -31,6 +32,49 @@ export type Crumb = {
    * earns it `aria-current="page"` (FR-069, FR-075).
    */
   href: string | null
+}
+
+export type TopicAnchor =
+  | { id: string; labelKey: StringKey; label?: never }
+  | { id: string; label: Localized | string; labelKey?: never }
+
+export function homeTopicAnchors(hasGithub: boolean): TopicAnchor[] {
+  return [
+    { id: 'terminal', labelKey: 'section.terminal' },
+    { id: 'about', labelKey: 'section.about' },
+    { id: 'work', labelKey: 'section.work' },
+    { id: 'stats', labelKey: 'section.stats' },
+    ...(hasGithub ? [{ id: 'github', labelKey: 'section.github' } as const] : []),
+    { id: 'contact', labelKey: 'section.contact' },
+  ]
+}
+
+export function privacyTopicAnchors(policy: PrivacyPolicy): TopicAnchor[] {
+  return [
+    ...policy.sections.map((section) => ({ id: section.id, label: section.heading })),
+    ...policy.projects.flatMap((project) => [
+      { id: project.id, label: project.name },
+      ...project.sections.map((section) => ({ id: section.id, label: section.heading })),
+    ]),
+  ]
+}
+
+export type ProjectTopicAnchor = { id: string; labelKey: StringKey }
+
+export function projectTopicAnchors(project: Project, hasTrackedTime: boolean): ProjectTopicAnchor[] {
+  return [
+    { id: 'problem', labelKey: 'project.problem' },
+    { id: 'capabilities', labelKey: 'project.capabilities' },
+    { id: 'stack', labelKey: 'project.stack' },
+    ...(project.metrics?.length ? [{ id: 'metrics', labelKey: 'project.metrics' } as const] : []),
+    { id: 'development', labelKey: 'project.development' },
+    { id: 'limitations', labelKey: 'project.limitations' },
+    ...(project.roadmap?.en.length ? [{ id: 'roadmap', labelKey: 'project.roadmap' } as const] : []),
+    ...(hasTrackedTime
+      ? [{ id: 'trackedTime', labelKey: 'project.trackedTime' } as const]
+      : []),
+    ...(project.links?.length ? [{ id: 'links', labelKey: 'project.links' } as const] : []),
+  ]
 }
 
 /**

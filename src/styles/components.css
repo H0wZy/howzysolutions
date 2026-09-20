@@ -18,33 +18,43 @@
   font-size: var(--fs-xs);
 }
 
-.dots {
+.navigation-menu {
   display: flex;
+  flex: 1 1 32rem;
+  min-width: 0;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+}
+
+.navigation-menu-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.chrome-mark {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
   gap: 7px;
+  border: 0;
+  color: var(--fg);
+  font-weight: 700;
+  transition: color var(--dur-fast) var(--ease);
 }
 
-.dots i {
+.chrome-mark:hover {
+  color: var(--accent);
+}
+
+.chrome-mark img {
   display: block;
-  width: 11px;
-  height: 11px;
-  border-radius: 50%;
-}
-
-.dots i:nth-child(1) { background: var(--danger); }
-.dots i:nth-child(2) { background: var(--accent); }
-.dots i:nth-child(3) { background: var(--accent-2); }
-
-.chrome-file-kind::before {
-  content: '';
-  display: inline-block;
-  width: 1px;
-  height: 0.9em;
-  margin: 0 7px -0.1em 1px;
-  background: var(--line);
-}
-
-.chrome-file {
-  color: var(--dim);
+  border-radius: var(--radius-sm);
 }
 
 .chrome-controls {
@@ -101,6 +111,96 @@
 
 /* Hero -------------------------------------------------------------------- */
 
+.hero-grid {
+  display: grid;
+  gap: calc(var(--gutter) * 1.5);
+  align-items: center;
+}
+
+.hero-copy {
+  min-width: 0;
+}
+
+.hero-portrait {
+  position: relative;
+  width: min(100%, 360px);
+  aspect-ratio: 1;
+  margin: 0 auto;
+  background: transparent;
+  border: 0;
+  transition:
+    transform var(--dur-base) var(--ease),
+    filter var(--dur-base) var(--ease);
+}
+
+.hero-portrait:hover {
+  transform: translateY(-2px);
+  filter: drop-shadow(0 10px 24px rgba(0, 0, 0, 0.5));
+}
+
+.hero-portrait-skeleton {
+  position: absolute;
+  inset: 0;
+  display: block;
+  background: transparent;
+}
+
+.hero-portrait img {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: transform var(--dur-base) var(--ease);
+}
+
+.hero-portrait:hover img {
+  transform: scale(1.02);
+}
+
+.hero-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  margin: 1.4em 0 0;
+  font-size: var(--fs-sm);
+}
+
+.hero-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--accent);
+  padding: 3px 8px;
+  margin: -3px -8px;
+  border-radius: var(--radius-sm);
+  border-bottom: 1px dashed var(--border);
+  transition:
+    color var(--dur-fast) var(--ease),
+    border-color var(--dur-fast) var(--ease),
+    background-color var(--dur-fast) var(--ease),
+    transform var(--dur-fast) var(--ease);
+}
+
+.hero-links a:hover {
+  border-bottom-style: solid;
+  border-color: var(--accent);
+  background-color: color-mix(in srgb, var(--accent) 10%, transparent);
+  transform: translateY(-1px);
+}
+
+@media (min-width: 760px) {
+  .hero-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(260px, 0.72fr);
+  }
+
+  .hero-portrait {
+    width: 100%;
+    max-width: 360px;
+    margin-right: 0;
+  }
+}
+
 .tagline {
   font-size: clamp(1.05rem, 3vw, 1.4rem);
   margin: 0.55em 0 0;
@@ -137,8 +237,17 @@
 }
 
 .project-row {
-  padding: 18px 0;
+  padding: 16px 12px;
+  margin: 0 -12px;
   border-top: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  transition:
+    background-color var(--dur-fast) var(--ease),
+    border-color var(--dur-fast) var(--ease);
+}
+
+.project-row:hover {
+  background-color: color-mix(in srgb, var(--surface) 60%, transparent);
 }
 
 .project-row-head {
@@ -152,6 +261,13 @@
   font-weight: 700;
   font-size: 1.05rem;
   border-bottom: none;
+  color: var(--fg);
+  transition: color var(--dur-fast) var(--ease);
+}
+
+.project-row:hover .project-row-name,
+.project-row-name:hover {
+  color: var(--accent);
 }
 
 .project-row-summary {
@@ -195,6 +311,16 @@
   border: 1px solid var(--border);
   color: var(--dim);
   white-space: nowrap;
+  transition:
+    border-color var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease),
+    background-color var(--dur-fast) var(--ease);
+}
+
+.badge:hover {
+  border-color: var(--accent);
+  color: var(--fg);
+  background-color: color-mix(in srgb, var(--accent) 8%, transparent);
 }
 
 .badge-production { color: var(--accent-2); border-color: var(--accent-2); }
@@ -348,8 +474,7 @@
 }
 
 /* Wide content scrolls inside itself; the page never scrolls horizontally. */
-.metrics,
-.stack-groups {
+.metrics {
   overflow-x: auto;
 }
 
@@ -363,7 +488,17 @@
 }
 
 .stats-panel .stack-groups {
+  display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 24px 28px;
+}
+
+.stats-panel .stack-group h3 {
+  font-size: var(--fs-xs);
+  color: var(--accent);
+  margin: 0 0 10px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
 }
 
 /* Terminal ---------------------------------------------------------------- */
@@ -379,17 +514,26 @@
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: var(--surface);
-  padding: 14px 16px;
-  min-height: 18rem;
-  max-height: 60vh;
+  padding: 10px 12px;
+  min-height: 12rem;
+  max-height: 52vh;
   overflow-y: auto;
   font-size: var(--fs-sm);
-  line-height: 1.75;
+  line-height: 1.55;
+  transition:
+    border-color var(--dur-fast) var(--ease),
+    box-shadow var(--dur-fast) var(--ease);
 }
 
-.term:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: -2px;
+.term:hover {
+  border-color: var(--border);
+}
+
+.term:focus-visible,
+.term:focus-within {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent);
 }
 
 /* Its scrollbar is the document's: base.css styles every scroller at once. */
@@ -406,7 +550,7 @@
 }
 
 .term-prompt {
-  color: var(--accent-2);
+  color: var(--accent);
   font-weight: 700;
 }
 
@@ -484,33 +628,71 @@
 }
 
 .term-ps1-session { color: var(--term-user); }
-.term-ps1-path { color: var(--accent); }
-.term-ps1-shell { color: var(--accent-2); }
+.term-ps1-path { color: var(--accent-2); }
+.term-ps1-shell { color: var(--accent); }
 .term-ps1-word { color: var(--dim); }
 
 .term-entry {
   display: flex;
-  align-items: baseline;
-  gap: 8px;
+  align-items: center;
+  gap: 6px;
+}
+
+.term-field {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  flex: 1 1 auto;
+  min-width: 0;
+  font: inherit;
+  font-size: var(--fs-sm);
+  line-height: 1.55;
+  letter-spacing: 0.05em;
+}
+
+.term-ghost {
+  visibility: hidden;
+  font-family: inherit;
+  font-size: inherit;
+  letter-spacing: inherit;
+  line-height: inherit;
+  white-space: pre;
+  pointer-events: none;
+}
+
+.term-cursor {
+  display: inline-block;
+  flex: none;
+  width: 0.72ch;
+  height: 1.15em;
+  background: var(--accent);
+  animation: term-cursor-blink 1s step-end infinite;
+}
+
+.term:focus-within .term-cursor {
+  animation: term-cursor-blink 1s step-end infinite;
 }
 
 .term-input {
-  flex: 1;
-  font: inherit;
-  font-size: var(--fs-sm);
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  font-family: inherit;
+  font-size: inherit;
+  letter-spacing: inherit;
+  line-height: inherit;
   color: var(--fg);
+  caret-color: transparent;
   background: transparent;
   border: 0;
   padding: 0;
-  min-width: 0;
+  margin: 0;
+  outline: none;
 }
 
 .term-input:focus {
   outline: none;
-}
-
-.term:focus-within {
-  box-shadow: inset 2px 0 0 var(--accent);
 }
 
 .term-input::placeholder {
@@ -520,6 +702,11 @@
 
 .term-input:disabled {
   cursor: not-allowed;
+}
+
+@keyframes term-cursor-blink {
+  0%, 49.9% { opacity: 1; }
+  50%, 100% { opacity: 0; }
 }
 
 /* Chrome controls --------------------------------------------------------- */
@@ -534,13 +721,12 @@
   border-radius: var(--radius-sm);
   padding: 2px 10px;
   cursor: pointer;
+  white-space: nowrap;
   transition:
     color var(--dur-fast) var(--ease),
-    border-color var(--dur-fast) var(--ease);
-}
-
-.chrome-btn {
-  white-space: nowrap;
+    border-color var(--dur-fast) var(--ease),
+    background-color var(--dur-fast) var(--ease),
+    transform var(--dur-fast) var(--ease);
 }
 
 .chrome-btn::before { content: '[ '; }
@@ -549,8 +735,9 @@
 .chrome-btn:hover {
   color: var(--accent);
   border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+  transform: translateY(-1px);
 }
-
 /* Theme joke bubble --------------------------------------------------------
  * Dark is the only theme (research D12): a click on the theme control never
  * changes anything, it shows this instead.
@@ -678,28 +865,40 @@
  * at any container width, 320px included, with no media query needed.
  */
 .bar-row {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-areas:
+    'name percent duration'
+    'bar bar bar';
+  grid-template-columns: minmax(0, 1fr) auto auto;
   align-items: baseline;
-  column-gap: 10px;
-  row-gap: 4px;
-  padding: 7px 0;
+  gap: 3px 8px;
+  padding: 4px 6px;
+  margin: 0 -6px;
+  border-radius: var(--radius-sm);
+  transition: background-color var(--dur-fast) var(--ease);
+}
+
+.bar-row:hover {
+  background-color: color-mix(in srgb, var(--surface) 60%, transparent);
 }
 
 .bar-name {
-  flex: 1 1 auto;
+  grid-area: name;
   min-inline-size: 0;
-  font-size: var(--fs-sm);
+  font-size: var(--fs-xs);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  font-weight: 500;
+  color: var(--fg);
 }
 
 .bar-lane {
-  flex: 1 1 100%;
-  order: 1;
+  grid-area: bar;
   display: block;
-  block-size: 6px;
+  block-size: 3px;
+  border-radius: var(--radius-sm);
+  background: var(--line);
 }
 
 .bar-fill {
@@ -709,19 +908,39 @@
   background: var(--bar-ink);
   /* A row rounding to 0.0% still shows a visible sliver, distinct from an absent row. */
   inline-size: clamp(3px, calc(var(--pct) * 1%), 100%);
+  transition: opacity var(--dur-fast) var(--ease);
+}
+
+.bar-row:hover .bar-fill {
+  opacity: 0.85;
 }
 
 .bar-percent,
 .bar-duration {
-  flex: 0 0 auto;
-  font-size: var(--fs-sm);
+  font-size: var(--fs-xs);
   color: var(--dim);
   white-space: nowrap;
 }
 
 .bar-percent {
+  grid-area: percent;
   min-inline-size: 3.8ch;
   text-align: right;
+  font-family: var(--font-mono);
+  color: var(--accent);
+  font-weight: 500;
+}
+
+.bar-duration {
+  grid-area: duration;
+}
+
+@media (min-width: 760px) {
+  .gh-month .bar-row {
+    grid-template-areas: 'name bar percent duration';
+    grid-template-columns: minmax(8rem, 0.8fr) minmax(5rem, 1fr) auto auto;
+    align-items: center;
+  }
 }
 
 .bar-more {
@@ -731,8 +950,9 @@
 .bar-more summary {
   cursor: pointer;
   color: var(--dim);
-  font-size: var(--fs-sm);
+  font-size: var(--fs-xs);
   width: fit-content;
+  transition: color var(--dur-fast) var(--ease);
 }
 
 .bar-more summary:hover {
@@ -741,11 +961,6 @@
 
 .bar-more[open] summary {
   margin-bottom: 6px;
-}
-
-.bar-list,
-.bar-more {
-  overflow-x: auto;
 }
 
 /*
@@ -1095,13 +1310,15 @@ button.pagination-link {
  * viewports, and no section may become unreachable — so this reflows rather
  * than hiding, and the page never gains a horizontal scrollbar at 320px.
  */
-.cv-layout {
+.cv-layout,
+.document-layout {
   display: grid;
   grid-template-columns: 1fr;
   gap: var(--gutter);
 }
 
-.cv-body {
+.cv-body,
+.document-body {
   min-width: 0;
 }
 
@@ -1114,14 +1331,14 @@ button.pagination-link {
  * Measured, not guessed: this is what closed the last few pixels SC-005
  * needed on a real small-phone viewport (360x667).
  */
-.cv-body > header.section {
+.cv-body > header.section,
+.document-body > header.section {
   padding-bottom: 0;
   border-bottom: none;
 }
 
 .rail {
-  position: sticky;
-  top: 0;
+  position: relative;
   align-self: start;
   padding: var(--gutter) var(--gutter) 0;
   font-size: var(--fs-sm);
@@ -1136,6 +1353,7 @@ button.pagination-link {
   cursor: pointer;
   color: var(--dim);
   list-style: revert;
+  transition: color var(--dur-fast) var(--ease);
 }
 
 .rail-details summary:hover {
@@ -1168,11 +1386,16 @@ button.pagination-link {
 .rail a {
   color: var(--dim);
   border-bottom: 1px solid transparent;
+  transition:
+    color var(--dur-fast) var(--ease),
+    border-color var(--dur-fast) var(--ease),
+    padding-left var(--dur-fast) var(--ease);
 }
 
 .rail a:hover {
-  color: var(--fg);
-  border-color: var(--line);
+  color: var(--accent);
+  border-color: var(--accent);
+  padding-left: 4px;
 }
 
 /*
@@ -1180,17 +1403,21 @@ button.pagination-link {
  * state is programmatic first and painted second (FR-075, Principle III) and
  * a screen reader is told the same thing the eye is.
  */
-.rail a[aria-current='true'] {
+.rail a[aria-current='true'],
+.rail a[aria-current='location'] {
   color: var(--accent);
   border-color: var(--accent);
+  font-weight: 600;
 }
 
 @media (min-width: 1000px) {
-  .cv-layout {
+  .cv-layout,
+  .document-layout {
     grid-template-columns: 210px minmax(0, 1fr);
   }
 
   .rail {
+    position: sticky;
     top: 48px;
     padding-top: var(--space-section);
   }
@@ -1272,10 +1499,10 @@ button.pagination-link {
  * measure the prose uses so the path lines up with the heading below it.
  */
 .breadcrumb {
-  max-width: var(--measure);
-  margin: 0 auto;
-  padding: 14px var(--gutter) 0;
-  font-size: var(--fs-sm);
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  font-size: var(--fs-xs);
 }
 
 /*
@@ -1287,22 +1514,20 @@ button.pagination-link {
 .breadcrumb ol {
   list-style: none;
   padding-left: 0;
+  margin: 0;
 }
 
 .breadcrumb a {
   border-bottom: 1px solid transparent;
+  transition: color var(--dur-fast) var(--ease), border-color var(--dur-fast) var(--ease);
 }
 
 .breadcrumb a:hover {
-  border-color: var(--line);
+  color: var(--accent);
+  border-color: var(--accent);
 }
 
 /* The current page is not a link, so it does not take the link colour. */
 .breadcrumb [data-slot='breadcrumb-page'] {
   color: var(--dim);
-}
-
-/* The CV page owns its own measure, so the trail follows the rail's gutter. */
-.cv-layout .breadcrumb {
-  margin: 0;
 }

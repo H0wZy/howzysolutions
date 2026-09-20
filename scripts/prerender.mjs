@@ -26,14 +26,33 @@ function escapeAttr(value) {
   return value.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;')
 }
 
-/** Replaces the shell's title/description with the ones this route declares. */
-function withMeta(html, { title, description }) {
+const ORIGIN = 'https://howzysolutions.com'
+
+/** Replaces the shell's title/description and adds the route's sharing card. */
+function withMeta(html, { title, description, image, imageAlt }) {
+  const social = [
+    `<meta property="og:type" content="website" />`,
+    `<meta property="og:site_name" content="Howzy Solutions" />`,
+    `<meta property="og:title" content="${escapeAttr(title)}" />`,
+    `<meta property="og:description" content="${escapeAttr(description)}" />`,
+    `<meta property="og:image" content="${ORIGIN}${escapeAttr(image)}" />`,
+    `<meta property="og:image:width" content="1200" />`,
+    `<meta property="og:image:height" content="630" />`,
+    `<meta property="og:image:alt" content="${escapeAttr(imageAlt)}" />`,
+    `<meta name="twitter:card" content="summary_large_image" />`,
+    `<meta name="twitter:title" content="${escapeAttr(title)}" />`,
+    `<meta name="twitter:description" content="${escapeAttr(description)}" />`,
+    `<meta name="twitter:image" content="${ORIGIN}${escapeAttr(image)}" />`,
+    `<meta name="twitter:image:alt" content="${escapeAttr(imageAlt)}" />`,
+  ].join('\n    ')
+
   return html
     .replace(/<title>[\s\S]*?<\/title>/, `<title>${escapeAttr(title)}</title>`)
     .replace(
       /<meta\s+name="description"\s+content="[\s\S]*?"\s*\/?>/,
       `<meta name="description" content="${escapeAttr(description)}" />`,
     )
+    .replace('</head>', `    ${social}\n  </head>`)
 }
 
 /**

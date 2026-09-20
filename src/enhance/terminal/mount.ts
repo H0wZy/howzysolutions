@@ -44,6 +44,27 @@ export function mountTerminal(root: HTMLElement, session: TerminalSession): void
   output.setAttribute('aria-label', translate(session.locale, 'terminal.outputLabel'))
 
   let cursor = session.history.length
+  const ghostEl = root.querySelector<HTMLElement>('[data-term-ghost]')
+
+  const syncCursor = () => {
+    if (!ghostEl) return
+    const val = input.value
+    if (val.length === 0) {
+      ghostEl.textContent = 'help'
+    } else {
+      const pos = input.selectionStart ?? val.length
+      ghostEl.textContent = val.slice(0, pos)
+    }
+  }
+
+  input.addEventListener('input', syncCursor)
+  input.addEventListener('keydown', () => {
+    requestAnimationFrame(syncCursor)
+  })
+  input.addEventListener('keyup', syncCursor)
+  input.addEventListener('click', syncCursor)
+  input.addEventListener('select', syncCursor)
+  syncCursor()
 
   // `root` is the scroll region: scrollback and prompt share it, so output
   // pushes the prompt down the way it does in a terminal rather than sliding
@@ -119,6 +140,7 @@ export function mountTerminal(root: HTMLElement, session: TerminalSession): void
     event.preventDefault()
     const value = input.value
     input.value = ''
+    syncCursor()
     run(value)
   })
 
@@ -129,6 +151,7 @@ export function mountTerminal(root: HTMLElement, session: TerminalSession): void
       event.preventDefault()
       cursor = Math.max(0, cursor - 1)
       input.value = session.history[cursor] ?? ''
+      syncCursor()
       return
     }
     if (event.key === 'ArrowDown') {
@@ -136,6 +159,7 @@ export function mountTerminal(root: HTMLElement, session: TerminalSession): void
       event.preventDefault()
       cursor = Math.min(session.history.length, cursor + 1)
       input.value = cursor === session.history.length ? '' : (session.history[cursor] ?? '')
+      syncCursor()
       return
     }
 
@@ -147,6 +171,7 @@ export function mountTerminal(root: HTMLElement, session: TerminalSession): void
       const matches = completions(partial, invocableNames())
       if (matches.length === 1) {
         input.value = `${matches[0]} `
+        syncCursor()
       } else if (matches.length > 1) {
         const block = document.createElement('div')
         block.className = 'term-block'

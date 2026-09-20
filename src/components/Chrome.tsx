@@ -1,11 +1,17 @@
 import type { ReactNode } from 'react'
 import type { Locale } from '../content/i18n/types'
 import { translate } from '../content/i18n/translate'
-import { locationFor } from '../route'
+import { locationFor, pathFor } from '../route'
 import { topLevelLinks } from '../navigation'
 import { ThemeControl } from './ThemeControl'
 import { LocaleControl } from './LocaleControl'
 import { Breadcrumb } from './Breadcrumb'
+import {
+  NavigationMenu,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+} from './ui/navigation-menu'
 
 /**
  * Sticky editor-style bar, plus the breadcrumb beneath it.
@@ -20,13 +26,11 @@ import { Breadcrumb } from './Breadcrumb'
  */
 export function Chrome({
   locale,
-  path,
   pathname,
   controls,
   leafLabel,
 }: {
   locale: Locale
-  path: string
   pathname: string
   controls?: ReactNode
   /** The current page's own name, where that name is data (a project). */
@@ -35,28 +39,28 @@ export function Chrome({
   const { route } = locationFor(pathname)
 
   return (
-    <>
-      <div className="chrome">
-        <span className="dots" aria-hidden="true">
-          <i />
-          <i />
-          <i />
-        </span>
-        <span className="chrome-file">
-          ~/{path} <span className="chrome-file-kind">{translate(locale, 'chrome.file')}</span>
-        </span>
-        <span className="chrome-controls">
-          {controls}
+    <header className="chrome">
+      <NavigationMenu aria-label={translate(locale, 'nav.primary')}>
+        <a className="chrome-mark" href={pathFor({ page: 'home' }, locale)} aria-label="H0wZy">
+          <img src="/brand/h0wzy-mark-512.png" width="28" height="28" alt="" />
+          <span>h0wzy</span>
+        </a>
+        <Breadcrumb route={route} locale={locale} leafLabel={leafLabel} />
+        <NavigationMenuList>
           {topLevelLinks(route, locale).map((link) => (
-            <a key={link.href} className="chrome-btn" href={link.href}>
-              {translate(locale, link.labelKey)}
-            </a>
+            <NavigationMenuItem key={link.href}>
+              <NavigationMenuLink className="chrome-btn" href={link.href}>
+                {translate(locale, link.labelKey)}
+              </NavigationMenuLink>
+            </NavigationMenuItem>
           ))}
+        </NavigationMenuList>
+      </NavigationMenu>
+      <span className="chrome-controls">
+          {controls}
           <LocaleControl locale={locale} pathname={pathname} />
           <ThemeControl locale={locale} />
-        </span>
-      </div>
-      <Breadcrumb route={route} locale={locale} leafLabel={leafLabel} />
-    </>
+      </span>
+    </header>
   )
 }

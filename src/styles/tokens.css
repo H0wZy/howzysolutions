@@ -14,8 +14,10 @@
   --surface: #141210;
   --fg: #e8e2d6;
   --dim: #968c79;
-  --accent: #e8a33d;
-  --accent-2: #5cc0ad;
+  /* Software, links, focus, active navigation and measured progress. */
+  --accent: #5cc0ad;
+  /* Warm editorial emphasis only; never an interactive or progress state. */
+  --accent-2: #e8a33d;
   /*
    * The one hue this palette did not already have, taken from the author's
    * own oh-my-posh prompt (~/.config/ohmyposh/h0wzy.omp.json, session segment
@@ -25,7 +27,7 @@
    * Every other segment maps onto a token this palette already had.
    */
   --term-user: #bb84ee;
-  /* Same ink as --accent-2 (research D4): bars are measured data, not a new hue. */
+  /* Same ink as --accent: bars are measured data, not a new hue. */
   --bar-ink: #5cc0ad;
   /*
    * Contribution grid intensity, five steps (research D11). Step 0 is a quiet
