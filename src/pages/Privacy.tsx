@@ -96,8 +96,11 @@ export function Privacy({
             <section key={project.id} className="section" id={project.id}>
               <div className="wrap">
                 <p className="sub dim">{translate(locale, 'privacy.projects')}</p>
-                <h2>
-                  {project.name} <span className="dim">· {project.tagline[locale]}</span>
+                <h2 className="privacy-project-title">
+                  {project.name}{' '}
+                  <span className="dim">
+                    · <span className="nowrap">{project.tagline[locale]}</span>
+                  </span>
                 </h2>
                 {project.summary[locale].map((paragraph) => (
                   <p key={paragraph} className="prose">

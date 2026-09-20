@@ -12,6 +12,7 @@ import { GithubActivity } from '../components/GithubActivity'
 import { Terminal } from '../components/Terminal'
 import { Skeleton } from '../components/ui/skeleton'
 import { SectionRail } from '../components/SectionRail'
+import { Typewriter } from '../components/Typewriter'
 import { homeTopicAnchors } from '../navigation'
 import portrait from '../assets/branding/h0wzy-portrait.webp'
 
@@ -40,13 +41,13 @@ export function Home({
         <header className="section hero">
           <div className="wrap hero-grid">
             <div className="hero-copy rise">
-              <h1>
-                {profile.handle}
-                <span className="cursor" aria-hidden="true">
-                  ▋
-                </span>
+              <h1 className="hero-title">
+                <span className="hero-greeting">{translate(locale, 'hero.greeting')}</span>
+                <span className="hero-handle">H0wZy</span>
               </h1>
-              <p className="tagline">{profile.tagline[locale]}</p>
+              <p className="tagline">
+                <Typewriter phrases={profile.taglines[locale]} />
+              </p>
               <p className="sub">
                 {translate(locale, 'hero.role')} · {profile.location[locale]}
               </p>

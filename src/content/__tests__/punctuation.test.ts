@@ -38,6 +38,7 @@ function visibleStrings(): Array<[where: string, text: string]> {
   }
 
   localized('profile.tagline', profile.tagline)
+  localizedList('profile.taglines', profile.taglines)
   localized('profile.location', profile.location)
   localizedList('profile.bio', profile.bio)
   for (const contact of profile.contacts) out.push([`profile.contact.${contact.kind}`, contact.label])

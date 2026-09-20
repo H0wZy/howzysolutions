@@ -40,27 +40,31 @@ export function Chrome({
 
   return (
     <header className="chrome">
-      <NavigationMenu aria-label={translate(locale, 'nav.primary')}>
+      <div className="chrome-brand">
         <a className="chrome-mark" href={pathFor({ page: 'home' }, locale)} aria-label="H0wZy">
           <img src="/brand/h0wzy-mark-512.png" width="28" height="28" alt="" />
           <span>h0wzy</span>
         </a>
         <Breadcrumb route={route} locale={locale} leafLabel={leafLabel} />
-        <NavigationMenuList>
-          {topLevelLinks(route, locale).map((link) => (
-            <NavigationMenuItem key={link.href}>
-              <NavigationMenuLink className="chrome-btn" href={link.href}>
-                {translate(locale, link.labelKey)}
-              </NavigationMenuLink>
-            </NavigationMenuItem>
-          ))}
-        </NavigationMenuList>
-      </NavigationMenu>
-      <span className="chrome-controls">
+      </div>
+      <div className="chrome-actions">
+        <NavigationMenu aria-label={translate(locale, 'nav.primary')}>
+          <NavigationMenuList>
+            {topLevelLinks(route, locale).map((link) => (
+              <NavigationMenuItem key={link.href}>
+                <NavigationMenuLink className="chrome-btn" href={link.href}>
+                  {translate(locale, link.labelKey)}
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+            ))}
+          </NavigationMenuList>
+        </NavigationMenu>
+        <span className="chrome-controls">
           {controls}
           <LocaleControl locale={locale} pathname={pathname} />
           <ThemeControl locale={locale} />
-      </span>
+        </span>
+      </div>
     </header>
   )
 }
