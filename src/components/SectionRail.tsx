@@ -1,8 +1,8 @@
 import type { Locale } from '../content/i18n/types'
-import type { Localized } from '../content/i18n/types'
 import { translate } from '../locale'
+import type { TopicAnchor } from '../navigation'
 
-export type RailEntry = { id: string; label: Localized }
+export type RailEntry = TopicAnchor
 
 /**
  * A map of a long document, derived from the record the page renders its
@@ -26,7 +26,7 @@ export type RailEntry = { id: string; label: Localized }
  * page has six sections and no other page reaches four, so the CV page is the
  * only page that gets one (FR-074, D10).
  */
-const MINIMUM_ENTRIES = 4
+const MINIMUM_ENTRIES = 2
 
 export function SectionRail({ entries, locale }: { entries: RailEntry[]; locale: Locale }) {
   if (entries.length < MINIMUM_ENTRIES) return null
@@ -37,7 +37,11 @@ export function SectionRail({ entries, locale }: { entries: RailEntry[]; locale:
       {entries.map((entry) => (
         <li key={entry.id}>
           <a href={`#${entry.id}`} data-rail-link={entry.id}>
-            {entry.label[locale]}
+            {entry.labelKey
+              ? translate(locale, entry.labelKey)
+              : typeof entry.label === 'string'
+                ? entry.label
+                : entry.label[locale]}
           </a>
         </li>
       ))}

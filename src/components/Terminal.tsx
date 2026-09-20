@@ -78,18 +78,24 @@ export function Terminal({ locale }: { locale: Locale }) {
           <label className="term-prompt" htmlFor="term-input">
             ❯
           </label>
-          <input
-            id="term-input"
-            className="term-input"
-            data-term-input
-            type="text"
-            autoComplete="off"
-            autoCapitalize="off"
-            autoCorrect="off"
-            spellCheck={false}
-            disabled
-            placeholder="help"
-          />
+          <div className="term-field">
+            <span className="term-ghost" data-term-ghost aria-hidden="true">
+              help
+            </span>
+            <span className="term-cursor" data-term-cursor aria-hidden="true" />
+            <input
+              id="term-input"
+              className="term-input"
+              data-term-input
+              type="text"
+              autoComplete="off"
+              autoCapitalize="off"
+              autoCorrect="off"
+              spellCheck={false}
+              disabled
+              placeholder="help"
+            />
+          </div>
         </div>
       </form>
     </div>

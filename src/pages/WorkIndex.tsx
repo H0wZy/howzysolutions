@@ -26,7 +26,7 @@ export function WorkIndex({
 
   return (
     <>
-      <Chrome locale={locale} path="h0wzy/work" pathname={pathname} />
+      <Chrome locale={locale} pathname={pathname} />
       <main className="section">
         <div className="wrap">
           <h1>{translate(locale, 'work.listingTitle')}</h1>

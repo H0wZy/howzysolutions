@@ -10,6 +10,8 @@ import {
   type Project,
 } from '../types'
 import { LOCALES } from '../i18n/types'
+import { en } from '../i18n/en'
+import { pt } from '../i18n/pt'
 
 const techIds = new Set(technologies.map((t) => t.id))
 const each = (fn: (p: Project) => void) => projects.forEach(fn)
@@ -46,6 +48,17 @@ describe('project records', () => {
     each((p) => {
       expect(Object.keys(PROJECT_KIND)).toContain(p.kind)
       expect(Object.keys(PROJECT_STATE)).toContain(p.state)
+    })
+  })
+
+  it('maps every project kind in both locales and assigns exactly one kind per project', () => {
+    for (const labelKey of Object.values(PROJECT_KIND)) {
+      expect(en[labelKey].trim(), labelKey).not.toBe('')
+      expect(pt[labelKey].trim(), labelKey).not.toBe('')
+    }
+    each((project) => {
+      expect(typeof project.kind, project.id).toBe('string')
+      expect(Object.hasOwn(PROJECT_KIND, project.kind), project.id).toBe(true)
     })
   })
 

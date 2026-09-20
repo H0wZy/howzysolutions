@@ -1,13 +1,15 @@
 import type { Locale } from '../content/i18n/types'
 import type { Project } from '../content/types'
-import { PROJECT_STATE } from '../content/types'
+import { PROJECT_KIND, PROJECT_STATE } from '../content/types'
 import { translate } from '../locale'
+import { pathFor } from '../route'
+import { Badge } from './ui/badge'
 
 function StateBadge({ project, locale }: { project: Project; locale: Locale }) {
   return (
-    <span className={`badge badge-${project.state}`}>
+    <Badge className={`badge-${project.state}`}>
       {translate(locale, PROJECT_STATE[project.state])}
-    </span>
+    </Badge>
   )
 }
 
@@ -34,9 +36,10 @@ export function ProjectList({ projects, locale }: { projects: Project[]; locale:
       {projects.map((project) => (
         <li key={project.id} className="project-row reveal">
           <div className="project-row-head">
-            <a className="project-row-name" href={`/work/${project.id}/`}>
+            <a className="project-row-name" href={pathFor({ page: 'work', id: project.id }, locale)}>
               {project.name}
             </a>
+            <Badge>{translate(locale, PROJECT_KIND[project.kind])}</Badge>
             <StateBadge project={project} locale={locale} />
           </div>
           <p className="project-row-summary">{project.summary[locale]}</p>

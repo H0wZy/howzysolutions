@@ -10,6 +10,10 @@ import { SectionLabel } from '../components/SectionLabel'
 import { StatsPanel } from '../components/StatsPanel'
 import { GithubActivity } from '../components/GithubActivity'
 import { Terminal } from '../components/Terminal'
+import { Skeleton } from '../components/ui/skeleton'
+import { SectionRail } from '../components/SectionRail'
+import { homeTopicAnchors } from '../navigation'
+import portrait from '../assets/branding/h0wzy-portrait.webp'
 
 export function Home({
   content,
@@ -28,33 +32,53 @@ export function Home({
 
   return (
     <>
-      <Chrome locale={locale} path="h0wzy" pathname={pathname} />
+      <Chrome locale={locale} pathname={pathname} />
 
-      <main>
-        <header className="section">
-          <div className="wrap rise">
-            <h1>
-              {profile.handle}
-              <span className="cursor" aria-hidden="true">
-                ▋
-              </span>
-            </h1>
-            <p className="tagline">{profile.tagline[locale]}</p>
-            <p className="sub">
-              {translate(locale, 'hero.role')} · {profile.location[locale]}
-            </p>
-            {/*
-              FR-028: experience and tracked time are separate measurements over
-              different periods, and each states its own.
-            */}
-            <p className="sub">
-              <strong>{translate(locale, 'hero.experience', { years, months })}</strong>{' '}
-              <span className="dim">({translate(locale, 'hero.experienceSince')})</span>
-            </p>
-            {/* FR-036: the same period wording as the activity section, never a second phrasing. */}
-            <p className="sub dim">
-              {stats.humanReadableTotal}, {translate(locale, period.key, period.params)}
-            </p>
+      <main className="document-layout">
+        <SectionRail entries={homeTopicAnchors(Boolean(activity.periods['last-year']))} locale={locale} />
+        <div className="document-body">
+        <header className="section hero">
+          <div className="wrap hero-grid">
+            <div className="hero-copy rise">
+              <h1>
+                {profile.handle}
+                <span className="cursor" aria-hidden="true">
+                  ▋
+                </span>
+              </h1>
+              <p className="tagline">{profile.tagline[locale]}</p>
+              <p className="sub">
+                {translate(locale, 'hero.role')} · {profile.location[locale]}
+              </p>
+              {/*
+                FR-028: experience and tracked time are separate measurements over
+                different periods, and each states its own.
+              */}
+              <p className="sub">
+                <strong>{translate(locale, 'hero.experience', { years, months })}</strong>{' '}
+                <span className="dim">({translate(locale, 'hero.experienceSince')})</span>
+              </p>
+              {/* FR-036: the same period wording as the activity section, never a second phrasing. */}
+              <p className="sub dim">
+                {stats.humanReadableTotal}, {translate(locale, period.key, period.params)}
+              </p>
+              <p className="hero-links">
+                <a href="#terminal">{translate(locale, 'section.terminal')}</a>
+                <a href="#work">{translate(locale, 'section.work')}</a>
+              </p>
+            </div>
+
+            <figure className="hero-portrait">
+              <Skeleton className="hero-portrait-skeleton" />
+              <img
+                src={portrait}
+                width="720"
+                height="720"
+                alt=""
+                fetchPriority="high"
+                decoding="async"
+              />
+            </figure>
           </div>
         </header>
 
@@ -121,6 +145,7 @@ export function Home({
             </ul>
           </div>
         </section>
+        </div>
       </main>
 
       <footer className="footer">

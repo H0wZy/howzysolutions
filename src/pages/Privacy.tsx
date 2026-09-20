@@ -3,6 +3,8 @@ import type { ContentBundle, PrivacySection } from '../content/types'
 import { translate } from '../locale'
 import { pathFor } from '../route'
 import { Chrome } from '../components/Chrome'
+import { SectionRail } from '../components/SectionRail'
+import { privacyTopicAnchors } from '../navigation'
 
 /**
  * The privacy policy (src/content/privacy.ts): the general policy, then one
@@ -47,8 +49,10 @@ export function Privacy({
 
   return (
     <>
-      <Chrome locale={locale} path="h0wzy/privacy-policy" pathname={pathname} />
-      <main>
+      <Chrome locale={locale} pathname={pathname} />
+      <main className="document-layout">
+        <SectionRail entries={privacyTopicAnchors(privacy)} locale={locale} />
+        <div className="document-body">
         <header className="section">
           <div className="wrap">
             <h1>{translate(locale, 'privacy.title')}</h1>
@@ -117,6 +121,7 @@ export function Privacy({
             </section>
           )
         })}
+        </div>
       </main>
     </>
   )

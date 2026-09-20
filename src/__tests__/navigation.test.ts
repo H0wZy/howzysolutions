@@ -1,7 +1,16 @@
 import { describe, expect, it } from 'vitest'
-import { topLevelLinks, trailFor } from '../navigation'
+import {
+  homeTopicAnchors,
+  privacyTopicAnchors,
+  projectTopicAnchors,
+  topLevelLinks,
+  trailFor,
+} from '../navigation'
 import { pathFor, type Route } from '../route'
 import { LOCALES } from '../content/i18n/types'
+import { privacy } from '../content/privacy'
+import { projects } from '../content/projects'
+import { trackedTimeFor } from '../content/stats'
 
 /**
  * The breadcrumb is a pure function of the route, which is the whole reason it
@@ -125,6 +134,54 @@ describe('the top-level links in the chrome bar', () => {
         if (locale === 'en') expect(link.href).not.toMatch(/^\/pt\//)
         else expect(link.href).toMatch(/^\/pt\//)
       }
+    }
+  })
+})
+
+describe('document outlines', () => {
+  it('keeps home anchors in rendered source order and omits absent GitHub activity', () => {
+    expect(homeTopicAnchors(true).map((entry) => entry.id)).toEqual([
+      'terminal',
+      'about',
+      'work',
+      'stats',
+      'github',
+      'contact',
+    ])
+    expect(homeTopicAnchors(false).map((entry) => entry.id)).toEqual([
+      'terminal',
+      'about',
+      'work',
+      'stats',
+      'contact',
+    ])
+  })
+
+  it('derives every privacy anchor from the policy record in source order', () => {
+    const expected = [
+      ...privacy.sections.map((section) => section.id),
+      ...privacy.projects.flatMap((project) => [
+        project.id,
+        ...project.sections.map((section) => section.id),
+      ]),
+    ]
+    expect(privacyTopicAnchors(privacy).map((entry) => entry.id)).toEqual(expected)
+  })
+
+  it('matches project anchors to the optional blocks that actually render', () => {
+    for (const project of projects) {
+      const ids = projectTopicAnchors(project, Boolean(trackedTimeFor(project.wakatimeProject))).map(
+        (entry) => entry.id,
+      )
+      expect(ids).toContain('problem')
+      expect(ids).toContain('capabilities')
+      expect(ids).toContain('stack')
+      expect(ids).toContain('development')
+      expect(ids).toContain('limitations')
+      expect(ids.includes('metrics')).toBe(Boolean(project.metrics?.length))
+      expect(ids.includes('roadmap')).toBe(Boolean(project.roadmap?.en.length))
+      expect(ids.includes('links')).toBe(Boolean(project.links?.length))
+      expect(new Set(ids).size).toBe(ids.length)
     }
   })
 })

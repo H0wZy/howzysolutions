@@ -155,3 +155,23 @@ describe('visitor-facing punctuation', () => {
     expect(offenders, `double hyphen in: ${offenders.join(', ')}`).toEqual([])
   })
 })
+
+describe('direct section headings', () => {
+  it('uses the requested project and activity headings in both locales', () => {
+    expect(en['work.heading']).toBe('My projects')
+    expect(pt['work.heading']).toBe('Meus projetos')
+    expect(en['stats.heading']).toBe('My activity')
+    expect(pt['stats.heading']).toBe('Minha atividade')
+  })
+
+  it('keeps project totals out of evergreen copy', () => {
+    for (const [where, text] of [
+      ['en.work.heading', en['work.heading']],
+      ['en.work.intro', en['work.intro']],
+      ['pt.work.heading', pt['work.heading']],
+      ['pt.work.intro', pt['work.intro']],
+    ]) {
+      expect(text, where).not.toMatch(/\b(?:eight|nine|oito|nove|8|9)\s+(?:projects|projetos)\b/i)
+    }
+  })
+})

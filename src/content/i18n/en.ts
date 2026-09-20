@@ -19,6 +19,7 @@ export const en = {
   'theme.joke.3': 'Reviewed it myself and rejected it myself. At least it was fast.',
   'theme.joke.4': "It's on the roadmap, right after the roadmap.",
   'chrome.skipToContent': 'Skip to content',
+  'meta.socialImageAlt': 'Graphite portrait of Marcos H0wZy Junior beside the h0wzy cursor wordmark.',
 
   // Sections
   'section.terminal': 'the_terminal',
@@ -46,7 +47,7 @@ export const en = {
   'hero.location': 'Londrina, Paraná, Brazil',
 
   // Project listing
-  'work.heading': 'Nine projects, and what each one does not do.',
+  'work.heading': 'My projects',
   'work.intro':
     'Every entry states its problem, its stack, its honest current state, and the limitations its own documentation declares.',
   'work.commits': 'commits',
@@ -92,7 +93,7 @@ export const en = {
   'stack.other': 'other',
 
   // Statistics
-  'stats.heading': 'Measured, not asserted.',
+  'stats.heading': 'My activity',
   'stats.total': 'total tracked',
   'stats.dailyAverage': 'daily average',
   'stats.languages': 'languages',
@@ -238,6 +239,7 @@ export const en = {
 
   // Navigation
   'nav.breadcrumb': 'Breadcrumb',
+  'nav.primary': 'Primary navigation',
   'nav.onThisPage': 'On this page',
   'nav.home': 'Home',
   // FR-084. Lowercase, matching the chrome bar's other controls (theme, lang)

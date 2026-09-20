@@ -31,22 +31,35 @@ export function alternates(pathname: string): Array<{ locale: Locale; href: stri
   return LOCALES.map((locale) => ({ locale, href: pathFor(route, locale) }))
 }
 
-export function metaFor(pathname: string): { title: string; description: string; lang: Locale } {
+export type PageMeta = {
+  title: string
+  description: string
+  lang: Locale
+  image: '/brand/h0wzy-social-card.png'
+  imageAlt: string
+}
+
+export function metaFor(pathname: string): PageMeta {
   const { route, locale } = locationFor(pathname)
+  const social = {
+    lang: locale,
+    image: '/brand/h0wzy-social-card.png' as const,
+    imageAlt: translate(locale, 'meta.socialImageAlt'),
+  }
   const project =
     route.page === 'work' ? content.projects.find((p) => p.id === route.id) : undefined
   if (project) {
     return {
       title: `${project.name} · ${content.profile.name}`,
       description: project.summary[locale],
-      lang: locale,
+      ...social,
     }
   }
   if (route.page === 'workIndex') {
     return {
       title: `${translate(locale, 'work.listingTitle')} · ${content.profile.name}`,
       description: translate(locale, 'work.intro'),
-      lang: locale,
+      ...social,
     }
   }
   /*
@@ -58,20 +71,20 @@ export function metaFor(pathname: string): { title: string; description: string;
     return {
       title: `${translate(locale, 'cv.title')} · ${content.profile.name}`,
       description: translate(locale, 'cv.metaDescription'),
-      lang: locale,
+      ...social,
     }
   }
   if (route.page === 'privacy') {
     return {
       title: `${translate(locale, 'privacy.title')} · ${content.profile.name}`,
       description: translate(locale, 'privacy.metaDescription'),
-      lang: locale,
+      ...social,
     }
   }
   return {
     title: `${content.profile.name} · ${translate(locale, 'hero.role')}`,
     description: content.profile.tagline[locale],
-    lang: locale,
+    ...social,
   }
 }
 
