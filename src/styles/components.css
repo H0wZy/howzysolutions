@@ -1191,6 +1191,7 @@
 /* Tighter than the stats panel's rows: a busy month lists many repositories,
    and the pager exists so the box stays short. */
 .gh-month .bar-row {
+  margin: 0;
   padding: 2px 0;
   row-gap: 3px;
 }
