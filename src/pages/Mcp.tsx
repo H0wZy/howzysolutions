@@ -315,10 +315,10 @@ export function Mcp({
                         key={tab}
                         type="button"
                         onClick={() => setActiveTab(tab)}
-                        className={`px-3 py-1.5 rounded text-xs font-mono transition-colors ${
+                        className={`px-3 py-1.5 rounded text-xs font-mono transition-colors border-0 outline-none cursor-pointer ${
                           activeTab === tab
                             ? 'bg-[var(--line)] text-[var(--accent)] font-semibold'
-                            : 'text-[var(--dim)] hover:text-[var(--fg)]'
+                            : 'bg-transparent text-[var(--dim)] hover:text-[var(--fg)]'
                         }`}
                       >
                         {tab === 'claude' && 'Claude'}
@@ -334,8 +334,8 @@ export function Mcp({
                     <button
                       type="button"
                       onClick={() => setMode('streamable')}
-                      className={`px-2.5 py-1 rounded transition-colors ${
-                        mode === 'streamable' ? 'bg-[var(--surface)] text-[var(--accent)] font-semibold' : 'text-[var(--dim)] hover:text-[var(--fg)]'
+                      className={`px-2.5 py-1 rounded transition-colors border-0 outline-none cursor-pointer ${
+                        mode === 'streamable' ? 'bg-[var(--surface)] text-[var(--accent)] font-semibold' : 'bg-transparent text-[var(--dim)] hover:text-[var(--fg)]'
                       }`}
                       title="Modern Streamable HTTP endpoint"
                     >
@@ -344,8 +344,8 @@ export function Mcp({
                     <button
                       type="button"
                       onClick={() => setMode('sse')}
-                      className={`px-2.5 py-1 rounded transition-colors ${
-                        mode === 'sse' ? 'bg-[var(--surface)] text-[var(--accent)] font-semibold' : 'text-[var(--dim)] hover:text-[var(--fg)]'
+                      className={`px-2.5 py-1 rounded transition-colors border-0 outline-none cursor-pointer ${
+                        mode === 'sse' ? 'bg-[var(--surface)] text-[var(--accent)] font-semibold' : 'bg-transparent text-[var(--dim)] hover:text-[var(--fg)]'
                       }`}
                       title="Legacy HTTP + SSE endpoint"
                     >
@@ -354,8 +354,8 @@ export function Mcp({
                     <button
                       type="button"
                       onClick={() => setMode('cli')}
-                      className={`px-2.5 py-1 rounded transition-colors ${
-                        mode === 'cli' ? 'bg-[var(--surface)] text-[var(--accent)] font-semibold' : 'text-[var(--dim)] hover:text-[var(--fg)]'
+                      className={`px-2.5 py-1 rounded transition-colors border-0 outline-none cursor-pointer ${
+                        mode === 'cli' ? 'bg-[var(--surface)] text-[var(--accent)] font-semibold' : 'bg-transparent text-[var(--dim)] hover:text-[var(--fg)]'
                       }`}
                       title="Zero-install CLI execution"
                     >
@@ -373,7 +373,7 @@ export function Mcp({
                   <button
                     type="button"
                     onClick={() => triggerCopy(connectorUrl, 'connector-url')}
-                    className="shrink-0 p-1.5 rounded text-[var(--dim)] hover:text-[var(--accent)] transition-colors"
+                    className="shrink-0 p-1.5 rounded border-0 outline-none bg-transparent text-[var(--dim)] hover:text-[var(--accent)] hover:bg-[var(--surface)] transition-colors cursor-pointer"
                     title={copiedKey === 'connector-url' ? 'Copied!' : 'Copy to clipboard'}
                     aria-label="Copy connector URL"
                   >
@@ -479,7 +479,7 @@ export function Mcp({
                     <button
                       type="button"
                       onClick={() => triggerCopy('npx @h0wzy/mcp', 'cmd-npx')}
-                      className="p-1 rounded text-[var(--dim)] hover:text-[var(--accent)] transition-colors"
+                      className="p-1 rounded border-0 outline-none bg-transparent text-[var(--dim)] hover:text-[var(--accent)] hover:bg-[var(--line)] transition-colors cursor-pointer"
                       title={copiedKey === 'cmd-npx' ? 'Copied!' : 'Copy command'}
                       aria-label="Copy command"
                     >
@@ -496,7 +496,7 @@ export function Mcp({
                     <button
                       type="button"
                       onClick={() => triggerCopy('npm install -g @h0wzy/mcp && hmcp', 'cmd-npm')}
-                      className="p-1 rounded text-[var(--dim)] hover:text-[var(--accent)] transition-colors"
+                      className="p-1 rounded border-0 outline-none bg-transparent text-[var(--dim)] hover:text-[var(--accent)] hover:bg-[var(--line)] transition-colors cursor-pointer"
                       title={copiedKey === 'cmd-npm' ? 'Copied!' : 'Copy command'}
                       aria-label="Copy command"
                     >
@@ -513,7 +513,7 @@ export function Mcp({
                     <button
                       type="button"
                       onClick={() => triggerCopy('go run ./cli setup-path && hmcp', 'cmd-go')}
-                      className="p-1 rounded text-[var(--dim)] hover:text-[var(--accent)] transition-colors"
+                      className="p-1 rounded border-0 outline-none bg-transparent text-[var(--dim)] hover:text-[var(--accent)] hover:bg-[var(--line)] transition-colors cursor-pointer"
                       title={copiedKey === 'cmd-go' ? 'Copied!' : 'Copy command'}
                       aria-label="Copy command"
                     >
