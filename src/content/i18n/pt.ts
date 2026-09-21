@@ -36,7 +36,7 @@ export const pt = {
   'hero.role': 'Desenvolvedor full-stack',
   'hero.experience': '{years}a {months}m em TI',
   'hero.experienceSince': 'desde a graduação na Unicesumar em 2023; empregado de maio de 2025 a agosto de 2026',
-  'hero.location': 'Londrina, Paraná, Brasil',
+  'hero.location': 'de Londrina para o Mundo',
 
   // Listagem de projetos
   'work.heading': 'Meus projetos',

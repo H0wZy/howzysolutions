@@ -48,7 +48,7 @@ export function Home({
               <p className="tagline">
                 <Typewriter phrases={profile.taglines[locale]} />
               </p>
-              <p className="sub">
+              <p className="sub nowrap">
                 {translate(locale, 'hero.role')} · {profile.location[locale]}
               </p>
               {/*
@@ -146,14 +146,14 @@ export function Home({
             </ul>
           </div>
         </section>
+
+        <footer className="footer">
+          <div className="wrap">
+            <p className="dim">{translate(locale, 'footer.builtWith')}</p>
+          </div>
+        </footer>
         </div>
       </main>
-
-      <footer className="footer">
-        <div className="wrap">
-          <p className="dim">{translate(locale, 'footer.builtWith')}</p>
-        </div>
-      </footer>
     </>
   )
 }
