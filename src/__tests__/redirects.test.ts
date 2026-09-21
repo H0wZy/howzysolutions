@@ -23,3 +23,16 @@ describe('the old /privacy/ link', () => {
     }
   })
 })
+
+describe('the old /work/ links', () => {
+  it.each(LOCALES)('%s: 301s to the works route', (locale) => {
+    const target = pathFor({ page: 'workIndex', number: 1 }, locale)
+    const old = locale === 'en' ? '/work/' : `/${locale}/work/`
+    for (const from of [old, old.slice(0, -1)]) {
+      expect(rules, from).toContainEqual([from, target, '301'])
+    }
+    const splatFrom = locale === 'en' ? '/work/*' : `/${locale}/work/*`
+    const splatTarget = locale === 'en' ? '/works/:splat' : `/${locale}/works/:splat`
+    expect(rules, splatFrom).toContainEqual([splatFrom, splatTarget, '301'])
+  })
+})

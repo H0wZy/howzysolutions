@@ -39,7 +39,7 @@ describe('project records', () => {
     each((p) => expect(p.id, `bad id: ${p.id}`).toMatch(/^[a-z0-9-]+$/))
   })
 
-  /* research D6 — a purely numeric id would collide with /work/{n}/ */
+  /* research D6 — a purely numeric id would collide with /works/{n}/ */
   it('never uses a purely numeric id', () => {
     each((p) => expect(p.id, p.id).not.toMatch(/^\d+$/))
   })

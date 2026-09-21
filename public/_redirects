@@ -5,3 +5,11 @@
 /privacy/ /privacy-policy/ 301
 /pt/privacy /pt/privacy-policy/ 301
 /pt/privacy/ /pt/privacy-policy/ 301
+
+# Legacy /work/ route migrated to /works/ on 2026-09-21.
+/work /works/ 301
+/work/ /works/ 301
+/work/* /works/:splat 301
+/pt/work /pt/works/ 301
+/pt/work/ /pt/works/ 301
+/pt/work/* /pt/works/:splat 301
