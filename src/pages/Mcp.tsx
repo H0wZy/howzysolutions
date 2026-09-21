@@ -96,29 +96,16 @@ function GithubIcon({ className = 'size-3.5 shrink-0' }: { className?: string })
   )
 }
 
-function SparkleIcon() {
-  return (
-    <Svg>
-      <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
-    </Svg>
-  )
+function ClaudeIcon() {
+  return <img src="/assets/icons/claude.svg" alt="" aria-hidden="true" className="size-3.5 shrink-0" width={14} height={14} />
 }
 
-function BotIcon() {
-  return (
-    <Svg>
-      <rect width="16" height="12" x="4" y="8" rx="2" />
-      <path d="M12 8V4H8m-6 10h2m16 0h2m-7-1v2m-6-2v2" />
-    </Svg>
-  )
+function OpenAIIcon() {
+  return <img src="/assets/icons/chatgpt.svg" alt="" aria-hidden="true" className="size-3.5 shrink-0" width={14} height={14} />
 }
 
-function PackageIcon() {
-  return (
-    <Svg>
-      <path d="m12 3 9 4.5v9L12 21l-9-4.5v-9Zm0 0v9m9-4.5-9 4.5-9-4.5" />
-    </Svg>
-  )
+function NpmIcon() {
+  return <img src="/assets/icons/npm.svg" alt="" aria-hidden="true" className="size-3.5 shrink-0" width={14} height={14} />
 }
 
 export function Mcp({
@@ -246,7 +233,7 @@ export function Mcp({
                         rel="noreferrer"
                         className="text-left px-2.5 py-1.5 rounded hover:bg-[var(--line)] text-[var(--accent)] transition-colors flex items-center gap-2"
                       >
-                        <SparkleIcon />
+                        <ClaudeIcon />
                         <span>Open in Claude ↗</span>
                       </a>
                       <a
@@ -255,7 +242,7 @@ export function Mcp({
                         rel="noreferrer"
                         className="text-left px-2.5 py-1.5 rounded hover:bg-[var(--line)] text-[var(--accent)] transition-colors flex items-center gap-2"
                       >
-                        <BotIcon />
+                        <OpenAIIcon />
                         <span>Open in ChatGPT ↗</span>
                       </a>
                       <a
@@ -264,7 +251,7 @@ export function Mcp({
                         rel="noreferrer"
                         className="text-left px-2.5 py-1.5 rounded hover:bg-[var(--line)] text-[var(--accent)] transition-colors flex items-center gap-2 border-t border-[var(--line)] pt-1 mt-0.5"
                       >
-                        <PackageIcon />
+                        <NpmIcon />
                         <span>View on npm ↗</span>
                       </a>
                       <a
