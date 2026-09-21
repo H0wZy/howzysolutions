@@ -18,7 +18,7 @@ function buildMarkdown(cv, locale) {
   const dateStamp = cv.capturedAt.slice(0, 10)
   const canonicalUrl = isPt ? 'https://howzysolutions.com/pt/cv' : 'https://howzysolutions.com/cv'
   const siteUrl = isPt ? 'https://howzysolutions.com/pt' : 'https://howzysolutions.com'
-  const pdfUrl = isPt ? 'https://howzysolutions.com/pt/cv.pdf' : 'https://howzysolutions.com/cv.pdf'
+  const pdfUrl = isPt ? 'https://howzysolutions.com/cv.pdf/ptbr' : 'https://howzysolutions.com/cv.pdf/eng'
   const title = isPt
     ? 'Marcos Junior Bueno Selzler - Curriculo'
     : 'Marcos Junior Bueno Selzler - Curriculum Vitae'
@@ -135,18 +135,18 @@ function run() {
   const enMd = buildMarkdown(cv, 'en')
   const ptMd = buildMarkdown(cv, 'pt')
 
-  // Write to public/
-  mkdirSync(join(publicDir, 'pt'), { recursive: true })
-  writeFileSync(join(publicDir, 'cv.md'), enMd)
-  writeFileSync(join(publicDir, 'pt', 'cv.md'), ptMd)
-  console.log('ok cv-markdown: wrote public/cv.md and public/pt/cv.md')
+  // Write to public/cv.md/ directory
+  mkdirSync(join(publicDir, 'cv.md'), { recursive: true })
+  writeFileSync(join(publicDir, 'cv.md', 'eng'), enMd)
+  writeFileSync(join(publicDir, 'cv.md', 'ptbr'), ptMd)
+  console.log('ok cv-markdown: wrote public/cv.md/{eng,ptbr}')
 
   // Write to dist/ if it exists (post-build)
   if (existsSync(distDir)) {
-    mkdirSync(join(distDir, 'pt'), { recursive: true })
-    writeFileSync(join(distDir, 'cv.md'), enMd)
-    writeFileSync(join(distDir, 'pt', 'cv.md'), ptMd)
-    console.log('ok cv-markdown: wrote dist/cv.md and dist/pt/cv.md')
+    mkdirSync(join(distDir, 'cv.md'), { recursive: true })
+    writeFileSync(join(distDir, 'cv.md', 'eng'), enMd)
+    writeFileSync(join(distDir, 'cv.md', 'ptbr'), ptMd)
+    console.log('ok cv-markdown: wrote dist/cv.md/{eng,ptbr}')
   }
 }
 

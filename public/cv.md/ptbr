@@ -3,11 +3,11 @@ title: Marcos Junior Bueno Selzler - Curriculo
 description: "Engenheiro de Software com foco em backend Java/JSF e .NET/Golang, mais recentemente na TCS, na conta Copel. Bicampeão do TCS AI Friday por soluções com LLMs e modelos preditivos. Experiência em modernização de sistemas legados para cloud (GCP/AWS) e construção de APIs REST com Clean Code, SOLID e testes."
 canonical: https://howzysolutions.com/pt/cv
 captured_at: 2026-09-21
-commit: 80a0f8a
+commit: acf2fc1
 links:
   website: https://howzysolutions.com/pt
   github: https://github.com/H0wZy
-  pdf: https://howzysolutions.com/pt/cv.pdf
+  pdf: https://howzysolutions.com/cv.pdf/ptbr
 ---
 
 # Marcos Junior Bueno Selzler
@@ -16,7 +16,7 @@ links:
 - **Localização:** Londrina, PR, Brazil
 - **Website:** https://howzysolutions.com/pt
 - **GitHub:** https://github.com/H0wZy
-- **Versão em PDF:** https://howzysolutions.com/pt/cv.pdf
+- **Versão em PDF:** https://howzysolutions.com/cv.pdf/ptbr
 
 ## Resumo Profissional
 Engenheiro de Software com foco em backend Java/JSF e .NET/Golang, mais recentemente na TCS, na conta Copel. Bicampeão do TCS AI Friday por soluções com LLMs e modelos preditivos. Experiência em modernização de sistemas legados para cloud (GCP/AWS) e construção de APIs REST com Clean Code, SOLID e testes.
