@@ -757,6 +757,7 @@
   width: 0.72ch;
   height: 1.15em;
   background: var(--accent);
+  transition: opacity var(--dur-base) var(--ease);
 }
 
 .term-input {

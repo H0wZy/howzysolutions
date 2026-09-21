@@ -1,136 +1,136 @@
 {
-  "capturedAt": "2026-09-21T00:53:35.787Z",
+  "capturedAt": "2026-09-21T05:02:43.859Z",
   "range": {
     "start": "2026-03-17",
-    "end": "2026-09-20"
+    "end": "2026-09-21"
   },
-  "totalSeconds": 861527.602,
-  "humanReadableTotal": "239 hrs 18 mins",
-  "dailyAverageSeconds": 10506,
+  "totalSeconds": 873483.857,
+  "humanReadableTotal": "242 hrs 38 mins",
+  "dailyAverageSeconds": 10524,
   "languages": [
     {
       "name": "Markdown",
-      "percent": 35.17,
-      "seconds": 326130.391,
-      "text": "90 hrs 35 mins"
+      "percent": 35.14,
+      "seconds": 333205.195,
+      "text": "92 hrs 33 mins"
     },
     {
       "name": "Python",
-      "percent": 13.82,
-      "seconds": 128132.177,
-      "text": "35 hrs 35 mins"
+      "percent": 13.69,
+      "seconds": 129768.926,
+      "text": "36 hrs 2 mins"
     },
     {
       "name": "TypeScript",
-      "percent": 12.33,
+      "percent": 12.06,
       "seconds": 114336.309,
       "text": "31 hrs 45 mins"
     },
     {
       "name": "JSON",
-      "percent": 8.98,
-      "seconds": 83269.95,
-      "text": "23 hrs 7 mins"
+      "percent": 9,
+      "seconds": 85352.66,
+      "text": "23 hrs 42 mins"
     },
     {
       "name": "Other",
-      "percent": 7.09,
-      "seconds": 65724.163,
-      "text": "18 hrs 15 mins"
+      "percent": 7.87,
+      "seconds": 74617.02,
+      "text": "20 hrs 43 mins"
     },
     {
       "name": "Go",
-      "percent": 6.92,
-      "seconds": 64126.957,
-      "text": "17 hrs 48 mins"
+      "percent": 6.78,
+      "seconds": 64268.079,
+      "text": "17 hrs 51 mins"
     },
     {
       "name": "JavaScript",
-      "percent": 3.23,
+      "percent": 3.16,
       "seconds": 29978.332,
       "text": "8 hrs 19 mins"
     },
     {
       "name": "C#",
-      "percent": 1.93,
+      "percent": 1.88,
       "seconds": 17869.837,
       "text": "4 hrs 57 mins"
     },
     {
       "name": "Text",
-      "percent": 1.66,
+      "percent": 1.63,
       "seconds": 15416.679,
       "text": "4 hrs 16 mins"
     },
     {
       "name": "CSS",
-      "percent": 1.59,
+      "percent": 1.56,
       "seconds": 14756.412,
       "text": "4 hrs 5 mins"
     },
     {
       "name": "Bash",
-      "percent": 1.21,
-      "seconds": 11193.528,
-      "text": "3 hrs 6 mins"
+      "percent": 1.23,
+      "seconds": 11619.143,
+      "text": "3 hrs 13 mins"
     },
     {
       "name": "YAML",
-      "percent": 1.14,
+      "percent": 1.11,
       "seconds": 10527.721,
       "text": "2 hrs 55 mins"
     },
     {
       "name": "Git Config",
       "percent": 0.86,
-      "seconds": 7969.551,
-      "text": "2 hrs 12 mins"
+      "seconds": 8136.196,
+      "text": "2 hrs 15 mins"
     },
     {
       "name": "TOML",
-      "percent": 0.59,
-      "seconds": 5450.467,
-      "text": "1 hr 30 mins"
+      "percent": 0.62,
+      "seconds": 5876.695,
+      "text": "1 hr 37 mins"
     },
     {
       "name": "Makefile",
-      "percent": 0.55,
+      "percent": 0.54,
       "seconds": 5132.749,
       "text": "1 hr 25 mins"
     },
     {
       "name": "HTML",
-      "percent": 0.5,
+      "percent": 0.48,
       "seconds": 4596.988,
       "text": "1 hr 16 mins"
     },
     {
       "name": "HTTP",
-      "percent": 0.46,
+      "percent": 0.45,
       "seconds": 4311.292,
       "text": "1 hr 11 mins"
     },
     {
       "name": "PowerShell",
-      "percent": 0.43,
+      "percent": 0.42,
       "seconds": 3957.59,
       "text": "1 hr 5 mins"
     },
     {
       "name": "SSH Config",
-      "percent": 0.4,
+      "percent": 0.39,
       "seconds": 3722.295,
       "text": "1 hr 2 mins"
     },
     {
       "name": "Docker",
-      "percent": 0.26,
+      "percent": 0.25,
       "seconds": 2373.508,
       "text": "39 mins"
     },
     {
       "name": "Diff",
-      "percent": 0.18,
+      "percent": 0.17,
       "seconds": 1652.374,
       "text": "27 mins"
     },
@@ -154,13 +154,13 @@
     },
     {
       "name": "Batchfile",
-      "percent": 0.11,
+      "percent": 0.1,
       "seconds": 976.54,
       "text": "16 mins"
     },
     {
       "name": "Terraform",
-      "percent": 0.09,
+      "percent": 0.08,
       "seconds": 788.622,
       "text": "13 mins"
     },
@@ -173,7 +173,7 @@
     {
       "name": "INI",
       "percent": 0.03,
-      "seconds": 308.008,
+      "seconds": 310.39,
       "text": "5 mins"
     },
     {
@@ -184,7 +184,7 @@
     },
     {
       "name": "TeX",
-      "percent": 0.01,
+      "percent": 0,
       "seconds": 46.81,
       "text": "0 secs"
     },
@@ -204,43 +204,43 @@
   "editors": [
     {
       "name": "Claude Code",
-      "percent": 65.81,
-      "seconds": 610224.075,
-      "text": "169 hrs 30 mins"
+      "percent": 65.29,
+      "seconds": 619023.52,
+      "text": "171 hrs 57 mins"
     },
     {
       "name": "VS Code",
-      "percent": 25.77,
-      "seconds": 238959.265,
-      "text": "66 hrs 22 mins"
+      "percent": 25.57,
+      "seconds": 242448.084,
+      "text": "67 hrs 20 mins"
     },
     {
       "name": "Antigravity CLI",
-      "percent": 3.49,
+      "percent": 3.42,
       "seconds": 32406.814,
       "text": "9 hrs"
     },
     {
       "name": "Antigravity Desktop",
-      "percent": 2.45,
-      "seconds": 22755.482,
-      "text": "6 hrs 19 mins"
+      "percent": 3.23,
+      "seconds": 30644.365,
+      "text": "8 hrs 30 mins"
     },
     {
       "name": "Codex CLI",
-      "percent": 1.82,
-      "seconds": 16830.248,
-      "text": "4 hrs 40 mins"
+      "percent": 1.84,
+      "seconds": 17456.773,
+      "text": "4 hrs 50 mins"
     },
     {
       "name": "Codex Vscode",
-      "percent": 0.34,
-      "seconds": 3111.875,
-      "text": "51 mins"
+      "percent": 0.33,
+      "seconds": 3157.315,
+      "text": "52 mins"
     },
     {
       "name": "Antigravity IDE",
-      "percent": 0.32,
+      "percent": 0.31,
       "seconds": 2964.006,
       "text": "49 mins"
     }
@@ -248,26 +248,26 @@
   "categories": [
     {
       "name": "AI Coding",
-      "percent": 87.41,
-      "seconds": 810532.814,
-      "text": "225 hrs 8 mins"
+      "percent": 87.64,
+      "seconds": 830926.168,
+      "text": "230 hrs 48 mins"
     },
     {
       "name": "Coding",
-      "percent": 8.09,
-      "seconds": 75032.699,
-      "text": "20 hrs 50 mins"
+      "percent": 7.95,
+      "seconds": 75339.442,
+      "text": "20 hrs 55 mins"
     },
     {
       "name": "Writing Docs",
-      "percent": 4.26,
-      "seconds": 39507.719,
-      "text": "10 hrs 58 mins"
+      "percent": 4.18,
+      "seconds": 39646.388,
+      "text": "11 hrs"
     },
     {
       "name": "Writing Tests",
       "percent": 0.22,
-      "seconds": 2049.068,
+      "seconds": 2059.414,
       "text": "34 mins"
     },
     {
@@ -280,97 +280,97 @@
   "projects": [
     {
       "name": "viralvideogen",
-      "percent": 44.52,
-      "seconds": 412822.181,
-      "text": "114 hrs 40 mins"
+      "percent": 44.92,
+      "seconds": 425895.764,
+      "text": "118 hrs 18 mins"
     },
     {
       "name": "generative-ai-e2",
-      "percent": 12.48,
+      "percent": 12.2,
       "seconds": 115706.817,
       "text": "32 hrs 8 mins"
     },
     {
+      "name": "howzysolutions",
+      "percent": 7.87,
+      "seconds": 74617.851,
+      "text": "20 hrs 43 mins"
+    },
+    {
       "name": "authsys",
-      "percent": 8.04,
+      "percent": 7.86,
       "seconds": 74563.301,
       "text": "20 hrs 42 mins"
     },
     {
       "name": "selzler-construtora",
-      "percent": 7.49,
+      "percent": 7.32,
       "seconds": 69443.776,
       "text": "19 hrs 17 mins"
     },
     {
-      "name": "howzysolutions",
-      "percent": 7.37,
-      "seconds": 68352.675,
-      "text": "18 hrs 59 mins"
-    },
-    {
       "name": "studiobiasantos",
-      "percent": 4.3,
+      "percent": 4.2,
       "seconds": 39831.373,
       "text": "11 hrs 3 mins"
     },
     {
       "name": "telasparana",
-      "percent": 2.61,
+      "percent": 2.55,
       "seconds": 24202.464,
       "text": "6 hrs 43 mins"
     },
     {
       "name": "2983539",
-      "percent": 1.93,
+      "percent": 1.88,
       "seconds": 17855.255,
       "text": "4 hrs 57 mins"
     },
     {
       "name": "terminal",
-      "percent": 1.84,
+      "percent": 1.8,
       "seconds": 17101.864,
       "text": "4 hrs 45 mins"
     },
     {
       "name": "mcp",
-      "percent": 1.49,
-      "seconds": 13797.536,
-      "text": "3 hrs 49 mins"
+      "percent": 1.46,
+      "seconds": 13842.976,
+      "text": "3 hrs 50 mins"
     },
     {
       "name": "RFCs abertas",
-      "percent": 1.35,
+      "percent": 1.32,
       "seconds": 12541.138,
       "text": "3 hrs 29 mins"
     },
     {
+      "name": "h0wzy",
+      "percent": 1.15,
+      "seconds": 10860.584,
+      "text": "3 hrs 1 min"
+    },
+    {
       "name": "antigravity",
-      "percent": 1.1,
+      "percent": 1.08,
       "seconds": 10208.106,
       "text": "2 hrs 50 mins"
     },
     {
-      "name": "h0wzy",
-      "percent": 1.01,
-      "seconds": 9395.671,
-      "text": "2 hrs 36 mins"
-    },
-    {
       "name": "claude-certifications",
-      "percent": 0.97,
+      "percent": 0.95,
       "seconds": 9012.926,
       "text": "2 hrs 30 mins"
     },
     {
       "name": "Vault",
-      "percent": 0.62,
+      "percent": 0.61,
       "seconds": 5768.208,
       "text": "1 hr 36 mins"
     },
     {
       "name": "UserApi",
-      "percent": 0.55,
+      "percent": 0.54,
       "seconds": 5137.863,
       "text": "1 hr 25 mins"
     },
@@ -388,13 +388,13 @@
     },
     {
       "name": "watch5lite",
-      "percent": 0.25,
+      "percent": 0.24,
       "seconds": 2311.458,
       "text": "38 mins"
     },
     {
       "name": "skeeper",
-      "percent": 0.25,
+      "percent": 0.24,
       "seconds": 2288.627,
       "text": "38 mins"
     },
