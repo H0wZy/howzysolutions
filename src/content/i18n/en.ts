@@ -78,6 +78,7 @@ export const en = {
   'state.delivered': 'delivered',
   'state.functional': 'functional, not deployed',
   'state.inProgress': 'in progress',
+  'state.paused': 'paused (on hiatus)',
   'state.skeleton': 'study skeleton',
 
   // Project kind vocabulary

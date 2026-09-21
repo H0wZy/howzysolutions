@@ -69,6 +69,7 @@ export const pt = {
   'state.delivered': 'entregue',
   'state.functional': 'funcional, sem deploy',
   'state.inProgress': 'em construção',
+  'state.paused': 'pausado (em hiato)',
   'state.skeleton': 'esqueleto de estudo',
 
   // Vocabulário de natureza
