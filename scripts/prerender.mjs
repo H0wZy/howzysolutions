@@ -57,17 +57,55 @@ function withMeta(html, { title, description, image, imageAlt }) {
 
 /**
  * hreflang alternates pointing at the real counterpart documents, plus the
- * document's own lang. Both only mean anything because each locale is a real
- * URL rather than a client-side toggle (FR-018).
+ * document's own lang and canonical URL. Both only mean anything because each
+ * locale is a real URL rather than a client-side toggle (FR-018).
+ * Absolute URLs are required by the hreflang and canonical specifications.
  */
 function withLangs(html, pathname, lang) {
+  const canonical = `    <link rel="canonical" href="${ORIGIN}${pathname}" />`
   const links = server
     .alternates(pathname)
-    .map((a) => `    <link rel="alternate" hreflang="${a.locale}" href="${a.href}" />`)
+    .map((a) => `    <link rel="alternate" hreflang="${a.locale}" href="${ORIGIN}${a.href}" />`)
     .join('\n')
   return html
     .replace(/<html lang="[^"]*"/, `<html lang="${lang}"`)
-    .replace('</head>', `${links}\n  </head>`)
+    .replace('</head>', `${canonical}\n${links}\n  </head>`)
+}
+
+/**
+ * Injects Schema.org JSON-LD structured data defining the Person and WebSite
+ * entities so search engines explicitly recognize "howzysolutions" and Marcos "H0wZy" Junior.
+ */
+function withStructuredData(html, locale) {
+  const isEn = locale === 'en'
+  const schema = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'Person',
+        '@id': `${ORIGIN}/#person`,
+        name: 'Marcos "H0wZy" Junior',
+        alternateName: ['H0wZy', 'Howzy', 'Marcos Junior'],
+        url: ORIGIN,
+        jobTitle: 'Full-stack Software Engineer',
+        sameAs: ['https://github.com/H0wZy', 'https://linktr.ee/howzy'],
+      },
+      {
+        '@type': 'WebSite',
+        '@id': `${ORIGIN}/#website`,
+        url: ORIGIN,
+        name: 'Howzy Solutions',
+        alternateName: ['howzysolutions', 'HowzySolutions', 'howzysolutions.com'],
+        description: isEn
+          ? 'Personal portfolio of Marcos "H0wZy" Junior, full-stack developer.'
+          : 'Portfólio pessoal de Marcos "H0wZy" Junior, desenvolvedor full-stack.',
+        publisher: { '@id': `${ORIGIN}/#person` },
+        inLanguage: ['en', 'pt-BR'],
+      },
+    ],
+  }
+  const scriptTag = `    <script type="application/ld+json">${JSON.stringify(schema)}</script>`
+  return html.replace('</head>', `${scriptTag}\n  </head>`)
 }
 
 /**
@@ -97,13 +135,46 @@ function withFontPreload(html) {
   return html.replace('</head>', `${link}\n  </head>`)
 }
 
-let written = 0
+function generateSitemap(routes) {
+  const urls = routes.map(({ pathname }) => {
+    const alts = server
+      .alternates(pathname)
+      .map(
+        (a) =>
+          `    <xhtml:link rel="alternate" hreflang="${a.locale}" href="${ORIGIN}${a.href}" />`,
+      )
+      .join('\n')
+    const priority =
+      pathname === '/' || pathname === '/pt/'
+        ? '1.0'
+        : pathname.startsWith('/works/') || pathname.startsWith('/pt/works/')
+          ? '0.8'
+          : '0.6'
+    return `  <url>
+    <loc>${ORIGIN}${pathname}</loc>
+${alts}
+    <changefreq>weekly</changefreq>
+    <priority>${priority}</priority>
+  </url>`
+  })
 
-for (const { pathname } of server.routes()) {
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+${urls.join('\n')}
+</urlset>
+`
+}
+
+let written = 0
+const allRoutes = server.routes()
+
+for (const { pathname, locale } of allRoutes) {
   const meta = server.metaFor(pathname)
   let html = shell.replace(ROOT_DIV, `<div id="root">${server.render(pathname)}</div>`)
   html = withMeta(html, meta)
   html = withLangs(html, pathname, meta.lang)
+  html = withStructuredData(html, locale)
   html = withFontPreload(html)
 
   const outDir = pathname === '/' ? dist : join(dist, pathname)
@@ -112,5 +183,10 @@ for (const { pathname } of server.routes()) {
   written++
   console.log(`  ${pathname.padEnd(36)} ${(html.length / 1024).toFixed(1)} KB`)
 }
+
+const sitemap = generateSitemap(allRoutes)
+writeFileSync(join(dist, 'sitemap.xml'), sitemap, 'utf8')
+writeFileSync(join(root, 'public', 'sitemap.xml'), sitemap, 'utf8')
+console.log('ok emitted sitemap.xml for 26 routes')
 
 console.log(`\nok prerendered ${written} documents`)

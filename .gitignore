@@ -40,3 +40,6 @@ coverage
 
 # Local scratch
 scratch
+
+# Lighthouse reports
+howzysolutions.com-*.html
