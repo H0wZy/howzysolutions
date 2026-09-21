@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import type { Locale } from '../content/i18n/types'
 import type { ContentBundle } from '../content/types'
+import mcpData from '../content/mcp.generated.json'
 import { Chrome } from '../components/Chrome'
 import { SectionRail, type RailEntry } from '../components/SectionRail'
 import { Footer } from '../components/Footer'
@@ -27,6 +28,7 @@ const BINARIES = [
   { p: 'Windows (amd64)', f: 'h0wzy-mcp-windows-amd64.exe' },
   { p: 'Linux (amd64)', f: 'h0wzy-mcp-linux-amd64' },
   { p: 'macOS (arm64)', f: 'h0wzy-mcp-darwin-arm64' },
+  { p: 'macOS (amd64)', f: 'h0wzy-mcp-darwin-amd64' },
 ]
 
 const BRIDGES = [
@@ -98,10 +100,26 @@ export function Mcp({
       .catch(() => {})
   }, [])
 
+  const copyFullMarkdown = async () => {
+    try {
+      const mdPath = locale === 'pt' ? '/pt/mcp.md' : '/mcp.md'
+      const res = await fetch(mdPath)
+      if (res.ok) {
+        const text = await res.text()
+        await navigator.clipboard.writeText(text)
+        setCopiedKey('page-md')
+        setDropdownOpen(false)
+        setTimeout(() => setCopiedKey((cur) => (cur === 'page-md' ? null : cur)), 3000)
+        return
+      }
+    } catch {
+      // Fallback in case fetch fails
+    }
+  }
+
   const triggerCopy = (text: string, key: string) => {
     navigator.clipboard.writeText(text).then(() => {
       setCopiedKey(key)
-      setDropdownOpen(false)
       setTimeout(() => setCopiedKey((cur) => (cur === key ? null : cur)), 3000)
     })
   }
@@ -128,7 +146,7 @@ export function Mcp({
             <div className="wrap flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-[var(--line)]">
               <div className="flex items-center gap-3 font-mono">
                 <span className="text-sm px-2.5 py-1 rounded border border-[var(--border)] bg-[var(--surface)] text-[var(--accent)] font-semibold">
-                  H0wZy/mcp v1.0.3
+                  H0wZy/mcp {mcpData.version}
                 </span>
                 <span className="text-xs text-[var(--dim)]">MIT · Go 1.26+ · Node 20+</span>
               </div>
@@ -139,85 +157,101 @@ export function Mcp({
                   href="https://github.com/H0wZy/mcp"
                   target="_blank"
                   rel="noreferrer"
-                  className="chrome-btn inline-flex items-center gap-2 text-xs"
+                  className="chrome-btn inline-flex items-center gap-1.5 text-xs font-mono"
                   title="GitHub repository"
                 >
-                  <svg className="size-3.5 fill-current" viewBox="0 0 16 16" aria-hidden="true">
-                    <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z" />
-                  </svg>
                   <span>GitHub</span>
-                  <span className="inline-flex items-center gap-1 font-mono text-[var(--fg)]">
-                    <svg className="size-3.5 stroke-current fill-none" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-                    </svg>
-                    {stars !== null ? stars : 'v1.0.3'}
-                  </span>
+                  <span className="text-[var(--accent)] font-semibold">★ {stars !== null ? stars : mcpData.stars}</span>
                 </a>
 
-                {/* Minimalist Dropdown */}
-                <div className="relative">
+                {/* Shadcn-inspired Copy Page Dropdown */}
+                <div className="relative inline-flex items-center">
                   <button
                     type="button"
-                    className="chrome-btn inline-flex items-center gap-1.5 text-xs bg-[var(--surface)] hover:text-[var(--accent)]"
-                    onClick={() => setDropdownOpen(!dropdownOpen)}
-                    aria-expanded={dropdownOpen}
+                    onClick={copyFullMarkdown}
+                    className="chrome-btn inline-flex items-center gap-2 text-xs bg-[var(--surface)] hover:text-[var(--accent)] rounded-r-none border-r-0"
+                    title={locale === 'pt' ? 'Copiar pagina inteira como Markdown' : 'Copy entire page as Markdown'}
                   >
-                    <span>{locale === 'pt' ? 'Copiar / Acoes' : 'Copy / Actions'}</span>
+                    {copiedKey === 'page-md' ? <CheckIcon /> : <CopyIcon />}
+                    <span>
+                      {copiedKey === 'page-md'
+                        ? (locale === 'pt' ? 'Copiado!' : 'Copied!')
+                        : (locale === 'pt' ? 'Copiar Pagina' : 'Copy Page')}
+                    </span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setDropdownOpen(!dropdownOpen)}
+                    className="chrome-btn px-2 text-xs bg-[var(--surface)] hover:text-[var(--accent)] rounded-l-none"
+                    aria-expanded={dropdownOpen}
+                    title={locale === 'pt' ? 'Mais opcoes' : 'More options'}
+                  >
                     <span>▾</span>
                   </button>
 
                   {dropdownOpen ? (
-                    <div className="absolute right-0 mt-2 w-56 rounded border border-[var(--border)] bg-[var(--surface)] shadow-2xl p-1 z-50 flex flex-col gap-0.5 text-xs font-mono">
-                      <button
-                        type="button"
-                        onClick={() =>
-                          triggerCopy(
-                            `# H0wZy/mcp — Multi-Agent MCP Hub\nQuickstart: npx @h0wzy/mcp\nhttps://github.com/H0wZy/mcp`,
-                            'dropdown-md',
-                          )
-                        }
-                        className="text-left px-2.5 py-1.5 rounded hover:bg-[var(--line)] hover:text-[var(--accent)] transition-colors"
-                      >
-                        📄 {locale === 'pt' ? 'Copiar Markdown' : 'Copy Markdown'}
-                      </button>
+                    <div className="absolute right-0 top-full mt-2 w-56 rounded border border-[var(--border)] bg-[var(--surface)] shadow-2xl p-1 z-50 flex flex-col gap-0.5 text-xs font-mono">
                       <a
-                        href="https://claude.ai/new?q=Tell%20me%20about%20the%20multi-agent%20MCP%20hub%20at%20github.com/H0wZy/mcp"
+                        href={locale === 'pt' ? '/pt/mcp.md' : '/mcp.md'}
                         target="_blank"
                         rel="noreferrer"
-                        className="text-left px-2.5 py-1.5 rounded hover:bg-[var(--line)] hover:text-[var(--accent)] transition-colors"
+                        className="text-left px-2.5 py-1.5 rounded hover:bg-[var(--line)] hover:text-[var(--accent)] transition-colors flex items-center gap-2"
+                        onClick={() => setDropdownOpen(false)}
                       >
-                        ⚡ Open in Claude ↗
+                        <span className="text-[10px] px-1 py-0.5 rounded border border-[var(--border)] font-bold">M↓</span>
+                        <span>{locale === 'pt' ? 'Ver como Markdown' : 'View as Markdown'}</span>
+                      </a>
+                      <button
+                        type="button"
+                        onClick={copyFullMarkdown}
+                        className="text-left px-2.5 py-1.5 rounded hover:bg-[var(--line)] hover:text-[var(--accent)] transition-colors flex items-center gap-2"
+                      >
+                        <CopyIcon />
+                        <span>{locale === 'pt' ? 'Copiar Markdown (.md)' : 'Copy Markdown (.md)'}</span>
+                      </button>
+                      <a
+                        href="https://claude.ai/new?q=H0wZy/mcp"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-left px-2.5 py-1.5 rounded hover:bg-[var(--line)] hover:text-[var(--accent)] transition-colors flex items-center gap-2"
+                      >
+                        <span>⚡</span>
+                        <span>Open in Claude ↗</span>
+                      </a>
+                      <a
+                        href="https://chatgpt.com/?q=H0wZy/mcp"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-left px-2.5 py-1.5 rounded hover:bg-[var(--line)] hover:text-[var(--accent)] transition-colors flex items-center gap-2"
+                      >
+                        <span>🤖</span>
+                        <span>Open in ChatGPT ↗</span>
                       </a>
                       <a
                         href="https://www.npmjs.com/package/@h0wzy/mcp"
                         target="_blank"
                         rel="noreferrer"
-                        className="text-left px-2.5 py-1.5 rounded hover:bg-[var(--line)] hover:text-[var(--accent)] transition-colors"
+                        className="text-left px-2.5 py-1.5 rounded hover:bg-[var(--line)] hover:text-[var(--accent)] transition-colors flex items-center gap-2 border-t border-[var(--line)] pt-1 mt-0.5"
                       >
-                        📦 View on npm ↗
+                        <span>📦</span>
+                        <span>View on npm ↗</span>
                       </a>
                       <a
-                        href="https://github.com/H0wZy/mcp/issues"
+                        href="https://github.com/H0wZy/mcp"
                         target="_blank"
                         rel="noreferrer"
-                        className="text-left px-2.5 py-1.5 rounded hover:bg-[var(--line)] hover:text-[var(--accent)] transition-colors border-t border-[var(--line)] pt-1"
+                        className="text-left px-2.5 py-1.5 rounded hover:bg-[var(--line)] hover:text-[var(--accent)] transition-colors flex items-center gap-2"
                       >
-                        🐛 {locale === 'pt' ? 'Abrir issue ↗' : 'Open issue ↗'}
+                        <span>🐙</span>
+                        <span>GitHub Repository ↗</span>
                       </a>
                     </div>
                   ) : null}
                 </div>
               </div>
             </div>
-
-            {copiedKey ? (
-              <div className="wrap mt-3">
-                <div className="px-3 py-1 rounded bg-[var(--surface)] border border-[var(--accent)] text-[var(--accent)] text-xs font-mono inline-block">
-                  ✓ {locale === 'pt' ? 'Copiado para a area de transferencia' : 'Copied to clipboard'}
-                </div>
-              </div>
-            ) : null}
           </header>
+
 
           {/* Overview Section */}
           <section id="overview" className="section">
@@ -266,7 +300,7 @@ export function Mcp({
 
                   <div className="space-y-1 text-xs pt-1">
                     <div className="text-[var(--fg)] font-semibold">
-                      H0wZy/mcp v1.0.3 • Multi-Agent MCP Hub
+                      H0wZy/mcp {mcpData.version} • Multi-Agent MCP Hub
                     </div>
                     <div className="text-[var(--term-user)]">
                       Claude Code ↔ OpenAI Codex ↔ Google Antigravity
@@ -517,7 +551,7 @@ export function Mcp({
                   >
                     <div className="flex items-center justify-between">
                       <strong className="text-[var(--accent)] text-sm">{pkg.n}</strong>
-                      <span className="text-[var(--dim)] text-[11px]">v1.0.3</span>
+                      <span className="text-[var(--dim)] text-[11px]">{mcpData.version}</span>
                     </div>
                     <p className="text-[var(--dim)] text-[11px] leading-relaxed">{pkg.d}</p>
                     <div className="text-[10px] text-[var(--dim)] pt-1 border-t border-[var(--line)]">
@@ -554,7 +588,7 @@ export function Mcp({
           <section id="binaries" className="section">
             <div className="wrap">
               <h2 className="text-xl font-semibold mb-4 text-[var(--fg)]">
-                {locale === 'pt' ? 'Binarios Avulsos (v1.0.3)' : 'Precompiled Standalone Binaries (v1.0.3)'}
+                {locale === 'pt' ? `Binarios Avulsos (${mcpData.version})` : `Precompiled Standalone Binaries (${mcpData.version})`}
               </h2>
               <p className="text-xs text-[var(--dim)] mb-4">
                 {locale === 'pt'
@@ -562,11 +596,11 @@ export function Mcp({
                   : 'Zero-dependency native binaries compiled via GoReleaser for Windows, Linux, and macOS.'}
               </p>
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 font-mono text-xs">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 font-mono text-xs">
                 {BINARIES.map((bin) => (
                   <a
                     key={bin.p}
-                    href={`https://github.com/H0wZy/mcp/releases/download/v1.0.3/${bin.f}`}
+                    href={`https://github.com/H0wZy/mcp/releases/download/${mcpData.version}/${bin.f}`}
                     className="p-3 rounded border border-[var(--border)] bg-[var(--surface)] hover:border-[var(--accent)] transition-colors block"
                   >
                     <span className="text-[var(--fg)] font-semibold block mb-1">{bin.p}</span>

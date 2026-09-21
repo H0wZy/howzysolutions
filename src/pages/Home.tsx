@@ -4,6 +4,7 @@ import { experienceDuration } from '../content/profile'
 import { periodLabel } from '../content/stats'
 import { activity } from '../content/contributions'
 import { translate } from '../locale'
+import mcpData from '../content/mcp.generated.json'
 import { pathFor } from '../route'
 import { Chrome } from '../components/Chrome'
 import { SectionLabel } from '../components/SectionLabel'
@@ -99,7 +100,7 @@ export function Home({
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <div className="flex items-center gap-2">
                   <span className="font-mono text-xs px-2.5 py-0.5 rounded border border-[var(--accent)] text-[var(--accent)] font-semibold">
-                    H0wZy/mcp v1.0.3
+                    H0wZy/mcp {mcpData.version}
                   </span>
                   <span className="text-xs font-mono text-[var(--dim)]">
                     {locale === 'pt' ? 'Hub Multi-Agente & Go CLI' : 'Multi-Agent Hub & Go CLI'}
