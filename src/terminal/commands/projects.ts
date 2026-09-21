@@ -89,7 +89,7 @@ export const projects: Command = {
         text(`## ${translate(locale, 'project.limitations')}`, 'dim'),
         ...project.limitations[locale].map((line) => text(`! ${line}`, 'accent')),
         blank(),
-        text(`/work/${project.id}/`, 'dim'),
+        text(`/works/${project.id}/`, 'dim'),
       ]
       return ok(lines)
     }

@@ -224,7 +224,7 @@ export const pt = {
   'nav.onThisPage': 'Nesta página',
   'nav.home': 'Início',
   'nav.cv': 'cv',
-  'nav.work': 'work',
+  'nav.work': 'works',
   'nav.privacy': 'privacy-policy',
 
   // Contact

@@ -90,9 +90,9 @@ export const open: Command = {
           : []),
       ])
     }
-    return ok([text(`/work/${project.id}/`, 'dim')], {
+    return ok([text(`/works/${project.id}/`, 'dim')], {
       type: 'navigate',
-      href: `/work/${project.id}/`,
+      href: `/works/${project.id}/`,
     })
   },
 }

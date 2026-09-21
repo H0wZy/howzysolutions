@@ -9,13 +9,13 @@ import { counterpart, locationFor, pathFor, splitLocale } from '../../route'
 describe('splitLocale', () => {
   it('treats English as unprefixed', () => {
     expect(splitLocale('/')).toEqual({ locale: 'en', rest: '/' })
-    expect(splitLocale('/work/telasparana/')).toEqual({ locale: 'en', rest: '/work/telasparana/' })
+    expect(splitLocale('/works/telasparana/')).toEqual({ locale: 'en', rest: '/works/telasparana/' })
   })
 
   it('splits a Portuguese prefix off', () => {
     expect(splitLocale('/pt/')).toEqual({ locale: 'pt', rest: '/' })
     expect(splitLocale('/pt')).toEqual({ locale: 'pt', rest: '/' })
-    expect(splitLocale('/pt/work/authsys/')).toEqual({ locale: 'pt', rest: '/work/authsys/' })
+    expect(splitLocale('/pt/works/authsys/')).toEqual({ locale: 'pt', rest: '/works/authsys/' })
   })
 
   it('does not mistake a project whose id starts with a locale name', () => {
@@ -28,8 +28,8 @@ describe('pathFor', () => {
   it('builds the canonical path per locale', () => {
     expect(pathFor({ page: 'home' }, 'en')).toBe('/')
     expect(pathFor({ page: 'home' }, 'pt')).toBe('/pt/')
-    expect(pathFor({ page: 'work', id: 'authsys' }, 'en')).toBe('/work/authsys/')
-    expect(pathFor({ page: 'work', id: 'authsys' }, 'pt')).toBe('/pt/work/authsys/')
+    expect(pathFor({ page: 'work', id: 'authsys' }, 'en')).toBe('/works/authsys/')
+    expect(pathFor({ page: 'work', id: 'authsys' }, 'pt')).toBe('/pt/works/authsys/')
   })
 })
 
@@ -37,12 +37,12 @@ describe('counterpart', () => {
   it('maps a page to the same page in the other locale', () => {
     expect(counterpart('/', 'pt')).toBe('/pt/')
     expect(counterpart('/pt/', 'en')).toBe('/')
-    expect(counterpart('/work/telasparana/', 'pt')).toBe('/pt/work/telasparana/')
-    expect(counterpart('/pt/work/telasparana/', 'en')).toBe('/work/telasparana/')
+    expect(counterpart('/works/telasparana/', 'pt')).toBe('/pt/works/telasparana/')
+    expect(counterpart('/pt/works/telasparana/', 'en')).toBe('/works/telasparana/')
   })
 
   it('round-trips', () => {
-    for (const path of ['/', '/work/authsys/', '/pt/', '/pt/work/authsys/']) {
+    for (const path of ['/', '/works/authsys/', '/pt/', '/pt/works/authsys/']) {
       const { locale } = locationFor(path)
       const other = locale === 'en' ? 'pt' : 'en'
       expect(counterpart(counterpart(path, other), locale)).toBe(path)
@@ -56,33 +56,33 @@ describe('locationFor', () => {
   })
 })
 
-describe('work listing route (research D6)', () => {
-  it('resolves /work/ and /work/1/ both to listing page 1', () => {
-    expect(locationFor('/work/').route).toEqual({ page: 'workIndex', number: 1 })
-    expect(locationFor('/work/1/').route).toEqual({ page: 'workIndex', number: 1 })
+describe('works listing route (research D6)', () => {
+  it('resolves /works/ and /works/1/ both to listing page 1', () => {
+    expect(locationFor('/works/').route).toEqual({ page: 'workIndex', number: 1 })
+    expect(locationFor('/works/1/').route).toEqual({ page: 'workIndex', number: 1 })
   })
 
-  it('resolves /work/2/ to listing page 2, not to a project with id 2', () => {
-    expect(locationFor('/work/2/').route).toEqual({ page: 'workIndex', number: 2 })
+  it('resolves /works/2/ to listing page 2, not to a project with id 2', () => {
+    expect(locationFor('/works/2/').route).toEqual({ page: 'workIndex', number: 2 })
   })
 
   it('still resolves a real project id to the detail route', () => {
-    expect(locationFor('/work/telasparana/').route).toEqual({
+    expect(locationFor('/works/telasparana/').route).toEqual({
       page: 'work',
       id: 'telasparana',
     })
   })
 
-  it('resolves /pt/work/2/ to page 2 in Portuguese', () => {
-    expect(locationFor('/pt/work/2/')).toEqual({
+  it('resolves /pt/works/2/ to page 2 in Portuguese', () => {
+    expect(locationFor('/pt/works/2/')).toEqual({
       route: { page: 'workIndex', number: 2 },
       locale: 'pt',
     })
   })
 
   it('builds listing paths per locale, page 1 canonically unnumbered', () => {
-    expect(pathFor({ page: 'workIndex', number: 1 }, 'en')).toBe('/work/')
-    expect(pathFor({ page: 'workIndex', number: 2 }, 'en')).toBe('/work/2/')
-    expect(pathFor({ page: 'workIndex', number: 2 }, 'pt')).toBe('/pt/work/2/')
+    expect(pathFor({ page: 'workIndex', number: 1 }, 'en')).toBe('/works/')
+    expect(pathFor({ page: 'workIndex', number: 2 }, 'en')).toBe('/works/2/')
+    expect(pathFor({ page: 'workIndex', number: 2 }, 'pt')).toBe('/pt/works/2/')
   })
 })

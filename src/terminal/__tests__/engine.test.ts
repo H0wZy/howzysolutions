@@ -140,7 +140,7 @@ describe('execute — effects are described, never performed', () => {
   it('returns a navigate descriptor for a real project', () => {
     expect(execute('open telasparana', ctx()).effect).toEqual({
       type: 'navigate',
-      href: '/work/telasparana/',
+      href: '/works/telasparana/',
     })
   })
 

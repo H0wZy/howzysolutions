@@ -40,10 +40,10 @@ export function parseRoute(rest: string): Route {
   // shaped like, and the word a recruiter scans for in both languages.
   if (rest === '/cv/' || rest === '/cv') return { page: 'cv' }
   if (rest === '/privacy-policy/' || rest === '/privacy-policy') return { page: 'privacy' }
-  if (rest === '/work/' || rest === '/work') return { page: 'workIndex', number: 1 }
-  const pageMatch = /^\/work\/(\d+)\/?$/.exec(rest)
+  if (rest === '/works/' || rest === '/works') return { page: 'workIndex', number: 1 }
+  const pageMatch = /^\/works\/(\d+)\/?$/.exec(rest)
   if (pageMatch) return { page: 'workIndex', number: Number(pageMatch[1]) }
-  const workMatch = /^\/work\/([a-z0-9-]+)\/?$/.exec(rest)
+  const workMatch = /^\/works\/([a-z0-9-]+)\/?$/.exec(rest)
   return workMatch ? { page: 'work', id: workMatch[1] } : { page: 'home' }
 }
 
@@ -56,15 +56,15 @@ export function locationFor(pathname: string): Location {
 export function pathFor(route: Route, locale: Locale): string {
   const rest =
     route.page === 'work'
-      ? `/work/${route.id}/`
+      ? `/works/${route.id}/`
       : route.page === 'cv'
         ? '/cv/'
         : route.page === 'privacy'
           ? '/privacy-policy/'
           : route.page === 'workIndex'
             ? route.number <= 1
-              ? '/work/'
-              : `/work/${route.number}/`
+              ? '/works/'
+              : `/works/${route.number}/`
             : '/'
   if (locale === DEFAULT_LOCALE) return rest
   return rest === '/' ? `/${locale}/` : `/${locale}${rest}`

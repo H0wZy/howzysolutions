@@ -54,12 +54,12 @@ export const en = {
   'work.commits': 'commits',
   'work.period': '{start} to {end}',
   'work.viewProject': 'open project',
-  'work.backToAll': 'back to all work',
+  'work.backToAll': 'back to all works',
   'work.page': 'Work pages',
   'work.pagePrev': 'previous page',
   'work.pageNext': 'next page',
-  'work.allWork': 'all work',
-  'work.listingTitle': 'All work',
+  'work.allWork': 'all works',
+  'work.listingTitle': 'All works',
 
   // Project detail
   'project.problem': 'the_problem',
@@ -248,11 +248,11 @@ export const en = {
   // as a filename in the chrome bar's own idiom.
   'nav.cv': 'cv',
   // Identical in both locales for the same reason `nav.cv` is: this is the URL
-  // segment `/work/` in the bar's filename idiom, not prose. `trabalhos` was
+  // segment `/works/` in the bar's filename idiom, not prose. `trabalhos` was
   // tried and pushed the bar past 360px into a horizontal document scrollbar,
   // which the spec forbids outright. The breadcrumb below still says
   // "Todos os trabalhos" in Portuguese, where the words ARE prose.
-  'nav.work': 'work',
+  'nav.work': 'works',
   // Same idiom as `nav.work`: the URL segment, identical in both locales.
   'nav.privacy': 'privacy-policy',
 
