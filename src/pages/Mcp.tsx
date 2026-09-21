@@ -18,17 +18,17 @@ const TOC_ENTRIES: RailEntry[] = [
 type TransportMode = 'streamable' | 'sse' | 'cli'
 
 const PACKAGES = [
-  { n: '@h0wzy/mcp', d: 'Interactive Go CLI runner and hub orchestrator' },
-  { n: '@h0wzy/mcp-shared', d: 'Cross-platform utilities and JSON-RPC stdio engine' },
-  { n: '@h0wzy/mcp-server-antigravity', d: 'Google Antigravity MCP Server connecting to Gemini 3.1' },
-  { n: '@h0wzy/mcp-server-codex', d: 'OpenAI Codex MCP Server connecting to GPT-5.6 / GPT-6' },
+  { n: '', d: 'Interactive Go CLI runner and hub orchestrator' },
+  { n: '-shared', d: 'Cross-platform utilities and JSON-RPC stdio engine' },
+  { n: '-server-antigravity', d: 'Google Antigravity MCP Server connecting to Gemini 3.1' },
+  { n: '-server-codex', d: 'OpenAI Codex MCP Server connecting to GPT-5.6 / GPT-6' },
 ]
 
 const BINARIES = [
-  { p: 'Windows (amd64)', f: 'h0wzy-mcp-windows-amd64.exe' },
-  { p: 'Linux (amd64)', f: 'h0wzy-mcp-linux-amd64' },
-  { p: 'macOS (arm64)', f: 'h0wzy-mcp-darwin-arm64' },
-  { p: 'macOS (amd64)', f: 'h0wzy-mcp-darwin-amd64' },
+  { p: 'Windows (amd64)', f: 'windows-amd64.exe' },
+  { p: 'Linux (amd64)', f: 'linux-amd64' },
+  { p: 'macOS (arm64)', f: 'darwin-arm64' },
+  { p: 'macOS (amd64)', f: 'darwin-amd64' },
 ]
 
 const BRIDGES = [
@@ -36,24 +36,24 @@ const BRIDGES = [
     n: 'Claude Code',
     b: 'Anthropic',
     d: {
-      en: 'Native ~/.claude.json bridge allowing Claude to invoke codex and agy.',
-      pt: 'Integracao ~/.claude.json para o Claude invocar codex e agy.',
+      en: 'Native ~/.claude.json bridge to invoke codex and agy.',
+      pt: 'Bridge ~/.claude.json para invocar codex e agy.',
     },
   },
   {
     n: 'OpenAI Codex CLI',
     b: 'GPT-5.6 / GPT-6',
     d: {
-      en: 'Bridge for official Codex CLI with sanitization and timeout protection.',
-      pt: 'Bridge para CLI Codex oficial com protecao e timeout.',
+      en: 'Bridge for Codex CLI with sanitization and timeout.',
+      pt: 'Bridge para CLI Codex com protecao e timeout.',
     },
   },
   {
     n: 'Google Antigravity',
     b: 'Gemini 3.1',
     d: {
-      en: 'Connects agy CLI and IDE via ~/.gemini/config/mcp_config.json.',
-      pt: 'Conecta agy CLI e IDE em ~/.gemini/config/mcp_config.json.',
+      en: 'Connects agy CLI and IDE via mcp_config.json.',
+      pt: 'Conecta agy CLI e IDE via mcp_config.json.',
     },
   },
 ]
@@ -63,20 +63,61 @@ const CLAUDE_STEPS = {
   pt: ['Execute: claude mcp add h0wzy-mcp -- npx -y @h0wzy/mcp', 'Claude Code invoca codex e agy com autonomia.'],
 }
 
+function Svg({ children, className = 'size-3.5 shrink-0' }: { children: React.ReactNode; className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      {children}
+    </svg>
+  )
+}
+
 function CopyIcon() {
   return (
-    <svg className="size-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <Svg>
       <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
       <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
-    </svg>
+    </Svg>
   )
 }
 
 function CheckIcon() {
   return (
-    <svg className="size-3.5 shrink-0 text-[var(--accent)] transition-transform duration-300 scale-110" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <Svg className="size-3.5 shrink-0 text-[var(--accent)]">
       <polyline points="20 6 9 17 4 12" />
+    </Svg>
+  )
+}
+
+function GithubIcon({ className = 'size-3.5 shrink-0' }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+      <path d="M8 0C3.58 0 0 3.58 0 8a8 8 0 005.47 7.59c.4.08.55-.17.55-.38v-1.49c-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52 0-.53.64 0 1.09.59 1.24.83.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 014 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.2c0 .22.15.47.55.38A8 8 0 0016 8c0-4.42-3.58-8-8-8z" />
     </svg>
+  )
+}
+
+function SparkleIcon() {
+  return (
+    <Svg>
+      <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+    </Svg>
+  )
+}
+
+function BotIcon() {
+  return (
+    <Svg>
+      <rect width="16" height="12" x="4" y="8" rx="2" />
+      <path d="M12 8V4H8m-6 10h2m16 0h2m-7-1v2m-6-2v2" />
+    </Svg>
+  )
+}
+
+function PackageIcon() {
+  return (
+    <Svg>
+      <path d="m12 3 9 4.5v9L12 21l-9-4.5v-9Zm0 0v9m9-4.5-9 4.5-9-4.5" />
+    </Svg>
   )
 }
 
@@ -102,18 +143,15 @@ export function Mcp({
 
   const copyFullMarkdown = async () => {
     try {
-      const mdPath = locale === 'pt' ? '/pt/mcp.md' : '/mcp.md'
-      const res = await fetch(mdPath)
+      const res = await fetch(locale === 'pt' ? '/pt/mcp.md' : '/mcp.md')
       if (res.ok) {
-        const text = await res.text()
-        await navigator.clipboard.writeText(text)
+        await navigator.clipboard.writeText(await res.text())
         setCopiedKey('page-md')
         setDropdownOpen(false)
         setTimeout(() => setCopiedKey((cur) => (cur === 'page-md' ? null : cur)), 3000)
-        return
       }
     } catch {
-      // Fallback in case fetch fails
+      // Fallback
     }
   }
 
@@ -152,14 +190,15 @@ export function Mcp({
               </div>
 
               <div className="flex items-center gap-2 relative">
-                {/* GitHub Star Button with Stroke-Only Star */}
+                {/* GitHub Star Button */}
                 <a
                   href="https://github.com/H0wZy/mcp"
                   target="_blank"
                   rel="noreferrer"
-                  className="chrome-btn inline-flex items-center gap-1.5 text-xs font-mono"
+                  className="chrome-btn inline-flex items-center gap-2 text-xs font-mono"
                   title="GitHub repository"
                 >
+                  <GithubIcon />
                   <span>GitHub</span>
                   <span className="text-[var(--accent)] font-semibold">★ {stars !== null ? stars : mcpData.stars}</span>
                 </a>
@@ -190,59 +229,51 @@ export function Mcp({
                   </button>
 
                   {dropdownOpen ? (
-                    <div className="absolute right-0 top-full mt-2 w-56 rounded border border-[var(--border)] bg-[var(--surface)] shadow-2xl p-1 z-50 flex flex-col gap-0.5 text-xs font-mono">
+                    <div className="absolute right-0 top-full mt-2 w-52 rounded border border-[var(--border)] bg-[var(--surface)] shadow-2xl p-1 z-50 flex flex-col gap-0.5 text-xs font-mono">
                       <a
                         href={locale === 'pt' ? '/pt/mcp.md' : '/mcp.md'}
                         target="_blank"
                         rel="noreferrer"
-                        className="text-left px-2.5 py-1.5 rounded hover:bg-[var(--line)] hover:text-[var(--accent)] transition-colors flex items-center gap-2"
+                        className="text-left px-2.5 py-1.5 rounded hover:bg-[var(--line)] text-[var(--accent)] transition-colors flex items-center gap-2"
                         onClick={() => setDropdownOpen(false)}
                       >
-                        <span className="text-[10px] px-1 py-0.5 rounded border border-[var(--border)] font-bold">M↓</span>
+                        <span className="text-[10px] px-1 py-0.5 rounded border border-[var(--accent)] font-bold">M↓</span>
                         <span>{locale === 'pt' ? 'Ver como Markdown' : 'View as Markdown'}</span>
                       </a>
-                      <button
-                        type="button"
-                        onClick={copyFullMarkdown}
-                        className="text-left px-2.5 py-1.5 rounded hover:bg-[var(--line)] hover:text-[var(--accent)] transition-colors flex items-center gap-2"
-                      >
-                        <CopyIcon />
-                        <span>{locale === 'pt' ? 'Copiar Markdown (.md)' : 'Copy Markdown (.md)'}</span>
-                      </button>
                       <a
                         href="https://claude.ai/new?q=H0wZy/mcp"
                         target="_blank"
                         rel="noreferrer"
-                        className="text-left px-2.5 py-1.5 rounded hover:bg-[var(--line)] hover:text-[var(--accent)] transition-colors flex items-center gap-2"
+                        className="text-left px-2.5 py-1.5 rounded hover:bg-[var(--line)] text-[var(--accent)] transition-colors flex items-center gap-2"
                       >
-                        <span>⚡</span>
+                        <SparkleIcon />
                         <span>Open in Claude ↗</span>
                       </a>
                       <a
                         href="https://chatgpt.com/?q=H0wZy/mcp"
                         target="_blank"
                         rel="noreferrer"
-                        className="text-left px-2.5 py-1.5 rounded hover:bg-[var(--line)] hover:text-[var(--accent)] transition-colors flex items-center gap-2"
+                        className="text-left px-2.5 py-1.5 rounded hover:bg-[var(--line)] text-[var(--accent)] transition-colors flex items-center gap-2"
                       >
-                        <span>🤖</span>
+                        <BotIcon />
                         <span>Open in ChatGPT ↗</span>
                       </a>
                       <a
                         href="https://www.npmjs.com/package/@h0wzy/mcp"
                         target="_blank"
                         rel="noreferrer"
-                        className="text-left px-2.5 py-1.5 rounded hover:bg-[var(--line)] hover:text-[var(--accent)] transition-colors flex items-center gap-2 border-t border-[var(--line)] pt-1 mt-0.5"
+                        className="text-left px-2.5 py-1.5 rounded hover:bg-[var(--line)] text-[var(--accent)] transition-colors flex items-center gap-2 border-t border-[var(--line)] pt-1 mt-0.5"
                       >
-                        <span>📦</span>
+                        <PackageIcon />
                         <span>View on npm ↗</span>
                       </a>
                       <a
                         href="https://github.com/H0wZy/mcp"
                         target="_blank"
                         rel="noreferrer"
-                        className="text-left px-2.5 py-1.5 rounded hover:bg-[var(--line)] hover:text-[var(--accent)] transition-colors flex items-center gap-2"
+                        className="text-left px-2.5 py-1.5 rounded hover:bg-[var(--line)] text-[var(--accent)] transition-colors flex items-center gap-2"
                       >
-                        <span>🐙</span>
+                        <GithubIcon />
                         <span>GitHub Repository ↗</span>
                       </a>
                     </div>
@@ -338,22 +369,18 @@ export function Mcp({
 
                     {/* Disabled / Future: Codex & Antigravity */}
                     {(['Codex', 'Antigravity'] as const).map((name) => (
-                      <div key={name} className="relative group inline-flex">
-                        <button
-                          type="button"
-                          disabled
-                          className="px-2.5 py-1 rounded text-[11px] font-mono border border-dashed border-[var(--border)] bg-[var(--bg)]/60 text-[var(--dim)] opacity-50 cursor-not-allowed inline-flex items-center gap-1 select-none transition-all group-hover:opacity-85"
-                          title={locale === 'pt' ? 'TODO: Suporte nativo em breve' : 'TODO: Native support coming soon'}
-                        >
-                          <span>{name}</span>
-                          <span className="text-[8.5px] uppercase tracking-wider px-1 py-0.2 rounded bg-[var(--line)] text-[var(--accent-2)] border border-[var(--line)]">
-                            TODO
-                          </span>
-                        </button>
-                        <div className="pointer-events-none absolute -top-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-[var(--bg)] text-[var(--fg)] border border-[var(--border)] px-2 py-0.5 rounded text-[10px] font-mono whitespace-nowrap shadow-lg z-20">
-                          {locale === 'pt' ? 'TODO: Em breve' : 'TODO: Coming soon'}
-                        </div>
-                      </div>
+                      <button
+                        key={name}
+                        type="button"
+                        disabled
+                        className="px-2.5 py-1 rounded text-[11px] font-mono border border-dashed border-[var(--border)] bg-[var(--bg)]/60 text-[var(--dim)] opacity-50 cursor-not-allowed inline-flex items-center gap-1 select-none transition-opacity hover:opacity-80"
+                        title={locale === 'pt' ? 'TODO: Suporte em breve' : 'TODO: Coming soon'}
+                      >
+                        <span>{name}</span>
+                        <span className="text-[8.5px] uppercase tracking-wider px-1 py-0.2 rounded bg-[var(--line)] text-[var(--accent-2)] border border-[var(--line)]">
+                          TODO
+                        </span>
+                      </button>
                     ))}
                   </div>
 
@@ -414,56 +441,38 @@ export function Mcp({
 
                 {/* 3 Steps */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-5 text-xs">
-                  {/* Step 1 */}
-                  <div className="space-y-1.5">
-                    <div className="flex items-center gap-2">
-                      <span className="size-5 rounded-full bg-[var(--line)] text-[var(--accent)] font-mono font-bold flex items-center justify-center text-[11px]">
-                        1
-                      </span>
-                      <strong className="text-[var(--fg)]">
-                        {mode === 'cli'
+                  {[
+                    {
+                      title:
+                        mode === 'cli'
                           ? (locale === 'pt' ? 'Comando de execucao' : 'Run CLI command')
-                          : (locale === 'pt' ? 'Copie o endpoint' : 'Copy endpoint URL')}
-                      </strong>
+                          : (locale === 'pt' ? 'Copie o endpoint' : 'Copy endpoint URL'),
+                      desc:
+                        mode === 'streamable'
+                          ? (locale === 'pt' ? 'Endpoint Streamable HTTP unificado recomendado pelo MCP.' : 'Unified Streamable HTTP endpoint recommended by modern MCP spec.')
+                          : mode === 'sse'
+                            ? (locale === 'pt' ? 'Endpoint SSE compativel com IDEs legadas.' : 'Legacy SSE endpoint for backwards-compatible IDEs.')
+                            : (locale === 'pt' ? 'Inicie instantaneamente sem instalacao previa via npx.' : 'Zero-installation runner via npx execution.'),
+                    },
+                    {
+                      title: locale === 'pt' ? 'Configure no cliente' : 'Configure client',
+                      desc: stepInfo[locale][0],
+                    },
+                    {
+                      title: locale === 'pt' ? 'Pronto para usar' : 'Ready to use',
+                      desc: stepInfo[locale][1],
+                    },
+                  ].map((s, i) => (
+                    <div key={i} className="space-y-1.5">
+                      <div className="flex items-center gap-2">
+                        <span className="size-5 rounded-full bg-[var(--line)] text-[var(--accent)] font-mono font-bold flex items-center justify-center text-[11px]">
+                          {i + 1}
+                        </span>
+                        <strong className="text-[var(--fg)]">{s.title}</strong>
+                      </div>
+                      <p className="text-[var(--dim)] text-[11px] leading-relaxed">{s.desc}</p>
                     </div>
-                    <p className="text-[var(--dim)] text-[11px] leading-relaxed">
-                      {mode === 'streamable'
-                        ? (locale === 'pt' ? 'Endpoint Streamable HTTP unificado recomendado pelo padrao MCP.' : 'Unified Streamable HTTP endpoint recommended by modern MCP spec.')
-                        : mode === 'sse'
-                          ? (locale === 'pt' ? 'Endpoint SSE compativel com clientes e IDEs legadas.' : 'Legacy SSE endpoint for backwards-compatible IDEs.')
-                          : (locale === 'pt' ? 'Inicie instantaneamente sem instalacao previa via npx.' : 'Zero-installation runner via npx execution.')}
-                    </p>
-                  </div>
-
-                  {/* Step 2 */}
-                  <div className="space-y-1.5">
-                    <div className="flex items-center gap-2">
-                      <span className="size-5 rounded-full bg-[var(--line)] text-[var(--accent)] font-mono font-bold flex items-center justify-center text-[11px]">
-                        2
-                      </span>
-                      <strong className="text-[var(--fg)]">
-                        {locale === 'pt' ? 'Configure no cliente' : 'Configure client'}
-                      </strong>
-                    </div>
-                    <p className="text-[var(--dim)] text-[11px] leading-relaxed">
-                      {stepInfo[locale][0]}
-                    </p>
-                  </div>
-
-                  {/* Step 3 */}
-                  <div className="space-y-1.5">
-                    <div className="flex items-center gap-2">
-                      <span className="size-5 rounded-full bg-[var(--line)] text-[var(--accent)] font-mono font-bold flex items-center justify-center text-[11px]">
-                        3
-                      </span>
-                      <strong className="text-[var(--fg)]">
-                        {locale === 'pt' ? 'Pronto para usar' : 'Ready to use'}
-                      </strong>
-                    </div>
-                    <p className="text-[var(--dim)] text-[11px] leading-relaxed">
-                      {stepInfo[locale][1]}
-                    </p>
-                  </div>
+                  ))}
                 </div>
 
                 <div className="pt-3 border-t border-[var(--line)] flex flex-wrap items-center justify-between text-[11px] text-[var(--dim)]">
@@ -494,9 +503,9 @@ export function Mcp({
 
               <div className="flex flex-col gap-3 font-mono text-xs">
                 {[
-                  { label: '# 1. Instant execution via npx:', cmd: 'npx @h0wzy/mcp', key: 'cmd-npx' },
-                  { label: '# 2. Global install with hmcp CLI:', cmd: 'npm install -g @h0wzy/mcp && hmcp', key: 'cmd-npm' },
-                  { label: '# 3. Direct from source with Go:', cmd: 'go run ./cli setup-path && hmcp', key: 'cmd-go' },
+                  { label: '# 1. Instant execution:', cmd: 'npx @h0wzy/mcp', key: 'cmd-npx' },
+                  { label: '# 2. Global install:', cmd: 'npm install -g @h0wzy/mcp && hmcp', key: 'cmd-npm' },
+                  { label: '# 3. From source (Go):', cmd: 'go run ./cli setup-path && hmcp', key: 'cmd-go' },
                 ].map((item) => (
                   <div key={item.key} className="p-3 rounded bg-[var(--surface)] border border-[var(--border)]">
                     <div className="flex items-center justify-between gap-2 mb-1.5">
@@ -541,24 +550,27 @@ export function Mcp({
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 font-mono text-xs">
-                {PACKAGES.map((pkg) => (
-                  <a
-                    key={pkg.n}
-                    href={`https://www.npmjs.com/package/${pkg.n}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="p-4 rounded border border-[var(--border)] bg-[var(--surface)] hover:border-[var(--accent)] transition-colors block space-y-2"
-                  >
-                    <div className="flex items-center justify-between">
-                      <strong className="text-[var(--accent)] text-sm">{pkg.n}</strong>
-                      <span className="text-[var(--dim)] text-[11px]">{mcpData.version}</span>
-                    </div>
-                    <p className="text-[var(--dim)] text-[11px] leading-relaxed">{pkg.d}</p>
-                    <div className="text-[10px] text-[var(--dim)] pt-1 border-t border-[var(--line)]">
-                      Published via GitHub Actions
-                    </div>
-                  </a>
-                ))}
+                {PACKAGES.map((pkg) => {
+                  const pkgName = `@h0wzy/mcp${pkg.n}`
+                  return (
+                    <a
+                      key={pkg.n}
+                      href={`https://www.npmjs.com/package/${pkgName}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="p-4 rounded border border-[var(--border)] bg-[var(--surface)] hover:border-[var(--accent)] transition-colors block space-y-2"
+                    >
+                      <div className="flex items-center justify-between">
+                        <strong className="text-[var(--accent)] text-sm">{pkgName}</strong>
+                        <span className="text-[var(--dim)] text-[11px]">{mcpData.version}</span>
+                      </div>
+                      <p className="text-[var(--dim)] text-[11px] leading-relaxed">{pkg.d}</p>
+                      <div className="text-[10px] text-[var(--dim)] pt-1 border-t border-[var(--line)]">
+                        Published via GitHub Actions
+                      </div>
+                    </a>
+                  )
+                })}
               </div>
             </div>
           </section>
@@ -597,16 +609,19 @@ export function Mcp({
               </p>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 font-mono text-xs">
-                {BINARIES.map((bin) => (
-                  <a
-                    key={bin.p}
-                    href={`https://github.com/H0wZy/mcp/releases/download/${mcpData.version}/${bin.f}`}
-                    className="p-3 rounded border border-[var(--border)] bg-[var(--surface)] hover:border-[var(--accent)] transition-colors block"
-                  >
-                    <span className="text-[var(--fg)] font-semibold block mb-1">{bin.p}</span>
-                    <span className="text-[var(--accent)] text-[11px]">{bin.f} ↗</span>
-                  </a>
-                ))}
+                {BINARIES.map((bin) => {
+                  const binName = `h0wzy-mcp-${bin.f}`
+                  return (
+                    <a
+                      key={bin.p}
+                      href={`https://github.com/H0wZy/mcp/releases/download/${mcpData.version}/${binName}`}
+                      className="p-3 rounded border border-[var(--border)] bg-[var(--surface)] hover:border-[var(--accent)] transition-colors block"
+                    >
+                      <span className="text-[var(--fg)] font-semibold block mb-1">{bin.p}</span>
+                      <span className="text-[var(--accent)] text-[11px]">{binName} ↗</span>
+                    </a>
+                  )
+                })}
               </div>
             </div>
           </section>
