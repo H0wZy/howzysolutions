@@ -142,11 +142,11 @@ export function ContributionGrid({ period, locale }: { period: ActivityPeriod; l
         >
           <thead aria-hidden="true">
             <tr>
-              <td />
+              <th scope="col" />
               {grid.months.map((month, i) => (
-                <td key={i} colSpan={month.span}>
+                <th key={i} scope="col" colSpan={month.span}>
                   <span className="contrib-month">{month.label}</span>
-                </td>
+                </th>
               ))}
             </tr>
           </thead>

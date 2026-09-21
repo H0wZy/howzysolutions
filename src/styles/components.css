@@ -1119,8 +1119,11 @@
   font-weight: 400;
 }
 
+.contrib-table thead th,
 .contrib-table thead td {
   height: 1.3em;
+  font-weight: normal;
+  text-align: left;
 }
 
 /* Labels are positioned out of flow, so their text never widens a column. */
@@ -1140,6 +1143,7 @@
    where the grid opens scrolled to the newest weeks. The shadow covers the
    box's padding strip, so no cell shows through beside the labels. */
 .contrib-table .contrib-weekday,
+.contrib-table thead th:first-child,
 .contrib-table thead td:first-child {
   position: sticky;
   left: 0;
