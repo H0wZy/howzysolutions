@@ -326,25 +326,31 @@ export function Mcp({
                   {/* Right: Transport Mode Switcher */}
                   <div className="flex flex-wrap items-center gap-2">
                     {[
-                      { id: 'streamable' as const, label: 'Streamable HTTP', title: 'Modern Streamable HTTP endpoint' },
-                      { id: 'sse' as const, label: 'HTTP / SSE', title: 'Legacy HTTP + SSE endpoint' },
+                      { id: 'streamable' as const, label: 'Streamable', title: 'Modern Streamable HTTP endpoint' },
+                      { id: 'sse' as const, label: 'SSE', title: 'Legacy HTTP + SSE endpoint' },
                       { id: 'cli' as const, label: 'CLI (Local)', title: 'Zero-install CLI execution' },
-                    ].map((t) => {
+                    ].map((t, idx) => {
                       const isSelected = mode === t.id
                       return (
-                        <button
-                          key={t.id}
-                          type="button"
-                          onClick={() => setMode(t.id)}
-                          className={`px-2.5 py-1 rounded text-[11px] font-mono transition-all border outline-none cursor-pointer ${
-                            isSelected
-                              ? 'bg-[var(--line)] border-[var(--accent)] text-[var(--accent)] font-semibold shadow-sm opacity-100'
-                              : 'bg-[var(--bg)]/60 border-[var(--border)] text-[var(--dim)] opacity-60 hover:opacity-100 hover:text-[var(--fg)] hover:border-[var(--accent)]/60'
-                          } focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:opacity-100`}
-                          title={t.title}
-                        >
-                          {t.label}
-                        </button>
+                        <div key={t.id} className="inline-flex items-center gap-2">
+                          {idx > 0 && (
+                            <span className="text-[var(--border)] text-[10px] select-none" aria-hidden="true">
+                              •
+                            </span>
+                          )}
+                          <button
+                            type="button"
+                            onClick={() => setMode(t.id)}
+                            className={`px-2.5 py-1 rounded text-[11px] font-mono transition-all border outline-none cursor-pointer ${
+                              isSelected
+                                ? 'bg-[var(--line)] border-[var(--accent)] text-[var(--accent)] font-semibold shadow-sm opacity-100'
+                                : 'bg-[var(--bg)]/60 border-[var(--border)] text-[var(--dim)] opacity-60 hover:opacity-100 hover:text-[var(--fg)] hover:border-[var(--accent)]/60'
+                            } focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:opacity-100`}
+                            title={t.title}
+                          >
+                            {t.label}
+                          </button>
+                        </div>
                       )
                     })}
                   </div>
