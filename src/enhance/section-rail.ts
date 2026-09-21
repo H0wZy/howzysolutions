@@ -5,41 +5,29 @@ export function initSectionRail(): void {
   if (!rail) return
 
   const links = new Map<string, HTMLAnchorElement>()
-  rail.querySelectorAll<HTMLAnchorElement>('[data-rail-link]').forEach((link) => {
-    const id = link.dataset.railLink
-    if (id) links.set(id, link)
-  })
+  rail.querySelectorAll<HTMLAnchorElement>('[data-rail-link]').forEach((l) => l.dataset.railLink && links.set(l.dataset.railLink, l))
   if (!links.size) return
 
-  const sections = [...links.keys()]
-    .map((id) => document.getElementById(id))
-    .filter((el): el is HTMLElement => !!el)
-
+  const sections = [...links.keys()].map((id) => document.getElementById(id)).filter((el): el is HTMLElement => !!el)
   if (!sections.length) return
 
   const visible = new Set<string>()
   let previous: string | undefined
 
   const mark = () => {
-    const atBottom = window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 2
+    const atBottom = scrollY + innerHeight >= document.documentElement.scrollHeight - 2
     const current = atBottom
       ? sections.at(-1)?.id
-      : [...sections].reverse().find((section) => visible.has(section.id))?.id ?? previous
+      : [...sections].reverse().find((s) => visible.has(s.id))?.id ?? previous
 
     previous = current
 
-    links.forEach((link, id) => {
-      if (id === current) link.setAttribute('aria-current', 'location')
-      else link.removeAttribute('aria-current')
-    })
+    links.forEach((link, id) => id === current ? link.setAttribute('aria-current', 'location') : link.removeAttribute('aria-current'))
   }
 
   const observer = new IntersectionObserver(
     (entries) => {
-      for (const entry of entries) {
-        if (entry.isIntersecting) visible.add(entry.target.id)
-        else visible.delete(entry.target.id)
-      }
+      for (const e of entries) visible[e.isIntersecting ? 'add' : 'delete'](e.target.id)
       mark()
     },
     { rootMargin: BAND },

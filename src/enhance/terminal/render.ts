@@ -1,6 +1,6 @@
 import type { OutputLine } from '../../terminal/types'
 
-function el<K extends keyof HTMLElementTagNameMap>(
+export function el<K extends keyof HTMLElementTagNameMap>(
   tag: K,
   className = '',
   text = '',
@@ -20,47 +20,40 @@ export function renderLine(line: OutputLine): HTMLElement {
       return el('div', `term-text${line.tone ? ` tone-${line.tone}` : ''}`, line.text)
 
     case 'link': {
-      const wrapper = el('div', 'term-text')
-      const anchor = el('a', '', line.text)
-      anchor.href = line.href
-      if (/^https?:/.test(line.href)) {
-        anchor.target = '_blank'
-        anchor.rel = 'noreferrer noopener'
+      const w = el('div', 'term-text'), a = el('a', '', line.text)
+      a.href = line.href
+      if (/^http/.test(line.href)) {
+        a.target = '_blank'
+        a.rel = 'noreferrer'
       }
-      wrapper.append(anchor)
-      return wrapper
+      w.append(a)
+      return w
     }
 
     case 'pairs': {
       const list = el('dl', 'term-pairs')
-      for (const [label, value] of line.rows) {
-        list.append(el('dt', '', label), el('dd', '', value))
-      }
+      for (const [k, v] of line.rows) list.append(el('dt', '', k), el('dd', '', v))
       return list
     }
 
     case 'table': {
-      const scroller = el('div', 'term-scroll')
-      const table = el('table', 'term-table')
-      const head = el('thead')
-      const headRow = el('tr')
-      for (const cell of line.head) headRow.append(el('th', '', cell))
-      head.append(headRow)
-      const body = el('tbody')
-      for (const row of line.rows) {
+      const s = el('div', 'term-scroll'), t = el('table', 'term-table'), h = el('thead'), b = el('tbody'), hr = el('tr')
+      for (const c of line.head) hr.append(el('th', '', c))
+      h.append(hr)
+      for (const r of line.rows) {
         const tr = el('tr')
-        for (const cell of row) tr.append(el('td', '', cell))
-        body.append(tr)
+        for (const c of r) tr.append(el('td', '', c))
+        b.append(tr)
       }
-      table.append(head, body)
-      scroller.append(table)
-      return scroller
+      t.append(h, b)
+      s.append(t)
+      return s
     }
   }
 }
 
 export function renderEcho(input: string): HTMLElement {
   const line = el('div', 'term-echo')
-  line.append(el('span', 'term-prompt', '❯'), el('span', '', ` ${input}`))
+  line.append(el('span', 'term-prompt', '❯'), ` ${input}`)
   return line
 }

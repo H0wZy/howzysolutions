@@ -20,6 +20,7 @@ import { initSectionRail } from './enhance/section-rail'
 import { mountTerminal } from './enhance/terminal/mount'
 import { initThemeControl } from './enhance/theme-control'
 import { initLocaleControl } from './enhance/locale-control'
+import { smoothScrollBy } from './enhance/scroll'
 import { locationFor } from './route'
 
 // The document's locale is whatever URL served it — no negotiation needed.
@@ -42,18 +43,12 @@ const root = document.getElementById('root')
  */
 function enhance() {
   document.addEventListener('click', (e) => {
-    const a = (e.target as HTMLElement | null)?.closest<HTMLAnchorElement>('a')
+    const a = (e.target as HTMLElement)?.closest<HTMLAnchorElement>('a')
     const el = a?.hash ? document.getElementById(a.hash.slice(1)) : null
-    if (a && el) {
+    if (el) {
       e.preventDefault()
-      const s = scrollY, d = el.getBoundingClientRect().top - 80, t0 = performance.now()
-      const f = (t: number) => {
-        const p = Math.min((t - t0) / 400, 1)
-        scrollTo(0, s + d * p * (2 - p))
-        if (p < 1) requestAnimationFrame(f)
-      }
-      requestAnimationFrame(f)
-      history.pushState(null, '', a.hash)
+      smoothScrollBy(el.getBoundingClientRect().top - 80)
+      history.pushState(null, '', a!.hash)
     }
   })
   initReveal()
@@ -63,10 +58,8 @@ function enhance() {
   initThemeControl(locale)
   initLocaleControl()
 
-  const terminal = document.querySelector<HTMLElement>('[data-term]')
-  if (terminal) {
-    mountTerminal(terminal, { history: [], locale })
-  }
+  const t = document.querySelector<HTMLElement>('[data-term]')
+  if (t) mountTerminal(t, { history: [], locale })
 }
 
 if (root) {

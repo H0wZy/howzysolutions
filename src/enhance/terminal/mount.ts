@@ -1,12 +1,12 @@
-import { execute } from '../../terminal/engine'
-import { completions, invocableNames } from '../../terminal/engine'
+import { execute, completions, invocableNames } from '../../terminal/engine'
 import type { Effect } from '../../terminal/types'
 import { content } from '../../content'
 import { translate } from '../../content/i18n/translate'
 import type { Locale } from '../../content/i18n/types'
 import { showThemeJokeKey } from '../theme-control'
 import { counterpart } from '../../route'
-import { renderEcho, renderLine } from './render'
+import { smoothScrollBy } from '../scroll'
+import { el, renderEcho, renderLine } from './render'
 
 /**
  * The canonical renderer. Vanilla DOM by design: the engine is framework-free
@@ -24,6 +24,8 @@ export type TerminalSession = {
   history: string[]
   locale: Locale
 }
+
+const SUGGESTIONS = ['help', 'projects', 'whoami', 'stats', 'stack', 'cv', 'contact', 'clear']
 
 export function mountTerminal(root: HTMLElement, session: TerminalSession): void {
   const outputEl = root.querySelector<HTMLElement>('[data-term-output]')
@@ -46,7 +48,6 @@ export function mountTerminal(root: HTMLElement, session: TerminalSession): void
   let cursor = session.history.length
   const placeholderEl = root.querySelector<HTMLElement>('[data-term-placeholder]')
   const ghostEl = root.querySelector<HTMLElement>('[data-term-ghost]')
-  const SUGGESTIONS = ['help', 'projects', 'whoami', 'stats', 'stack', 'cv', 'contact', 'clear']
   let suggestionIndex = 0
 
   const syncCursor = () => {
@@ -63,9 +64,15 @@ export function mountTerminal(root: HTMLElement, session: TerminalSession): void
     }
   }, 3500)
 
+  function scrollTerminal(): void {
+    const b = (e: Element) => e.getBoundingClientRect()
+    const d = Math.max(b(root.closest('section') ?? root).top - 80, b(root).bottom - innerHeight + 80)
+    if (d > 2) smoothScrollBy(d)
+  }
+
   ;['input', 'keyup', 'click', 'select'].forEach((e) => input.addEventListener(e, syncCursor))
   input.addEventListener('keydown', () => requestAnimationFrame(syncCursor))
-  input.addEventListener('focus', () => form.scrollIntoView({ behavior: 'smooth', block: 'nearest' }))
+  input.addEventListener('focus', scrollTerminal)
   syncCursor()
 
   /**
@@ -73,9 +80,7 @@ export function mountTerminal(root: HTMLElement, session: TerminalSession): void
    * by CLONING the live one, so the markup has a single definition
    * (src/components/Terminal.tsx) and cannot drift from what sits below it.
    */
-  function echoPrompt(): HTMLElement | null {
-    return promptEl ? (promptEl.cloneNode(true) as HTMLElement) : null
-  }
+  const echoPrompt = () => promptEl ? (promptEl.cloneNode(true) as HTMLElement) : null
 
   function applyEffect(effect: Effect): void {
     switch (effect.type) {
@@ -92,7 +97,7 @@ export function mountTerminal(root: HTMLElement, session: TerminalSession): void
         // navigation to the counterpart URL — the same thing the chrome's
         // language link does (FR-015). Scroll is preserved the same way.
         try {
-          sessionStorage.setItem('h0wzy.scroll', String(window.scrollY))
+          sessionStorage.setItem('h0wzy.scroll', String(scrollY))
         } catch {
           /* No storage, no restore; the navigation still happens. */
         }
@@ -116,12 +121,10 @@ export function mountTerminal(root: HTMLElement, session: TerminalSession): void
       history: session.history,
     })
 
-    const block = document.createElement('div')
-    block.className = `term-block${result.status === 0 ? '' : ' is-error'}`
+    const block = el('div', `term-block${result.status ? ' is-error' : ''}`)
     const prompt = echoPrompt()
     if (prompt) block.append(prompt)
-    block.append(renderEcho(trimmed))
-    for (const line of result.lines) block.append(renderLine(line))
+    block.append(renderEcho(trimmed), ...result.lines.map(renderLine))
     output.append(block)
 
     session.history.push(trimmed)
@@ -130,7 +133,7 @@ export function mountTerminal(root: HTMLElement, session: TerminalSession): void
     if (result.effect) applyEffect(result.effect)
     requestAnimationFrame(() => {
       root.scrollTop = root.scrollHeight
-      form.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+      scrollTerminal()
       input.focus({ preventScroll: true })
     })
   }
@@ -149,7 +152,7 @@ export function mountTerminal(root: HTMLElement, session: TerminalSession): void
       if (!session.history.length) return
       e.preventDefault()
       cursor = e.key === 'ArrowUp' ? Math.max(0, cursor - 1) : Math.min(session.history.length, cursor + 1)
-      input.value = cursor === session.history.length ? '' : (session.history[cursor] ?? '')
+      input.value = session.history[cursor] ?? ''
       syncCursor()
       return
     }
@@ -160,7 +163,7 @@ export function mountTerminal(root: HTMLElement, session: TerminalSession): void
       const val = input.value.trim()
       const idx = SUGGESTIONS.indexOf(val)
       if (!val || idx !== -1) {
-        suggestionIndex = idx === -1 ? suggestionIndex : (idx + 1) % SUGGESTIONS.length
+        if (idx !== -1) suggestionIndex = (idx + 1) % SUGGESTIONS.length
         input.value = `${SUGGESTIONS[suggestionIndex]} `
         syncCursor()
         return
@@ -171,8 +174,7 @@ export function mountTerminal(root: HTMLElement, session: TerminalSession): void
         input.value = `${matches[0]} `
         syncCursor()
       } else if (matches.length > 1) {
-        const block = document.createElement('div')
-        block.className = 'term-block'
+        const block = el('div', 'term-block')
         block.append(
           renderLine({
             kind: 'text',
@@ -183,19 +185,16 @@ export function mountTerminal(root: HTMLElement, session: TerminalSession): void
           }),
         )
         output.append(block)
-        root.scrollTop = root.scrollHeight
-        form.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+        requestAnimationFrame(() => {
+          root.scrollTop = root.scrollHeight
+          scrollTerminal()
+        })
       }
     }
   })
 
   root.addEventListener('keydown', (e) => {
-    if (document.activeElement !== input && !e.ctrlKey && !e.metaKey && !e.altKey && (e.key.length === 1 || e.key === 'Backspace' || e.key === 'Tab')) {
-      input.focus()
-    }
+    if (document.activeElement !== input && !e.ctrlKey && !e.metaKey && (e.key.length === 1 || e.key === 'Tab' || e.key === 'Backspace')) input.focus()
   })
-
-  root.addEventListener('mouseup', () => {
-    if (!getSelection()?.toString()) input.focus()
-  })
+  root.addEventListener('mouseup', () => getSelection()?.toString() || input.focus())
 }

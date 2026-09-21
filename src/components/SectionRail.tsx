@@ -39,9 +39,9 @@ export function SectionRail({ entries, locale }: { entries: RailEntry[]; locale:
           <a href={`#${entry.id}`} data-rail-link={entry.id}>
             {entry.labelKey
               ? translate(locale, entry.labelKey)
-              : typeof entry.label === 'string'
-                ? entry.label
-                : entry.label[locale]}
+              : typeof entry.label === 'object'
+                ? entry.label[locale]
+                : entry.label}
           </a>
         </li>
       ))}
