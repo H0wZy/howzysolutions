@@ -9,6 +9,7 @@ import { Chrome } from '../components/Chrome'
 import { SectionLabel } from '../components/SectionLabel'
 import { StatsPanel } from '../components/StatsPanel'
 import { GithubActivity } from '../components/GithubActivity'
+import { Footer } from '../components/Footer'
 import { Terminal } from '../components/Terminal'
 import { Skeleton } from '../components/ui/skeleton'
 import { SectionRail } from '../components/SectionRail'
@@ -198,11 +199,7 @@ export function Home({
           </div>
         </section>
 
-        <footer className="footer">
-          <div className="wrap">
-            <p className="dim">{translate(locale, 'footer.builtWith')}</p>
-          </div>
-        </footer>
+        <Footer locale={locale} />
         </div>
       </main>
     </>
