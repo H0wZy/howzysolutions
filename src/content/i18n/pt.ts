@@ -234,8 +234,7 @@ export const pt = {
   'contact.linktree': 'linktree',
 
   // Rodapé
-  'footer.builtWith':
-    'Feito com React, TypeScript e Vite. Sem rastreadores, sem fontes de terceiros.',
+  'footer.builtWith': '© 2026 Marcos "H0wZy" Junior · Todos os direitos reservados.',
   'footer.source': 'código no github',
 
   // Página de privacidade
