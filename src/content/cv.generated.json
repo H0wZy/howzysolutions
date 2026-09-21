@@ -1,6 +1,6 @@
 {
-  "capturedAt": "2026-09-21T18:24:16.286Z",
-  "sourceCommit": "b71e83e",
+  "capturedAt": "2026-09-21T21:27:11.432Z",
+  "sourceCommit": "80a0f8a",
   "sourceRef": "C:\\Users\\h0wzy\\projects\\curriculum-vitae\\overleaf\\main.tex",
   "isFallback": false,
   "headline": {
@@ -16,14 +16,14 @@
       "locale": "en",
       "filename": "ENG_CV_Marcos_Junior_Bueno_Selzler.pdf",
       "href": "/cv/ENG_CV_Marcos_Junior_Bueno_Selzler.pdf",
-      "bytes": 33443,
+      "bytes": 33305,
       "present": true
     },
     {
       "locale": "pt",
       "filename": "PTBR_CV_Marcos_Junior_Bueno_Selzler.pdf",
       "href": "/cv/PTBR_CV_Marcos_Junior_Bueno_Selzler.pdf",
-      "bytes": 34187,
+      "bytes": 34061,
       "present": true
     }
   ],

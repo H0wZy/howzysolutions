@@ -13,3 +13,7 @@
 /pt/work /pt/works/ 301
 /pt/work/ /pt/works/ 301
 /pt/work/* /pt/works/:splat 301
+
+# Clean PDF routes for curriculum-vitae
+/cv.pdf /cv/ENG_CV_Marcos_Junior_Bueno_Selzler.pdf 302
+/pt/cv.pdf /cv/PTBR_CV_Marcos_Junior_Bueno_Selzler.pdf 302

@@ -11,6 +11,8 @@ on:
   schedule:
     - cron: '0 9 * * *' # 06:00 in Londrina (UTC-3)
   workflow_dispatch:
+  repository_dispatch:
+    types: [cv_updated]
 
 permissions:
   contents: read

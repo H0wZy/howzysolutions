@@ -14,7 +14,7 @@ import { educationRange, projectIdFor, railEntries } from '../content/cv'
 import { translate } from '../locale'
 import { pathFor } from '../route'
 import { Chrome } from '../components/Chrome'
-import { CvDownloads } from '../components/CvDownloads'
+import { CvHeaderActions } from '../components/cv/CvHeaderActions'
 import { SectionRail } from '../components/SectionRail'
 import { Footer } from '../components/Footer'
 
@@ -287,9 +287,15 @@ export function Cv({
             one-line role tag only.
           */}
           <header className="section">
-            <div className="wrap">
-              <h1>{translate(locale, 'cv.title')}</h1>
-              <p className="sub">{cv.headline[locale]}</p>
+            <div className="wrap flex flex-wrap items-start justify-between gap-4">
+              <div>
+                <h1>{translate(locale, 'cv.title')}</h1>
+                <p className="sub">{cv.headline[locale]}</p>
+                <CaptureStamp cv={cv} locale={locale} />
+              </div>
+              <div className="pt-1">
+                <CvHeaderActions locale={locale} />
+              </div>
             </div>
           </header>
 
@@ -299,16 +305,9 @@ export function Cv({
             ))}
           </div>
 
-          {/*
-            The summary, the downloads and the capture stamp close the page
-            rather than open it: by the time a reader reaches here they have
-            the full record, and the download is the natural next action.
-          */}
           <section className="section">
             <div className="wrap">
               <p className="prose">{cv.summary[locale]}</p>
-              <CvDownloads cv={cv} locale={locale} />
-              <CaptureStamp cv={cv} locale={locale} />
             </div>
           </section>
           <Footer locale={locale} />
