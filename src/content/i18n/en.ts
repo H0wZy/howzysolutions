@@ -263,7 +263,7 @@ export const en = {
   'contact.linktree': 'linktree',
 
   // Footer
-  'footer.builtWith': 'Built with React, TypeScript and Vite. No trackers, no third-party fonts.',
+  'footer.builtWith': '© 2026 Marcos "H0wZy" Junior · All rights reserved.',
   'footer.source': 'source on github',
 
   // Privacy page
