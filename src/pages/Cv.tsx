@@ -16,6 +16,7 @@ import { pathFor } from '../route'
 import { Chrome } from '../components/Chrome'
 import { CvDownloads } from '../components/CvDownloads'
 import { SectionRail } from '../components/SectionRail'
+import { Footer } from '../components/Footer'
 
 /**
  * The professional record as a page (US1).
@@ -310,6 +311,7 @@ export function Cv({
               <CaptureStamp cv={cv} locale={locale} />
             </div>
           </section>
+          <Footer locale={locale} />
         </div>
       </main>
     </>

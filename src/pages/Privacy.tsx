@@ -4,6 +4,7 @@ import { translate } from '../locale'
 import { pathFor } from '../route'
 import { Chrome } from '../components/Chrome'
 import { SectionRail } from '../components/SectionRail'
+import { Footer } from '../components/Footer'
 import { privacyTopicAnchors } from '../navigation'
 
 /**
@@ -124,6 +125,7 @@ export function Privacy({
             </section>
           )
         })}
+        <Footer locale={locale} />
         </div>
       </main>
     </>

@@ -3,6 +3,7 @@ import type { Locale } from '../content/i18n/types'
 import type { ContentBundle } from '../content/types'
 import { Chrome } from '../components/Chrome'
 import { SectionRail, type RailEntry } from '../components/SectionRail'
+import { Footer } from '../components/Footer'
 
 const TOC_ENTRIES: RailEntry[] = [
   { id: 'overview', label: { en: 'Overview', pt: 'Visao Geral' } },
@@ -13,7 +14,8 @@ const TOC_ENTRIES: RailEntry[] = [
   { id: 'binaries', label: { en: 'Standalone Binaries', pt: 'Binarios Avulsos' } },
 ]
 
-type AgentTab = 'claude' | 'cursor' | 'claude-code' | 'codex' | 'antigravity'
+type AgentTab = 'claude' | 'claude-code' | 'codex' | 'antigravity'
+type TransportMode = 'streamable' | 'sse' | 'cli'
 
 const PACKAGES = [
   { n: '@h0wzy/mcp', d: 'Interactive Go CLI runner and hub orchestrator' },
@@ -57,13 +59,9 @@ const BRIDGES = [
 
 const STEPS: Record<AgentTab, { en: [string, string]; pt: [string, string]; action?: string }> = {
   claude: {
-    en: ['Settings → Connectors → Add H0wZy MCP and paste URL.', 'Connect and start cross-model code reviews.'],
-    pt: ['Ajustes → Conectores → Adicione H0wZy MCP e cole a URL.', 'Conecte e execute revisoes multi-agente.'],
+    en: ['Settings → Connectors → Add H0wZy MCP and paste endpoint.', 'Connect and start cross-model code reviews.'],
+    pt: ['Ajustes → Conectores → Adicione H0wZy MCP e cole o endpoint.', 'Conecte e execute revisoes multi-agente.'],
     action: 'https://claude.ai/new',
-  },
-  cursor: {
-    en: ['Settings → Features → MCP → Add new server (SSE).', 'Invoke multi-agent tools directly in Cursor chat.'],
-    pt: ['Settings → Features → MCP → Add new server (SSE).', 'Invoque ferramentas do hub no chat do Cursor.'],
   },
   'claude-code': {
     en: ['Run: claude mcp add h0wzy-mcp -- npx -y @h0wzy/mcp', 'Claude Code invokes codex and agy autonomously.'],
@@ -79,6 +77,23 @@ const STEPS: Record<AgentTab, { en: [string, string]; pt: [string, string]; acti
   },
 }
 
+function CopyIcon() {
+  return (
+    <svg className="size-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+      <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
+    </svg>
+  )
+}
+
+function CheckIcon() {
+  return (
+    <svg className="size-3.5 shrink-0 text-[var(--accent)] transition-transform duration-300 scale-110" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <polyline points="20 6 9 17 4 12" />
+    </svg>
+  )
+}
+
 export function Mcp({
   locale,
   pathname,
@@ -88,9 +103,9 @@ export function Mcp({
   pathname: string
 }) {
   const [dropdownOpen, setDropdownOpen] = useState(false)
-  const [copiedStatus, setCopiedStatus] = useState<string | null>(null)
+  const [copiedKey, setCopiedKey] = useState<string | null>(null)
   const [activeTab, setActiveTab] = useState<AgentTab>('claude')
-  const [mode, setMode] = useState<'mcp' | 'cli'>('mcp')
+  const [mode, setMode] = useState<TransportMode>('streamable')
   const [stars, setStars] = useState<number | null>(null)
 
   useEffect(() => {
@@ -100,17 +115,21 @@ export function Mcp({
       .catch(() => {})
   }, [])
 
-  const showCopied = (msg: string) => {
-    setCopiedStatus(msg)
-    setDropdownOpen(false)
-    setTimeout(() => setCopiedStatus(null), 3000)
+  const triggerCopy = (text: string, key: string) => {
+    navigator.clipboard.writeText(text).then(() => {
+      setCopiedKey(key)
+      setDropdownOpen(false)
+      setTimeout(() => setCopiedKey((cur) => (cur === key ? null : cur)), 3000)
+    })
   }
 
-  const copyText = (text: string, label: string) => {
-    navigator.clipboard.writeText(text).then(() => showCopied(label))
-  }
+  const connectorUrl =
+    mode === 'streamable'
+      ? 'https://mcp.howzysolutions.com/mcp'
+      : mode === 'sse'
+        ? 'https://mcp.howzysolutions.com/sse'
+        : 'npx @h0wzy/mcp'
 
-  const connectorUrl = mode === 'mcp' ? 'https://mcp.howzysolutions.com/sse' : 'npx @h0wzy/mcp'
   const stepInfo = STEPS[activeTab]
 
   return (
@@ -132,7 +151,7 @@ export function Mcp({
               </div>
 
               <div className="flex items-center gap-2 relative">
-                {/* GitHub Star Button */}
+                {/* GitHub Star Button with Stroke-Only Star */}
                 <a
                   href="https://github.com/H0wZy/mcp"
                   target="_blank"
@@ -144,9 +163,9 @@ export function Mcp({
                     <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z" />
                   </svg>
                   <span>GitHub</span>
-                  <span className="inline-flex items-center gap-1 text-[var(--accent)] font-mono">
-                    <svg className="size-3 fill-current text-[var(--accent-2)]" viewBox="0 0 16 16" aria-hidden="true">
-                      <path d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.75.75 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z" />
+                  <span className="inline-flex items-center gap-1 font-mono text-[var(--fg)]">
+                    <svg className="size-3.5 stroke-current fill-none" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
                     </svg>
                     {stars !== null ? stars : 'v1.0.3'}
                   </span>
@@ -169,9 +188,9 @@ export function Mcp({
                       <button
                         type="button"
                         onClick={() =>
-                          copyText(
+                          triggerCopy(
                             `# H0wZy/mcp — Multi-Agent MCP Hub\nQuickstart: npx @h0wzy/mcp\nhttps://github.com/H0wZy/mcp`,
-                            locale === 'pt' ? 'Markdown copiado!' : 'Markdown copied!',
+                            'dropdown-md',
                           )
                         }
                         className="text-left px-2.5 py-1.5 rounded hover:bg-[var(--line)] hover:text-[var(--accent)] transition-colors"
@@ -208,10 +227,10 @@ export function Mcp({
               </div>
             </div>
 
-            {copiedStatus ? (
+            {copiedKey ? (
               <div className="wrap mt-3">
                 <div className="px-3 py-1 rounded bg-[var(--surface)] border border-[var(--accent)] text-[var(--accent)] text-xs font-mono inline-block">
-                  ✓ {copiedStatus}
+                  ✓ {locale === 'pt' ? 'Copiado para a area de transferencia' : 'Copied to clipboard'}
                 </div>
               </div>
             ) : null}
@@ -233,15 +252,10 @@ export function Mcp({
               <div className="rounded-lg bg-[var(--bg)] border border-[var(--border)] overflow-hidden shadow-2xl font-mono text-xs">
                 <div className="px-4 py-2.5 bg-[var(--surface)] border-b border-[var(--line)] flex items-center justify-between text-[11px]">
                   <div className="flex items-center gap-2">
-                    <span className="text-[var(--term-user)] font-semibold">h0wzy@h0wzy</span>
+                    <span className="text-[var(--term-user)] font-semibold">h0wzy@howzysolutions</span>
                     <span className="text-[var(--dim)]">in</span>
-                    <span className="text-[var(--accent)]">~</span>
-                    <span className="text-[var(--dim)]">at</span>
-                    <span className="text-[var(--accent-2)]">2h 32m 19s</span>
-                    <span className="text-[var(--dim)]">w/</span>
-                    <span className="text-[var(--fg)]">pwsh</span>
+                    <span className="text-[var(--accent)]">~/mcp</span>
                   </div>
-                  <span className="text-[var(--dim)]">Go 1.26+</span>
                 </div>
 
                 <div className="p-5 overflow-x-auto space-y-4">
@@ -250,7 +264,7 @@ export function Mcp({
                     <span className="text-[var(--fg)] font-bold">hmcp</span>
                   </div>
 
-                  {/* Gradient ASCII Banner */}
+                  {/* Gradient ASCII Banner with Perfectly Aligned 74-col block font */}
                   <pre
                     className="leading-tight font-black select-none tracking-tighter"
                     style={{
@@ -259,41 +273,20 @@ export function Mcp({
                       WebkitTextFillColor: 'transparent',
                     }}
                   >
-{`██╗  ██╗ ██████╗ ██╗    ██╗███████╗██╗   ██╗  ███╗   ███╗  ██████╗ ███████╗
-██║  ██║██╔═████╗██║    ██║╚══███╔╝╚██╗ ██╔╝  ████╗ ████║ ██╔════╝ ██╔══██╗
-███████║██║██╔██║██║ █╗ ██║  ███╔╝   ╚████╔╝  ██╔████╔██║ ██║      ██████╔╝
-██╔══██║████╔╝██║██║███╗██║ ███╔╝     ╚██╔╝   ██║╚██╔╝██║ ██║      ██╔═══╝
-██║  ██║╚██████╔╝╚███╔███╔╝███████╗    ██║    ██║ ╚═╝ ██║ ╚██████╗ ██║
-╚═╝  ╚═╝ ╚═════╝  ╚══╝╚══╝ ╚══════╝    ╚═╝    ╚═╝     ╚═╝  ╚═════╝ ╚═╝`}
+{`██╗  ██╗ ██████╗ ██╗    ██╗███████╗██╗   ██╗   ███╗   ███╗ ██████╗██████╗ 
+██║  ██║██╔═══██╗██║    ██║╚══███╔╝╚██╗ ██╔╝   ████╗ ████║██╔════╝██╔══██╗
+███████║██║   ██║██║ █╗ ██║  ███╔╝   ╚████╔╝   ██╔████╔██║██║     ██████╔╝
+██╔══██║██║   ██║██║███╗██║ ███╔╝     ╚██╔╝    ██║╚██╔╝██║██║     ██╔═══╝ 
+██║  ██║╚██████╔╝╚███╔███╔╝███████╗    ██║     ██║ ╚═╝ ██║╚██████╗██║     
+╚═╝  ╚═╝ ╚═════╝  ╚══╝╚══╝ ╚══════╝    ╚═╝     ╚═╝     ╚═╝ ╚═════╝╚═╝     `}
                   </pre>
 
-                  <div className="space-y-1 text-xs">
+                  <div className="space-y-1 text-xs pt-1">
                     <div className="text-[var(--fg)] font-semibold">
                       H0wZy/mcp v1.0.3 • Multi-Agent MCP Hub
                     </div>
                     <div className="text-[var(--term-user)]">
                       Claude Code ↔ OpenAI Codex ↔ Google Antigravity
-                    </div>
-                  </div>
-
-                  <div className="pt-3 border-t border-[var(--line)] space-y-2 text-[11px]">
-                    <div className="text-[var(--accent)] font-semibold">
-                      🔍 Scanning local AI developer CLIs...
-                    </div>
-                    <div className="pl-2 space-y-0.5 text-[var(--fg)]">
-                      <div><span className="text-[var(--accent)]">✓</span> Claude Code <span className="text-[var(--dim)]">(C:\Users\h0wzy\.local\bin\claude.exe)</span></div>
-                      <div><span className="text-[var(--accent)]">✓</span> OpenAI Codex CLI <span className="text-[var(--dim)]">(C:\Users\h0wzy\AppData\Roaming\npm\codex.cmd)</span></div>
-                      <div><span className="text-[var(--accent)]">✓</span> Google Antigravity <span className="text-[var(--dim)]">(C:\Users\h0wzy\AppData\Local\agy\bin\agy.exe)</span></div>
-                    </div>
-
-                    <div className="pt-2 text-[var(--accent-2)] font-semibold">
-                      Select MCP bridges to configure:
-                    </div>
-                    <div className="pl-2 space-y-0.5 text-[var(--dim)]">
-                      <div className="text-[var(--term-user)] font-semibold">&gt; Claude Code ↔ Google Antigravity (Gemini 3.1 Pro/Flash)</div>
-                      <div>  Claude Code ↔ OpenAI Codex (GPT-5.6 / GPT-6 Astra)</div>
-                      <div>  OpenAI Codex ↔ Google Antigravity (Gemini 3.1)</div>
-                      <div>  Google Antigravity ↔ OpenAI Codex</div>
                     </div>
                   </div>
                 </div>
@@ -309,89 +302,110 @@ export function Mcp({
               </h2>
               <p className="text-xs text-[var(--dim)] mb-4">
                 {locale === 'pt'
-                  ? 'Inspirado em conectores universais. Escolha sua IDE ou agente e conecte em 3 passos simples.'
-                  : 'Inspired by universal AI connectors. Select your client and connect in 3 simple steps.'}
+                  ? 'Escolha seu cliente e conecte ao hub com Streamable HTTP moderno ou SSE legado.'
+                  : 'Select your client and connect to the hub via modern Streamable HTTP or legacy SSE.'}
               </p>
 
-              <div className="p-5 rounded-lg bg-[var(--surface)] border border-[var(--border)] shadow-xl space-y-5">
+              <div className="p-5 rounded-lg bg-[var(--surface)] shadow-xl space-y-5">
+                {/* Agent selector tabs + Mode Switcher (clean minimalist styling) */}
                 <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-[var(--line)]">
-                  <div className="flex flex-wrap items-center gap-1.5">
-                    {(['claude', 'cursor', 'claude-code', 'codex', 'antigravity'] as AgentTab[]).map((tab) => (
+                  <div className="flex flex-wrap items-center gap-1">
+                    {(['claude', 'claude-code', 'codex', 'antigravity'] as AgentTab[]).map((tab) => (
                       <button
                         key={tab}
                         type="button"
                         onClick={() => setActiveTab(tab)}
                         className={`px-3 py-1.5 rounded text-xs font-mono transition-colors ${
                           activeTab === tab
-                            ? 'bg-[var(--line)] text-[var(--accent)] border border-[var(--accent)] font-semibold'
-                            : 'text-[var(--dim)] hover:text-[var(--fg)] hover:bg-[var(--bg)]'
+                            ? 'bg-[var(--line)] text-[var(--accent)] font-semibold'
+                            : 'text-[var(--dim)] hover:text-[var(--fg)]'
                         }`}
                       >
                         {tab === 'claude' && 'Claude'}
-                        {tab === 'cursor' && 'Cursor'}
                         {tab === 'claude-code' && 'Claude Code'}
                         {tab === 'codex' && 'OpenAI Codex'}
-                        {tab === 'antigravity' && 'Antigravity'}
+                        {tab === 'antigravity' && 'Google Antigravity'}
                       </button>
                     ))}
                   </div>
 
-                  <div className="flex items-center gap-1 p-0.5 rounded bg-[var(--bg)] border border-[var(--border)] text-xs font-mono">
+                  {/* Transport Mode Switcher */}
+                  <div className="flex items-center gap-1 p-0.5 rounded bg-[var(--bg)] text-xs font-mono">
                     <button
                       type="button"
-                      onClick={() => setMode('mcp')}
-                      className={`px-2.5 py-1 rounded ${
-                        mode === 'mcp' ? 'bg-[var(--surface)] text-[var(--accent)] font-semibold' : 'text-[var(--dim)]'
+                      onClick={() => setMode('streamable')}
+                      className={`px-2.5 py-1 rounded transition-colors ${
+                        mode === 'streamable' ? 'bg-[var(--surface)] text-[var(--accent)] font-semibold' : 'text-[var(--dim)] hover:text-[var(--fg)]'
                       }`}
+                      title="Modern Streamable HTTP endpoint"
                     >
-                      MCP (SSE)
+                      Streamable HTTP
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setMode('sse')}
+                      className={`px-2.5 py-1 rounded transition-colors ${
+                        mode === 'sse' ? 'bg-[var(--surface)] text-[var(--accent)] font-semibold' : 'text-[var(--dim)] hover:text-[var(--fg)]'
+                      }`}
+                      title="Legacy HTTP + SSE endpoint"
+                    >
+                      HTTP / SSE
                     </button>
                     <button
                       type="button"
                       onClick={() => setMode('cli')}
-                      className={`px-2.5 py-1 rounded ${
-                        mode === 'cli' ? 'bg-[var(--surface)] text-[var(--accent)] font-semibold' : 'text-[var(--dim)]'
+                      className={`px-2.5 py-1 rounded transition-colors ${
+                        mode === 'cli' ? 'bg-[var(--surface)] text-[var(--accent)] font-semibold' : 'text-[var(--dim)] hover:text-[var(--fg)]'
                       }`}
+                      title="Zero-install CLI execution"
                     >
                       CLI (Local)
                     </button>
                   </div>
                 </div>
 
+                {/* Full-width Connector URL / Command display (never cut off) */}
+                <div className="p-3 rounded bg-[var(--bg)] font-mono text-xs flex flex-wrap items-center justify-between gap-3">
+                  <div className="flex items-center gap-2 min-w-0 flex-1">
+                    <span className="text-[var(--accent)] select-none font-bold">$</span>
+                    <span className="text-[var(--fg)] select-all break-all">{connectorUrl}</span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => triggerCopy(connectorUrl, 'connector-url')}
+                    className="shrink-0 p-1.5 rounded text-[var(--dim)] hover:text-[var(--accent)] transition-colors"
+                    title={copiedKey === 'connector-url' ? 'Copied!' : 'Copy to clipboard'}
+                    aria-label="Copy connector URL"
+                  >
+                    {copiedKey === 'connector-url' ? <CheckIcon /> : <CopyIcon />}
+                  </button>
+                </div>
+
+                {/* 3 Steps */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-5 text-xs">
                   {/* Step 1 */}
-                  <div className="space-y-2">
+                  <div className="space-y-1.5">
                     <div className="flex items-center gap-2">
                       <span className="size-5 rounded-full bg-[var(--line)] text-[var(--accent)] font-mono font-bold flex items-center justify-center text-[11px]">
                         1
                       </span>
                       <strong className="text-[var(--fg)]">
-                        {mode === 'mcp'
-                          ? (locale === 'pt' ? 'Copie a URL do conector' : 'Copy connector URL')
-                          : (locale === 'pt' ? 'Comando de execucao' : 'Run CLI command')}
+                        {mode === 'cli'
+                          ? (locale === 'pt' ? 'Comando de execucao' : 'Run CLI command')
+                          : (locale === 'pt' ? 'Copie o endpoint' : 'Copy endpoint URL')}
                       </strong>
                     </div>
-                    <p className="text-[var(--dim)] text-[11px]">
-                      {mode === 'mcp'
-                        ? (locale === 'pt' ? 'Cole este endpoint no seu cliente MCP na proxima etapa.' : "You'll paste this URL into your client in the next step.")
-                        : (locale === 'pt' ? 'Inicie instantaneamente sem instalacao previa.' : 'Zero installation execution via npx runner.')}
+                    <p className="text-[var(--dim)] text-[11px] leading-relaxed">
+                      {mode === 'streamable'
+                        ? (locale === 'pt' ? 'Endpoint Streamable HTTP unificado recomendado pelo padrao MCP.' : 'Unified Streamable HTTP endpoint recommended by modern MCP spec.')
+                        : mode === 'sse'
+                          ? (locale === 'pt' ? 'Endpoint SSE compativel com clientes e IDEs legadas.' : 'Legacy SSE endpoint for backwards-compatible IDEs.')
+                          : (locale === 'pt' ? 'Inicie instantaneamente sem instalacao previa via npx.' : 'Zero-installation runner via npx execution.')}
                     </p>
-
-                    <div className="flex items-center gap-1 p-2 rounded bg-[var(--bg)] border border-[var(--border)] font-mono text-[11px]">
-                      <span className="truncate text-[var(--fg)] select-all">{connectorUrl}</span>
-                      <button
-                        type="button"
-                        onClick={() => copyText(connectorUrl, locale === 'pt' ? 'URL copiada!' : 'URL copied!')}
-                        className="ml-auto text-[var(--accent)] hover:text-[var(--fg)] px-2 py-0.5 rounded border border-[var(--line)]"
-                        title="Copy to clipboard"
-                      >
-                        {locale === 'pt' ? 'Copiar' : 'Copy'}
-                      </button>
-                    </div>
                   </div>
 
                   {/* Step 2 */}
-                  <div className="space-y-2">
+                  <div className="space-y-1.5">
                     <div className="flex items-center gap-2">
                       <span className="size-5 rounded-full bg-[var(--line)] text-[var(--accent)] font-mono font-bold flex items-center justify-center text-[11px]">
                         2
@@ -406,7 +420,7 @@ export function Mcp({
                   </div>
 
                   {/* Step 3 */}
-                  <div className="space-y-2">
+                  <div className="space-y-1.5">
                     <div className="flex items-center gap-2">
                       <span className="size-5 rounded-full bg-[var(--line)] text-[var(--accent)] font-mono font-bold flex items-center justify-center text-[11px]">
                         3
@@ -423,7 +437,7 @@ export function Mcp({
                         href={stepInfo.action}
                         target="_blank"
                         rel="noreferrer"
-                        className="btn inline-block text-xs font-mono mt-2"
+                        className="btn inline-block text-xs font-mono mt-1"
                       >
                         {locale === 'pt' ? 'Abrir Claude ↗' : 'Open Claude ↗'}
                       </a>
@@ -434,8 +448,8 @@ export function Mcp({
                 <div className="pt-3 border-t border-[var(--line)] flex flex-wrap items-center justify-between text-[11px] text-[var(--dim)]">
                   <span>
                     {locale === 'pt'
-                      ? 'Se estiver usando Claude Code ou Codex localmente, prefira a CLI Go interativa.'
-                      : 'If you are using Claude Code or Codex locally, it is best to use the Go CLI.'}
+                      ? 'Recomendado: use Streamable HTTP para servicos remotos e CLI Go para dev local.'
+                      : 'Recommended: use Streamable HTTP for remote services and Go CLI for local dev.'}
                   </span>
                   <a
                     href="https://github.com/H0wZy/mcp"
@@ -450,7 +464,7 @@ export function Mcp({
             </div>
           </section>
 
-          {/* Quickstart & CLI */}
+          {/* Quickstart & CLI with Copy Buttons */}
           <section id="quickstart" className="section">
             <div className="wrap">
               <h2 className="text-xl font-semibold mb-4 text-[var(--fg)]">
@@ -458,19 +472,55 @@ export function Mcp({
               </h2>
 
               <div className="flex flex-col gap-3 font-mono text-xs">
+                {/* 1. npx */}
                 <div className="p-3 rounded bg-[var(--surface)] border border-[var(--border)]">
-                  <span className="text-[var(--dim)] block mb-1"># 1. Instant execution via npx:</span>
-                  <code className="text-[var(--accent)] font-bold text-sm select-all">npx @h0wzy/mcp</code>
+                  <div className="flex items-center justify-between gap-2 mb-1.5">
+                    <span className="text-[var(--dim)]"># 1. Instant execution via npx:</span>
+                    <button
+                      type="button"
+                      onClick={() => triggerCopy('npx @h0wzy/mcp', 'cmd-npx')}
+                      className="p-1 rounded text-[var(--dim)] hover:text-[var(--accent)] transition-colors"
+                      title={copiedKey === 'cmd-npx' ? 'Copied!' : 'Copy command'}
+                      aria-label="Copy command"
+                    >
+                      {copiedKey === 'cmd-npx' ? <CheckIcon /> : <CopyIcon />}
+                    </button>
+                  </div>
+                  <code className="text-[var(--accent)] font-bold text-sm select-all block">npx @h0wzy/mcp</code>
                 </div>
 
+                {/* 2. npm install */}
                 <div className="p-3 rounded bg-[var(--surface)] border border-[var(--border)]">
-                  <span className="text-[var(--dim)] block mb-1"># 2. Global install with hmcp CLI:</span>
-                  <code className="text-[var(--accent)] font-bold text-sm select-all">npm install -g @h0wzy/mcp && hmcp</code>
+                  <div className="flex items-center justify-between gap-2 mb-1.5">
+                    <span className="text-[var(--dim)]"># 2. Global install with hmcp CLI:</span>
+                    <button
+                      type="button"
+                      onClick={() => triggerCopy('npm install -g @h0wzy/mcp && hmcp', 'cmd-npm')}
+                      className="p-1 rounded text-[var(--dim)] hover:text-[var(--accent)] transition-colors"
+                      title={copiedKey === 'cmd-npm' ? 'Copied!' : 'Copy command'}
+                      aria-label="Copy command"
+                    >
+                      {copiedKey === 'cmd-npm' ? <CheckIcon /> : <CopyIcon />}
+                    </button>
+                  </div>
+                  <code className="text-[var(--accent)] font-bold text-sm select-all block">npm install -g @h0wzy/mcp && hmcp</code>
                 </div>
 
+                {/* 3. Go */}
                 <div className="p-3 rounded bg-[var(--surface)] border border-[var(--border)]">
-                  <span className="text-[var(--dim)] block mb-1"># 3. Direct from source with Go:</span>
-                  <code className="text-[var(--accent)] font-bold text-sm select-all">go run ./cli setup-path && hmcp</code>
+                  <div className="flex items-center justify-between gap-2 mb-1.5">
+                    <span className="text-[var(--dim)]"># 3. Direct from source with Go:</span>
+                    <button
+                      type="button"
+                      onClick={() => triggerCopy('go run ./cli setup-path && hmcp', 'cmd-go')}
+                      className="p-1 rounded text-[var(--dim)] hover:text-[var(--accent)] transition-colors"
+                      title={copiedKey === 'cmd-go' ? 'Copied!' : 'Copy command'}
+                      aria-label="Copy command"
+                    >
+                      {copiedKey === 'cmd-go' ? <CheckIcon /> : <CopyIcon />}
+                    </button>
+                  </div>
+                  <code className="text-[var(--accent)] font-bold text-sm select-all block">go run ./cli setup-path && hmcp</code>
                 </div>
               </div>
             </div>
@@ -568,6 +618,9 @@ export function Mcp({
               </div>
             </div>
           </section>
+
+          {/* Footer Component */}
+          <Footer locale={locale} />
         </div>
       </main>
     </>

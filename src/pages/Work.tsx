@@ -3,6 +3,7 @@ import type { ContentBundle } from '../content/types'
 import { Chrome } from '../components/Chrome'
 import { ProjectDetail } from '../components/ProjectDetail'
 import { SectionRail } from '../components/SectionRail'
+import { Footer } from '../components/Footer'
 import { trackedTimeFor } from '../content/stats'
 import { projectTopicAnchors } from '../navigation'
 
@@ -59,6 +60,7 @@ export function Work({
               locale={locale}
             />
           </div>
+          <Footer locale={locale} />
         </div>
       </main>
     </>

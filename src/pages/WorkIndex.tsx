@@ -5,6 +5,7 @@ import { translate } from '../locale'
 import { Chrome } from '../components/Chrome'
 import { ProjectList } from '../components/ProjectList'
 import { Pagination } from '../components/Pagination'
+import { Footer } from '../components/Footer'
 
 /**
  * The paginated work listing: chrome, the page's slice, and the strip. No
@@ -34,6 +35,7 @@ export function WorkIndex({
           <ProjectList projects={projects} locale={locale} />
           <Pagination number={number} total={total} locale={locale} />
         </div>
+        <Footer locale={locale} />
       </main>
     </>
   )
