@@ -271,9 +271,7 @@ pre {
  */
 @media (prefers-reduced-motion: reduce) {
   .rise > *,
-  .reveal,
-  .term-placeholder,
-  .term-cursor {
+  .reveal {
     opacity: 1 !important;
     transform: none !important;
     transition: none !important;
