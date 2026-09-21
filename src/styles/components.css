@@ -719,6 +719,28 @@
   letter-spacing: 0.05em;
 }
 
+.term-placeholder {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  display: inline-flex;
+  align-items: center;
+  color: var(--dim);
+  opacity: 0.4;
+  pointer-events: none;
+  font-family: inherit;
+  font-size: inherit;
+  letter-spacing: inherit;
+  line-height: inherit;
+  white-space: pre;
+  transition: opacity var(--dur-base) var(--ease);
+}
+
+.term-placeholder:empty {
+  opacity: 0;
+}
+
 .term-ghost {
   visibility: hidden;
   font-family: inherit;

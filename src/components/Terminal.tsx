@@ -79,7 +79,12 @@ export function Terminal({ locale }: { locale: Locale }) {
             ❯
           </label>
           <div className="term-field">
-            <span className="term-ghost" data-term-ghost aria-hidden="true" />
+            <span className="term-placeholder" data-term-placeholder aria-hidden="true">
+              help
+            </span>
+            <span className="term-ghost" data-term-ghost aria-hidden="true">
+              help
+            </span>
             <span className="term-cursor" data-term-cursor aria-hidden="true" />
             <input
               id="term-input"
