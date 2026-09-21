@@ -45,7 +45,7 @@ export const en = {
    */
   'hero.experience': '{years}y {months}mo in IT',
   'hero.experienceSince': 'since the Unicesumar degree in 2023; employed May 2025 to August 2026',
-  'hero.location': 'Londrina, Paraná, Brazil',
+  'hero.location': 'from Londrina to World',
 
   // Project listing
   'work.heading': 'My projects',

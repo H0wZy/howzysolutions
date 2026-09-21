@@ -519,6 +519,7 @@
 .footer {
   padding: 40px 0 64px;
   font-size: var(--fs-sm);
+  text-align: center;
 }
 
 /* Wide content scrolls inside itself; the page never scrolls horizontally. */

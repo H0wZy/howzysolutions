@@ -14,7 +14,7 @@ export const profile: AuthorProfile = {
     en: [
       'Software Engineer · Open to Work',
       'I build software that states what it cannot do.',
-      'Worked at TCS for 16 months',
+      'Ex-Software Engineer @ TCS',
       'Full-Stack | Backend | Cloud',
       'Two-time TCS AI Friday Champion 🏆',
       'Go | .NET C# | Java | React',
@@ -23,7 +23,7 @@ export const profile: AuthorProfile = {
     pt: [
       'Engenheiro de Software · Open to Work',
       'Construo software que declara o que não consegue fazer.',
-      'Atuei na TCS por 16 meses',
+      'Ex-Engenheiro de Software @ TCS',
       'Full-Stack | Backend | Cloud',
       'Bicampeão do TCS AI Friday 🏆',
       'Go | .NET C# | Java | React',
@@ -54,8 +54,8 @@ export const profile: AuthorProfile = {
   experienceStart: '2023-01-01',
 
   location: {
-    en: 'Londrina, Paraná, Brazil',
-    pt: 'Londrina, Paraná, Brasil',
+    en: 'from Londrina to World',
+    pt: 'de Londrina para o Mundo',
   },
 
   contacts: [
