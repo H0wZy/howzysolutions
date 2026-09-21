@@ -6,7 +6,7 @@ export function CvHeaderActions({ locale }: { locale: Locale }) {
   const [open, setOpen] = useState(false)
   const [copied, setCopied] = useState(false)
 
-  const mdUrl = locale === 'pt' ? '/pt/cv.md' : '/cv.md'
+  const mdUrl = locale === 'pt' ? '/cv.md/ptbr' : '/cv.md/eng'
 
   const copy = async () => {
     try {
@@ -84,7 +84,7 @@ export function CvHeaderActions({ locale }: { locale: Locale }) {
 
           <a
             role="menuitem"
-            href="/cv.pdf"
+            href="/cv.pdf/eng"
             target="_blank"
             rel="noreferrer"
             className="text-left px-2.5 py-1.5 rounded hover:bg-[var(--line)] text-[var(--text)] hover:text-[var(--accent)] transition-colors flex items-center gap-2"
@@ -98,7 +98,7 @@ export function CvHeaderActions({ locale }: { locale: Locale }) {
 
           <a
             role="menuitem"
-            href="/pt/cv.pdf"
+            href="/cv.pdf/ptbr"
             target="_blank"
             rel="noreferrer"
             className="text-left px-2.5 py-1.5 rounded hover:bg-[var(--line)] text-[var(--text)] hover:text-[var(--accent)] transition-colors flex items-center gap-2"

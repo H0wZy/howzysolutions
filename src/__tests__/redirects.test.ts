@@ -36,3 +36,26 @@ describe('the old /work/ links', () => {
     expect(rules, splatFrom).toContainEqual([splatFrom, splatTarget, '301'])
   })
 })
+
+describe('clean CV routes', () => {
+  it('redirects /cv.pdf to /cv.pdf/eng', () => {
+    expect(rules).toContainEqual(['/cv.pdf', '/cv.pdf/eng', '302'])
+    expect(rules).toContainEqual(['/cv.pdf/', '/cv.pdf/eng', '302'])
+  })
+
+  it('redirects /pt/cv.pdf to /cv.pdf/ptbr', () => {
+    expect(rules).toContainEqual(['/pt/cv.pdf', '/cv.pdf/ptbr', '302'])
+    expect(rules).toContainEqual(['/pt/cv.pdf/', '/cv.pdf/ptbr', '302'])
+  })
+
+  it('redirects /cv.md to /cv.md/eng', () => {
+    expect(rules).toContainEqual(['/cv.md', '/cv.md/eng', '302'])
+    expect(rules).toContainEqual(['/cv.md/', '/cv.md/eng', '302'])
+  })
+
+  it('redirects /pt/cv.md to /cv.md/ptbr', () => {
+    expect(rules).toContainEqual(['/pt/cv.md', '/cv.md/ptbr', '302'])
+    expect(rules).toContainEqual(['/pt/cv.md/', '/cv.md/ptbr', '302'])
+  })
+})
+
