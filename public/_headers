@@ -14,10 +14,6 @@
   Content-Type: text/markdown; charset=utf-8
   Access-Control-Allow-Origin: *
 
-/cv.pdf/*
-  Content-Type: application/pdf
-  Content-Disposition: inline
-
 /cv.pdf/eng
   Content-Type: application/pdf
   Content-Disposition: inline; filename="ENG_CV_Marcos_Junior_Bueno_Selzler.pdf"
