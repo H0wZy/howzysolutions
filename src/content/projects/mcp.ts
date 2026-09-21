@@ -1,4 +1,5 @@
 import type { Project } from '../types'
+import mcpData from '../mcp.generated.json'
 
 export const mcp: Project = {
   id: 'mcp',
@@ -9,8 +10,8 @@ export const mcp: Project = {
     en: 'Multi-agent Model Context Protocol hub and Go CLI bridging Claude Code, OpenAI Codex and Google Antigravity.',
     pt: 'Hub Model Context Protocol multi-agente e CLI em Go conectando Claude Code, OpenAI Codex e Google Antigravity.',
   },
-  period: { start: '2026-09-19', end: '2026-09-21' },
-  commits: 32,
+  period: { start: '2026-09-19', end: mcpData.lastCommitDate },
+  commits: mcpData.commits,
   wakatimeProject: 'mcp',
 
   summary: {
@@ -94,17 +95,17 @@ export const mcp: Project = {
   metrics: [
     {
       label: { en: 'Commits', pt: 'Commits' },
-      value: '32',
-      source: { en: 'git history, 2026-09-19 to 2026-09-21', pt: 'historico git, 19/09/2026 a 21/09/2026' },
+      value: String(mcpData.commits),
+      source: { en: `git history, 2026-09-19 to ${mcpData.lastCommitDate}`, pt: `historico git, 19/09/2026 a ${mcpData.lastCommitDate}` },
     },
     {
       label: { en: 'Shipped version', pt: 'Versao lancada' },
-      value: 'v1.0.3',
+      value: mcpData.version,
       source: { en: 'npm registry and GitHub Releases', pt: 'registro npm e GitHub Releases' },
     },
     {
       label: { en: 'Supported host agents', pt: 'Agentes suportados' },
-      value: '3',
+      value: String(mcpData.supportedAgents),
       source: { en: 'Claude Code, OpenAI Codex, Google Antigravity', pt: 'Claude Code, OpenAI Codex, Google Antigravity' },
     },
   ],

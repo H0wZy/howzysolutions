@@ -5,3 +5,11 @@
 
 /assets/*
   Cache-Control: public, max-age=31536000, immutable
+
+/*.md
+  Content-Type: text/markdown; charset=utf-8
+  Access-Control-Allow-Origin: *
+
+/pt/*.md
+  Content-Type: text/markdown; charset=utf-8
+  Access-Control-Allow-Origin: *

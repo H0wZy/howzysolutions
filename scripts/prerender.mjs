@@ -9,6 +9,7 @@
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
+import { writeAllMarkdown } from './generate-mcp-markdown.mjs'
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 const dist = join(root, 'dist')
@@ -188,5 +189,7 @@ const sitemap = generateSitemap(allRoutes)
 writeFileSync(join(dist, 'sitemap.xml'), sitemap, 'utf8')
 writeFileSync(join(root, 'public', 'sitemap.xml'), sitemap, 'utf8')
 console.log('ok emitted sitemap.xml for 26 routes')
+
+writeAllMarkdown()
 
 console.log(`\nok prerendered ${written} documents`)
