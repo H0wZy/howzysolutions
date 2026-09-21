@@ -225,14 +225,14 @@ export function Mcp({
               <h1 className="text-3xl font-bold tracking-tight text-[var(--fg)] mb-3">
                 {locale === 'pt' ? 'O que e H0wZy/mcp?' : 'What is H0wZy/mcp?'}
               </h1>
-              <p className="sub text-lg text-[var(--dim)] mb-6">
+              <p className="sub text-lg text-[var(--dim)] mb-8">
                 {locale === 'pt'
                   ? 'O Hub MCP Multi-Agente definitivo e CLI em Go conectando Claude Code, OpenAI Codex e Google Antigravity.'
                   : 'The Ultimate Multi-Agent MCP Hub and Go CLI connecting Claude Code, OpenAI Codex, and Google Antigravity.'}
               </p>
 
               {/* Real hmcp ASCII Banner & Terminal Preview */}
-              <div className="rounded-lg bg-[var(--bg)] border border-[var(--border)] overflow-hidden shadow-2xl font-mono text-xs">
+              <div className="rounded-lg bg-[var(--bg)] border border-[var(--border)] overflow-hidden shadow-2xl font-mono text-xs mt-8">
                 <div className="px-4 py-2.5 bg-[var(--surface)] border-b border-[var(--line)] flex items-center justify-between text-[11px]">
                   <div className="flex items-center gap-2">
                     <span className="text-[var(--term-user)] font-semibold">h0wzy@howzysolutions</span>
@@ -293,11 +293,11 @@ export function Mcp({
                 {/* Agent selector tabs + Mode Switcher */}
                 <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-[var(--line)]">
                   {/* Left: Agent tabs */}
-                  <div className="flex flex-wrap items-center gap-2">
+                  <div className="flex flex-wrap items-center gap-3">
                     {/* Active / Clickable: Claude Code */}
                     <button
                       type="button"
-                      className="px-3 py-1.5 rounded text-xs font-mono font-semibold transition-all border outline-none bg-[var(--line)] border-[var(--accent)] text-[var(--accent)] shadow-sm focus-visible:ring-2 focus-visible:ring-[var(--accent)] cursor-default"
+                      className="px-2.5 py-1 rounded text-[11px] font-mono font-semibold transition-all border outline-none bg-[var(--line)] border-[var(--accent)] text-[var(--accent)] shadow-sm focus-visible:ring-2 focus-visible:ring-[var(--accent)] cursor-default"
                     >
                       Claude Code
                     </button>
@@ -308,11 +308,11 @@ export function Mcp({
                         <button
                           type="button"
                           disabled
-                          className="px-3 py-1.5 rounded text-xs font-mono border border-dashed border-[var(--border)] bg-[var(--bg)]/60 text-[var(--dim)] opacity-50 cursor-not-allowed inline-flex items-center gap-1.5 select-none transition-all group-hover:opacity-85"
+                          className="px-2.5 py-1 rounded text-[11px] font-mono border border-dashed border-[var(--border)] bg-[var(--bg)]/60 text-[var(--dim)] opacity-50 cursor-not-allowed inline-flex items-center gap-1 select-none transition-all group-hover:opacity-85"
                           title={locale === 'pt' ? 'TODO: Suporte nativo em breve' : 'TODO: Native support coming soon'}
                         >
                           <span>{name}</span>
-                          <span className="text-[9px] uppercase tracking-wider px-1 py-0.2 rounded bg-[var(--line)] text-[var(--accent-2)] border border-[var(--line)]">
+                          <span className="text-[8.5px] uppercase tracking-wider px-1 py-0.2 rounded bg-[var(--line)] text-[var(--accent-2)] border border-[var(--line)]">
                             TODO
                           </span>
                         </button>
@@ -324,43 +324,29 @@ export function Mcp({
                   </div>
 
                   {/* Right: Transport Mode Switcher */}
-                  <div className="flex items-center gap-1 p-1 rounded-md bg-[var(--bg)] border border-[var(--border)] text-xs font-mono">
-                    <button
-                      type="button"
-                      onClick={() => setMode('streamable')}
-                      className={`px-2.5 py-1 rounded transition-colors border cursor-pointer ${
-                        mode === 'streamable'
-                          ? 'bg-[var(--surface)] border-[var(--accent)] text-[var(--accent)] font-semibold shadow-sm'
-                          : 'bg-transparent border-transparent text-[var(--dim)] hover:text-[var(--fg)] hover:bg-[var(--surface)]/50'
-                      } focus-visible:ring-1 focus-visible:ring-[var(--accent)]`}
-                      title="Modern Streamable HTTP endpoint"
-                    >
-                      Streamable HTTP
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setMode('sse')}
-                      className={`px-2.5 py-1 rounded transition-colors border cursor-pointer ${
-                        mode === 'sse'
-                          ? 'bg-[var(--surface)] border-[var(--accent)] text-[var(--accent)] font-semibold shadow-sm'
-                          : 'bg-transparent border-transparent text-[var(--dim)] hover:text-[var(--fg)] hover:bg-[var(--surface)]/50'
-                      } focus-visible:ring-1 focus-visible:ring-[var(--accent)]`}
-                      title="Legacy HTTP + SSE endpoint"
-                    >
-                      HTTP / SSE
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setMode('cli')}
-                      className={`px-2.5 py-1 rounded transition-colors border cursor-pointer ${
-                        mode === 'cli'
-                          ? 'bg-[var(--surface)] border-[var(--accent)] text-[var(--accent)] font-semibold shadow-sm'
-                          : 'bg-transparent border-transparent text-[var(--dim)] hover:text-[var(--fg)] hover:bg-[var(--surface)]/50'
-                      } focus-visible:ring-1 focus-visible:ring-[var(--accent)]`}
-                      title="Zero-install CLI execution"
-                    >
-                      CLI (Local)
-                    </button>
+                  <div className="flex flex-wrap items-center gap-2">
+                    {[
+                      { id: 'streamable' as const, label: 'Streamable HTTP', title: 'Modern Streamable HTTP endpoint' },
+                      { id: 'sse' as const, label: 'HTTP / SSE', title: 'Legacy HTTP + SSE endpoint' },
+                      { id: 'cli' as const, label: 'CLI (Local)', title: 'Zero-install CLI execution' },
+                    ].map((t) => {
+                      const isSelected = mode === t.id
+                      return (
+                        <button
+                          key={t.id}
+                          type="button"
+                          onClick={() => setMode(t.id)}
+                          className={`px-2.5 py-1 rounded text-[11px] font-mono transition-all border outline-none cursor-pointer ${
+                            isSelected
+                              ? 'bg-[var(--line)] border-[var(--accent)] text-[var(--accent)] font-semibold shadow-sm opacity-100'
+                              : 'bg-[var(--bg)]/60 border-[var(--border)] text-[var(--dim)] opacity-60 hover:opacity-100 hover:text-[var(--fg)] hover:border-[var(--accent)]/60'
+                          } focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:opacity-100`}
+                          title={t.title}
+                        >
+                          {t.label}
+                        </button>
+                      )
+                    })}
                   </div>
                 </div>
 
