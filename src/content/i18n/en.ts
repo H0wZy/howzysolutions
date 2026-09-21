@@ -23,6 +23,7 @@ export const en = {
 
   // Sections
   'section.terminal': 'the_terminal',
+  'section.featured': 'featured_project',
   'section.work': 'selected_work',
   'section.about': 'the_whole_idea',
   'section.stats': 'measured_activity',

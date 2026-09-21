@@ -41,6 +41,7 @@ export type TopicAnchor =
 export function homeTopicAnchors(hasGithub: boolean): TopicAnchor[] {
   return [
     { id: 'terminal', labelKey: 'section.terminal' },
+    { id: 'featured', labelKey: 'section.featured' },
     { id: 'about', labelKey: 'section.about' },
     { id: 'work', labelKey: 'section.work' },
     { id: 'stats', labelKey: 'section.stats' },

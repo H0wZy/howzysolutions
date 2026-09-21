@@ -140,6 +140,27 @@ export function ProjectDetail({
         </p>
       </header>
 
+      {project.id === 'mcp' ? (
+        <div className="p-4 rounded bg-[var(--surface)] border border-[var(--accent)] flex flex-wrap items-center justify-between gap-3 mb-6">
+          <div>
+            <strong className="text-sm text-[var(--fg)] block font-mono">
+              {locale === 'pt' ? 'Showcase Interativo & Live Hub' : 'Interactive Showcase & Live Hub'}
+            </strong>
+            <span className="text-xs text-[var(--dim)]">
+              {locale === 'pt'
+                ? 'Acesse a demonstracao visual com TUI, bridges de IA, conectores e documentacao.'
+                : 'Access the visual preview with TUI, AI bridges, connector widgets and docs.'}
+            </span>
+          </div>
+          <a
+            href={pathFor({ page: 'mcp' }, locale)}
+            className="btn text-xs font-mono"
+          >
+            {locale === 'pt' ? 'Abrir Showcase' : 'Open Showcase'} →
+          </a>
+        </div>
+      ) : null}
+
       {sections.map((section) => (
         <Block key={section.id} anchor={section.id} labelKey={section.labelKey} locale={locale}>
           {content[section.id]}
