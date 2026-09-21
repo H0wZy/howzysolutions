@@ -46,19 +46,18 @@ export function mountTerminal(root: HTMLElement, session: TerminalSession): void
   let cursor = session.history.length
   const placeholderEl = root.querySelector<HTMLElement>('[data-term-placeholder]')
   const ghostEl = root.querySelector<HTMLElement>('[data-term-ghost]')
-  const SUGGESTIONS = ['help', 'projects', 'whoami', 'stats', 'stack', 'cv', 'contact', 'about', 'clear']
+  const SUGGESTIONS = ['help', 'projects', 'whoami', 'stats', 'stack', 'cv', 'contact', 'clear']
   let suggestionIndex = 0
 
   const syncCursor = () => {
     const val = input.value
-    const empty = !val
-    const text = empty ? SUGGESTIONS[suggestionIndex] : val.slice(0, input.selectionStart ?? val.length)
-    if (placeholderEl) placeholderEl.textContent = empty ? text : ''
+    const text = val ? val.slice(0, input.selectionStart ?? val.length) : SUGGESTIONS[suggestionIndex]
+    if (placeholderEl) placeholderEl.textContent = val ? '' : text
     if (ghostEl) ghostEl.textContent = text
   }
 
   setInterval(() => {
-    if (input.value.length === 0) {
+    if (!input.value) {
       suggestionIndex = (suggestionIndex + 1) % SUGGESTIONS.length
       syncCursor()
     }
@@ -66,9 +65,7 @@ export function mountTerminal(root: HTMLElement, session: TerminalSession): void
 
   ;['input', 'keyup', 'click', 'select'].forEach((e) => input.addEventListener(e, syncCursor))
   input.addEventListener('keydown', () => requestAnimationFrame(syncCursor))
-  input.addEventListener('focus', () => {
-    form.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
-  })
+  input.addEventListener('focus', () => form.scrollIntoView({ behavior: 'smooth', block: 'nearest' }))
   syncCursor()
 
   /**
@@ -131,7 +128,6 @@ export function mountTerminal(root: HTMLElement, session: TerminalSession): void
     cursor = session.history.length
 
     if (result.effect) applyEffect(result.effect)
-    root.scrollTop = root.scrollHeight
     requestAnimationFrame(() => {
       root.scrollTop = root.scrollHeight
       form.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
@@ -149,18 +145,10 @@ export function mountTerminal(root: HTMLElement, session: TerminalSession): void
 
   input.addEventListener('keydown', (e) => {
     // History recall (FR-012).
-    if (e.key === 'ArrowUp') {
+    if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
       if (!session.history.length) return
       e.preventDefault()
-      cursor = Math.max(0, cursor - 1)
-      input.value = session.history[cursor] ?? ''
-      syncCursor()
-      return
-    }
-    if (e.key === 'ArrowDown') {
-      if (!session.history.length) return
-      e.preventDefault()
-      cursor = Math.min(session.history.length, cursor + 1)
+      cursor = e.key === 'ArrowUp' ? Math.max(0, cursor - 1) : Math.min(session.history.length, cursor + 1)
       input.value = cursor === session.history.length ? '' : (session.history[cursor] ?? '')
       syncCursor()
       return
@@ -208,6 +196,6 @@ export function mountTerminal(root: HTMLElement, session: TerminalSession): void
   })
 
   root.addEventListener('mouseup', () => {
-    if (!window.getSelection()?.toString()) input.focus()
+    if (!getSelection()?.toString()) input.focus()
   })
 }
