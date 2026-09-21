@@ -328,7 +328,7 @@ export function Mcp({
                     {[
                       { id: 'streamable' as const, label: 'Streamable', title: 'Modern Streamable HTTP endpoint' },
                       { id: 'sse' as const, label: 'SSE', title: 'Legacy HTTP + SSE endpoint' },
-                      { id: 'cli' as const, label: 'CLI (Local)', title: 'Zero-install CLI execution' },
+                      { id: 'cli' as const, label: 'CLI', title: 'Zero-install CLI execution' },
                     ].map((t, idx) => {
                       const isSelected = mode === t.id
                       return (
