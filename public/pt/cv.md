@@ -1,0 +1,104 @@
+---
+title: Marcos Junior Bueno Selzler - Curriculo
+description: "Engenheiro de Software com foco em backend Java/JSF e .NET/Golang, mais recentemente na TCS, na conta Copel. Bicampeão do TCS AI Friday por soluções com LLMs e modelos preditivos. Experiência em modernização de sistemas legados para cloud (GCP/AWS) e construção de APIs REST com Clean Code, SOLID e testes."
+canonical: https://howzysolutions.com/pt/cv
+captured_at: 2026-09-21
+commit: 80a0f8a
+links:
+  website: https://howzysolutions.com/pt
+  github: https://github.com/H0wZy
+  pdf: https://howzysolutions.com/pt/cv.pdf
+---
+
+# Marcos Junior Bueno Selzler
+> SOFTWARE ENGINEER | BACKEND & FULL STACK
+
+- **Localização:** Londrina, PR, Brazil
+- **Website:** https://howzysolutions.com/pt
+- **GitHub:** https://github.com/H0wZy
+- **Versão em PDF:** https://howzysolutions.com/pt/cv.pdf
+
+## Resumo Profissional
+Engenheiro de Software com foco em backend Java/JSF e .NET/Golang, mais recentemente na TCS, na conta Copel. Bicampeão do TCS AI Friday por soluções com LLMs e modelos preditivos. Experiência em modernização de sistemas legados para cloud (GCP/AWS) e construção de APIs REST com Clean Code, SOLID e testes.
+
+## Experiência Profissional
+### Software Engineer · Tata Consultancy Services (Copel)
+*2025-05 até 2026-08 | Londrina, PR*
+
+- Desenvolvi e mantive aplicações Java 8 com JSF em servidores WildFly/JBoss.
+- Otimizei queries SQL críticas, melhorando performance e estabilidade.
+- Migrei aplicações de JBoss 7 para WildFly 23.
+- Modernizei sistemas legados on-premise para o GCP, com integrações via Denodo.
+- Desenvolvi serviços de backend em Golang.
+- Atuei em ambientes cloud (GCP e AWS).
+
+### Bootcamper Software Engineer · Tata Consultancy Services (Bootcamp 2x2y)
+*2025-05 até 2025-11 | Londrina, PR*
+
+- Formação intensiva em engenharia de software full stack pela TCS.
+- Desenvolvi projetos práticos aplicando arquitetura em camadas e Clean Code.
+
+## Prêmios e Destaques
+### Bicampeão TCS AI Friday · Projeto Pipeverse
+*2026-05*
+[LinkedIn](https://www.linkedin.com/posts/marcosh0wzy_tcs-tcsai-aifriday-activity-7463971325016006657-WzoZ)
+
+- Sistema preditivo para estimar a probabilidade de falha em projetos de IA (qualidade de dados, definição do problema, adoção e monitoramento).
+
+### Campeão TCS AI Friday · Projeto Energy Saver
+*2026-02*
+[LinkedIn](https://www.linkedin.com/posts/marcosh0wzy_ai-llm-dataanalysis-activity-7439643718057385985--a7G)
+
+- Solução com LLM para análise de consumo energético a partir de CSV: detecção de anomalias e recomendações automatizadas para redução de desperdício.
+
+## Habilidades
+### Tech Stack
+.NET, C#, Golang, Java, Spring Boot, React, Next.js, TypeScript, SQL/NoSQL, Docker
+
+### Cloud & DevOps
+GCP (Cloud Run, Cloud SQL, GCS), AWS, Terraform (IaC), Docker, CI/CD, Git/GitHub
+
+### IA & LLMs
+análise de dados com LLMs, modelos preditivos, prompt engineering
+
+### Conceitos
+Clean Code, SOLID, DDD, POO, APIs REST, Observabilidade, Testes Unitários (xUnit, Moq)
+
+### Idiomas
+Inglês (Intermediário), Português (Nativo)
+
+## Projetos
+### Telas Paraná: Site Institucional
+[site anterior](https://telasearamesparana.com.br)
+
+- Redesign full-stack do site institucional da empresa, substituindo o site legado.
+- Front-end em React / Next.js e dois microsserviços .NET/C# (Users.Api, Leads.Api), todos implantados no GCP Cloud Run.
+- Banco no Cloud SQL, mídia no Cloud Storage (GCS) e infraestrutura provisionada como código com Terraform.
+
+### C# User API
+[GitHub](https://github.com/H0wZy/UserApi)
+
+- API REST em C#/.NET com Entity Framework e PostgreSQL, arquitetura em camadas e CRUD de usuários.
+- Autenticação JWT, controle de autorização e cobertura de testes com xUnit e Moq.
+
+### Golang User API
+[GitHub](https://github.com/H0wZy/user-api)
+
+- API REST em Golang com Gin e Gorm: CRUD de usuários, autenticação e autorização.
+- Backend estruturado com foco em performance e organização de código.
+
+### Web EasyDonate
+[GitHub](https://github.com/H0wZy/web.easydonate)
+
+- Marketplace de doações em .NET com PostgreSQL, voltado a economia circular e escalabilidade.
+
+## Formação Acadêmica
+### Tecnólogo em Análise e Desenvolvimento de Sistemas · Unicesumar
+*2025 | Londrina, PR*
+
+## Certificações
+### Foundational C# with Microsoft · freeCodeCamp
+*2025-06*
+[freeCodeCamp](https://freecodecamp.org/certification/h0wzy/foundational-c-sharp-with-microsoft)
+
+- Sintaxe e estruturas de C#, POO, coleções, tratamento de exceções e boas práticas em .NET.

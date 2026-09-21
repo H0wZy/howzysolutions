@@ -231,7 +231,14 @@ export const en = {
   'cv.ongoing': 'ongoing',
   'cv.seeProject': 'read the full project record',
 
-  // CV downloads
+  // CV downloads & exports
+  'cv.copyPage': 'Copy Page',
+  'cv.copied': 'Copied!',
+  'cv.copyFailed': 'Copy failed',
+  'cv.menuTrigger': 'Export options',
+  'cv.viewMarkdown': 'View as Markdown',
+  'cv.downloadPdfEn': 'Download PDF (EN)',
+  'cv.downloadPdfPt': 'Download PDF (PT-BR)',
   'cv.download.heading': 'Download the CV',
   'cv.download.primary': 'Download the CV in {language}',
   'cv.download.other': 'Also available in {language}',

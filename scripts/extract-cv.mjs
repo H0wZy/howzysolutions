@@ -604,6 +604,12 @@ function documents() {
     const from = join(filesDir, filename)
     const bytes = readFileSync(from)
     copyFileSync(from, join(publicCv, filename))
+    if (locale === 'en') {
+      copyFileSync(from, join(root, 'public', 'cv.pdf'))
+    } else if (locale === 'pt') {
+      mkdirSync(join(root, 'public', 'pt'), { recursive: true })
+      copyFileSync(from, join(root, 'public', 'pt', 'cv.pdf'))
+    }
     return {
       locale,
       filename,
