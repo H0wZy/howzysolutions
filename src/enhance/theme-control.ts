@@ -27,9 +27,7 @@ function renderJokeBubble(locale: Locale, key: StringKey): void {
   timer = setTimeout(() => bubble?.classList.remove('is-visible'), 4000)
 }
 
-export function showThemeJokeKey(locale: Locale, key: StringKey): void {
-  renderJokeBubble(locale, key)
-}
+export const showThemeJokeKey = renderJokeBubble
 
 export function initThemeControl(locale: Locale): void {
   const button = document.querySelector<HTMLButtonElement>('[data-theme-toggle]')
