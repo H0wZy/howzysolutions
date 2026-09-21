@@ -25,6 +25,7 @@ export const pt = {
 
   // Seções
   'section.terminal': 'o_terminal',
+  'section.featured': 'projeto_em_destaque',
   'section.work': 'trabalhos_selecionados',
   'section.about': 'a_ideia_toda',
   'section.stats': 'atividade_medida',

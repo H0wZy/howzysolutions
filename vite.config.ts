@@ -36,4 +36,7 @@ export default defineConfig({
     // so a tool that reads it for aliases finds nothing — research D15.
     alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) },
   },
+  build: {
+    target: 'es2022',
+  },
 })

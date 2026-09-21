@@ -142,6 +142,7 @@ describe('document outlines', () => {
   it('keeps home anchors in rendered source order and omits absent GitHub activity', () => {
     expect(homeTopicAnchors(true).map((entry) => entry.id)).toEqual([
       'terminal',
+      'featured',
       'about',
       'work',
       'stats',
@@ -150,6 +151,7 @@ describe('document outlines', () => {
     ])
     expect(homeTopicAnchors(false).map((entry) => entry.id)).toEqual([
       'terminal',
+      'featured',
       'about',
       'work',
       'stats',

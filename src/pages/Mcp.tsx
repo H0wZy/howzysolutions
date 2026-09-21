@@ -1,18 +1,83 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import type { Locale } from '../content/i18n/types'
 import type { ContentBundle } from '../content/types'
 import { Chrome } from '../components/Chrome'
 import { SectionRail, type RailEntry } from '../components/SectionRail'
 
 const TOC_ENTRIES: RailEntry[] = [
-  { id: 'what-is-it', label: { en: 'What is H0wZy/mcp?', pt: 'O que e H0wZy/mcp?' } },
-  { id: 'three-things', label: { en: 'Key Advantages', pt: 'Principais Vantagens' } },
-  { id: 'quickstart', label: { en: 'Quick Start', pt: 'Inicio Rapido' } },
+  { id: 'overview', label: { en: 'Overview', pt: 'Visao Geral' } },
+  { id: 'connector', label: { en: 'Connect Agent', pt: 'Conectar Agente' } },
+  { id: 'quickstart', label: { en: 'Quickstart & CLI', pt: 'Inicio Rapido & CLI' } },
+  { id: 'packages', label: { en: 'npm Packages', pt: 'Pacotes npm' } },
+  { id: 'bridges', label: { en: 'Supported AI CLIs', pt: 'CLIs de IA' } },
   { id: 'binaries', label: { en: 'Standalone Binaries', pt: 'Binarios Avulsos' } },
-  { id: 'bridges', label: { en: 'Supported AI CLIs', pt: 'CLIs de IA Suportados' } },
-  { id: 'architecture', label: { en: 'Architecture & Hub', pt: 'Arquitetura e Hub' } },
-  { id: 'home-server', label: { en: 'Public URL & Tunnel', pt: 'URL Publica e Tunnel' } },
 ]
+
+type AgentTab = 'claude' | 'cursor' | 'claude-code' | 'codex' | 'antigravity'
+
+const PACKAGES = [
+  { n: '@h0wzy/mcp', d: 'Interactive Go CLI runner and hub orchestrator' },
+  { n: '@h0wzy/mcp-shared', d: 'Cross-platform utilities and JSON-RPC stdio engine' },
+  { n: '@h0wzy/mcp-server-antigravity', d: 'Google Antigravity MCP Server connecting to Gemini 3.1' },
+  { n: '@h0wzy/mcp-server-codex', d: 'OpenAI Codex MCP Server connecting to GPT-5.6 / GPT-6' },
+]
+
+const BINARIES = [
+  { p: 'Windows (amd64)', f: 'h0wzy-mcp-windows-amd64.exe' },
+  { p: 'Linux (amd64)', f: 'h0wzy-mcp-linux-amd64' },
+  { p: 'macOS (arm64)', f: 'h0wzy-mcp-darwin-arm64' },
+]
+
+const BRIDGES = [
+  {
+    n: 'Claude Code',
+    b: 'Anthropic',
+    d: {
+      en: 'Native ~/.claude.json bridge allowing Claude to invoke codex and agy.',
+      pt: 'Integracao ~/.claude.json para o Claude invocar codex e agy.',
+    },
+  },
+  {
+    n: 'OpenAI Codex CLI',
+    b: 'GPT-5.6 / GPT-6',
+    d: {
+      en: 'Bridge for official Codex CLI with sanitization and timeout protection.',
+      pt: 'Bridge para CLI Codex oficial com protecao e timeout.',
+    },
+  },
+  {
+    n: 'Google Antigravity',
+    b: 'Gemini 3.1',
+    d: {
+      en: 'Connects agy CLI and IDE via ~/.gemini/config/mcp_config.json.',
+      pt: 'Conecta agy CLI e IDE em ~/.gemini/config/mcp_config.json.',
+    },
+  },
+]
+
+const STEPS: Record<AgentTab, { en: [string, string]; pt: [string, string]; action?: string }> = {
+  claude: {
+    en: ['Settings → Connectors → Add H0wZy MCP and paste URL.', 'Connect and start cross-model code reviews.'],
+    pt: ['Ajustes → Conectores → Adicione H0wZy MCP e cole a URL.', 'Conecte e execute revisoes multi-agente.'],
+    action: 'https://claude.ai/new',
+  },
+  cursor: {
+    en: ['Settings → Features → MCP → Add new server (SSE).', 'Invoke multi-agent tools directly in Cursor chat.'],
+    pt: ['Settings → Features → MCP → Add new server (SSE).', 'Invoque ferramentas do hub no chat do Cursor.'],
+  },
+  'claude-code': {
+    en: ['Run: claude mcp add h0wzy-mcp -- npx -y @h0wzy/mcp', 'Claude Code invokes codex and agy autonomously.'],
+    pt: ['Execute: claude mcp add h0wzy-mcp -- npx -y @h0wzy/mcp', 'Claude Code invoca codex e agy com autonomia.'],
+  },
+  codex: {
+    en: ['Run: codex mcp add h0wzy-mcp -- npx -y @h0wzy/mcp', 'Codex gains cross-bridge access to Gemini and Claude.'],
+    pt: ['Execute: codex mcp add h0wzy-mcp -- npx -y @h0wzy/mcp', 'Codex acessa bridges para Gemini e Claude.'],
+  },
+  antigravity: {
+    en: ['Add to ~/.gemini/config/mcp_config.json in mcpServers.', 'Google Antigravity and AGY CLI integrated instantly.'],
+    pt: ['Adicione a ~/.gemini/config/mcp_config.json em mcpServers.', 'Google Antigravity e AGY CLI integrados instantaneamente.'],
+  },
+}
 
 export function Mcp({
   locale,
@@ -24,6 +89,16 @@ export function Mcp({
 }) {
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const [copiedStatus, setCopiedStatus] = useState<string | null>(null)
+  const [activeTab, setActiveTab] = useState<AgentTab>('claude')
+  const [mode, setMode] = useState<'mcp' | 'cli'>('mcp')
+  const [stars, setStars] = useState<number | null>(null)
+
+  useEffect(() => {
+    fetch('https://api.github.com/repos/H0wZy/mcp')
+      .then((res) => (res.ok ? res.json() : null))
+      .then((d) => typeof d?.stargazers_count === 'number' && setStars(d.stargazers_count))
+      .catch(() => {})
+  }, [])
 
   const showCopied = (msg: string) => {
     setCopiedStatus(msg)
@@ -31,46 +106,12 @@ export function Mcp({
     setTimeout(() => setCopiedStatus(null), 3000)
   }
 
-  const copyPageMarkdown = () => {
-    const md = `# H0wZy/mcp — Multi-Agent MCP Hub & Go CLI\n\nCentralize, enhance, and distribute high-performance Model Context Protocol (MCP) servers connecting Claude Code, OpenAI Codex, and Google Antigravity.\n\nQuickstart:\n- Instant execution: npx @h0wzy/mcp\n- Global install: npm i -g @h0wzy/mcp && hmcp\n- Go source: go run ./cli setup-path\n\nGitHub: https://github.com/H0wZy/mcp\nShowcase: https://howzysolutions.com/mcp`
-    navigator.clipboard.writeText(md).then(() => showCopied(locale === 'pt' ? 'Markdown copiado!' : 'Markdown copied!'))
+  const copyText = (text: string, label: string) => {
+    navigator.clipboard.writeText(text).then(() => showCopied(label))
   }
 
-  const copyCursorConfig = () => {
-    const snippet = JSON.stringify(
-      {
-        mcpServers: {
-          'h0wzy-mcp': {
-            command: 'npx',
-            args: ['-y', '@h0wzy/mcp'],
-          },
-        },
-      },
-      null,
-      2,
-    )
-    navigator.clipboard.writeText(snippet).then(() => showCopied('Cursor MCP config copied!'))
-  }
-
-  const copyVsCodeConfig = () => {
-    const snippet = JSON.stringify(
-      {
-        servers: {
-          'h0wzy-mcp': {
-            command: 'npx',
-            args: ['-y', '@h0wzy/mcp'],
-          },
-        },
-      },
-      null,
-      2,
-    )
-    navigator.clipboard.writeText(snippet).then(() => showCopied('VS Code MCP config copied!'))
-  }
-
-  const copyMcpCommand = () => {
-    navigator.clipboard.writeText('npx @h0wzy/mcp').then(() => showCopied(locale === 'pt' ? 'Comando MCP copiado!' : 'MCP command copied!'))
-  }
+  const connectorUrl = mode === 'mcp' ? 'https://mcp.howzysolutions.com/sse' : 'npx @h0wzy/mcp'
+  const stepInfo = STEPS[activeTab]
 
   return (
     <>
@@ -80,29 +121,38 @@ export function Mcp({
         <SectionRail entries={TOC_ENTRIES} locale={locale} />
 
         <div className="document-body">
-          {/* Top Bar Header */}
+          {/* Header Bar */}
           <header className="section">
             <div className="wrap flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-[var(--line)]">
-              <div className="flex items-center gap-3">
-                <span className="font-mono text-sm px-2.5 py-1 rounded border border-[var(--border)] bg-[var(--surface)] text-[var(--accent)] font-semibold">
+              <div className="flex items-center gap-3 font-mono">
+                <span className="text-sm px-2.5 py-1 rounded border border-[var(--border)] bg-[var(--surface)] text-[var(--accent)] font-semibold">
                   H0wZy/mcp v1.0.3
                 </span>
-                <span className="font-mono text-xs text-[var(--dim)]">
-                  MIT License · Go 1.26+ · Node 20+
-                </span>
+                <span className="text-xs text-[var(--dim)]">MIT · Go 1.26+ · Node 20+</span>
               </div>
 
               <div className="flex items-center gap-2 relative">
+                {/* GitHub Star Button */}
                 <a
                   href="https://github.com/H0wZy/mcp"
                   target="_blank"
                   rel="noreferrer"
-                  className="chrome-btn inline-flex items-center gap-1.5 text-xs"
+                  className="chrome-btn inline-flex items-center gap-2 text-xs"
+                  title="GitHub repository"
                 >
-                  <span>⭐ GitHub</span>
-                  <span className="text-[var(--accent)] font-mono">v1.0.3</span>
+                  <svg className="size-3.5 fill-current" viewBox="0 0 16 16" aria-hidden="true">
+                    <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z" />
+                  </svg>
+                  <span>GitHub</span>
+                  <span className="inline-flex items-center gap-1 text-[var(--accent)] font-mono">
+                    <svg className="size-3 fill-current text-[var(--accent-2)]" viewBox="0 0 16 16" aria-hidden="true">
+                      <path d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.75.75 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z" />
+                    </svg>
+                    {stars !== null ? stars : 'v1.0.3'}
+                  </span>
                 </a>
 
+                {/* Minimalist Dropdown */}
                 <div className="relative">
                   <button
                     type="button"
@@ -110,66 +160,47 @@ export function Mcp({
                     onClick={() => setDropdownOpen(!dropdownOpen)}
                     aria-expanded={dropdownOpen}
                   >
-                    <span>{locale === 'pt' ? 'Copiar / Conectar' : 'Copy page'}</span>
-                    <span className="text-xs">▾</span>
+                    <span>{locale === 'pt' ? 'Copiar / Acoes' : 'Copy / Actions'}</span>
+                    <span>▾</span>
                   </button>
 
                   {dropdownOpen ? (
-                    <div className="absolute right-0 mt-2 w-72 rounded border border-[var(--border)] bg-[var(--surface)] shadow-2xl p-2 z-50 flex flex-col gap-1 text-xs font-mono">
+                    <div className="absolute right-0 mt-2 w-56 rounded border border-[var(--border)] bg-[var(--surface)] shadow-2xl p-1 z-50 flex flex-col gap-0.5 text-xs font-mono">
                       <button
                         type="button"
-                        onClick={copyPageMarkdown}
-                        className="text-left px-3 py-2 rounded hover:bg-[var(--line)] hover:text-[var(--accent)] transition-colors flex flex-col"
+                        onClick={() =>
+                          copyText(
+                            `# H0wZy/mcp — Multi-Agent MCP Hub\nQuickstart: npx @h0wzy/mcp\nhttps://github.com/H0wZy/mcp`,
+                            locale === 'pt' ? 'Markdown copiado!' : 'Markdown copied!',
+                          )
+                        }
+                        className="text-left px-2.5 py-1.5 rounded hover:bg-[var(--line)] hover:text-[var(--accent)] transition-colors"
                       >
-                        <span className="font-semibold text-[var(--fg)]">📄 {locale === 'pt' ? 'Copiar pagina' : 'Copy page'}</span>
-                        <span className="text-[var(--dim)] text-[11px]">{locale === 'pt' ? 'Markdown para LLMs' : 'Copy as Markdown for LLMs'}</span>
+                        📄 {locale === 'pt' ? 'Copiar Markdown' : 'Copy Markdown'}
                       </button>
-
-                      <button
-                        type="button"
-                        onClick={copyCursorConfig}
-                        className="text-left px-3 py-2 rounded hover:bg-[var(--line)] hover:text-[var(--accent)] transition-colors flex flex-col"
-                      >
-                        <span className="font-semibold text-[var(--fg)]">⬡ Connect to Cursor</span>
-                        <span className="text-[var(--dim)] text-[11px]">{locale === 'pt' ? 'Copiar config JSON para Cursor' : 'Install MCP Server on Cursor'}</span>
-                      </button>
-
-                      <button
-                        type="button"
-                        onClick={copyVsCodeConfig}
-                        className="text-left px-3 py-2 rounded hover:bg-[var(--line)] hover:text-[var(--accent)] transition-colors flex flex-col"
-                      >
-                        <span className="font-semibold text-[var(--fg)]">💻 Connect to VS Code</span>
-                        <span className="text-[var(--dim)] text-[11px]">{locale === 'pt' ? 'Copiar config para VS Code' : 'Install MCP Server on VS Code'}</span>
-                      </button>
-
-                      <button
-                        type="button"
-                        onClick={copyMcpCommand}
-                        className="text-left px-3 py-2 rounded hover:bg-[var(--line)] hover:text-[var(--accent)] transition-colors flex flex-col"
-                      >
-                        <span className="font-semibold text-[var(--fg)]">🔌 {locale === 'pt' ? 'Copiar comando MCP' : 'Copy MCP command'}</span>
-                        <span className="text-[var(--dim)] text-[11px]">npx @h0wzy/mcp</span>
-                      </button>
-
                       <a
                         href="https://claude.ai/new?q=Tell%20me%20about%20the%20multi-agent%20MCP%20hub%20at%20github.com/H0wZy/mcp"
                         target="_blank"
                         rel="noreferrer"
-                        className="text-left px-3 py-2 rounded hover:bg-[var(--line)] hover:text-[var(--accent)] transition-colors flex flex-col"
+                        className="text-left px-2.5 py-1.5 rounded hover:bg-[var(--line)] hover:text-[var(--accent)] transition-colors"
                       >
-                        <span className="font-semibold text-[var(--fg)]">⚡ Open in Claude ↗</span>
-                        <span className="text-[var(--dim)] text-[11px]">{locale === 'pt' ? 'Perguntar sobre este hub' : 'Ask questions about this hub'}</span>
+                        ⚡ Open in Claude ↗
                       </a>
-
+                      <a
+                        href="https://www.npmjs.com/package/@h0wzy/mcp"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-left px-2.5 py-1.5 rounded hover:bg-[var(--line)] hover:text-[var(--accent)] transition-colors"
+                      >
+                        📦 View on npm ↗
+                      </a>
                       <a
                         href="https://github.com/H0wZy/mcp/issues"
                         target="_blank"
                         rel="noreferrer"
-                        className="text-left px-3 py-2 rounded hover:bg-[var(--line)] hover:text-[var(--accent)] transition-colors flex flex-col border-t border-[var(--line)] pt-2"
+                        className="text-left px-2.5 py-1.5 rounded hover:bg-[var(--line)] hover:text-[var(--accent)] transition-colors border-t border-[var(--line)] pt-1"
                       >
-                        <span className="font-semibold text-[var(--fg)]">🐛 {locale === 'pt' ? 'Abrir uma issue' : 'Open an issue ↗'}</span>
-                        <span className="text-[var(--dim)] text-[11px]">{locale === 'pt' ? 'Reportar bug ou sugerir recurso' : 'Report bug or request feature'}</span>
+                        🐛 {locale === 'pt' ? 'Abrir issue ↗' : 'Open issue ↗'}
                       </a>
                     </div>
                   ) : null}
@@ -179,15 +210,15 @@ export function Mcp({
 
             {copiedStatus ? (
               <div className="wrap mt-3">
-                <div className="px-3 py-1.5 rounded bg-[var(--surface)] border border-[var(--accent)] text-[var(--accent)] text-xs font-mono inline-block">
+                <div className="px-3 py-1 rounded bg-[var(--surface)] border border-[var(--accent)] text-[var(--accent)] text-xs font-mono inline-block">
                   ✓ {copiedStatus}
                 </div>
               </div>
             ) : null}
           </header>
 
-          {/* Hero Section */}
-          <section id="what-is-it" className="section">
+          {/* Overview Section */}
+          <section id="overview" className="section">
             <div className="wrap">
               <h1 className="text-3xl font-bold tracking-tight text-[var(--fg)] mb-3">
                 {locale === 'pt' ? 'O que e H0wZy/mcp?' : 'What is H0wZy/mcp?'}
@@ -198,87 +229,237 @@ export function Mcp({
                   : 'The Ultimate Multi-Agent MCP Hub and Go CLI connecting Claude Code, OpenAI Codex, and Google Antigravity.'}
               </p>
 
-              {/* Terminal ASCII Banner Preview */}
-              <div className="p-4 rounded-lg bg-[var(--surface)] border border-[var(--border)] font-mono text-xs overflow-x-auto shadow-xl">
-                <pre className="text-[var(--term-user)] leading-none mb-3">
-{` _   _  _____         ______       __  __  _____ _____  
-| | | ||  _  |       |___  /      |  \\/  |/  __ \\  __ \\ 
-| |_| || |/' |__  __    / / _   _ | .  . || /  \\/ |  \\/ 
-|  _  ||  /| |\\ \\/\\ \\  / / | | | || |\\/| || |   | | __  
-| | | |\\ |_/ / \\ \\/ /./ /__| |_| || |  | || \\__/\\ |_\\ \\ 
-\\_| |_/ \\___/   \\_/  \\_____/\\__, |\\_|  |_/ \\____/\\____/ 
-                             __/ |                      
-                            |___/  `}
-                </pre>
-                <div className="flex flex-wrap items-center gap-3 text-[11px] pt-3 border-t border-[var(--line)]">
-                  <span className="text-[var(--accent)] font-semibold">
-                    [claude] ✓ Connected
-                  </span>
-                  <span className="text-[var(--accent)] font-semibold">
-                    [codex] ✓ Connected
-                  </span>
-                  <span className="text-[var(--accent)] font-semibold">
-                    [antigravity] ✓ Connected
-                  </span>
-                  <span className="text-[var(--dim)] ml-auto">
-                    sub-50ms JSON-RPC 2.0 stdio
-                  </span>
+              {/* Real hmcp ASCII Banner & Terminal Preview */}
+              <div className="rounded-lg bg-[var(--bg)] border border-[var(--border)] overflow-hidden shadow-2xl font-mono text-xs">
+                <div className="px-4 py-2.5 bg-[var(--surface)] border-b border-[var(--line)] flex items-center justify-between text-[11px]">
+                  <div className="flex items-center gap-2">
+                    <span className="text-[var(--term-user)] font-semibold">h0wzy@h0wzy</span>
+                    <span className="text-[var(--dim)]">in</span>
+                    <span className="text-[var(--accent)]">~</span>
+                    <span className="text-[var(--dim)]">at</span>
+                    <span className="text-[var(--accent-2)]">2h 32m 19s</span>
+                    <span className="text-[var(--dim)]">w/</span>
+                    <span className="text-[var(--fg)]">pwsh</span>
+                  </div>
+                  <span className="text-[var(--dim)]">Go 1.26+</span>
+                </div>
+
+                <div className="p-5 overflow-x-auto space-y-4">
+                  <div className="text-[var(--dim)]">
+                    <span className="text-[var(--accent)] font-bold">❯ </span>
+                    <span className="text-[var(--fg)] font-bold">hmcp</span>
+                  </div>
+
+                  {/* Gradient ASCII Banner */}
+                  <pre
+                    className="leading-tight font-black select-none tracking-tighter"
+                    style={{
+                      background: 'linear-gradient(180deg, #e9d5ff 0%, #c084fc 35%, #9333ea 70%, #6b21a8 100%)',
+                      WebkitBackgroundClip: 'text',
+                      WebkitTextFillColor: 'transparent',
+                    }}
+                  >
+{`██╗  ██╗ ██████╗ ██╗    ██╗███████╗██╗   ██╗  ███╗   ███╗  ██████╗ ███████╗
+██║  ██║██╔═████╗██║    ██║╚══███╔╝╚██╗ ██╔╝  ████╗ ████║ ██╔════╝ ██╔══██╗
+███████║██║██╔██║██║ █╗ ██║  ███╔╝   ╚████╔╝  ██╔████╔██║ ██║      ██████╔╝
+██╔══██║████╔╝██║██║███╗██║ ███╔╝     ╚██╔╝   ██║╚██╔╝██║ ██║      ██╔═══╝
+██║  ██║╚██████╔╝╚███╔███╔╝███████╗    ██║    ██║ ╚═╝ ██║ ╚██████╗ ██║
+╚═╝  ╚═╝ ╚═════╝  ╚══╝╚══╝ ╚══════╝    ╚═╝    ╚═╝     ╚═╝  ╚═════╝ ╚═╝`}
+                  </pre>
+
+                  <div className="space-y-1 text-xs">
+                    <div className="text-[var(--fg)] font-semibold">
+                      H0wZy/mcp v1.0.3 • Multi-Agent MCP Hub
+                    </div>
+                    <div className="text-[var(--term-user)]">
+                      Claude Code ↔ OpenAI Codex ↔ Google Antigravity
+                    </div>
+                  </div>
+
+                  <div className="pt-3 border-t border-[var(--line)] space-y-2 text-[11px]">
+                    <div className="text-[var(--accent)] font-semibold">
+                      🔍 Scanning local AI developer CLIs...
+                    </div>
+                    <div className="pl-2 space-y-0.5 text-[var(--fg)]">
+                      <div><span className="text-[var(--accent)]">✓</span> Claude Code <span className="text-[var(--dim)]">(C:\Users\h0wzy\.local\bin\claude.exe)</span></div>
+                      <div><span className="text-[var(--accent)]">✓</span> OpenAI Codex CLI <span className="text-[var(--dim)]">(C:\Users\h0wzy\AppData\Roaming\npm\codex.cmd)</span></div>
+                      <div><span className="text-[var(--accent)]">✓</span> Google Antigravity <span className="text-[var(--dim)]">(C:\Users\h0wzy\AppData\Local\agy\bin\agy.exe)</span></div>
+                    </div>
+
+                    <div className="pt-2 text-[var(--accent-2)] font-semibold">
+                      Select MCP bridges to configure:
+                    </div>
+                    <div className="pl-2 space-y-0.5 text-[var(--dim)]">
+                      <div className="text-[var(--term-user)] font-semibold">&gt; Claude Code ↔ Google Antigravity (Gemini 3.1 Pro/Flash)</div>
+                      <div>  Claude Code ↔ OpenAI Codex (GPT-5.6 / GPT-6 Astra)</div>
+                      <div>  OpenAI Codex ↔ Google Antigravity (Gemini 3.1)</div>
+                      <div>  Google Antigravity ↔ OpenAI Codex</div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </section>
 
-          {/* Key Advantages */}
-          <section id="three-things" className="section">
+          {/* Connector Widget */}
+          <section id="connector" className="section">
             <div className="wrap">
-              <h2 className="text-xl font-semibold mb-4 text-[var(--fg)]">
-                {locale === 'pt' ? 'Principais Vantagens' : 'Three Key Advantages'}
+              <h2 className="text-xl font-semibold mb-2 text-[var(--fg)]">
+                {locale === 'pt' ? 'Conecte seu Agente de IA' : 'Connect Your AI Agent'}
               </h2>
+              <p className="text-xs text-[var(--dim)] mb-4">
+                {locale === 'pt'
+                  ? 'Inspirado em conectores universais. Escolha sua IDE ou agente e conecte em 3 passos simples.'
+                  : 'Inspired by universal AI connectors. Select your client and connect in 3 simple steps.'}
+              </p>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="p-4 rounded border border-[var(--border)] bg-[var(--surface)]">
-                  <span className="text-[var(--accent)] font-mono text-xs font-bold block mb-1">01 / DRY SHARED CORE</span>
-                  <h3 className="font-semibold text-sm mb-2 text-[var(--fg)]">@h0wzy/mcp-shared</h3>
-                  <p className="text-xs text-[var(--dim)] leading-relaxed">
-                    {locale === 'pt'
-                      ? 'Elimina duplicacao de codigo entre hosts. Um motor unico gerencia 100% de stdio JSON-RPC 2.0, handshakes e captura de erros.'
-                      : 'Eliminates duplication across host agents. A single engine manages 100% of JSON-RPC 2.0 stdio handling, error catching and handshakes.'}
-                  </p>
+              <div className="p-5 rounded-lg bg-[var(--surface)] border border-[var(--border)] shadow-xl space-y-5">
+                <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-[var(--line)]">
+                  <div className="flex flex-wrap items-center gap-1.5">
+                    {(['claude', 'cursor', 'claude-code', 'codex', 'antigravity'] as AgentTab[]).map((tab) => (
+                      <button
+                        key={tab}
+                        type="button"
+                        onClick={() => setActiveTab(tab)}
+                        className={`px-3 py-1.5 rounded text-xs font-mono transition-colors ${
+                          activeTab === tab
+                            ? 'bg-[var(--line)] text-[var(--accent)] border border-[var(--accent)] font-semibold'
+                            : 'text-[var(--dim)] hover:text-[var(--fg)] hover:bg-[var(--bg)]'
+                        }`}
+                      >
+                        {tab === 'claude' && 'Claude'}
+                        {tab === 'cursor' && 'Cursor'}
+                        {tab === 'claude-code' && 'Claude Code'}
+                        {tab === 'codex' && 'OpenAI Codex'}
+                        {tab === 'antigravity' && 'Antigravity'}
+                      </button>
+                    ))}
+                  </div>
+
+                  <div className="flex items-center gap-1 p-0.5 rounded bg-[var(--bg)] border border-[var(--border)] text-xs font-mono">
+                    <button
+                      type="button"
+                      onClick={() => setMode('mcp')}
+                      className={`px-2.5 py-1 rounded ${
+                        mode === 'mcp' ? 'bg-[var(--surface)] text-[var(--accent)] font-semibold' : 'text-[var(--dim)]'
+                      }`}
+                    >
+                      MCP (SSE)
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setMode('cli')}
+                      className={`px-2.5 py-1 rounded ${
+                        mode === 'cli' ? 'bg-[var(--surface)] text-[var(--accent)] font-semibold' : 'text-[var(--dim)]'
+                      }`}
+                    >
+                      CLI (Local)
+                    </button>
+                  </div>
                 </div>
 
-                <div className="p-4 rounded border border-[var(--border)] bg-[var(--surface)]">
-                  <span className="text-[var(--accent)] font-mono text-xs font-bold block mb-1">02 / CROSS-PLATFORM</span>
-                  <h3 className="font-semibold text-sm mb-2 text-[var(--fg)]">Native Windows & POSIX</h3>
-                  <p className="text-xs text-[var(--dim)] leading-relaxed">
-                    {locale === 'pt'
-                      ? 'Zero glitches no Windows. Resolucao automatica de extensoes (.exe, .cmd, .bat) e delimitadores nativos sem overrides manuais de PATH.'
-                      : 'Zero Windows glitches. Automatic PATHEXT resolution (.exe, .cmd, .bat) and native delimiters without manual PATH overrides.'}
-                  </p>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-5 text-xs">
+                  {/* Step 1 */}
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <span className="size-5 rounded-full bg-[var(--line)] text-[var(--accent)] font-mono font-bold flex items-center justify-center text-[11px]">
+                        1
+                      </span>
+                      <strong className="text-[var(--fg)]">
+                        {mode === 'mcp'
+                          ? (locale === 'pt' ? 'Copie a URL do conector' : 'Copy connector URL')
+                          : (locale === 'pt' ? 'Comando de execucao' : 'Run CLI command')}
+                      </strong>
+                    </div>
+                    <p className="text-[var(--dim)] text-[11px]">
+                      {mode === 'mcp'
+                        ? (locale === 'pt' ? 'Cole este endpoint no seu cliente MCP na proxima etapa.' : "You'll paste this URL into your client in the next step.")
+                        : (locale === 'pt' ? 'Inicie instantaneamente sem instalacao previa.' : 'Zero installation execution via npx runner.')}
+                    </p>
+
+                    <div className="flex items-center gap-1 p-2 rounded bg-[var(--bg)] border border-[var(--border)] font-mono text-[11px]">
+                      <span className="truncate text-[var(--fg)] select-all">{connectorUrl}</span>
+                      <button
+                        type="button"
+                        onClick={() => copyText(connectorUrl, locale === 'pt' ? 'URL copiada!' : 'URL copied!')}
+                        className="ml-auto text-[var(--accent)] hover:text-[var(--fg)] px-2 py-0.5 rounded border border-[var(--line)]"
+                        title="Copy to clipboard"
+                      >
+                        {locale === 'pt' ? 'Copiar' : 'Copy'}
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Step 2 */}
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <span className="size-5 rounded-full bg-[var(--line)] text-[var(--accent)] font-mono font-bold flex items-center justify-center text-[11px]">
+                        2
+                      </span>
+                      <strong className="text-[var(--fg)]">
+                        {locale === 'pt' ? 'Configure no cliente' : 'Configure client'}
+                      </strong>
+                    </div>
+                    <p className="text-[var(--dim)] text-[11px] leading-relaxed">
+                      {stepInfo[locale][0]}
+                    </p>
+                  </div>
+
+                  {/* Step 3 */}
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <span className="size-5 rounded-full bg-[var(--line)] text-[var(--accent)] font-mono font-bold flex items-center justify-center text-[11px]">
+                        3
+                      </span>
+                      <strong className="text-[var(--fg)]">
+                        {locale === 'pt' ? 'Pronto para usar' : 'Ready to use'}
+                      </strong>
+                    </div>
+                    <p className="text-[var(--dim)] text-[11px] leading-relaxed">
+                      {stepInfo[locale][1]}
+                    </p>
+                    {stepInfo.action ? (
+                      <a
+                        href={stepInfo.action}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="btn inline-block text-xs font-mono mt-2"
+                      >
+                        {locale === 'pt' ? 'Abrir Claude ↗' : 'Open Claude ↗'}
+                      </a>
+                    ) : null}
+                  </div>
                 </div>
 
-                <div className="p-4 rounded border border-[var(--border)] bg-[var(--surface)]">
-                  <span className="text-[var(--accent)] font-mono text-xs font-bold block mb-1">03 / PERFORMANCE</span>
-                  <h3 className="font-semibold text-sm mb-2 text-[var(--fg)]">Sub-50ms Go TUI</h3>
-                  <p className="text-xs text-[var(--dim)] leading-relaxed">
+                <div className="pt-3 border-t border-[var(--line)] flex flex-wrap items-center justify-between text-[11px] text-[var(--dim)]">
+                  <span>
                     {locale === 'pt'
-                      ? 'Execucao instantanea de binarios locais com menos de 50ms de overhead, removendo latencia de checagem de rede do npx.'
-                      : 'Direct execution of local binaries with sub-50ms invocation overhead, removing runtime npx network check delays.'}
-                  </p>
+                      ? 'Se estiver usando Claude Code ou Codex localmente, prefira a CLI Go interativa.'
+                      : 'If you are using Claude Code or Codex locally, it is best to use the Go CLI.'}
+                  </span>
+                  <a
+                    href="https://github.com/H0wZy/mcp"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-[var(--accent)] hover:underline"
+                  >
+                    GitHub Repository ↗
+                  </a>
                 </div>
               </div>
             </div>
           </section>
 
-          {/* Quick Start */}
+          {/* Quickstart & CLI */}
           <section id="quickstart" className="section">
             <div className="wrap">
               <h2 className="text-xl font-semibold mb-4 text-[var(--fg)]">
-                {locale === 'pt' ? 'Inicio Rapido' : 'Quick Start'}
+                {locale === 'pt' ? 'Inicio Rapido & CLI' : 'Quick Start & CLI'}
               </h2>
 
               <div className="flex flex-col gap-3 font-mono text-xs">
                 <div className="p-3 rounded bg-[var(--surface)] border border-[var(--border)]">
-                  <span className="text-[var(--dim)] block mb-1"># 1. Instant execution via npx (Zero setup):</span>
+                  <span className="text-[var(--dim)] block mb-1"># 1. Instant execution via npx:</span>
                   <code className="text-[var(--accent)] font-bold text-sm select-all">npx @h0wzy/mcp</code>
                 </div>
 
@@ -291,6 +472,72 @@ export function Mcp({
                   <span className="text-[var(--dim)] block mb-1"># 3. Direct from source with Go:</span>
                   <code className="text-[var(--accent)] font-bold text-sm select-all">go run ./cli setup-path && hmcp</code>
                 </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Official Packages */}
+          <section id="packages" className="section">
+            <div className="wrap">
+              <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
+                <div>
+                  <h2 className="text-xl font-semibold text-[var(--fg)]">
+                    {locale === 'pt' ? 'Pacotes Oficiais npm' : 'Official npm Packages'}
+                  </h2>
+                  <p className="text-xs text-[var(--dim)]">
+                    {locale === 'pt' ? 'Publicados e versionados no registro publico do npm.' : 'Published and versioned on the public npm registry.'}
+                  </p>
+                </div>
+                <a
+                  href="https://www.npmjs.com/~h0wzy"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="font-mono text-xs text-[var(--accent)] hover:underline"
+                >
+                  npmjs.com/~h0wzy ↗
+                </a>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 font-mono text-xs">
+                {PACKAGES.map((pkg) => (
+                  <a
+                    key={pkg.n}
+                    href={`https://www.npmjs.com/package/${pkg.n}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="p-4 rounded border border-[var(--border)] bg-[var(--surface)] hover:border-[var(--accent)] transition-colors block space-y-2"
+                  >
+                    <div className="flex items-center justify-between">
+                      <strong className="text-[var(--accent)] text-sm">{pkg.n}</strong>
+                      <span className="text-[var(--dim)] text-[11px]">v1.0.3</span>
+                    </div>
+                    <p className="text-[var(--dim)] text-[11px] leading-relaxed">{pkg.d}</p>
+                    <div className="text-[10px] text-[var(--dim)] pt-1 border-t border-[var(--line)]">
+                      Published via GitHub Actions
+                    </div>
+                  </a>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* Supported AI CLIs */}
+          <section id="bridges" className="section">
+            <div className="wrap">
+              <h2 className="text-xl font-semibold mb-4 text-[var(--fg)]">
+                {locale === 'pt' ? 'CLIs de IA Suportados' : 'Supported AI Developer CLIs'}
+              </h2>
+
+              <div className="space-y-3 font-mono text-xs">
+                {BRIDGES.map((b) => (
+                  <div key={b.n} className="p-3 rounded border border-[var(--border)] bg-[var(--surface)]">
+                    <div className="flex items-center justify-between mb-1">
+                      <strong className="text-[var(--fg)] text-sm">{b.n}</strong>
+                      <span className="text-[var(--accent)] text-[11px]">{b.b}</span>
+                    </div>
+                    <p className="text-[var(--dim)] leading-relaxed">{b.d[locale]}</p>
+                  </div>
+                ))}
               </div>
             </div>
           </section>
@@ -308,130 +555,16 @@ export function Mcp({
               </p>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 font-mono text-xs">
-                <a
-                  href="https://github.com/H0wZy/mcp/releases/download/v1.0.3/h0wzy-mcp-windows-amd64.exe"
-                  className="p-3 rounded border border-[var(--border)] bg-[var(--surface)] hover:border-[var(--accent)] transition-colors block"
-                >
-                  <span className="text-[var(--fg)] font-semibold block mb-1">🪟 Windows (amd64)</span>
-                  <span className="text-[var(--accent)] text-[11px]">h0wzy-mcp-windows-amd64.exe ↗</span>
-                </a>
-
-                <a
-                  href="https://github.com/H0wZy/mcp/releases/download/v1.0.3/h0wzy-mcp-linux-amd64"
-                  className="p-3 rounded border border-[var(--border)] bg-[var(--surface)] hover:border-[var(--accent)] transition-colors block"
-                >
-                  <span className="text-[var(--fg)] font-semibold block mb-1">🐧 Linux (amd64)</span>
-                  <span className="text-[var(--accent)] text-[11px]">h0wzy-mcp-linux-amd64 ↗</span>
-                </a>
-
-                <a
-                  href="https://github.com/H0wZy/mcp/releases/download/v1.0.3/h0wzy-mcp-darwin-arm64"
-                  className="p-3 rounded border border-[var(--border)] bg-[var(--surface)] hover:border-[var(--accent)] transition-colors block"
-                >
-                  <span className="text-[var(--fg)] font-semibold block mb-1">🍏 macOS (arm64)</span>
-                  <span className="text-[var(--accent)] text-[11px]">h0wzy-mcp-darwin-arm64 ↗</span>
-                </a>
-              </div>
-            </div>
-          </section>
-
-          {/* Supported AI CLIs */}
-          <section id="bridges" className="section">
-            <div className="wrap">
-              <h2 className="text-xl font-semibold mb-4 text-[var(--fg)]">
-                {locale === 'pt' ? 'CLIs de IA Suportados' : 'Supported AI Developer CLIs'}
-              </h2>
-
-              <div className="space-y-3 font-mono text-xs">
-                <div className="p-3 rounded border border-[var(--border)] bg-[var(--surface)]">
-                  <div className="flex items-center justify-between mb-1">
-                    <strong className="text-[var(--fg)] text-sm">Claude Code</strong>
-                    <span className="text-[var(--accent)] text-[11px]">Anthropic</span>
-                  </div>
-                  <p className="text-[var(--dim)] leading-relaxed">
-                    {locale === 'pt'
-                      ? 'Integracao nativa com ~/.claude.json. Permite que o Claude invoque codex e agy para revisoes de codigo e validacoes cruzadas.'
-                      : 'Native integration with ~/.claude.json. Allows Claude to invoke codex and agy for code reviews and second opinions.'}
-                  </p>
-                </div>
-
-                <div className="p-3 rounded border border-[var(--border)] bg-[var(--surface)]">
-                  <div className="flex items-center justify-between mb-1">
-                    <strong className="text-[var(--fg)] text-sm">OpenAI Codex CLI</strong>
-                    <span className="text-[var(--accent)] text-[11px]">GPT-5.6 / GPT-6 Astra</span>
-                  </div>
-                  <p className="text-[var(--dim)] leading-relaxed">
-                    {locale === 'pt'
-                      ? 'Bridge para o CLI Codex oficial com sanitizacao de tokens de saida e execucao com timeout protegido.'
-                      : 'Bridge for official Codex CLI with output token sanitization and protected timeout execution.'}
-                  </p>
-                </div>
-
-                <div className="p-3 rounded border border-[var(--border)] bg-[var(--surface)]">
-                  <div className="flex items-center justify-between mb-1">
-                    <strong className="text-[var(--fg)] text-sm">Google Antigravity</strong>
-                    <span className="text-[var(--accent)] text-[11px]">Gemini 3.1 Pro / Flash</span>
-                  </div>
-                  <p className="text-[var(--dim)] leading-relaxed">
-                    {locale === 'pt'
-                      ? 'Conexao com o CLI agy e antigravity IDE, injetando MCP servers em ~/.gemini/config/mcp_config.json.'
-                      : 'Connection with agy CLI and antigravity IDE, injecting MCP servers in ~/.gemini/config/mcp_config.json.'}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* Architecture & Hub */}
-          <section id="architecture" className="section">
-            <div className="wrap">
-              <h2 className="text-xl font-semibold mb-4 text-[var(--fg)]">
-                {locale === 'pt' ? 'Arquitetura e Hub' : 'System Architecture'}
-              </h2>
-              <p className="text-xs text-[var(--dim)] leading-relaxed mb-4">
-                {locale === 'pt'
-                  ? 'O H0wZy/mcp adota uma arquitetura desacoplada onde o CLI interativo em Go orquestra a configuracao, e o nucleo compartilhado executa servidores JSON-RPC 2.0 independentes para cada modelo de IA.'
-                  : 'H0wZy/mcp adopts a decoupled architecture where the interactive Go CLI orchestrates configuration, and the shared core executes independent JSON-RPC 2.0 servers for each AI model.'}
-              </p>
-
-              <div className="p-4 rounded border border-[var(--border)] bg-[var(--surface)] font-mono text-xs space-y-2">
-                <div><span className="text-[var(--accent)] font-bold">H0wZy/mcp/</span></div>
-                <div className="pl-4 text-[var(--dim)]">├── <strong className="text-[var(--fg)]">cli/</strong> : Interactive Go TUI (Bubble Tea / Lip Gloss)</div>
-                <div className="pl-4 text-[var(--dim)]">├── <strong className="text-[var(--fg)]">servers/</strong> : Decoupled bridges (claude, codex, antigravity)</div>
-                <div className="pl-4 text-[var(--dim)]">├── <strong className="text-[var(--fg)]">shared/</strong> : Reusable JSON-RPC 2.0 stdio engine (@h0wzy/mcp-shared)</div>
-                <div className="pl-4 text-[var(--dim)]">├── <strong className="text-[var(--fg)]">npm/</strong> : Cross-platform binary installer & npx runner</div>
-                <div className="pl-4 text-[var(--dim)]">└── <strong className="text-[var(--fg)]">specs/</strong> : Formal specifications and architecture diagrams</div>
-              </div>
-            </div>
-          </section>
-
-          {/* Home Server & Public Tunnel */}
-          <section id="home-server" className="section">
-            <div className="wrap">
-              <h2 className="text-xl font-semibold mb-4 text-[var(--fg)]">
-                {locale === 'pt' ? 'URL Publica e Cloudflare Tunnel' : 'Public Remote Endpoint & Cloudflare Tunnel'}
-              </h2>
-              <div className="p-4 rounded border border-[var(--border)] bg-[var(--surface)] text-xs leading-relaxed space-y-3">
-                <p className="text-[var(--dim)]">
-                  {locale === 'pt'
-                    ? 'Proximo marco arquitetural (Spec 004): exposicao de endpoint remoto SSE / Streamable HTTP hospedado no servidor domestico Ubuntu (h0wzy-server) via Cloudflare Tunnel.'
-                    : 'Next architectural milestone (Spec 004): exposing a public remote SSE / Streamable HTTP endpoint hosted on the Ubuntu home server (h0wzy-server) via Cloudflare Tunnel.'}
-                </p>
-
-                <div className="p-3 rounded bg-[var(--bg)] border border-[var(--line)] font-mono">
-                  <div className="text-[var(--accent)] font-semibold mb-1">
-                    mcp.howzysolutions.com/sse
-                  </div>
-                  <div className="text-[var(--dim)] text-[11px]">
-                    Internet → Cloudflare Edge → cloudflared tunnel → h0wzy-server (Docker) → MCP Hub
-                  </div>
-                </div>
-
-                <p className="text-[var(--dim)] text-[11px]">
-                  {locale === 'pt'
-                    ? 'Isso permitira que agentes remotos e IDEs na nuvem se conectem diretamente ao servidor MCP sem depender de execucao local stdio.'
-                    : 'This will allow remote agents and cloud IDEs to connect directly to the MCP server without requiring local stdio execution.'}
-                </p>
+                {BINARIES.map((bin) => (
+                  <a
+                    key={bin.p}
+                    href={`https://github.com/H0wZy/mcp/releases/download/v1.0.3/${bin.f}`}
+                    className="p-3 rounded border border-[var(--border)] bg-[var(--surface)] hover:border-[var(--accent)] transition-colors block"
+                  >
+                    <span className="text-[var(--fg)] font-semibold block mb-1">{bin.p}</span>
+                    <span className="text-[var(--accent)] text-[11px]">{bin.f} ↗</span>
+                  </a>
+                ))}
               </div>
             </div>
           </section>

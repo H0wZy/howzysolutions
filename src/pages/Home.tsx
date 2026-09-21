@@ -65,6 +65,7 @@ export function Home({
               </p>
               <p className="hero-links">
                 <a href="#terminal">{translate(locale, 'section.terminal')}</a>
+                <a href="#featured">{translate(locale, 'section.featured')}</a>
                 <a href="#work">{translate(locale, 'section.work')}</a>
               </p>
             </div>
@@ -87,6 +88,56 @@ export function Home({
           <div className="wrap">
             <SectionLabel id="section.terminal" anchor="terminal" locale={locale} />
             <Terminal locale={locale} />
+          </div>
+        </section>
+
+        <section className="section" id="featured">
+          <div className="wrap">
+            <SectionLabel id="section.featured" anchor="featured" locale={locale} />
+            <div className="p-5 rounded border border-[var(--border)] bg-[var(--surface)] space-y-4">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <div className="flex items-center gap-2">
+                  <span className="font-mono text-xs px-2.5 py-0.5 rounded border border-[var(--accent)] text-[var(--accent)] font-semibold">
+                    H0wZy/mcp v1.0.3
+                  </span>
+                  <span className="text-xs font-mono text-[var(--dim)]">
+                    {locale === 'pt' ? 'Hub Multi-Agente & Go CLI' : 'Multi-Agent Hub & Go CLI'}
+                  </span>
+                </div>
+                <a
+                  href={pathFor({ page: 'mcp' }, locale)}
+                  className="font-mono text-xs text-[var(--accent)] hover:underline"
+                >
+                  {locale === 'pt' ? 'abrir showcase completo →' : 'open full showcase →'}
+                </a>
+              </div>
+
+              <p className="prose text-sm text-[var(--fg)]">
+                {locale === 'pt'
+                  ? 'Centralize e distribua servidores MCP de alta performance conectando Claude Code, OpenAI Codex e Google Antigravity com TUI interativa em Go e execucao sub-50ms.'
+                  : 'Centralize and distribute high-performance MCP servers connecting Claude Code, OpenAI Codex, and Google Antigravity with interactive Go TUI and sub-50ms execution.'}
+              </p>
+
+              <div className="flex flex-wrap items-center gap-2 text-xs font-mono text-[var(--term-user)]">
+                <span>Claude Code</span>
+                <span className="text-[var(--dim)]">↔</span>
+                <span>OpenAI Codex</span>
+                <span className="text-[var(--dim)]">↔</span>
+                <span>Google Antigravity</span>
+              </div>
+
+              <div className="pt-2 flex flex-wrap items-center gap-3">
+                <a
+                  href={pathFor({ page: 'mcp' }, locale)}
+                  className="btn text-xs font-mono"
+                >
+                  {locale === 'pt' ? 'Explorar H0wZy/mcp' : 'Explore H0wZy/mcp'} →
+                </a>
+                <code className="text-xs font-mono px-3 py-1.5 rounded bg-[var(--bg)] border border-[var(--line)] text-[var(--fg)] select-all">
+                  npx @h0wzy/mcp
+                </code>
+              </div>
+            </div>
           </div>
         </section>
 
