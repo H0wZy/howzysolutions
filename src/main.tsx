@@ -41,6 +41,15 @@ const root = document.getElementById('root')
  * imports no React, no renderer and no DOM (Principle IV, FR-048).
  */
 function enhance() {
+  document.addEventListener('click', (e) => {
+    const a = (e.target as HTMLElement | null)?.closest<HTMLAnchorElement>('a')
+    const el = a?.hash ? document.getElementById(a.hash.slice(1)) : null
+    if (a && el) {
+      e.preventDefault()
+      el.scrollIntoView({ behavior: 'smooth' })
+      history.pushState(null, '', a.hash)
+    }
+  })
   initReveal()
   // Adds the rail's follow-along mark and nothing else. The rail is already a
   // working list of anchors without it (FR-073).

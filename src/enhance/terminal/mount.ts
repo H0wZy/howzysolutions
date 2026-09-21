@@ -44,38 +44,32 @@ export function mountTerminal(root: HTMLElement, session: TerminalSession): void
   output.setAttribute('aria-label', translate(session.locale, 'terminal.outputLabel'))
 
   let cursor = session.history.length
+  const placeholderEl = root.querySelector<HTMLElement>('[data-term-placeholder]')
   const ghostEl = root.querySelector<HTMLElement>('[data-term-ghost]')
-  const SUGGESTIONS = ['whoami', 'projects', 'stats', 'stack', 'cv', 'contact', 'about', 'clear', 'help']
+  const SUGGESTIONS = ['help', 'projects', 'whoami', 'stats', 'stack', 'cv', 'contact', 'about', 'clear']
+  let suggestionIndex = 0
 
   const syncCursor = () => {
-    if (!ghostEl) return
     const val = input.value
-    if (val.length === 0) {
-      ghostEl.textContent = ''
-    } else {
-      const pos = input.selectionStart ?? val.length
-      ghostEl.textContent = val.slice(0, pos)
+    const empty = !val
+    const text = empty ? SUGGESTIONS[suggestionIndex] : val.slice(0, input.selectionStart ?? val.length)
+    if (placeholderEl) placeholderEl.textContent = empty ? text : ''
+    if (ghostEl) ghostEl.textContent = text
+  }
+
+  setInterval(() => {
+    if (input.value.length === 0) {
+      suggestionIndex = (suggestionIndex + 1) % SUGGESTIONS.length
+      syncCursor()
     }
-  }
+  }, 3500)
 
-  input.addEventListener('input', syncCursor)
-  input.addEventListener('keydown', () => {
-    requestAnimationFrame(syncCursor)
+  ;['input', 'keyup', 'click', 'select'].forEach((e) => input.addEventListener(e, syncCursor))
+  input.addEventListener('keydown', () => requestAnimationFrame(syncCursor))
+  input.addEventListener('focus', () => {
+    form.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
   })
-  input.addEventListener('keyup', syncCursor)
-  input.addEventListener('click', syncCursor)
-  input.addEventListener('select', syncCursor)
   syncCursor()
-
-  // `root` is the scroll region: scrollback and prompt share it, so output
-  // pushes the prompt down the way it does in a terminal rather than sliding
-  // under a pinned input bar.
-  const scrollToEnd = () => {
-    root.scrollTo({
-      top: root.scrollHeight,
-      behavior: 'smooth',
-    })
-  }
 
   /**
    * Scrollback repeats the prompt each command, as a shell does — and repeats it
@@ -137,35 +131,35 @@ export function mountTerminal(root: HTMLElement, session: TerminalSession): void
     cursor = session.history.length
 
     if (result.effect) applyEffect(result.effect)
-    scrollToEnd()
-    block.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
-
-    // Auto-focus the output block for clarity and accessibility
-    block.setAttribute('tabindex', '-1')
-    block.focus({ preventScroll: true })
+    root.scrollTop = root.scrollHeight
+    requestAnimationFrame(() => {
+      root.scrollTop = root.scrollHeight
+      form.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+      input.focus({ preventScroll: true })
+    })
   }
 
-  form.addEventListener('submit', (event) => {
-    event.preventDefault()
-    const value = input.value
+  form.addEventListener('submit', (e) => {
+    e.preventDefault()
+    const val = input.value
     input.value = ''
     syncCursor()
-    run(value)
+    run(val)
   })
 
-  input.addEventListener('keydown', (event) => {
+  input.addEventListener('keydown', (e) => {
     // History recall (FR-012).
-    if (event.key === 'ArrowUp') {
-      if (session.history.length === 0) return
-      event.preventDefault()
+    if (e.key === 'ArrowUp') {
+      if (!session.history.length) return
+      e.preventDefault()
       cursor = Math.max(0, cursor - 1)
       input.value = session.history[cursor] ?? ''
       syncCursor()
       return
     }
-    if (event.key === 'ArrowDown') {
-      if (session.history.length === 0) return
-      event.preventDefault()
+    if (e.key === 'ArrowDown') {
+      if (!session.history.length) return
+      e.preventDefault()
       cursor = Math.min(session.history.length, cursor + 1)
       input.value = cursor === session.history.length ? '' : (session.history[cursor] ?? '')
       syncCursor()
@@ -173,19 +167,18 @@ export function mountTerminal(root: HTMLElement, session: TerminalSession): void
     }
 
     // Completion: loop through suggestions when empty, or complete prefix (FR-012).
-    if (event.key === 'Tab') {
-      event.preventDefault()
-      const partial = input.value.trim()
-      const idx = SUGGESTIONS.indexOf(partial)
-      if (partial.length === 0 || idx !== -1) {
-        const nextIdx = idx === -1 ? 0 : (idx + 1) % SUGGESTIONS.length
-        const next = SUGGESTIONS[nextIdx]
-        input.value = `${next} `
+    if (e.key === 'Tab') {
+      e.preventDefault()
+      const val = input.value.trim()
+      const idx = SUGGESTIONS.indexOf(val)
+      if (!val || idx !== -1) {
+        suggestionIndex = idx === -1 ? suggestionIndex : (idx + 1) % SUGGESTIONS.length
+        input.value = `${SUGGESTIONS[suggestionIndex]} `
         syncCursor()
         return
       }
 
-      const matches = completions(partial, invocableNames())
+      const matches = completions(val, invocableNames())
       if (matches.length === 1) {
         input.value = `${matches[0]} `
         syncCursor()
@@ -202,24 +195,19 @@ export function mountTerminal(root: HTMLElement, session: TerminalSession): void
           }),
         )
         output.append(block)
-        scrollToEnd()
+        root.scrollTop = root.scrollHeight
+        form.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
       }
     }
   })
 
-  // Typing while output or terminal has focus redirects back to the input seamlessly
-  root.addEventListener('keydown', (event) => {
-    if (document.activeElement !== input && !event.ctrlKey && !event.metaKey && !event.altKey) {
-      if (event.key.length === 1 || event.key === 'Backspace' || event.key === 'Tab') {
-        input.focus()
-      }
+  root.addEventListener('keydown', (e) => {
+    if (document.activeElement !== input && !e.ctrlKey && !e.metaKey && !e.altKey && (e.key.length === 1 || e.key === 'Backspace' || e.key === 'Tab')) {
+      input.focus()
     }
   })
 
-  // Clicking anywhere in the terminal focuses the prompt, the way a terminal
-  // behaves — but never steals a selection the visitor is making.
   root.addEventListener('mouseup', () => {
-    if ((window.getSelection()?.toString().length ?? 0) > 0) return
-    input.focus()
+    if (!window.getSelection()?.toString()) input.focus()
   })
 }
