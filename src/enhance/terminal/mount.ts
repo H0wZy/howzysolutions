@@ -52,12 +52,15 @@ export function mountTerminal(root: HTMLElement, session: TerminalSession): void
     if (cursorEl) cursorEl.style.opacity = o
   }
 
+  const setPrompt = (t: string) => {
+    if (placeholderEl) placeholderEl.textContent = input.value ? '' : t
+    if (ghostEl) ghostEl.textContent = t
+  }
+
   const syncCursor = () => {
     const val = input.value
-    const text = val ? val.slice(0, input.selectionStart ?? val.length) : SUGGESTIONS[suggestionIndex]
     fade()
-    if (placeholderEl) placeholderEl.textContent = val ? '' : text
-    if (ghostEl) ghostEl.textContent = text
+    setPrompt(val ? val.slice(0, input.selectionStart ?? val.length) : SUGGESTIONS[suggestionIndex])
   }
 
   setInterval(() => {
@@ -66,9 +69,12 @@ export function mountTerminal(root: HTMLElement, session: TerminalSession): void
       setTimeout(() => {
         if (!input.value) {
           suggestionIndex = (suggestionIndex + 1) % 8
-          syncCursor()
+          setPrompt(SUGGESTIONS[suggestionIndex])
+          requestAnimationFrame(() => {
+            if (!input.value) fade()
+          })
         }
-      }, 280)
+      }, 300)
     }
   }, 3500)
 
@@ -80,7 +86,6 @@ export function mountTerminal(root: HTMLElement, session: TerminalSession): void
   const follow = () => requestAnimationFrame(() => { root.scrollTop = root.scrollHeight; scrollTerminal() })
 
   for (const e of ['input', 'keyup', 'click', 'select']) input.addEventListener(e, syncCursor)
-  input.addEventListener('keydown', () => requestAnimationFrame(syncCursor))
   input.addEventListener('focus', scrollTerminal)
   syncCursor()
 
@@ -170,14 +175,14 @@ export function mountTerminal(root: HTMLElement, session: TerminalSession): void
       const idx = SUGGESTIONS.indexOf(val)
       if (!val || idx !== -1) {
         if (idx !== -1) suggestionIndex = (idx + 1) % 8
-        input.value = `${SUGGESTIONS[suggestionIndex]} `
+        input.value = SUGGESTIONS[suggestionIndex]
         syncCursor()
         return
       }
 
       const matches = completions(val, invocableNames())
       if (matches.length === 1) {
-        input.value = `${matches[0]} `
+        input.value = matches[0]
         syncCursor()
       } else if (matches.length > 1) {
         const block = el('div', 'term-block')
