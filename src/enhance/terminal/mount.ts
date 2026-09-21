@@ -28,16 +28,12 @@ export type TerminalSession = {
 const SUGGESTIONS = ['help', 'projects', 'whoami', 'stats', 'stack', 'cv', 'contact', 'clear']
 
 export function mountTerminal(root: HTMLElement, session: TerminalSession): void {
-  const outputEl = root.querySelector<HTMLElement>('[data-term-output]')
-  const formEl = root.querySelector<HTMLFormElement>('[data-term-form]')
-  const inputEl = root.querySelector<HTMLInputElement>('[data-term-input]')
-  const promptEl = root.querySelector<HTMLElement>('[data-term-ps1]')
-  if (!outputEl || !formEl || !inputEl) return
-
-  // Narrowing does not survive into the hoisted function declarations below.
-  const output = outputEl
-  const form = formEl
-  const input = inputEl
+  const q = <T extends HTMLElement>(s: string) => root.querySelector<T>(s)
+  const output = q('[data-term-output]')
+  const form = q<HTMLFormElement>('[data-term-form]')
+  const input = q<HTMLInputElement>('[data-term-input]')
+  const promptEl = q('[data-term-ps1]')
+  if (!output || !form || !input) return
 
   // The prerendered input ships disabled, so a visitor without JavaScript sees an
   // inert prompt rather than one that silently swallows what they type.
@@ -46,31 +42,44 @@ export function mountTerminal(root: HTMLElement, session: TerminalSession): void
   output.setAttribute('aria-label', translate(session.locale, 'terminal.outputLabel'))
 
   let cursor = session.history.length
-  const placeholderEl = root.querySelector<HTMLElement>('[data-term-placeholder]')
-  const ghostEl = root.querySelector<HTMLElement>('[data-term-ghost]')
+  const placeholderEl = q('[data-term-placeholder]')
+  const ghostEl = q('[data-term-ghost]')
+  const cursorEl = q('[data-term-cursor]')
   let suggestionIndex = 0
+
+  const fade = (o = '') => {
+    if (placeholderEl) placeholderEl.style.opacity = o
+    if (cursorEl) cursorEl.style.opacity = o
+  }
 
   const syncCursor = () => {
     const val = input.value
     const text = val ? val.slice(0, input.selectionStart ?? val.length) : SUGGESTIONS[suggestionIndex]
+    fade()
     if (placeholderEl) placeholderEl.textContent = val ? '' : text
     if (ghostEl) ghostEl.textContent = text
   }
 
   setInterval(() => {
-    if (!input.value) {
-      suggestionIndex = (suggestionIndex + 1) % SUGGESTIONS.length
-      syncCursor()
+    if (!input.value && placeholderEl) {
+      fade('0')
+      setTimeout(() => {
+        if (!input.value) {
+          suggestionIndex = (suggestionIndex + 1) % 8
+          syncCursor()
+        }
+      }, 280)
     }
   }, 3500)
 
-  function scrollTerminal(): void {
-    const b = (e: Element) => e.getBoundingClientRect()
-    const d = Math.max(b(root.closest('section') ?? root).top - 80, b(root).bottom - innerHeight + 80)
+  const scrollTerminal = () => {
+    const s = root.closest('section') ?? root
+    const d = Math.max(s.getBoundingClientRect().top - 80, root.getBoundingClientRect().bottom - innerHeight + 80)
     if (d > 2) smoothScrollBy(d)
   }
+  const follow = () => requestAnimationFrame(() => { root.scrollTop = root.scrollHeight; scrollTerminal() })
 
-  ;['input', 'keyup', 'click', 'select'].forEach((e) => input.addEventListener(e, syncCursor))
+  for (const e of ['input', 'keyup', 'click', 'select']) input.addEventListener(e, syncCursor)
   input.addEventListener('keydown', () => requestAnimationFrame(syncCursor))
   input.addEventListener('focus', scrollTerminal)
   syncCursor()
@@ -82,7 +91,7 @@ export function mountTerminal(root: HTMLElement, session: TerminalSession): void
    */
   const echoPrompt = () => promptEl ? (promptEl.cloneNode(true) as HTMLElement) : null
 
-  function applyEffect(effect: Effect): void {
+  const applyEffect = (effect: Effect) => {
     switch (effect.type) {
       case 'clear':
         output.replaceChildren()
@@ -109,7 +118,7 @@ export function mountTerminal(root: HTMLElement, session: TerminalSession): void
     }
   }
 
-  function run(raw: string): void {
+  const run = (raw: string) => {
     const trimmed = raw.trim()
 
     // Empty input leaves no trace and no history entry (error contract).
@@ -131,11 +140,8 @@ export function mountTerminal(root: HTMLElement, session: TerminalSession): void
     cursor = session.history.length
 
     if (result.effect) applyEffect(result.effect)
-    requestAnimationFrame(() => {
-      root.scrollTop = root.scrollHeight
-      scrollTerminal()
-      input.focus({ preventScroll: true })
-    })
+    follow()
+    input.focus({ preventScroll: true })
   }
 
   form.addEventListener('submit', (e) => {
@@ -163,7 +169,7 @@ export function mountTerminal(root: HTMLElement, session: TerminalSession): void
       const val = input.value.trim()
       const idx = SUGGESTIONS.indexOf(val)
       if (!val || idx !== -1) {
-        if (idx !== -1) suggestionIndex = (idx + 1) % SUGGESTIONS.length
+        if (idx !== -1) suggestionIndex = (idx + 1) % 8
         input.value = `${SUGGESTIONS[suggestionIndex]} `
         syncCursor()
         return
@@ -185,16 +191,13 @@ export function mountTerminal(root: HTMLElement, session: TerminalSession): void
           }),
         )
         output.append(block)
-        requestAnimationFrame(() => {
-          root.scrollTop = root.scrollHeight
-          scrollTerminal()
-        })
+        follow()
       }
     }
   })
 
   root.addEventListener('keydown', (e) => {
-    if (document.activeElement !== input && !e.ctrlKey && !e.metaKey && (e.key.length === 1 || e.key === 'Tab' || e.key === 'Backspace')) input.focus()
+    if (document.activeElement !== input && !e.ctrlKey && !e.metaKey && (e.key.length === 1 || e.key === 'Tab')) input.focus()
   })
   root.addEventListener('mouseup', () => getSelection()?.toString() || input.focus())
 }
