@@ -146,5 +146,8 @@ export function trailFor(route: Route, locale: Locale, leafLabel?: string): Crum
 
     case 'privacy':
       return [home, { labelKey: 'privacy.title', href: null }]
+
+    case 'mcp':
+      return [home, { label: 'H0wZy/mcp', href: null }]
   }
 }

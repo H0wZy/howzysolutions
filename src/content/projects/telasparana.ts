@@ -4,7 +4,7 @@ export const telasparana: Project = {
   id: 'telasparana',
   name: 'Telas Paraná',
   kind: 'client',
-  state: 'production',
+  state: 'paused',
   context: {
     en: 'Telas Paraná: perimeter fencing and protection, Londrina/PR. 40 years, three generations.',
     pt: 'Telas Paraná: cercamento e proteção perimetral, Londrina/PR. 40 anos, três gerações.',
@@ -14,8 +14,8 @@ export const telasparana: Project = {
   wakatimeProject: 'telasparana',
 
   summary: {
-    en: 'Conversion site, lead capture and customer authentication for a traditional fencing company, on Cloud Run and provisioned entirely by Terraform.',
-    pt: 'Site de conversão, captura de leads e autenticação de cliente para uma empresa tradicional de cercamento, em Cloud Run e provisionado inteiramente por Terraform.',
+    en: 'Conversion site, lead capture and customer authentication for a traditional fencing company, built on Cloud Run and provisioned by Terraform. The project is currently discontinued and paused on hiatus awaiting opportunity.',
+    pt: 'Site de conversão, captura de leads e autenticação de cliente para uma empresa tradicional de cercamento, em Cloud Run e provisionado por Terraform. O projeto está atualmente descontinuado e em hiato aguardando oportunidade.',
   },
 
   problem: {
@@ -65,11 +65,13 @@ export const telasparana: Project = {
 
   limitations: {
     en: [
+      'Project paused on hiatus: active development and maintenance are discontinued for now awaiting opportunity, and the public Google Cloud Run deployment has been decommissioned.',
       'Allowed-hosts validation is deferred, and the README says why: pinning the wrong list takes the Cloud Run deployment down, and the gain is marginal behind the existing setup.',
       'The HS256 signing secret is shared between the users API and the BFF. Migrating to RS256 is recorded as low priority rather than as an oversight.',
       'E-mail verification on traditional signup is still pending. Google login already arrives with a verified address, so the gap only affects one of the two signup paths.',
     ],
     pt: [
+      'Projeto pausado em hiato: desenvolvimento ativo e manutenção foram descontinuados por enquanto aguardando oportunidade, e o deploy público no Google Cloud Run foi desativado.',
       'A validação de AllowedHosts está adiada, e o README diz o motivo: fixar a lista errada derruba o deploy no Cloud Run, e o ganho é marginal diante do que já existe.',
       'O segredo de assinatura HS256 é compartilhado entre a users-api e o BFF. A migração para RS256 está registrada como baixa prioridade, não como descuido.',
       'A verificação de e-mail no cadastro tradicional continua pendente. O login Google já chega com endereço verificado, então a lacuna afeta só um dos dois caminhos de cadastro.',

@@ -17,6 +17,7 @@ export function routes(): Array<{ pathname: string; locale: Locale }> {
     { page: 'home' },
     { page: 'cv' },
     { page: 'privacy' },
+    { page: 'mcp' },
     ...Array.from({ length: total }, (_, i) => ({ page: 'workIndex' as const, number: i + 1 })),
     ...content.projects.map((p) => ({ page: 'work' as const, id: p.id })),
   ]
@@ -78,6 +79,16 @@ export function metaFor(pathname: string): PageMeta {
     return {
       title: `${translate(locale, 'privacy.title')} · ${content.profile.name}`,
       description: translate(locale, 'privacy.metaDescription'),
+      ...social,
+    }
+  }
+  if (route.page === 'mcp') {
+    return {
+      title: `H0wZy/mcp · Multi-Agent MCP Hub · ${content.profile.name}`,
+      description:
+        locale === 'pt'
+          ? 'Hub MCP Multi-Agente definitivo e CLI em Go conectando Claude Code, OpenAI Codex e Google Antigravity.'
+          : 'The Ultimate Multi-Agent MCP Hub and Go CLI connecting Claude Code, OpenAI Codex, and Google Antigravity.',
       ...social,
     }
   }

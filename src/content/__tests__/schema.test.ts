@@ -17,13 +17,14 @@ const techIds = new Set(technologies.map((t) => t.id))
 const each = (fn: (p: Project) => void) => projects.forEach(fn)
 
 describe('project records', () => {
-  it('covers all eight repositories', () => {
-    expect(projects).toHaveLength(8)
+  it('covers all nine repositories', () => {
+    expect(projects).toHaveLength(9)
     expect(projects.map((p) => p.id).sort()).toEqual(
       [
         'authsys',
         'generative-ai-e2',
         'howzysolutions',
+        'mcp',
         'selzler-construtora',
         'studiobiasantos',
         'telasparana',

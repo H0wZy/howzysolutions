@@ -29,6 +29,7 @@ export const PROJECT_STATE = {
   delivered: 'state.delivered',
   functional: 'state.functional',
   'in-progress': 'state.inProgress',
+  paused: 'state.paused',
   skeleton: 'state.skeleton',
 } as const satisfies Record<string, StringKey>
 export type ProjectState = keyof typeof PROJECT_STATE

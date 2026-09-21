@@ -4,7 +4,7 @@ export const selzlerConstrutora: Project = {
   id: 'selzler-construtora',
   name: 'Selzler Construtora',
   kind: 'client',
-  state: 'functional',
+  state: 'paused',
   context: {
     en: 'Selzler Arquitetura e Engenharia: public, industrial and residential construction, Toledo/PR. 40 years.',
     pt: 'Selzler Arquitetura e Engenharia: obras públicas, industriais e residenciais, Toledo/PR. 40 anos.',
@@ -14,13 +14,13 @@ export const selzlerConstrutora: Project = {
   wakatimeProject: 'selzler-construtora',
 
   summary: {
-    en: 'Public site and admin panel letting the partners publish their own work, built in ten days on a modular monolith with structure and auth inherited from Telas Paraná.',
-    pt: 'Site público e painel admin permitindo aos sócios publicar o próprio trabalho, construído em dez dias sobre um monolito modular com estrutura e auth herdados do Telas Paraná.',
+    en: 'Public site and admin panel letting the partners publish their own work, built in ten days on a modular monolith with structure and auth inherited from Telas Paraná. Currently paused on hiatus.',
+    pt: 'Site público e painel admin permitindo aos sócios publicar o próprio trabalho, construído em dez dias sobre um monolito modular com estrutura e auth herdados do Telas Paraná. Atualmente pausado em hiato.',
   },
 
   problem: {
-    en: 'The existing site is static WordPress. Every completed project, every new client in the portfolio, required calling a developer. The partners had no way to publish their own work.',
-    pt: 'O site atual é WordPress estático. Cada obra concluída, cada cliente novo no portfólio, exigia acionar um desenvolvedor. Os sócios não tinham como publicar o próprio trabalho.',
+    en: 'The existing company domain selzlerconstrutora.com.br hosts an external legacy WordPress site not authored by Marcos. Every completed project and client record required calling a developer. The partners needed an independent platform to publish their work.',
+    pt: 'O domínio existente da empresa selzlerconstrutora.com.br hospeda um WordPress legado externo não desenvolvido por Marcos. Cada obra concluída e registro exigia acionar um desenvolvedor. Os sócios precisavam de uma plataforma independente para publicar seu trabalho.',
   },
 
   capabilities: {
@@ -65,12 +65,14 @@ export const selzlerConstrutora: Project = {
 
   limitations: {
     en: [
-      'Not deployed. Everything through v0.4 is complete and working locally, but v1.0, production deployment on its own domain, is still open, so this is presented as functional rather than in production.',
+      'Project paused on hiatus: the platform was fully developed through v0.4 and paused awaiting opportunity before replacing the legacy external WordPress domain selzlerconstrutora.com.br.',
+      'Not deployed in production. Everything through v0.4 is complete and working locally, but production rollout remains open.',
       'The frontend test suite covers structural invariants, not appearance. Layout and accessibility still require direct measurement in a real browser.',
       'A designed next sprint exists on paper only: a local vector RAG over the documentation, exposed to the agents through an MCP server.',
     ],
     pt: [
-      'Sem deploy. Tudo até a v0.4 está completo e funcionando localmente, mas a v1.0, deploy em produção com domínio próprio, continua aberta, então é apresentado como funcional e não como em produção.',
+      'Projeto pausado em hiato: a plataforma foi totalmente desenvolvida até a v0.4 e pausada aguardando oportunidade antes de substituir o domínio WordPress legado externo selzlerconstrutora.com.br.',
+      'Sem deploy em produção. Tudo até a v0.4 está completo e funcionando localmente, mas a entrada em produção continua aberta.',
       'A suíte de testes do frontend cobre invariantes estruturais, não aparência. Layout e acessibilidade ainda exigem medição direta em navegador real.',
       'Há uma próxima sprint desenhada que existe só no papel: RAG vetorial local sobre a documentação, exposto aos agentes por servidor MCP.',
     ],

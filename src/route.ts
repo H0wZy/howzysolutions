@@ -15,6 +15,7 @@ export type Route =
   | { page: 'work'; id: string }
   | { page: 'cv' }
   | { page: 'privacy' }
+  | { page: 'mcp' }
 
 export type Location = { route: Route; locale: Locale }
 
@@ -40,6 +41,7 @@ export function parseRoute(rest: string): Route {
   // shaped like, and the word a recruiter scans for in both languages.
   if (rest === '/cv/' || rest === '/cv') return { page: 'cv' }
   if (rest === '/privacy-policy/' || rest === '/privacy-policy') return { page: 'privacy' }
+  if (rest === '/mcp/' || rest === '/mcp') return { page: 'mcp' }
   if (rest === '/works/' || rest === '/works') return { page: 'workIndex', number: 1 }
   const pageMatch = /^\/works\/(\d+)\/?$/.exec(rest)
   if (pageMatch) return { page: 'workIndex', number: Number(pageMatch[1]) }
@@ -61,11 +63,13 @@ export function pathFor(route: Route, locale: Locale): string {
         ? '/cv/'
         : route.page === 'privacy'
           ? '/privacy-policy/'
-          : route.page === 'workIndex'
-            ? route.number <= 1
-              ? '/works/'
-              : `/works/${route.number}/`
-            : '/'
+          : route.page === 'mcp'
+            ? '/mcp/'
+            : route.page === 'workIndex'
+              ? route.number <= 1
+                ? '/works/'
+                : `/works/${route.number}/`
+              : '/'
   if (locale === DEFAULT_LOCALE) return rest
   return rest === '/' ? `/${locale}/` : `/${locale}${rest}`
 }

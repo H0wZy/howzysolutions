@@ -23,6 +23,13 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://howzysolutions.com/mcp/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://howzysolutions.com/mcp/" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://howzysolutions.com/pt/mcp/" />
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://howzysolutions.com/works/</loc>
     <xhtml:link rel="alternate" hreflang="en" href="https://howzysolutions.com/works/" />
     <xhtml:link rel="alternate" hreflang="pt" href="https://howzysolutions.com/pt/works/" />
@@ -33,6 +40,13 @@
     <loc>https://howzysolutions.com/works/2/</loc>
     <xhtml:link rel="alternate" hreflang="en" href="https://howzysolutions.com/works/2/" />
     <xhtml:link rel="alternate" hreflang="pt" href="https://howzysolutions.com/pt/works/2/" />
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://howzysolutions.com/works/mcp/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://howzysolutions.com/works/mcp/" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://howzysolutions.com/pt/works/mcp/" />
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -114,6 +128,13 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://howzysolutions.com/pt/mcp/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://howzysolutions.com/mcp/" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://howzysolutions.com/pt/mcp/" />
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://howzysolutions.com/pt/works/</loc>
     <xhtml:link rel="alternate" hreflang="en" href="https://howzysolutions.com/works/" />
     <xhtml:link rel="alternate" hreflang="pt" href="https://howzysolutions.com/pt/works/" />
@@ -124,6 +145,13 @@
     <loc>https://howzysolutions.com/pt/works/2/</loc>
     <xhtml:link rel="alternate" hreflang="en" href="https://howzysolutions.com/works/2/" />
     <xhtml:link rel="alternate" hreflang="pt" href="https://howzysolutions.com/pt/works/2/" />
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://howzysolutions.com/pt/works/mcp/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://howzysolutions.com/works/mcp/" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://howzysolutions.com/pt/works/mcp/" />
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
