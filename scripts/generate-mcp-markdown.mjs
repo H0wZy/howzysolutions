@@ -75,6 +75,17 @@ Apos configurado, o Claude Code pode invocar ferramentas do OpenAI Codex e Googl
 - **HTTP / SSE**: \`https://mcp.howzysolutions.com/sse\`
 - **CLI (Local Stdio)**: \`npx @h0wzy/mcp\`
 
+## Delegacao Multi-Agente & Ferramentas
+
+Como instruir o Claude Code a delegar ao Antigravity e Codex via 8 ferramentas espelhadas:
+
+| Antigravity (Gemini 3.1) | Codex (GPT-5.6 / GPT-6) | Finalidade | Prompt Exemplo |
+| --- | --- | --- | --- |
+| \`ask_antigravity\` | \`ask_codex\` | Consultas e segunda opiniao | "Peca uma segunda opiniao ao Antigravity sobre este schema de banco." |
+| \`review_antigravity\` | \`review_codex\` | Code review e seguranca | "Faca um review do meu git diff usando Codex para checar seguranca." |
+| \`brainstorm_antigravity\` | \`brainstorm_codex\` | Trade-offs arquiteturais | "Faca um brainstorming com Codex comparando Redis e Cloudflare KV para cache." |
+| \`plan_antigravity\` | \`plan_codex\` | Planos de implementacao | "Gere um plano de implementacao com Antigravity para refatorar auth." |
+
 ## Pacotes do Monorepo
 
 | Pacote | Descricao | Versao |
@@ -149,6 +160,17 @@ Once registered, Claude Code can autonomously route tasks to OpenAI Codex and Go
 - **Streamable HTTP (Recommended)**: \`https://mcp.howzysolutions.com/mcp\`
 - **HTTP / SSE**: \`https://mcp.howzysolutions.com/sse\`
 - **CLI (Local Stdio)**: \`npx @h0wzy/mcp\`
+
+## Multi-Agent Delegation & Tools
+
+How to prompt Claude Code to delegate to Antigravity and Codex across 8 mirrored tools:
+
+| Antigravity (Gemini 3.1) | Codex (GPT-5.6 / GPT-6) | Purpose | Example Prompt |
+| --- | --- | --- | --- |
+| \`ask_antigravity\` | \`ask_codex\` | Inquiries and second opinions | "Ask Antigravity for a second opinion on this database schema." |
+| \`review_antigravity\` | \`review_codex\` | Code and security reviews | "Review my git diff using Codex for security edge cases." |
+| \`brainstorm_antigravity\` | \`brainstorm_codex\` | Architectural trade-offs | "Brainstorm caching strategies with Codex comparing Redis and Cloudflare KV." |
+| \`plan_antigravity\` | \`plan_codex\` | Implementation roadmaps | "Generate an implementation plan with Antigravity to refactor auth." |
 
 ## Monorepo Packages
 

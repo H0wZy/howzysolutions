@@ -45,6 +45,17 @@ Apos configurado, o Claude Code pode invocar ferramentas do OpenAI Codex e Googl
 - **HTTP / SSE**: `https://mcp.howzysolutions.com/sse`
 - **CLI (Local Stdio)**: `npx @h0wzy/mcp`
 
+## Delegacao Multi-Agente & Ferramentas
+
+Como instruir o Claude Code a delegar ao Antigravity e Codex via 8 ferramentas espelhadas:
+
+| Antigravity (Gemini 3.1) | Codex (GPT-5.6 / GPT-6) | Finalidade | Prompt Exemplo |
+| --- | --- | --- | --- |
+| `ask_antigravity` | `ask_codex` | Consultas e segunda opiniao | "Peca uma segunda opiniao ao Antigravity sobre este schema de banco." |
+| `review_antigravity` | `review_codex` | Code review e seguranca | "Faca um review do meu git diff usando Codex para checar seguranca." |
+| `brainstorm_antigravity` | `brainstorm_codex` | Trade-offs arquiteturais | "Faca um brainstorming com Codex comparando Redis e Cloudflare KV para cache." |
+| `plan_antigravity` | `plan_codex` | Planos de implementacao | "Gere um plano de implementacao com Antigravity para refatorar auth." |
+
 ## Pacotes do Monorepo
 
 | Pacote | Descricao | Versao |
