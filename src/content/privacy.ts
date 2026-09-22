@@ -1,4 +1,4 @@
-import type { PrivacyPolicy } from './types'
+import type { LegalDocument } from './types'
 
 /**
  * The privacy policy of H0wZy Solutions, served at /privacy-policy/.
@@ -14,7 +14,7 @@ import type { PrivacyPolicy } from './types'
  * docs/tiktok-shop/partner-center/PRIVACY_POLICY.md; a change to either is a
  * change to both, and `updated` moves with it.
  */
-export const privacy: PrivacyPolicy = {
+export const privacy: LegalDocument = {
   updated: '2026-09-19',
 
   intro: {

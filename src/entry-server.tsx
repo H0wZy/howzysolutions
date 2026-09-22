@@ -1,6 +1,7 @@
 import { renderToString } from 'react-dom/server'
 import App from './App'
-import { content } from './content'
+import { Legal } from './pages/Legal'
+import { content, terms } from './content'
 import { LOCALES, type Locale } from './content/i18n/types'
 import { translate } from './content/i18n/translate'
 import { workPage } from './content/types'
@@ -17,6 +18,10 @@ export function routes(): Array<{ pathname: string; locale: Locale }> {
     { page: 'home' },
     { page: 'cv' },
     { page: 'privacy' },
+    { page: 'terms' },
+    // One document per app, because a store reviews one app and asks for its
+    // own terms URL (/terms-of-service/viralvideogen/).
+    ...(terms.projects ?? []).map((app) => ({ page: 'termsApp' as const, id: app.id })),
     { page: 'mcp' },
     ...Array.from({ length: total }, (_, i) => ({ page: 'workIndex' as const, number: i + 1 })),
     ...content.projects.map((p) => ({ page: 'work' as const, id: p.id })),
@@ -82,6 +87,21 @@ export function metaFor(pathname: string): PageMeta {
       ...social,
     }
   }
+  if (route.page === 'terms') {
+    return {
+      title: `${translate(locale, 'terms.title')} · ${content.profile.name}`,
+      description: translate(locale, 'terms.metaDescription'),
+      ...social,
+    }
+  }
+  if (route.page === 'termsApp') {
+    const app = (terms.projects ?? []).find((a) => a.id === route.id)
+    return {
+      title: `${app?.name ?? route.id} · ${translate(locale, 'terms.title')} · ${content.profile.name}`,
+      description: app?.summary[locale][0] ?? translate(locale, 'terms.metaDescription'),
+      ...social,
+    }
+  }
   if (route.page === 'mcp') {
     return {
       title: `H0wZy/mcp · Multi-Agent MCP Hub · ${content.profile.name}`,
@@ -107,6 +127,25 @@ export function metaFor(pathname: string): PageMeta {
  * to emit markup that hydration can attach to.
  */
 export function render(pathname: string): string {
+  const { route, locale } = locationFor(pathname)
+  /*
+   * The legal documents render here rather than inside App, and nothing on the
+   * client imports them (src/main.tsx does not hydrate these routes). They are
+   * static prose with no handler on them, so shipping the component and both
+   * records in the entry chunk bought nothing and cost about 3 KB gzipped
+   * against a budget with none to spare.
+   */
+  if (route.page === 'privacy' || route.page === 'terms' || route.page === 'termsApp') {
+    return renderToString(
+      <Legal
+        content={content}
+        kind={route.page === 'privacy' ? 'privacy' : 'terms'}
+        appId={route.page === 'termsApp' ? route.id : undefined}
+        locale={locale}
+        pathname={pathname}
+      />,
+    )
+  }
   return renderToString(<App pathname={pathname} />)
 }
 

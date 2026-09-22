@@ -24,6 +24,21 @@ describe('the old /privacy/ link', () => {
   })
 })
 
+/**
+ * The app was renamed from viralvideogen to vvv after its terms URL had been
+ * given out. This fails if the old path stops landing on the new page.
+ */
+describe("the app's old terms URL", () => {
+  it.each(LOCALES)("%s: 301s to the app's own terms page", (locale) => {
+    const target = pathFor({ page: 'termsApp', id: 'vvv' }, locale)
+    const prefix = locale === 'en' ? '' : `/${locale}`
+    const old = `${prefix}/terms-of-service/viralvideogen/`
+    for (const from of [old, old.slice(0, -1)]) {
+      expect(rules, from).toContainEqual([from, target, '301'])
+    }
+  })
+})
+
 describe('the old /work/ links', () => {
   it.each(LOCALES)('%s: 301s to the works route', (locale) => {
     const target = pathFor({ page: 'workIndex', number: 1 }, locale)

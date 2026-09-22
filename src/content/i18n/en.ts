@@ -279,10 +279,20 @@ export const en = {
   'privacy.title': 'Privacy policy',
   'privacy.metaDescription':
     'How H0wZy Solutions handles personal data on this website and in each of its projects, including viralvideogen, its private TikTok Shop app.',
-  'privacy.updated': 'Last updated {date}.',
-  'privacy.contact': 'Contact:',
   'privacy.projects': 'Project policies',
   'privacy.aboutProject': 'read the project record',
+
+  // Terms page
+  'terms.title': 'Terms of service',
+  'terms.apps': 'App terms',
+  'terms.metaDescription':
+    'The terms under which H0wZy Solutions publishes this portfolio: acceptable use, ownership of the work shown, no warranty, and Brazilian law.',
+
+  // Shared by both legal documents
+  'legal.updated': 'Last updated {date}.',
+  'legal.contact': 'Contact:',
+  'legal.general': 'read the general terms',
+  'legal.privacyFor': 'privacy policy for this app',
 } as const
 
 export type StringKey = keyof typeof en

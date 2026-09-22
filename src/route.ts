@@ -15,6 +15,8 @@ export type Route =
   | { page: 'work'; id: string }
   | { page: 'cv' }
   | { page: 'privacy' }
+  | { page: 'terms' }
+  | { page: 'termsApp'; id: string }
   | { page: 'mcp' }
 
 export type Location = { route: Route; locale: Locale }
@@ -41,6 +43,9 @@ export function parseRoute(rest: string): Route {
   // shaped like, and the word a recruiter scans for in both languages.
   if (rest === '/cv/' || rest === '/cv') return { page: 'cv' }
   if (rest === '/privacy-policy/' || rest === '/privacy-policy') return { page: 'privacy' }
+  if (rest === '/terms-of-service/' || rest === '/terms-of-service') return { page: 'terms' }
+  const appMatch = /^\/terms-of-service\/([a-z0-9-]+)\/?$/.exec(rest)
+  if (appMatch) return { page: 'termsApp', id: appMatch[1] }
   if (rest === '/mcp/' || rest === '/mcp') return { page: 'mcp' }
   if (rest === '/works/' || rest === '/works') return { page: 'workIndex', number: 1 }
   const pageMatch = /^\/works\/(\d+)\/?$/.exec(rest)
@@ -54,24 +59,39 @@ export function locationFor(pathname: string): Location {
   return { route: parseRoute(rest), locale }
 }
 
+/** Routes whose path carries nothing from the route but its name. */
+const FIXED = {
+  home: '/',
+  cv: '/cv/',
+  privacy: '/privacy-policy/',
+  terms: '/terms-of-service/',
+  mcp: '/mcp/',
+} as const satisfies Record<string, string>
+
 /** The canonical path for a route in a given locale. */
 export function pathFor(route: Route, locale: Locale): string {
   const rest =
     route.page === 'work'
       ? `/works/${route.id}/`
-      : route.page === 'cv'
-        ? '/cv/'
-        : route.page === 'privacy'
-          ? '/privacy-policy/'
-          : route.page === 'mcp'
-            ? '/mcp/'
-            : route.page === 'workIndex'
-              ? route.number <= 1
-                ? '/works/'
-                : `/works/${route.number}/`
-              : '/'
+      : route.page === 'termsApp'
+        ? `/terms-of-service/${route.id}/`
+        : route.page === 'workIndex'
+          ? route.number <= 1
+            ? '/works/'
+            : `/works/${route.number}/`
+          : FIXED[route.page]
   if (locale === DEFAULT_LOCALE) return rest
   return rest === '/' ? `/${locale}/` : `/${locale}${rest}`
+}
+
+/**
+ * Routes whose document is complete as prerendered HTML: no handler, no state,
+ * nothing for React to attach to. src/main.tsx skips hydration for these and
+ * src/App.tsx does not import them, which is what keeps them out of the client
+ * bundle (src/entry-server.tsx renders them instead).
+ */
+export function isStaticDocument(route: Route): boolean {
+  return route.page === 'privacy' || route.page === 'terms' || route.page === 'termsApp'
 }
 
 /** The same page in another locale — what the language control links to. */

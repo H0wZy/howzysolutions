@@ -153,11 +153,10 @@ export type ContentBundle = {
   stats: CodingStatsSnapshot
   /** One module, read by the page, the rail and the terminal alike (FR-067). */
   cv: CvView
-  privacy: PrivacyPolicy
 }
 
 /** Prose paragraphs, then an optional list. `id` is the section's anchor. */
-export type PrivacySection = {
+export type LegalSection = {
   id: string
   heading: Localized
   body: Localized<string[]>
@@ -165,22 +164,30 @@ export type PrivacySection = {
 }
 
 /**
- * The /privacy/ page: a general policy, then one entry per project that
- * handles personal data beyond the website. A project's `id` is both its
- * anchor on the page and, when it has one, its record in src/content/projects.
+ * A dated legal document: the privacy policy at /privacy-policy/ and the terms
+ * of service at /terms-of-service/. One shape, so one page component renders
+ * both. Deliberately not part of `ContentBundle`: both are prerendered and
+ * never hydrated, so neither ships in the client bundle (src/content/index.ts).
+ *
+ * `projects` is the per-entry half: for the policy, one entry per project that
+ * handles personal data beyond the website; for the terms, one per app that
+ * needs terms of its own. An `id` is that entry's anchor on the index, and, on
+ * the terms, its own page at /terms-of-service/<id>/. A document with no such
+ * entries omits the field rather than carrying an empty list nobody can tell
+ * from an oversight.
  */
-export type PrivacyPolicy = {
+export type LegalDocument = {
   /** ISO date, rendered as-is. Moves whenever the text does. */
   updated: string
   intro: Localized
-  sections: PrivacySection[]
-  projects: Array<{
+  sections: LegalSection[]
+  projects?: Array<{
     id: string
     name: string
     tagline: Localized
     /** What the project is, for a reader who has never heard of it. */
     summary: Localized<string[]>
-    sections: PrivacySection[]
+    sections: LegalSection[]
   }>
 }
 

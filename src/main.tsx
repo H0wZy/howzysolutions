@@ -21,7 +21,7 @@ import { mountTerminal } from './enhance/terminal/mount'
 import { initThemeControl } from './enhance/theme-control'
 import { initLocaleControl } from './enhance/locale-control'
 import { smoothScrollBy } from './enhance/scroll'
-import { locationFor } from './route'
+import { isStaticDocument, locationFor } from './route'
 
 // The document's locale is whatever URL served it — no negotiation needed.
 const pathname = window.location.pathname
@@ -62,12 +62,16 @@ function enhance() {
   if (t) mountTerminal(t, { history: [], locale })
 }
 
-if (root) {
+if (root && !isStaticDocument(locationFor(pathname).route)) {
   // HydratedApp owns the effect that guarantees `enhance` runs after the
   // hydration commit rather than alongside it. See its header for why.
   hydrateRoot(root, <HydratedApp pathname={pathname} onHydrated={enhance} />)
 } else {
-  // No #root means no prerendered document to hydrate. The enhancements are
-  // still the right thing to run: they are what makes a served page work.
+  /*
+   * A legal document, or no #root at all. Both are complete without React:
+   * the controls in the chrome bar are build-time markup that src/enhance/
+   * wires by hand (see ThemeControl and LocaleControl), so the enhancements
+   * ARE what makes the page work, hydration or not.
+   */
   enhance()
 }
