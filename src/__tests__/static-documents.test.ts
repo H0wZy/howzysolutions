@@ -41,7 +41,7 @@ describe('the legal documents stay out of the client bundle', () => {
     expect(read('../main.tsx')).toMatch(/isStaticDocument/)
     for (const { pathname } of routes()) {
       const { route } = locationFor(pathname)
-      const legal = ['privacy', 'terms', 'termsApp'].includes(route.page)
+      const legal = ['privacy', 'terms', 'legalApp'].includes(route.page)
       expect(isStaticDocument(route), pathname).toBe(legal)
     }
   })
@@ -50,11 +50,16 @@ describe('the legal documents stay out of the client bundle', () => {
 describe('every legal route is a real prerendered document', () => {
   const emitted = new Set(routes().map((r) => r.pathname))
 
-  it.each(LOCALES)('%s: emits the index and one page per app', (locale) => {
-    expect(emitted).toContain(pathFor({ page: 'privacy' }, locale))
-    expect(emitted).toContain(pathFor({ page: 'terms' }, locale))
-    for (const app of terms.projects ?? []) {
-      expect(emitted).toContain(pathFor({ page: 'termsApp', id: app.id }, locale))
+  it.each(LOCALES)('%s: emits each index and one page per app of each', (locale) => {
+    for (const [doc, document] of [
+      ['privacy', privacy],
+      ['terms', terms],
+    ] as const) {
+      expect(emitted).toContain(pathFor({ page: doc }, locale))
+      expect(document.projects?.length, `${doc} has no app block`).toBeGreaterThan(0)
+      for (const app of document.projects ?? []) {
+        expect(emitted).toContain(pathFor({ page: 'legalApp', doc, id: app.id }, locale))
+      }
     }
   })
 })

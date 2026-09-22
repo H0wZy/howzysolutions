@@ -60,21 +60,41 @@ describe('the legal documents (spec: terms of service)', () => {
     })
   })
 
-  it("resolves an app's own terms page", () => {
+  it("resolves an app's own page in either document", () => {
     expect(locationFor('/terms-of-service/vvv/').route).toEqual({
-      page: 'termsApp',
+      page: 'legalApp',
+      doc: 'terms',
       id: 'vvv',
+    })
+    expect(locationFor('/privacy-policy/vvv').route).toEqual({
+      page: 'legalApp',
+      doc: 'privacy',
+      id: 'vvv',
+    })
+    expect(locationFor('/pt/privacy-policy/vvv/')).toEqual({
+      route: { page: 'legalApp', doc: 'privacy', id: 'vvv' },
+      locale: 'pt',
     })
   })
 
-  it('builds both terms paths per locale', () => {
+  it('builds every legal path per locale', () => {
     expect(pathFor({ page: 'terms' }, 'en')).toBe('/terms-of-service/')
     expect(pathFor({ page: 'terms' }, 'pt')).toBe('/pt/terms-of-service/')
-    expect(pathFor({ page: 'termsApp', id: 'vvv' }, 'en')).toBe('/terms-of-service/vvv/')
-    expect(pathFor({ page: 'termsApp', id: 'vvv' }, 'pt')).toBe('/pt/terms-of-service/vvv/')
+    expect(pathFor({ page: 'legalApp', doc: 'terms', id: 'vvv' }, 'en')).toBe(
+      '/terms-of-service/vvv/',
+    )
+    expect(pathFor({ page: 'legalApp', doc: 'terms', id: 'vvv' }, 'pt')).toBe(
+      '/pt/terms-of-service/vvv/',
+    )
+    expect(pathFor({ page: 'legalApp', doc: 'privacy', id: 'vvv' }, 'en')).toBe(
+      '/privacy-policy/vvv/',
+    )
+    expect(pathFor({ page: 'legalApp', doc: 'privacy', id: 'vvv' }, 'pt')).toBe(
+      '/pt/privacy-policy/vvv/',
+    )
   })
 
-  it('keeps the privacy policy where its app review left it', () => {
+  it('keeps the privacy policy index where its app review left it', () => {
     expect(pathFor({ page: 'privacy' }, 'en')).toBe('/privacy-policy/')
     expect(locationFor('/privacy-policy/').route).toEqual({ page: 'privacy' })
   })

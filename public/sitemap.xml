@@ -30,6 +30,13 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://howzysolutions.com/privacy-policy/vvv/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://howzysolutions.com/privacy-policy/vvv/" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://howzysolutions.com/pt/privacy-policy/vvv/" />
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://howzysolutions.com/terms-of-service/vvv/</loc>
     <xhtml:link rel="alternate" hreflang="en" href="https://howzysolutions.com/terms-of-service/vvv/" />
     <xhtml:link rel="alternate" hreflang="pt" href="https://howzysolutions.com/pt/terms-of-service/vvv/" />
@@ -86,9 +93,9 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://howzysolutions.com/works/viralvideogen/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://howzysolutions.com/works/viralvideogen/" />
-    <xhtml:link rel="alternate" hreflang="pt" href="https://howzysolutions.com/pt/works/viralvideogen/" />
+    <loc>https://howzysolutions.com/works/vvv/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://howzysolutions.com/works/vvv/" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://howzysolutions.com/pt/works/vvv/" />
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -149,6 +156,13 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://howzysolutions.com/pt/privacy-policy/vvv/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://howzysolutions.com/privacy-policy/vvv/" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://howzysolutions.com/pt/privacy-policy/vvv/" />
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://howzysolutions.com/pt/terms-of-service/vvv/</loc>
     <xhtml:link rel="alternate" hreflang="en" href="https://howzysolutions.com/terms-of-service/vvv/" />
     <xhtml:link rel="alternate" hreflang="pt" href="https://howzysolutions.com/pt/terms-of-service/vvv/" />
@@ -205,9 +219,9 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://howzysolutions.com/pt/works/viralvideogen/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://howzysolutions.com/works/viralvideogen/" />
-    <xhtml:link rel="alternate" hreflang="pt" href="https://howzysolutions.com/pt/works/viralvideogen/" />
+    <loc>https://howzysolutions.com/pt/works/vvv/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://howzysolutions.com/works/vvv/" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://howzysolutions.com/pt/works/vvv/" />
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>

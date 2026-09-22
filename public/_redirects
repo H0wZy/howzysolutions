@@ -7,12 +7,21 @@
 /pt/privacy/ /pt/privacy-policy/ 301
 
 # The app was renamed from viralvideogen to vvv on 2026-09-22, after its terms
-# URL had already been given out. Keep these for as long as the app exists;
+# URL had already been given out. Its policy page and its project page moved
+# with it. Keep these for as long as the app exists;
 # src/__tests__/redirects.test.ts checks them.
 /terms-of-service/viralvideogen /terms-of-service/vvv/ 301
 /terms-of-service/viralvideogen/ /terms-of-service/vvv/ 301
 /pt/terms-of-service/viralvideogen /pt/terms-of-service/vvv/ 301
 /pt/terms-of-service/viralvideogen/ /pt/terms-of-service/vvv/ 301
+/privacy-policy/viralvideogen /privacy-policy/vvv/ 301
+/privacy-policy/viralvideogen/ /privacy-policy/vvv/ 301
+/pt/privacy-policy/viralvideogen /pt/privacy-policy/vvv/ 301
+/pt/privacy-policy/viralvideogen/ /pt/privacy-policy/vvv/ 301
+/works/viralvideogen /works/vvv/ 301
+/works/viralvideogen/ /works/vvv/ 301
+/pt/works/viralvideogen /pt/works/vvv/ 301
+/pt/works/viralvideogen/ /pt/works/vvv/ 301
 
 # Legacy /work/ route migrated to /works/ on 2026-09-21.
 /work /works/ 301

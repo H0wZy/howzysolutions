@@ -3,7 +3,7 @@ import { mcp } from './mcp'
 import { telasparana } from './telasparana'
 import { selzlerConstrutora } from './selzler-construtora'
 import { generativeAiE2 } from './generative-ai-e2'
-import { viralvideogen } from './viralvideogen'
+import { vvv } from './vvv'
 import { studiobiasantos } from './studiobiasantos'
 import { howzysolutions } from './howzysolutions'
 import { terminal } from './terminal'
@@ -15,7 +15,7 @@ export const projects: Project[] = [
   telasparana,
   selzlerConstrutora,
   generativeAiE2,
-  viralvideogen,
+  vvv,
   studiobiasantos,
   howzysolutions,
   terminal,

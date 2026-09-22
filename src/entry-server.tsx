@@ -1,7 +1,7 @@
 import { renderToString } from 'react-dom/server'
 import App from './App'
 import { Legal } from './pages/Legal'
-import { content, terms } from './content'
+import { content, privacy, terms } from './content'
 import { LOCALES, type Locale } from './content/i18n/types'
 import { translate } from './content/i18n/translate'
 import { workPage } from './content/types'
@@ -12,6 +12,9 @@ import { locationFor, pathFor, type Route } from './route'
  * FR-016). English is unprefixed; Portuguese lives under /pt/. The listing
  * page count is derived from the data, never hardcoded (FR-020).
  */
+/** The two legal records, keyed by the route page that renders each index. */
+const LEGAL = { privacy, terms } as const
+
 export function routes(): Array<{ pathname: string; locale: Locale }> {
   const { total } = workPage(content.projects, 1)
   const pages: Route[] = [
@@ -19,9 +22,11 @@ export function routes(): Array<{ pathname: string; locale: Locale }> {
     { page: 'cv' },
     { page: 'privacy' },
     { page: 'terms' },
-    // One document per app, because a store reviews one app and asks for its
-    // own terms URL (/terms-of-service/viralvideogen/).
-    ...(terms.projects ?? []).map((app) => ({ page: 'termsApp' as const, id: app.id })),
+    // One document per app per record, because a store reviews one app and
+    // asks for its own terms URL and its own policy URL.
+    ...(['privacy', 'terms'] as const).flatMap((doc) =>
+      (LEGAL[doc].projects ?? []).map((app) => ({ page: 'legalApp' as const, doc, id: app.id })),
+    ),
     { page: 'mcp' },
     ...Array.from({ length: total }, (_, i) => ({ page: 'workIndex' as const, number: i + 1 })),
     ...content.projects.map((p) => ({ page: 'work' as const, id: p.id })),
@@ -94,11 +99,14 @@ export function metaFor(pathname: string): PageMeta {
       ...social,
     }
   }
-  if (route.page === 'termsApp') {
-    const app = (terms.projects ?? []).find((a) => a.id === route.id)
+  if (route.page === 'legalApp') {
+    const app = (LEGAL[route.doc].projects ?? []).find((a) => a.id === route.id)
+    const document = route.doc === 'privacy' ? 'privacy.title' : 'terms.title'
     return {
-      title: `${app?.name ?? route.id} · ${translate(locale, 'terms.title')} · ${content.profile.name}`,
-      description: app?.summary[locale][0] ?? translate(locale, 'terms.metaDescription'),
+      title: `${app?.name ?? route.id} · ${translate(locale, document)} · ${content.profile.name}`,
+      description:
+        app?.summary[locale][0] ??
+        translate(locale, route.doc === 'privacy' ? 'privacy.metaDescription' : 'terms.metaDescription'),
       ...social,
     }
   }
@@ -135,12 +143,12 @@ export function render(pathname: string): string {
    * records in the entry chunk bought nothing and cost about 3 KB gzipped
    * against a budget with none to spare.
    */
-  if (route.page === 'privacy' || route.page === 'terms' || route.page === 'termsApp') {
+  if (route.page === 'privacy' || route.page === 'terms' || route.page === 'legalApp') {
     return renderToString(
       <Legal
         content={content}
-        kind={route.page === 'privacy' ? 'privacy' : 'terms'}
-        appId={route.page === 'termsApp' ? route.id : undefined}
+        kind={route.page === 'legalApp' ? route.doc : route.page}
+        appId={route.page === 'legalApp' ? route.id : undefined}
         locale={locale}
         pathname={pathname}
       />,

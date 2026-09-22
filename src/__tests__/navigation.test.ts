@@ -49,12 +49,14 @@ describe('the breadcrumb trail', () => {
     expect(trail[1]).toEqual({ labelKey: 'cv.title', href: null })
   })
 
-  it.each(LOCALES)("%s: an app's terms sit under the terms index, under home", (locale) => {
-    const trail = trailFor({ page: 'termsApp', id: 'vvv' }, locale, 'vvv')
-    expect(trail).toHaveLength(3)
-    expect(trail[0].href).toBe(pathFor({ page: 'home' }, locale))
-    expect(trail[1].href).toBe(pathFor({ page: 'terms' }, locale))
-    expect(trail[2]).toEqual({ label: 'vvv', href: null })
+  it.each(LOCALES)("%s: an app's page sits under its own document, under home", (locale) => {
+    for (const doc of ['privacy', 'terms'] as const) {
+      const trail = trailFor({ page: 'legalApp', doc, id: 'vvv' }, locale, 'vvv')
+      expect(trail).toHaveLength(3)
+      expect(trail[0].href).toBe(pathFor({ page: 'home' }, locale))
+      expect(trail[1].href).toBe(pathFor({ page: doc }, locale))
+      expect(trail[2]).toEqual({ label: 'vvv', href: null })
+    }
   })
 })
 
@@ -66,7 +68,7 @@ describe('every trail', () => {
     { page: 'cv' },
     { page: 'privacy' },
     { page: 'terms' },
-    { page: 'termsApp', id: 'vvv' },
+    { page: 'legalApp', doc: 'terms', id: 'vvv' },
     { page: 'mcp' },
   ]
 
@@ -117,7 +119,7 @@ describe('the top-level links in the chrome bar', () => {
     { page: 'cv' },
     { page: 'privacy' },
     { page: 'terms' },
-    { page: 'termsApp', id: 'vvv' },
+    { page: 'legalApp', doc: 'terms', id: 'vvv' },
   ]
 
   const destinations: Route[] = [
@@ -188,15 +190,28 @@ describe('document outlines', () => {
     expect(legalTopicAnchors(document).map((entry) => entry.id)).toEqual(expected)
   })
 
-  it("gives every app terms an id that is both its anchor and its own page", () => {
+  it.each([
+    ['privacy', privacy, '/privacy-policy/'],
+    ['terms', terms, '/terms-of-service/'],
+  ] as const)("gives every %s app an id that is both its anchor and its own page", (doc, document, base) => {
     // /terms-of-service/#vvv is the anchor on the index and
     // /terms-of-service/vvv/ is the same block on a page of its own, which is
     // the URL a store asks for. One id, so the two can never disagree.
-    for (const app of terms.projects ?? []) {
-      expect(legalTopicAnchors(terms).map((entry) => entry.id)).toContain(app.id)
-      expect(pathFor({ page: 'termsApp', id: app.id }, 'en')).toBe(`/terms-of-service/${app.id}/`)
+    for (const app of document.projects ?? []) {
+      expect(legalTopicAnchors(document).map((entry) => entry.id)).toContain(app.id)
+      expect(pathFor({ page: 'legalApp', doc, id: app.id }, 'en')).toBe(`${base}${app.id}/`)
     }
-    expect((terms.projects ?? []).length).toBeGreaterThan(0)
+    expect((document.projects ?? []).length).toBeGreaterThan(0)
+  })
+
+  /*
+   * Each app page links across to the other document's page for the same app.
+   * That link is built from the app's own id, so it resolves only while both
+   * records use it. This is what fails if one is renamed and the other is not.
+   */
+  it('names the same app by the same id in both documents', () => {
+    const ids = (document: typeof privacy) => (document.projects ?? []).map((app) => app.id).sort()
+    expect(ids(privacy)).toEqual(ids(terms))
   })
 
   it('matches project anchors to the optional blocks that actually render', () => {

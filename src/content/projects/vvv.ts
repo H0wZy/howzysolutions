@@ -1,12 +1,15 @@
 import type { Project } from '../types'
 
-export const viralvideogen: Project = {
-  id: 'viralvideogen',
-  name: 'viralvideogen (storylab)',
+export const vvv: Project = {
+  id: 'vvv',
+  name: 'vvv (Viral Video Visualizer)',
   kind: 'product',
   state: 'functional',
   period: { start: '2026-08-16', end: '2026-08-18' },
   commits: 38,
+  /* WakaTime's own project name, which the rename did not change. It joins to
+     src/content/wakatime.generated.json, so it follows that snapshot rather
+     than this record's id. */
   wakatimeProject: 'viralvideogen',
 
   summary: {

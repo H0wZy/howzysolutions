@@ -26,15 +26,23 @@ describe('the old /privacy/ link', () => {
 
 /**
  * The app was renamed from viralvideogen to vvv after its terms URL had been
- * given out. This fails if the old path stops landing on the new page.
+ * given out, and its policy page and project page moved with it. This fails if
+ * any of the three old paths stops landing on its new page.
  */
-describe("the app's old terms URL", () => {
-  it.each(LOCALES)("%s: 301s to the app's own terms page", (locale) => {
-    const target = pathFor({ page: 'termsApp', id: 'vvv' }, locale)
+describe("the app's old URLs", () => {
+  const moved = (locale: (typeof LOCALES)[number]) => [
+    ['terms', '/terms-of-service/', pathFor({ page: 'legalApp', doc: 'terms', id: 'vvv' }, locale)],
+    ['policy', '/privacy-policy/', pathFor({ page: 'legalApp', doc: 'privacy', id: 'vvv' }, locale)],
+    ['project', '/works/', pathFor({ page: 'work', id: 'vvv' }, locale)],
+  ]
+
+  it.each(LOCALES)('%s: 301s every one to its renamed page', (locale) => {
     const prefix = locale === 'en' ? '' : `/${locale}`
-    const old = `${prefix}/terms-of-service/viralvideogen/`
-    for (const from of [old, old.slice(0, -1)]) {
-      expect(rules, from).toContainEqual([from, target, '301'])
+    for (const [what, base, target] of moved(locale)) {
+      const old = `${prefix}${base}viralvideogen/`
+      for (const from of [old, old.slice(0, -1)]) {
+        expect(rules, `${what}: ${from}`).toContainEqual([from, target, '301'])
+      }
     }
   })
 })
