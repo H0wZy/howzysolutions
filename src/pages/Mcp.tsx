@@ -10,12 +10,48 @@ const TOC_ENTRIES: RailEntry[] = [
   { id: 'overview', label: { en: 'Overview', pt: 'Visao Geral' } },
   { id: 'connector', label: { en: 'Connect Agent', pt: 'Conectar Agente' } },
   { id: 'quickstart', label: { en: 'Quickstart & CLI', pt: 'Inicio Rapido & CLI' } },
+  { id: 'tools', label: { en: 'Agent Delegation', pt: 'Delegacao' } },
   { id: 'packages', label: { en: 'npm Packages', pt: 'Pacotes npm' } },
   { id: 'bridges', label: { en: 'Supported AI CLIs', pt: 'CLIs de IA' } },
   { id: 'binaries', label: { en: 'Standalone Binaries', pt: 'Binarios Avulsos' } },
 ]
 
 type TransportMode = 'streamable' | 'sse' | 'cli'
+
+const AGENT_TOOLS = [
+  {
+    a: 'ask',
+    d: { en: 'Inquiries and second opinions', pt: 'Consultas e segunda opiniao' },
+    p: { en: 'Ask Antigravity for a second opinion on this database schema.', pt: 'Peca uma segunda opiniao ao Antigravity sobre este schema de banco.' },
+  },
+  {
+    a: 'review',
+    d: { en: 'Code and security reviews', pt: 'Code review e seguranca' },
+    p: { en: 'Review my git diff using Codex for security edge cases.', pt: 'Faca um review do meu git diff usando Codex para checar seguranca.' },
+  },
+  {
+    a: 'brainstorm',
+    d: { en: 'Architectural trade-offs', pt: 'Trade-offs arquiteturais' },
+    p: { en: 'Brainstorm caching strategies with Codex comparing Redis and Cloudflare KV.', pt: 'Faca um brainstorming com Codex comparando Redis e Cloudflare KV para cache.' },
+  },
+  {
+    a: 'plan',
+    d: { en: 'Implementation roadmaps', pt: 'Planos de implementacao' },
+    p: { en: 'Generate an implementation plan with Antigravity to refactor auth.', pt: 'Gere um plano de implementacao com Antigravity para refatorar auth.' },
+  },
+]
+
+const QUICK_CMDS = [
+  { l: '# 1. Instant execution:', c: 'npx @h0wzy/mcp', k: 'cmd-npx' },
+  { l: '# 2. Global install:', c: 'npm install -g @h0wzy/mcp && hmcp', k: 'cmd-npm' },
+  { l: '# 3. From source (Go):', c: 'go run ./cli setup-path && hmcp', k: 'cmd-go' },
+]
+
+const MODES: { id: TransportMode; l: string; t: string }[] = [
+  { id: 'streamable', l: 'Streamable', t: 'Modern Streamable HTTP endpoint' },
+  { id: 'sse', l: 'SSE', t: 'Legacy HTTP + SSE endpoint' },
+  { id: 'cli', l: 'CLI', t: 'Zero-install CLI execution' },
+]
 
 const PACKAGES = [
   { n: '', d: 'Interactive Go CLI runner and hub orchestrator' },
@@ -36,15 +72,15 @@ const BRIDGES = [
     n: 'Claude Code',
     b: 'Anthropic',
     d: {
-      en: 'Native ~/.claude.json bridge to invoke codex and agy.',
-      pt: 'Bridge ~/.claude.json para invocar codex e agy.',
+      en: 'Bridge in ~/.claude.json to invoke codex and agy.',
+      pt: 'Bridge em ~/.claude.json para invocar codex e agy.',
     },
   },
   {
     n: 'OpenAI Codex CLI',
     b: 'GPT-5.6 / GPT-6',
     d: {
-      en: 'Bridge for Codex CLI with sanitization and timeout.',
+      en: 'Bridge for Codex CLI with safety and timeout.',
       pt: 'Bridge para CLI Codex com protecao e timeout.',
     },
   },
@@ -63,49 +99,44 @@ const CLAUDE_STEPS = {
   pt: ['Execute: claude mcp add h0wzy-mcp -- npx -y @h0wzy/mcp', 'Claude Code invoca codex e agy com autonomia.'],
 }
 
-function Svg({ children, className = 'size-3.5 shrink-0' }: { children: React.ReactNode; className?: string }) {
+function ActionIcon({ ok }: { ok: boolean }) {
   return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      {children}
+    <svg className="size-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      {ok ? <path d="m20 6-11 11-5-5" className="text-[var(--accent)]" /> : <path d="M16 4H4v12m4-8h12v12H8z" />}
     </svg>
   )
 }
 
-function CopyIcon() {
+function ImgIcon({ src }: { src: string }) {
+  return <img src={src} alt="" aria-hidden="true" className="size-3.5 shrink-0" width={14} height={14} />
+}
+
+function CopyBtn({
+  copied,
+  onClick,
+  locale,
+  label,
+}: {
+  copied: boolean
+  onClick: () => void
+  locale: Locale
+  label?: string
+}) {
+  const isPt = locale === 'pt'
   return (
-    <Svg>
-      <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
-      <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
-    </Svg>
+    <button
+      type="button"
+      onClick={onClick}
+      className="shrink-0 px-2.5 py-1.5 rounded border border-[var(--border)] bg-[var(--surface)] text-[var(--dim)] hover:text-[var(--accent)] hover:border-[var(--accent)] transition-colors cursor-pointer inline-flex items-center gap-1.5 focus-visible:ring-1 focus-visible:ring-[var(--accent)]"
+      title={copied ? (isPt ? 'Copiado!' : 'Copied!') : (isPt ? 'Copiar' : 'Copy')}
+      aria-label={isPt ? 'Copiar' : 'Copy'}
+    >
+      <ActionIcon ok={copied} />
+      <span className="text-[11px] font-mono">
+        {copied ? (isPt ? 'Copiado' : 'Copied') : label || (isPt ? 'Copiar' : 'Copy')}
+      </span>
+    </button>
   )
-}
-
-function CheckIcon() {
-  return (
-    <Svg className="size-3.5 shrink-0 text-[var(--accent)]">
-      <polyline points="20 6 9 17 4 12" />
-    </Svg>
-  )
-}
-
-function GithubIcon({ className = 'size-3.5 shrink-0' }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
-      <path d="M8 0C3.58 0 0 3.58 0 8a8 8 0 005.47 7.59c.4.08.55-.17.55-.38v-1.49c-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52 0-.53.64 0 1.09.59 1.24.83.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 014 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48v2.2c0 .22.15.47.55.38A8 8 0 0016 8c0-4.42-3.58-8-8-8z" />
-    </svg>
-  )
-}
-
-function ClaudeIcon() {
-  return <img src="/assets/icons/claude.svg" alt="" aria-hidden="true" className="size-3.5 shrink-0" width={14} height={14} />
-}
-
-function OpenAIIcon() {
-  return <img src="/assets/icons/chatgpt.svg" alt="" aria-hidden="true" className="size-3.5 shrink-0" width={14} height={14} />
-}
-
-function NpmIcon() {
-  return <img src="/assets/icons/npm.svg" alt="" aria-hidden="true" className="size-3.5 shrink-0" width={14} height={14} />
 }
 
 export function Mcp({
@@ -156,8 +187,6 @@ export function Mcp({
         ? 'https://mcp.howzysolutions.com/sse'
         : 'npx @h0wzy/mcp'
 
-  const stepInfo = CLAUDE_STEPS
-
   return (
     <>
       <Chrome locale={locale} pathname={pathname} />
@@ -185,7 +214,7 @@ export function Mcp({
                   className="chrome-btn inline-flex items-center gap-2 text-xs font-mono"
                   title="GitHub repository"
                 >
-                  <GithubIcon />
+                  <ImgIcon src="/assets/icons/github.svg" />
                   <span>GitHub</span>
                   <span className="text-[var(--accent)] font-semibold">★ {stars !== null ? stars : mcpData.stars}</span>
                 </a>
@@ -198,7 +227,7 @@ export function Mcp({
                     className="chrome-btn inline-flex items-center gap-2 text-xs bg-[var(--surface)] hover:text-[var(--accent)] rounded-r-none border-r-0"
                     title={locale === 'pt' ? 'Copiar pagina inteira como Markdown' : 'Copy entire page as Markdown'}
                   >
-                    {copiedKey === 'page-md' ? <CheckIcon /> : <CopyIcon />}
+                    <ActionIcon ok={copiedKey === 'page-md'} />
                     <span>
                       {copiedKey === 'page-md'
                         ? (locale === 'pt' ? 'Copiado!' : 'Copied!')
@@ -217,52 +246,25 @@ export function Mcp({
 
                   {dropdownOpen ? (
                     <div className="absolute right-0 top-full mt-2 w-52 rounded border border-[var(--border)] bg-[var(--surface)] shadow-2xl p-1 z-50 flex flex-col gap-0.5 text-xs font-mono">
-                      <a
-                        href={locale === 'pt' ? '/pt/mcp.md' : '/mcp.md'}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="text-left px-2.5 py-1.5 rounded hover:bg-[var(--line)] text-[var(--accent)] transition-colors flex items-center gap-2"
-                        onClick={() => setDropdownOpen(false)}
-                      >
-                        <span className="text-[10px] px-1 py-0.5 rounded border border-[var(--accent)] font-bold">M↓</span>
-                        <span>{locale === 'pt' ? 'Ver como Markdown' : 'View as Markdown'}</span>
-                      </a>
-                      <a
-                        href="https://claude.ai/new?q=H0wZy/mcp"
-                        target="_blank"
-                        rel="noreferrer"
-                        className="text-left px-2.5 py-1.5 rounded hover:bg-[var(--line)] text-[var(--accent)] transition-colors flex items-center gap-2"
-                      >
-                        <ClaudeIcon />
-                        <span>Open in Claude ↗</span>
-                      </a>
-                      <a
-                        href="https://chatgpt.com/?q=H0wZy/mcp"
-                        target="_blank"
-                        rel="noreferrer"
-                        className="text-left px-2.5 py-1.5 rounded hover:bg-[var(--line)] text-[var(--accent)] transition-colors flex items-center gap-2"
-                      >
-                        <OpenAIIcon />
-                        <span>Open in ChatGPT ↗</span>
-                      </a>
-                      <a
-                        href="https://www.npmjs.com/package/@h0wzy/mcp"
-                        target="_blank"
-                        rel="noreferrer"
-                        className="text-left px-2.5 py-1.5 rounded hover:bg-[var(--line)] text-[var(--accent)] transition-colors flex items-center gap-2 border-t border-[var(--line)] pt-1 mt-0.5"
-                      >
-                        <NpmIcon />
-                        <span>View on npm ↗</span>
-                      </a>
-                      <a
-                        href="https://github.com/H0wZy/mcp"
-                        target="_blank"
-                        rel="noreferrer"
-                        className="text-left px-2.5 py-1.5 rounded hover:bg-[var(--line)] text-[var(--accent)] transition-colors flex items-center gap-2"
-                      >
-                        <GithubIcon />
-                        <span>GitHub Repository ↗</span>
-                      </a>
+                      {[
+                        { href: locale === 'pt' ? '/pt/mcp.md' : '/mcp.md', label: locale === 'pt' ? 'Ver como Markdown' : 'View as Markdown', icon: <span className="text-[10px] px-1 py-0.5 rounded border border-[var(--accent)] font-bold">M↓</span>, onClick: () => setDropdownOpen(false) },
+                        { href: 'https://claude.ai/new?q=H0wZy/mcp', label: 'Open in Claude ↗', icon: <ImgIcon src="/assets/icons/claude.svg" /> },
+                        { href: 'https://chatgpt.com/?q=H0wZy/mcp', label: 'Open in ChatGPT ↗', icon: <ImgIcon src="/assets/icons/chatgpt.svg" /> },
+                        { href: 'https://www.npmjs.com/package/@h0wzy/mcp', label: 'View on npm ↗', icon: <ImgIcon src="/assets/icons/npm.svg" />, border: true },
+                        { href: 'https://github.com/H0wZy/mcp', label: 'GitHub Repository ↗', icon: <ImgIcon src="/assets/icons/github.svg" /> },
+                      ].map((item) => (
+                        <a
+                          key={item.href}
+                          href={item.href}
+                          target="_blank"
+                          rel="noreferrer"
+                          className={`text-left px-2.5 py-1.5 rounded hover:bg-[var(--line)] text-[var(--accent)] transition-colors flex items-center gap-2 ${item.border ? 'border-t border-[var(--line)] pt-1 mt-0.5' : ''}`}
+                          onClick={item.onClick}
+                        >
+                          {item.icon}
+                          <span>{item.label}</span>
+                        </a>
+                      ))}
                     </div>
                   ) : null}
                 </div>
@@ -300,21 +302,13 @@ export function Mcp({
                   </div>
 
                   {/* Gradient ASCII Banner with Perfectly Aligned 74-col block font */}
-                  <pre
-                    className="leading-tight font-black select-none tracking-tighter"
-                    style={{
-                      background: 'linear-gradient(180deg, #e9d5ff 0%, #c084fc 35%, #9333ea 70%, #6b21a8 100%)',
-                      WebkitBackgroundClip: 'text',
-                      WebkitTextFillColor: 'transparent',
-                    }}
-                  >
-{`██╗  ██╗ ██████╗ ██╗    ██╗███████╗██╗   ██╗   ███╗   ███╗ ██████╗██████╗ 
-██║  ██║██╔═══██╗██║    ██║╚══███╔╝╚██╗ ██╔╝   ████╗ ████║██╔════╝██╔══██╗
-███████║██║   ██║██║ █╗ ██║  ███╔╝   ╚████╔╝   ██╔████╔██║██║     ██████╔╝
-██╔══██║██║   ██║██║███╗██║ ███╔╝     ╚██╔╝    ██║╚██╔╝██║██║     ██╔═══╝ 
-██║  ██║╚██████╔╝╚███╔███╔╝███████╗    ██║     ██║ ╚═╝ ██║╚██████╗██║     
-╚═╝  ╚═╝ ╚═════╝  ╚══╝╚══╝ ╚══════╝    ╚═╝     ╚═╝     ╚═╝ ╚═════╝╚═╝     `}
-                  </pre>
+                  <img
+                    src="/assets/mcp-banner.svg"
+                    alt="H0wZy/mcp banner"
+                    className="h-auto max-w-full select-none"
+                    width={570}
+                    height={90}
+                  />
 
                   <div className="space-y-1 text-xs pt-1">
                     <div className="text-[var(--fg)] font-semibold">
@@ -360,11 +354,11 @@ export function Mcp({
                         key={name}
                         type="button"
                         disabled
-                        className="px-2.5 py-1 rounded text-[11px] font-mono border border-dashed border-[var(--border)] bg-[var(--bg)]/60 text-[var(--dim)] opacity-50 cursor-not-allowed inline-flex items-center gap-1 select-none transition-opacity hover:opacity-80"
+                        className="px-2.5 py-1 rounded text-[11px] font-mono border border-dashed border-[var(--border)] text-[var(--dim)] opacity-50 cursor-not-allowed inline-flex items-center gap-1 select-none"
                         title={locale === 'pt' ? 'TODO: Suporte em breve' : 'TODO: Coming soon'}
                       >
                         <span>{name}</span>
-                        <span className="text-[8.5px] uppercase tracking-wider px-1 py-0.2 rounded bg-[var(--line)] text-[var(--accent-2)] border border-[var(--line)]">
+                        <span className="text-[8.5px] uppercase px-1 rounded bg-[var(--line)] text-[var(--accent-2)]">
                           TODO
                         </span>
                       </button>
@@ -373,11 +367,7 @@ export function Mcp({
 
                   {/* Right: Transport Mode Switcher */}
                   <div className="flex flex-wrap items-center gap-2">
-                    {[
-                      { id: 'streamable' as const, label: 'Streamable', title: 'Modern Streamable HTTP endpoint' },
-                      { id: 'sse' as const, label: 'SSE', title: 'Legacy HTTP + SSE endpoint' },
-                      { id: 'cli' as const, label: 'CLI', title: 'Zero-install CLI execution' },
-                    ].map((t, idx) => {
+                    {MODES.map((t, idx) => {
                       const isSelected = mode === t.id
                       return (
                         <div key={t.id} className="inline-flex items-center gap-2">
@@ -394,9 +384,9 @@ export function Mcp({
                                 ? 'bg-[var(--line)] border-[var(--accent)] text-[var(--accent)] font-semibold shadow-sm opacity-100'
                                 : 'bg-[var(--bg)]/60 border-[var(--border)] text-[var(--dim)] opacity-60 hover:opacity-100 hover:text-[var(--fg)] hover:border-[var(--accent)]/60'
                             } focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:opacity-100`}
-                            title={t.title}
+                            title={t.t}
                           >
-                            {t.label}
+                            {t.l}
                           </button>
                         </div>
                       )
@@ -410,20 +400,11 @@ export function Mcp({
                     <span className="text-[var(--accent)] select-none font-bold">$</span>
                     <span className="text-[var(--fg)] select-all break-all">{connectorUrl}</span>
                   </div>
-                  <button
-                    type="button"
+                  <CopyBtn
+                    copied={copiedKey === 'connector-url'}
                     onClick={() => triggerCopy(connectorUrl, 'connector-url')}
-                    className="shrink-0 px-2.5 py-1.5 rounded border border-[var(--border)] bg-[var(--surface)] text-[var(--dim)] hover:text-[var(--accent)] hover:border-[var(--accent)] transition-colors cursor-pointer inline-flex items-center gap-1.5 focus-visible:ring-1 focus-visible:ring-[var(--accent)]"
-                    title={copiedKey === 'connector-url' ? 'Copied!' : 'Copy to clipboard'}
-                    aria-label="Copy connector URL"
-                  >
-                    {copiedKey === 'connector-url' ? <CheckIcon /> : <CopyIcon />}
-                    <span className="text-[11px] font-mono">
-                      {copiedKey === 'connector-url'
-                        ? (locale === 'pt' ? 'Copiado' : 'Copied')
-                        : (locale === 'pt' ? 'Copiar' : 'Copy')}
-                    </span>
-                  </button>
+                    locale={locale}
+                  />
                 </div>
 
                 {/* 3 Steps */}
@@ -443,11 +424,11 @@ export function Mcp({
                     },
                     {
                       title: locale === 'pt' ? 'Configure no cliente' : 'Configure client',
-                      desc: stepInfo[locale][0],
+                      desc: CLAUDE_STEPS[locale][0],
                     },
                     {
                       title: locale === 'pt' ? 'Pronto para usar' : 'Ready to use',
-                      desc: stepInfo[locale][1],
+                      desc: CLAUDE_STEPS[locale][1],
                     },
                   ].map((s, i) => (
                     <div key={i} className="space-y-1.5">
@@ -489,27 +470,76 @@ export function Mcp({
               </h2>
 
               <div className="flex flex-col gap-3 font-mono text-xs">
-                {[
-                  { label: '# 1. Instant execution:', cmd: 'npx @h0wzy/mcp', key: 'cmd-npx' },
-                  { label: '# 2. Global install:', cmd: 'npm install -g @h0wzy/mcp && hmcp', key: 'cmd-npm' },
-                  { label: '# 3. From source (Go):', cmd: 'go run ./cli setup-path && hmcp', key: 'cmd-go' },
-                ].map((item) => (
-                  <div key={item.key} className="p-3 rounded bg-[var(--surface)] border border-[var(--border)]">
+                {QUICK_CMDS.map((item) => (
+                  <div key={item.k} className="p-3 rounded bg-[var(--surface)] border border-[var(--border)]">
                     <div className="flex items-center justify-between gap-2 mb-1.5">
-                      <span className="text-[var(--dim)]">{item.label}</span>
+                      <span className="text-[var(--dim)]">{item.l}</span>
                       <button
                         type="button"
-                        onClick={() => triggerCopy(item.cmd, item.key)}
+                        onClick={() => triggerCopy(item.c, item.k)}
                         className="p-1 rounded border-0 outline-none bg-transparent text-[var(--dim)] hover:text-[var(--accent)] hover:bg-[var(--line)] transition-colors cursor-pointer"
-                        title={copiedKey === item.key ? 'Copied!' : 'Copy command'}
+                        title={copiedKey === item.k ? 'Copied!' : 'Copy command'}
                         aria-label="Copy command"
                       >
-                        {copiedKey === item.key ? <CheckIcon /> : <CopyIcon />}
+                        <ActionIcon ok={copiedKey === item.k} />
                       </button>
                     </div>
-                    <code className="text-[var(--accent)] font-bold text-sm select-all block">{item.cmd}</code>
+                    <code className="text-[var(--accent)] font-bold text-sm select-all block">{item.c}</code>
                   </div>
                 ))}
+              </div>
+            </div>
+          </section>
+
+          {/* Multi-Agent Delegation & Tools */}
+          <section id="tools" className="section">
+            <div className="wrap">
+              <h2 className="text-xl font-semibold mb-2 text-[var(--fg)]">
+                {locale === 'pt' ? 'Delegacao Multi-Agente & Ferramentas' : 'Multi-Agent Delegation & Tools'}
+              </h2>
+              <p className="text-xs text-[var(--dim)] mb-6">
+                {locale === 'pt'
+                  ? 'Como instruir o Claude Code a delegar ao Antigravity e Codex via 8 ferramentas espelhadas.'
+                  : 'How to prompt Claude Code to delegate to Antigravity and Codex across 8 mirrored tools.'}
+              </p>
+
+              <div className="space-y-4">
+                {AGENT_TOOLS.map((t) => {
+                  const isCopied = copiedKey === `p-${t.a}`
+                  return (
+                    <div
+                      key={t.a}
+                      className="p-4 rounded-lg bg-[var(--surface)] border border-[var(--border)] font-mono text-xs space-y-3"
+                    >
+                      <div className="flex flex-wrap items-center justify-between gap-2 pb-2.5 border-b border-[var(--line)]">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span className="px-2 py-0.5 rounded bg-[var(--bg)] border border-[var(--accent)] text-[var(--accent)] font-bold">
+                            {t.a}_antigravity
+                          </span>
+                          <span className="text-[var(--dim)]">↔</span>
+                          <span className="px-2 py-0.5 rounded bg-[var(--bg)] border border-[var(--accent-2)] text-[var(--accent-2)] font-bold">
+                            {t.a}_codex
+                          </span>
+                        </div>
+                        <span className="text-[11px] text-[var(--dim)]">{t.d[locale]}</span>
+                      </div>
+
+                      <div className="p-2.5 rounded bg-[var(--bg)] border border-[var(--border)] flex flex-wrap items-center justify-between gap-3">
+                        <div className="flex items-start gap-2 min-w-0 flex-1">
+                          <span className="text-[var(--accent)] select-none font-bold">❯</span>
+                          <span className="text-[var(--fg)] italic select-all leading-relaxed">
+                            &ldquo;{t.p[locale]}&rdquo;
+                          </span>
+                        </div>
+                        <CopyBtn
+                          copied={isCopied}
+                          onClick={() => triggerCopy(t.p[locale], `p-${t.a}`)}
+                          locale={locale}
+                        />
+                      </div>
+                    </div>
+                  )
+                })}
               </div>
             </div>
           </section>
@@ -545,7 +575,7 @@ export function Mcp({
                       href={`https://www.npmjs.com/package/${pkgName}`}
                       target="_blank"
                       rel="noreferrer"
-                      className="p-4 rounded border border-[var(--border)] bg-[var(--surface)] hover:border-[var(--accent)] transition-colors block space-y-2"
+                      className="p-3 rounded border border-[var(--border)] bg-[var(--surface)] hover:border-[var(--accent)] transition-colors block space-y-2"
                     >
                       <div className="flex items-center justify-between">
                         <strong className="text-[var(--accent)] text-sm">{pkgName}</strong>
@@ -553,7 +583,7 @@ export function Mcp({
                       </div>
                       <p className="text-[var(--dim)] text-[11px] leading-relaxed">{pkg.d}</p>
                       <div className="text-[10px] text-[var(--dim)] pt-1 border-t border-[var(--line)]">
-                        Published via GitHub Actions
+                        Published via CI
                       </div>
                     </a>
                   )
@@ -591,24 +621,21 @@ export function Mcp({
               </h2>
               <p className="text-xs text-[var(--dim)] mb-4">
                 {locale === 'pt'
-                  ? 'Binarios nativos sem dependencias gerados via GoReleaser para Windows, Linux e macOS.'
-                  : 'Zero-dependency native binaries compiled via GoReleaser for Windows, Linux, and macOS.'}
+                  ? 'Binarios nativos sem dependencias compilados para Windows, Linux e macOS.'
+                  : 'Zero-dependency native binaries compiled for Windows, Linux, and macOS.'}
               </p>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 font-mono text-xs">
-                {BINARIES.map((bin) => {
-                  const binName = `h0wzy-mcp-${bin.f}`
-                  return (
-                    <a
-                      key={bin.p}
-                      href={`https://github.com/H0wZy/mcp/releases/download/${mcpData.version}/${binName}`}
-                      className="p-3 rounded border border-[var(--border)] bg-[var(--surface)] hover:border-[var(--accent)] transition-colors block"
-                    >
-                      <span className="text-[var(--fg)] font-semibold block mb-1">{bin.p}</span>
-                      <span className="text-[var(--accent)] text-[11px]">{binName} ↗</span>
-                    </a>
-                  )
-                })}
+                {BINARIES.map((bin) => (
+                  <a
+                    key={bin.p}
+                    href={`https://github.com/H0wZy/mcp/releases/download/${mcpData.version}/h0wzy-mcp-${bin.f}`}
+                    className="p-3 rounded border border-[var(--border)] bg-[var(--surface)] hover:border-[var(--accent)] transition-colors block"
+                  >
+                    <span className="text-[var(--fg)] font-semibold block mb-1">{bin.p}</span>
+                    <span className="text-[var(--accent)] text-[11px]">h0wzy-mcp-{bin.f} ↗</span>
+                  </a>
+                ))}
               </div>
             </div>
           </section>

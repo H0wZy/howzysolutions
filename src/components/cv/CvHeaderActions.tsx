@@ -82,33 +82,22 @@ export function CvHeaderActions({ locale }: { locale: Locale }) {
             <span>{translate(locale, 'cv.viewMarkdown')}</span>
           </a>
 
-          <a
-            role="menuitem"
-            href="/cv.pdf/eng"
-            target="_blank"
-            rel="noreferrer"
-            className="text-left px-2.5 py-1.5 rounded hover:bg-[var(--line)] text-[var(--text)] hover:text-[var(--accent)] transition-colors flex items-center gap-2"
-            onClick={() => setOpen(false)}
-          >
-            <span className="text-[10px] px-1 py-0.5 rounded border border-[var(--border)] font-bold text-[var(--dim)]">
-              PDF
-            </span>
-            <span>{translate(locale, 'cv.downloadPdfEn')}</span>
-          </a>
-
-          <a
-            role="menuitem"
-            href="/cv.pdf/ptbr"
-            target="_blank"
-            rel="noreferrer"
-            className="text-left px-2.5 py-1.5 rounded hover:bg-[var(--line)] text-[var(--text)] hover:text-[var(--accent)] transition-colors flex items-center gap-2"
-            onClick={() => setOpen(false)}
-          >
-            <span className="text-[10px] px-1 py-0.5 rounded border border-[var(--border)] font-bold text-[var(--dim)]">
-              PDF
-            </span>
-            <span>{translate(locale, 'cv.downloadPdfPt')}</span>
-          </a>
+          {(['en', 'pt'] as const).map((lang) => (
+            <a
+              key={lang}
+              role="menuitem"
+              href={`/cv.pdf/${lang === 'pt' ? 'ptbr' : 'eng'}`}
+              target="_blank"
+              rel="noreferrer"
+              className="text-left px-2.5 py-1.5 rounded hover:bg-[var(--line)] text-[var(--text)] hover:text-[var(--accent)] transition-colors flex items-center gap-2"
+              onClick={() => setOpen(false)}
+            >
+              <span className="text-[10px] px-1 py-0.5 rounded border border-[var(--border)] font-bold text-[var(--dim)]">
+                PDF
+              </span>
+              <span>{translate(locale, lang === 'pt' ? 'cv.downloadPdfPt' : 'cv.downloadPdfEn')}</span>
+            </a>
+          ))}
         </div>
       )}
     </div>

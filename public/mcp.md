@@ -45,6 +45,17 @@ Once registered, Claude Code can autonomously route tasks to OpenAI Codex and Go
 - **HTTP / SSE**: `https://mcp.howzysolutions.com/sse`
 - **CLI (Local Stdio)**: `npx @h0wzy/mcp`
 
+## Multi-Agent Delegation & Tools
+
+How to prompt Claude Code to delegate to Antigravity and Codex across 8 mirrored tools:
+
+| Antigravity (Gemini 3.1) | Codex (GPT-5.6 / GPT-6) | Purpose | Example Prompt |
+| --- | --- | --- | --- |
+| `ask_antigravity` | `ask_codex` | Inquiries and second opinions | "Ask Antigravity for a second opinion on this database schema." |
+| `review_antigravity` | `review_codex` | Code and security reviews | "Review my git diff using Codex for security edge cases." |
+| `brainstorm_antigravity` | `brainstorm_codex` | Architectural trade-offs | "Brainstorm caching strategies with Codex comparing Redis and Cloudflare KV." |
+| `plan_antigravity` | `plan_codex` | Implementation roadmaps | "Generate an implementation plan with Antigravity to refactor auth." |
+
 ## Monorepo Packages
 
 | Package | Description | Version |
