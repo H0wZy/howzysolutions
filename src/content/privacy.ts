@@ -7,15 +7,25 @@ import type { LegalDocument } from './types'
  * one section per project that handles personal data beyond the website. A
  * project with no entry here collects none.
  *
- * TikTok Shop's Data Security and Privacy Review for viralvideogen was sent
- * with /privacy/, which public/_redirects 301s here. Neither that redirect
- * nor the `viralvideogen` anchor may go away.
- * That project's section is the same text as viralvideogen's
+ * A project's block keeps a stable `id`, so /privacy-policy/#vvv is an anchor
+ * and /privacy-policy/vvv/ is that same block on a page of its own. The per-app
+ * URL is what a store asks for when it reviews one app.
+ *
+ * TikTok Shop's Data Security and Privacy Review was sent with /privacy/, which
+ * public/_redirects 301s here. That redirect may not go away.
+ *
+ * The app was renamed from `viralvideogen` to `vvv`. Partner Center still
+ * carries the old name, so the record says so once, in prose, in the same words
+ * the terms use, and the old URL 301s to the new one (public/_redirects). The
+ * old `#viralvideogen` anchor is deliberately not kept: it was a fragment on a
+ * page that still answers, never a URL given out on its own.
+ *
+ * That project's section is the same text as vvv's
  * docs/tiktok-shop/partner-center/PRIVACY_POLICY.md; a change to either is a
  * change to both, and `updated` moves with it.
  */
 export const privacy: LegalDocument = {
-  updated: '2026-09-19',
+  updated: '2026-09-22',
 
   intro: {
     en: 'How H0wZy Solutions handles personal data: first on this website, then in each project that handles data of its own.',
@@ -89,20 +99,22 @@ export const privacy: LegalDocument = {
 
   projects: [
     {
-      id: 'viralvideogen',
-      name: 'viralvideogen',
+      id: 'vvv',
+      name: 'vvv',
       tagline: { en: 'TikTok Shop app', pt: 'app do TikTok Shop' },
       summary: {
         en: [
-          'viralvideogen is the tool H0wZy Solutions uses to publish product videos to a TikTok Shop creator account and to keep that account\'s showcase, the list of products the creator promotes, up to date. It runs on the operator\'s computer, has no website or sign-up of its own, and works only for creator accounts that have authorized it in TikTok Shop. It is not offered to the public.',
+          'vvv (Viral Video Visualizer) is the tool H0wZy Solutions uses to publish product videos to a TikTok Shop creator account and to keep that account\'s showcase, the list of products the creator promotes, up to date. It runs on the operator\'s computer, has no website or sign-up of its own, and works only for creator accounts that have authorized it in TikTok Shop. It is not offered to the public.',
+          'The app is registered in TikTok Shop\'s Partner Center under its former name, viralvideogen.',
         ],
         pt: [
-          'O viralvideogen é a ferramenta que a H0wZy Solutions usa para publicar vídeos de produto numa conta de criador do TikTok Shop e manter atualizada a vitrine dessa conta, a lista de produtos que o criador divulga. Ele roda no computador do operador, não tem site nem cadastro próprio e só funciona para contas de criador que o autorizaram no TikTok Shop. Não é oferecido ao público.',
+          'O vvv (Viral Video Visualizer) é a ferramenta que a H0wZy Solutions usa para publicar vídeos de produto numa conta de criador do TikTok Shop e manter atualizada a vitrine dessa conta, a lista de produtos que o criador divulga. Ele roda no computador do operador, não tem site nem cadastro próprio e só funciona para contas de criador que o autorizaram no TikTok Shop. Não é oferecido ao público.',
+          'O app está registrado no Partner Center do TikTok Shop sob o nome anterior, viralvideogen.',
         ],
       },
       sections: [
         {
-          id: 'viralvideogen-data',
+          id: 'vvv-data',
           heading: { en: 'What the app receives and why', pt: 'O que o app recebe e por quê' },
           body: {
             en: [
@@ -126,7 +138,7 @@ export const privacy: LegalDocument = {
           },
         },
         {
-          id: 'viralvideogen-storage',
+          id: 'vvv-storage',
           heading: { en: 'Where it is stored and who processes it', pt: 'Onde fica e quem trata' },
           body: { en: [], pt: [] },
           items: {
@@ -141,7 +153,7 @@ export const privacy: LegalDocument = {
           },
         },
         {
-          id: 'viralvideogen-retention',
+          id: 'vvv-retention',
           heading: { en: 'How long we keep it', pt: 'Por quanto tempo guardamos' },
           body: {
             en: [

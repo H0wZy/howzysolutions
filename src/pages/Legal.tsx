@@ -11,17 +11,18 @@ import { Footer } from '../components/Footer'
 import { legalTopicAnchors } from '../navigation'
 
 /**
- * Both legal documents, and both of the shapes the terms take.
+ * Both legal documents, and both of the shapes each one takes.
  *
  * The privacy policy (src/content/privacy.ts) and the terms of service
  * (src/content/terms.ts) are the same record: an intro, a date, anchored
- * sections, then one block per app that needs terms of its own. One component
- * renders them, so neither drifts from the other.
+ * sections, then one block per app that needs a section of its own. One
+ * component renders them, so neither drifts from the other.
  *
  * `appId` switches to the second shape: that app's block alone, at
- * /terms-of-service/<id>/, which is the URL a store asks for when it reviews
- * one app. The general terms are not repeated there, they are linked, and the
- * id is the same one that anchors the block on the index.
+ * /privacy-policy/<id>/ or /terms-of-service/<id>/, which are the URLs a store
+ * asks for when it reviews one app. The general sections are not repeated
+ * there, they are linked, and the id is the same one that anchors the block on
+ * the index.
  *
  * Nothing here is imported by src/App.tsx, and that is load-bearing rather
  * than incidental: these pages are prerendered and never hydrated (see
@@ -38,11 +39,30 @@ import { legalTopicAnchors } from '../navigation'
  * address, so the two cannot drift apart.
  */
 
-/** The record, its title, and the word it uses for its per-entry blocks. */
+/**
+ * The record, its title, the word it uses for its per-entry blocks, and the two
+ * links an app page carries: back to this document's general sections, and
+ * across to the other document's page for the same app.
+ */
 const KINDS = {
-  privacy: { document: privacy, title: 'privacy.title', group: 'privacy.projects' },
-  terms: { document: terms, title: 'terms.title', group: 'terms.apps' },
-} as const satisfies Record<string, { document: LegalDocument; title: StringKey; group: StringKey }>
+  privacy: {
+    document: privacy,
+    title: 'privacy.title',
+    group: 'privacy.projects',
+    general: 'legal.generalPolicy',
+    cross: 'legal.termsFor',
+  },
+  terms: {
+    document: terms,
+    title: 'terms.title',
+    group: 'terms.apps',
+    general: 'legal.general',
+    cross: 'legal.privacyFor',
+  },
+} as const satisfies Record<
+  string,
+  { document: LegalDocument; title: StringKey; group: StringKey; general: StringKey; cross: StringKey }
+>
 
 export type LegalKind = keyof typeof KINDS
 
@@ -74,18 +94,22 @@ export function Legal({
 }: {
   content: ContentBundle
   kind: LegalKind
-  /** Set only by /terms-of-service/<id>/: render that app's block by itself. */
+  /** Set only by a per-app page: render that app's block by itself. */
   appId?: string
   locale: Locale
   pathname: string
 }) {
-  const { document, title, group } = KINDS[kind]
+  const { document, title, group, general, cross } = KINDS[kind]
+  const otherKind: LegalKind = kind === 'privacy' ? 'terms' : 'privacy'
   const email = content.profile.contacts.find((c) => c.kind === 'email')
   const apps = document.projects ?? []
   /* An id nothing matches falls back to the index rather than to an empty
      page: the prerender only emits real ids, so this is the client's guard. */
   const only = appId ? apps.find((app) => app.id === appId) : undefined
   const shown = only ? [only] : apps
+  /* The other document's page for this same app, when it has one. Both records
+     use the app's own id, so the pair can never point at different apps. */
+  const crossed = only && KINDS[otherKind].document.projects?.some((app) => app.id === only.id)
 
   return (
     <>
@@ -120,23 +144,32 @@ export function Legal({
                   {apps.map((app, i) => (
                     <span key={app.id}>
                       {i > 0 ? ', ' : null}
-                      <a href={pathFor({ page: 'termsApp', id: app.id }, locale)}>{app.name}</a>
+                      <a href={pathFor({ page: 'legalApp', doc: kind, id: app.id }, locale)}>
+                        {app.name}
+                      </a>
                     </span>
                   ))}
                 </p>
               ) : null}
               {/*
-               * The general terms are linked from the app page, never repeated.
-               * The policy is linked whole rather than by `#${only.id}`: the two
-               * documents do not share an id while the app's rename is only half
-               * done, and a fragment that resolves to nothing is worse than none.
+               * The general sections are linked from the app page, never
+               * repeated. The other document is linked at the same app's own
+               * page when it has one, and at its index when it does not: a link
+               * to a page that resolves to nothing is worse than none.
                */}
               {only ? (
                 <p className="sub dim">
-                  <a href={pathFor({ page: kind }, locale)}>{translate(locale, 'legal.general')}</a>
+                  <a href={pathFor({ page: kind }, locale)}>{translate(locale, general)}</a>
                   {' · '}
-                  <a href={pathFor({ page: 'privacy' }, locale)}>
-                    {translate(locale, 'legal.privacyFor')}
+                  <a
+                    href={pathFor(
+                      crossed
+                        ? { page: 'legalApp', doc: otherKind, id: only.id }
+                        : { page: otherKind },
+                      locale,
+                    )}
+                  >
+                    {translate(locale, cross)}
                   </a>
                 </p>
               ) : null}

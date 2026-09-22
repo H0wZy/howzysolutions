@@ -16,7 +16,8 @@ export type Route =
   | { page: 'cv' }
   | { page: 'privacy' }
   | { page: 'terms' }
-  | { page: 'termsApp'; id: string }
+  /** One app's block of one legal document, on a page of its own. */
+  | { page: 'legalApp'; doc: 'privacy' | 'terms'; id: string }
   | { page: 'mcp' }
 
 export type Location = { route: Route; locale: Locale }
@@ -44,8 +45,12 @@ export function parseRoute(rest: string): Route {
   if (rest === '/cv/' || rest === '/cv') return { page: 'cv' }
   if (rest === '/privacy-policy/' || rest === '/privacy-policy') return { page: 'privacy' }
   if (rest === '/terms-of-service/' || rest === '/terms-of-service') return { page: 'terms' }
-  const appMatch = /^\/terms-of-service\/([a-z0-9-]+)\/?$/.exec(rest)
-  if (appMatch) return { page: 'termsApp', id: appMatch[1] }
+  // One mechanism for both documents: a store reviewing one app asks for that
+  // app's own terms URL and its own policy URL, which are the same shape.
+  const appMatch = /^\/(privacy-policy|terms-of-service)\/([a-z0-9-]+)\/?$/.exec(rest)
+  if (appMatch) {
+    return { page: 'legalApp', doc: appMatch[1] === 'privacy-policy' ? 'privacy' : 'terms', id: appMatch[2] }
+  }
   if (rest === '/mcp/' || rest === '/mcp') return { page: 'mcp' }
   if (rest === '/works/' || rest === '/works') return { page: 'workIndex', number: 1 }
   const pageMatch = /^\/works\/(\d+)\/?$/.exec(rest)
@@ -73,8 +78,8 @@ export function pathFor(route: Route, locale: Locale): string {
   const rest =
     route.page === 'work'
       ? `/works/${route.id}/`
-      : route.page === 'termsApp'
-        ? `/terms-of-service/${route.id}/`
+      : route.page === 'legalApp'
+        ? `${FIXED[route.doc]}${route.id}/`
         : route.page === 'workIndex'
           ? route.number <= 1
             ? '/works/'
@@ -91,7 +96,7 @@ export function pathFor(route: Route, locale: Locale): string {
  * bundle (src/entry-server.tsx renders them instead).
  */
 export function isStaticDocument(route: Route): boolean {
-  return route.page === 'privacy' || route.page === 'terms' || route.page === 'termsApp'
+  return route.page === 'privacy' || route.page === 'terms' || route.page === 'legalApp'
 }
 
 /** The same page in another locale — what the language control links to. */

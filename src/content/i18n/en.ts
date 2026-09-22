@@ -278,7 +278,7 @@ export const en = {
   // Privacy page
   'privacy.title': 'Privacy policy',
   'privacy.metaDescription':
-    'How H0wZy Solutions handles personal data on this website and in each of its projects, including viralvideogen, its private TikTok Shop app.',
+    'How H0wZy Solutions handles personal data on this website and in each of its projects, including vvv, its private TikTok Shop app.',
   'privacy.projects': 'Project policies',
   'privacy.aboutProject': 'read the project record',
 
@@ -292,7 +292,9 @@ export const en = {
   'legal.updated': 'Last updated {date}.',
   'legal.contact': 'Contact:',
   'legal.general': 'read the general terms',
+  'legal.generalPolicy': 'read the general policy',
   'legal.privacyFor': 'privacy policy for this app',
+  'legal.termsFor': 'terms of service for this app',
 } as const
 
 export type StringKey = keyof typeof en

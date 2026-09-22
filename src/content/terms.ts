@@ -11,9 +11,9 @@ import type { LegalDocument } from './types'
  *
  * The app was renamed from `viralvideogen` to `vvv`. Partner Center still
  * carries the old name, so the record says so once, in prose, and the old URL
- * 301s to the new one (public/_redirects). The privacy policy's own rename is
- * a separate change; until it lands its anchor is still #viralvideogen, which
- * is why the app page links that policy rather than a fragment of it.
+ * 301s to the new one (public/_redirects). The privacy policy uses the same id
+ * for the same app, which is what lets this app's page link across to
+ * /privacy-policy/vvv/ rather than to the policy index.
  *
  * The contact is the profile's email contact rather than a second copy of the
  * address, so the two cannot drift apart.

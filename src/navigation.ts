@@ -152,10 +152,13 @@ export function trailFor(route: Route, locale: Locale, leafLabel?: string): Crum
     case 'terms':
       return [home, { labelKey: 'terms.title', href: null }]
 
-    case 'termsApp':
+    case 'legalApp':
       return [
         home,
-        { labelKey: 'terms.title', href: pathFor({ page: 'terms' }, locale) },
+        {
+          labelKey: route.doc === 'privacy' ? 'privacy.title' : 'terms.title',
+          href: pathFor({ page: route.doc }, locale),
+        },
         { label: leafLabel ?? route.id, href: null },
       ]
 

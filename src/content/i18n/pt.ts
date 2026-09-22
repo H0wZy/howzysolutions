@@ -249,7 +249,7 @@ export const pt = {
   // Página de privacidade
   'privacy.title': 'Política de privacidade',
   'privacy.metaDescription':
-    'Como a H0wZy Solutions trata dados pessoais neste site e em cada um dos seus projetos, incluindo o viralvideogen, seu app privado do TikTok Shop.',
+    'Como a H0wZy Solutions trata dados pessoais neste site e em cada um dos seus projetos, incluindo o vvv, seu app privado do TikTok Shop.',
   'privacy.projects': 'Políticas por projeto',
   'privacy.aboutProject': 'ler a página do projeto',
 
@@ -263,5 +263,7 @@ export const pt = {
   'legal.updated': 'Atualizada em {date}.',
   'legal.contact': 'Contato:',
   'legal.general': 'ler os termos gerais',
+  'legal.generalPolicy': 'ler a política geral',
   'legal.privacyFor': 'política de privacidade deste app',
+  'legal.termsFor': 'termos de serviço deste app',
 } satisfies Record<StringKey, string>

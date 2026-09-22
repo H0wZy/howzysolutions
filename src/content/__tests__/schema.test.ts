@@ -29,7 +29,7 @@ describe('project records', () => {
         'studiobiasantos',
         'telasparana',
         'terminal',
-        'viralvideogen',
+        'vvv',
       ].sort(),
     )
   })
