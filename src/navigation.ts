@@ -1,6 +1,6 @@
 import type { Locale, Localized } from './content/i18n/types'
 import type { StringKey } from './content/i18n/en'
-import type { PrivacyPolicy, Project } from './content/types'
+import type { LegalDocument, Project } from './content/types'
 import { pathFor, type Route } from './route'
 
 /**
@@ -50,10 +50,11 @@ export function homeTopicAnchors(hasGithub: boolean): TopicAnchor[] {
   ]
 }
 
-export function privacyTopicAnchors(policy: PrivacyPolicy): TopicAnchor[] {
+/** The rail for a legal document: its sections, then any per-project blocks. */
+export function legalTopicAnchors(document: LegalDocument): TopicAnchor[] {
   return [
-    ...policy.sections.map((section) => ({ id: section.id, label: section.heading })),
-    ...policy.projects.flatMap((project) => [
+    ...document.sections.map((section) => ({ id: section.id, label: section.heading })),
+    ...(document.projects ?? []).flatMap((project) => [
       { id: project.id, label: project.name },
       ...project.sections.map((section) => ({ id: section.id, label: section.heading })),
     ]),
@@ -147,6 +148,16 @@ export function trailFor(route: Route, locale: Locale, leafLabel?: string): Crum
 
     case 'privacy':
       return [home, { labelKey: 'privacy.title', href: null }]
+
+    case 'terms':
+      return [home, { labelKey: 'terms.title', href: null }]
+
+    case 'termsApp':
+      return [
+        home,
+        { labelKey: 'terms.title', href: pathFor({ page: 'terms' }, locale) },
+        { label: leafLabel ?? route.id, href: null },
+      ]
 
     case 'mcp':
       return [home, { label: 'H0wZy/mcp', href: null }]

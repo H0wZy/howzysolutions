@@ -188,7 +188,7 @@ for (const { pathname, locale } of allRoutes) {
 const sitemap = generateSitemap(allRoutes)
 writeFileSync(join(dist, 'sitemap.xml'), sitemap, 'utf8')
 writeFileSync(join(root, 'public', 'sitemap.xml'), sitemap, 'utf8')
-console.log('ok emitted sitemap.xml for 26 routes')
+console.log(`ok emitted sitemap.xml for ${allRoutes.length} routes`)
 
 writeAllMarkdown()
 

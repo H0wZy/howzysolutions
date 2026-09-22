@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import {
   homeTopicAnchors,
-  privacyTopicAnchors,
+  legalTopicAnchors,
   projectTopicAnchors,
   topLevelLinks,
   trailFor,
@@ -9,6 +9,7 @@ import {
 import { pathFor, type Route } from '../route'
 import { LOCALES } from '../content/i18n/types'
 import { privacy } from '../content/privacy'
+import { terms } from '../content/terms'
 import { projects } from '../content/projects'
 import { trackedTimeFor } from '../content/stats'
 
@@ -47,6 +48,14 @@ describe('the breadcrumb trail', () => {
     expect(trail[0].href).toBe(pathFor({ page: 'home' }, locale))
     expect(trail[1]).toEqual({ labelKey: 'cv.title', href: null })
   })
+
+  it.each(LOCALES)("%s: an app's terms sit under the terms index, under home", (locale) => {
+    const trail = trailFor({ page: 'termsApp', id: 'vvv' }, locale, 'vvv')
+    expect(trail).toHaveLength(3)
+    expect(trail[0].href).toBe(pathFor({ page: 'home' }, locale))
+    expect(trail[1].href).toBe(pathFor({ page: 'terms' }, locale))
+    expect(trail[2]).toEqual({ label: 'vvv', href: null })
+  })
 })
 
 describe('every trail', () => {
@@ -55,6 +64,10 @@ describe('every trail', () => {
     { page: 'workIndex', number: 1 },
     { page: 'work', id: 'telasparana' },
     { page: 'cv' },
+    { page: 'privacy' },
+    { page: 'terms' },
+    { page: 'termsApp', id: 'vvv' },
+    { page: 'mcp' },
   ]
 
   it.each(LOCALES)('%s: marks exactly one crumb as the current page (FR-069)', (locale) => {
@@ -103,6 +116,8 @@ describe('the top-level links in the chrome bar', () => {
     { page: 'work', id: 'telasparana' },
     { page: 'cv' },
     { page: 'privacy' },
+    { page: 'terms' },
+    { page: 'termsApp', id: 'vvv' },
   ]
 
   const destinations: Route[] = [
@@ -159,15 +174,29 @@ describe('document outlines', () => {
     ])
   })
 
-  it('derives every privacy anchor from the policy record in source order', () => {
+  it.each([
+    ['privacy', privacy],
+    ['terms', terms],
+  ] as const)('derives every %s anchor from the record in source order', (_name, document) => {
     const expected = [
-      ...privacy.sections.map((section) => section.id),
-      ...privacy.projects.flatMap((project) => [
+      ...document.sections.map((section) => section.id),
+      ...(document.projects ?? []).flatMap((project) => [
         project.id,
         ...project.sections.map((section) => section.id),
       ]),
     ]
-    expect(privacyTopicAnchors(privacy).map((entry) => entry.id)).toEqual(expected)
+    expect(legalTopicAnchors(document).map((entry) => entry.id)).toEqual(expected)
+  })
+
+  it("gives every app terms an id that is both its anchor and its own page", () => {
+    // /terms-of-service/#vvv is the anchor on the index and
+    // /terms-of-service/vvv/ is the same block on a page of its own, which is
+    // the URL a store asks for. One id, so the two can never disagree.
+    for (const app of terms.projects ?? []) {
+      expect(legalTopicAnchors(terms).map((entry) => entry.id)).toContain(app.id)
+      expect(pathFor({ page: 'termsApp', id: app.id }, 'en')).toBe(`/terms-of-service/${app.id}/`)
+    }
+    expect((terms.projects ?? []).length).toBeGreaterThan(0)
   })
 
   it('matches project anchors to the optional blocks that actually render', () => {

@@ -250,8 +250,18 @@ export const pt = {
   'privacy.title': 'Política de privacidade',
   'privacy.metaDescription':
     'Como a H0wZy Solutions trata dados pessoais neste site e em cada um dos seus projetos, incluindo o viralvideogen, seu app privado do TikTok Shop.',
-  'privacy.updated': 'Atualizada em {date}.',
-  'privacy.contact': 'Contato:',
   'privacy.projects': 'Políticas por projeto',
   'privacy.aboutProject': 'ler a página do projeto',
+
+  // Página de termos
+  'terms.title': 'Termos de serviço',
+  'terms.apps': 'Termos por app',
+  'terms.metaDescription':
+    'Os termos sob os quais a H0wZy Solutions publica este portfólio: uso aceitável, propriedade do trabalho mostrado, ausência de garantia e lei brasileira.',
+
+  // Comuns aos dois documentos jurídicos
+  'legal.updated': 'Atualizada em {date}.',
+  'legal.contact': 'Contato:',
+  'legal.general': 'ler os termos gerais',
+  'legal.privacyFor': 'política de privacidade deste app',
 } satisfies Record<StringKey, string>

@@ -5,6 +5,7 @@ import { profile } from '../profile'
 import { projects } from '../projects'
 import { cv } from '../cv'
 import { privacy } from '../privacy'
+import { terms } from '../terms'
 import { LOCALES } from '../i18n/types'
 import type { Localized } from '../i18n/types'
 import { metaFor, routes } from '../../entry-server'
@@ -101,6 +102,7 @@ function visibleStrings(): Array<[where: string, text: string]> {
   walk('cv.headline', cv.headline)
   walk('cv.summary', cv.summary)
   walk('privacy', privacy)
+  walk('terms', terms)
 
   return out
 }

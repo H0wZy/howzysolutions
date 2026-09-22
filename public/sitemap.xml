@@ -23,6 +23,20 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://howzysolutions.com/terms-of-service/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://howzysolutions.com/terms-of-service/" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://howzysolutions.com/pt/terms-of-service/" />
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://howzysolutions.com/terms-of-service/vvv/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://howzysolutions.com/terms-of-service/vvv/" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://howzysolutions.com/pt/terms-of-service/vvv/" />
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://howzysolutions.com/mcp/</loc>
     <xhtml:link rel="alternate" hreflang="en" href="https://howzysolutions.com/mcp/" />
     <xhtml:link rel="alternate" hreflang="pt" href="https://howzysolutions.com/pt/mcp/" />
@@ -124,6 +138,20 @@
     <loc>https://howzysolutions.com/pt/privacy-policy/</loc>
     <xhtml:link rel="alternate" hreflang="en" href="https://howzysolutions.com/privacy-policy/" />
     <xhtml:link rel="alternate" hreflang="pt" href="https://howzysolutions.com/pt/privacy-policy/" />
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://howzysolutions.com/pt/terms-of-service/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://howzysolutions.com/terms-of-service/" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://howzysolutions.com/pt/terms-of-service/" />
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://howzysolutions.com/pt/terms-of-service/vvv/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://howzysolutions.com/terms-of-service/vvv/" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://howzysolutions.com/pt/terms-of-service/vvv/" />
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>

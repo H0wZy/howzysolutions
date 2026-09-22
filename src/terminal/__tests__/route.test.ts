@@ -50,6 +50,36 @@ describe('counterpart', () => {
   })
 })
 
+describe('the legal documents (spec: terms of service)', () => {
+  it('resolves the terms index, with and without its trailing slash', () => {
+    expect(locationFor('/terms-of-service/').route).toEqual({ page: 'terms' })
+    expect(locationFor('/terms-of-service').route).toEqual({ page: 'terms' })
+    expect(locationFor('/pt/terms-of-service/')).toEqual({
+      route: { page: 'terms' },
+      locale: 'pt',
+    })
+  })
+
+  it("resolves an app's own terms page", () => {
+    expect(locationFor('/terms-of-service/vvv/').route).toEqual({
+      page: 'termsApp',
+      id: 'vvv',
+    })
+  })
+
+  it('builds both terms paths per locale', () => {
+    expect(pathFor({ page: 'terms' }, 'en')).toBe('/terms-of-service/')
+    expect(pathFor({ page: 'terms' }, 'pt')).toBe('/pt/terms-of-service/')
+    expect(pathFor({ page: 'termsApp', id: 'vvv' }, 'en')).toBe('/terms-of-service/vvv/')
+    expect(pathFor({ page: 'termsApp', id: 'vvv' }, 'pt')).toBe('/pt/terms-of-service/vvv/')
+  })
+
+  it('keeps the privacy policy where its app review left it', () => {
+    expect(pathFor({ page: 'privacy' }, 'en')).toBe('/privacy-policy/')
+    expect(locationFor('/privacy-policy/').route).toEqual({ page: 'privacy' })
+  })
+})
+
 describe('locationFor', () => {
   it('falls back to the home page for an unknown path', () => {
     expect(locationFor('/nonsense/')).toEqual({ route: { page: 'home' }, locale: 'en' })
