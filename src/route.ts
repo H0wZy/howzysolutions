@@ -19,6 +19,8 @@ export type Route =
   /** One app's block of one legal document, on a page of its own. */
   | { page: 'legalApp'; doc: 'privacy' | 'terms'; id: string }
   | { page: 'mcp' }
+  /** A designed summary of a project whose record lives at /works/vvv/. */
+  | { page: 'vvv' }
 
 export type Location = { route: Route; locale: Locale }
 
@@ -52,6 +54,7 @@ export function parseRoute(rest: string): Route {
     return { page: 'legalApp', doc: appMatch[1] === 'privacy-policy' ? 'privacy' : 'terms', id: appMatch[2] }
   }
   if (rest === '/mcp/' || rest === '/mcp') return { page: 'mcp' }
+  if (rest === '/vvv/' || rest === '/vvv') return { page: 'vvv' }
   if (rest === '/works/' || rest === '/works') return { page: 'workIndex', number: 1 }
   const pageMatch = /^\/works\/(\d+)\/?$/.exec(rest)
   if (pageMatch) return { page: 'workIndex', number: Number(pageMatch[1]) }
@@ -71,6 +74,7 @@ const FIXED = {
   privacy: '/privacy-policy/',
   terms: '/terms-of-service/',
   mcp: '/mcp/',
+  vvv: '/vvv/',
 } as const satisfies Record<string, string>
 
 /** The canonical path for a route in a given locale. */
@@ -95,8 +99,12 @@ export function pathFor(route: Route, locale: Locale): string {
  * src/App.tsx does not import them, which is what keeps them out of the client
  * bundle (src/entry-server.tsx renders them instead).
  */
-export function isStaticDocument(route: Route): boolean {
-  return route.page === 'privacy' || route.page === 'terms' || route.page === 'legalApp'
+const STATIC_PAGES = ['privacy', 'terms', 'legalApp', 'vvv'] as const
+
+export function isStaticDocument(
+  route: Route,
+): route is Extract<Route, { page: (typeof STATIC_PAGES)[number] }> {
+  return (STATIC_PAGES as readonly string[]).includes(route.page)
 }
 
 /** The same page in another locale — what the language control links to. */

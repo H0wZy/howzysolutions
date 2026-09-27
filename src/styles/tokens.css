@@ -121,6 +121,12 @@
   --fs-xs: 0.74rem;
   --fs-h2: clamp(1.4rem, 4vw, 1.9rem);
   --fs-h1: clamp(2.4rem, 8vw, 4rem);
+  /*
+   * The showcase title (spec 004): hermes-agent's thin headline, echoed by a
+   * light weight of this same family rather than by a display face. Capped
+   * below --fs-h1 because it runs in capitals, four lines deep, beside art.
+   */
+  --fs-display: clamp(2.1rem, 6vw, 3.2rem);
 
   /* Space and measure */
   --measure: 820px;

@@ -6,6 +6,7 @@ import { projects } from '../projects'
 import { cv } from '../cv'
 import { privacy } from '../privacy'
 import { terms } from '../terms'
+import { vvvShowcase } from '../showcase-vvv'
 import { LOCALES } from '../i18n/types'
 import type { Localized } from '../i18n/types'
 import { metaFor, routes } from '../../entry-server'
@@ -103,6 +104,8 @@ function visibleStrings(): Array<[where: string, text: string]> {
   walk('cv.summary', cv.summary)
   walk('privacy', privacy)
   walk('terms', terms)
+  // The vvv showcase (spec 004): prose that exists nowhere else on the site.
+  walk('showcase.vvv', vvvShowcase)
 
   return out
 }

@@ -110,6 +110,14 @@ export const mcp: Project = {
     },
   ],
 
+  showcase: {
+    route: { page: 'mcp' },
+    blurb: {
+      en: 'The visual preview: the TUI, the AI bridges, the connector widgets and the docs.',
+      pt: 'A demonstração visual: a TUI, as bridges de IA, os conectores e a documentação.',
+    },
+  },
+
   links: [
     { kind: 'repo', href: 'https://github.com/H0wZy/mcp', label: 'GitHub' },
     { kind: 'live', href: 'https://howzysolutions.com/mcp', label: 'Showcase' },

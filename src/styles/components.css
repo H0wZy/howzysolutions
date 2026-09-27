@@ -1628,3 +1628,165 @@ button.pagination-link {
 .breadcrumb [data-slot='breadcrumb-page'] {
   color: var(--dim);
 }
+
+/* Showcase (spec 004) ------------------------------------------------------ */
+
+/*
+ * hermes-agent's headline, spoken in this site's one family: a light weight,
+ * capitals, tight leading. Capitals are presentation only; the record keeps
+ * sentence case, so a screen reader hears words rather than letters.
+ */
+.showcase-title {
+  font-size: var(--fs-display);
+  font-weight: 250;
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  margin: 0.15em 0 0;
+}
+
+.showcase-title-line,
+.showcase-former {
+  display: block;
+}
+
+.showcase-actions {
+  margin: 1.6em 0 0;
+}
+
+/*
+ * Artwork is grayscale line work on pure black. `lighten` lets the black lose
+ * to --bg, so the picture reads as printed on the ground, with no box around
+ * it: hermes-agent's technique over this site's colour (plan D3). No filter
+ * and no shadow, because glow and blur are out of the vocabulary.
+ */
+.showcase-art {
+  margin: 2em 0 0;
+  mix-blend-mode: lighten;
+}
+
+.showcase-art img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.showcase-art-lead {
+  margin: 0;
+  width: min(100%, 420px);
+  justify-self: center;
+}
+
+/* Wraps rather than scrolls: no horizontal scroll at 360px, and no scroll box
+   a keyboard user would need to reach. */
+.showcase-term {
+  margin: 1.4em 0 0;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  font-size: var(--fs-sm);
+  line-height: 1.6;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.showcase-term code {
+  color: var(--fg);
+}
+
+/* Hanging indents: a wrapped command continues under its first word, a
+   wrapped note under its first word after the `#`. */
+.showcase-term-line,
+.showcase-term-cmd,
+.showcase-term-note {
+  display: block;
+}
+
+.showcase-term-line + .showcase-term-line {
+  margin-top: 0.4em;
+}
+
+.showcase-term-cmd {
+  padding-left: 2ch;
+  text-indent: -2ch;
+}
+
+.showcase-term-note {
+  padding-left: 4ch;
+  text-indent: -2ch;
+  color: var(--dim);
+}
+
+/* Numbered like hermes-agent's features, marked like this site's comments. */
+.showcase-stages {
+  list-style: none;
+  margin: 1.4em 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0 28px;
+}
+
+.showcase-stages li,
+.showcase-lanes > div {
+  padding: 18px 0 20px;
+  border-top: 1px solid var(--line);
+}
+
+.showcase-stages h3,
+.showcase-lanes h3 {
+  font-size: 1.05rem;
+  margin: 0.3em 0 0.5em;
+}
+
+.showcase-stages p,
+.showcase-lanes p {
+  margin: 0;
+  max-width: 68ch;
+}
+
+.showcase-stage-verb {
+  color: var(--dim);
+  font-size: var(--fs-sm);
+}
+
+.showcase-lanes {
+  display: grid;
+  gap: 0 28px;
+  margin-top: 1.4em;
+}
+
+.showcase-faq {
+  margin: 1.4em 0 1.6em;
+}
+
+.showcase-faq details {
+  border-top: 1px solid var(--line);
+  padding: 14px 0;
+}
+
+.showcase-faq details:last-child {
+  border-bottom: 1px solid var(--line);
+}
+
+.showcase-faq summary {
+  cursor: pointer;
+  color: var(--fg);
+  font-weight: 600;
+  transition: color var(--dur-fast) var(--ease);
+}
+
+.showcase-faq summary:hover {
+  color: var(--accent);
+}
+
+.showcase-faq details p {
+  margin: 0.8em 0 0;
+}
+
+@media (min-width: 640px) {
+  .showcase-stages,
+  .showcase-lanes {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

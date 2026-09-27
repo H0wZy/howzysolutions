@@ -52,6 +52,8 @@ export const pt = {
   'work.pageNext': 'próxima página',
   'work.allWork': 'todos os trabalhos',
   'work.listingTitle': 'Todos os trabalhos',
+  'work.showcase': 'Showcase',
+  'work.openShowcase': 'abrir showcase',
 
   // Detalhe do projeto
   'project.problem': 'o_problema',
