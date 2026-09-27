@@ -86,6 +86,8 @@ export type ProjectImage = {
 export type Project = {
   id: string
   name: string
+  /* Shown under the name wherever it appears, so a reader who knows the old one finds it. */
+  formerName?: string
   kind: ProjectKind
   state: ProjectState
   context?: Localized

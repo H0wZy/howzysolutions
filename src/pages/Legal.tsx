@@ -199,6 +199,7 @@ export function Legal({
                       · <span className="nowrap">{app.tagline[locale]}</span>
                     </span>
                   </h2>
+                  {record?.formerName ? <p className="sub dim">old {record.formerName}</p> : null}
                   {app.summary[locale].map((paragraph) => (
                     <p key={paragraph} className="prose">
                       {paragraph}

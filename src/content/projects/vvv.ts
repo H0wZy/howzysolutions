@@ -3,6 +3,7 @@ import type { Project } from '../types'
 export const vvv: Project = {
   id: 'vvv',
   name: 'vvv (Viral Video Visualizer)',
+  formerName: 'viralvideogen',
   kind: 'product',
   state: 'functional',
   period: { start: '2026-08-16', end: '2026-08-18' },
