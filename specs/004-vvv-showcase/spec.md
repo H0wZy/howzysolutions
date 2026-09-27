@@ -76,6 +76,18 @@ A short FAQ answers: is the code public, does it post by itself, why there is no
 
 **Independent Test**: Each answer opens and closes by keyboard alone, with scripting disabled.
 
+### User Story 6 - Featured projects on the home page, one at a time (Priority: P2)
+
+Added 2026-09-27: "na sessão http://localhost:4173/#featured coloque uma paginação ali pra irmos colocando varios projetos na home". The home page's featured card showed only H0wZy/mcp, hardcoded in `Home.tsx`. It now pages through every project that carries a featured card, vvv beside mcp.
+
+**Independent Test**: On `/#featured`, activate `2`, then `→`, then Tab into the strip and press an arrow key; each shows the other card. Repeat with scripting disabled.
+
+**Acceptance Scenarios**:
+
+1. **Given** two featured projects, **When** the page loads, **Then** the first card shows with a pager `← 1 2 →`, `1` marked current.
+2. **Given** a keyboard user, **When** they Tab into the strip, **Then** the visible card is outlined and the arrow keys move between cards.
+3. **Given** a single featured project, **When** the page renders, **Then** no pager and no radio are rendered.
+
 ### Edge Cases
 
 - No artwork yet, or only some of it: the page must look finished either way.
@@ -99,6 +111,8 @@ A short FAQ answers: is the code public, does it post by itself, why there is no
 - **FR-010**: The vvv project record MUST be brought up to date so that record, showcase and legal pages agree.
 - **FR-011**: The FAQ MUST use native `<details>`/`<summary>`.
 - **FR-012**: The prompts used to generate the artwork MUST be recorded in this folder, so the images can be regenerated in the same style.
+- **FR-013**: The home page's featured cards MUST come from project data (`Project.featured`), in the order `projects` lists them, so featuring a project is a data edit.
+- **FR-014**: The featured strip MUST switch cards without JavaScript: a visually hidden radio group decides which card shows, a focused radio outlines its card, and the numbered labels and wrap-around arrows check the same radios for a pointer.
 
 ### Key Entities
 

@@ -67,6 +67,12 @@ function visibleStrings(): Array<[where: string, text: string]> {
     for (const [i, image] of (project.images ?? []).entries()) {
       localized(`${at}.image[${i}].alt`, image.alt)
     }
+    if (project.showcase) localized(`${at}.showcase.blurb`, project.showcase.blurb)
+    if (project.featured) {
+      localized(`${at}.featured.tagline`, project.featured.tagline)
+      localized(`${at}.featured.pitch`, project.featured.pitch)
+      localizedList(`${at}.featured.chain`, project.featured.chain)
+    }
   }
 
   /*

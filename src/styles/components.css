@@ -917,7 +917,8 @@
   border-color: var(--accent);
 }
 
-.pagination-link[aria-current='page'] {
+.pagination-link[aria-current='page'],
+.pagination-link.is-current {
   background: var(--accent);
   border-color: var(--accent);
   color: var(--bg);
@@ -1789,4 +1790,30 @@ button.pagination-link {
   .showcase-lanes {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+}
+
+/* Featured strip (spec 004 US6) -------------------------------------------- */
+
+/*
+ * The card after the checked radio is the one on show; the rest wait. No
+ * radio (a single featured project) means no rule applies and the card shows.
+ * A keyboard-focused radio outlines its card, since the radio itself is
+ * visually hidden.
+ */
+.featured-radio + .featured-card {
+  display: none;
+}
+
+.featured-radio:checked + .featured-card {
+  display: block;
+}
+
+.featured-radio:focus-visible + .featured-card {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.featured-pager .pagination-link {
+  cursor: pointer;
+  user-select: none;
 }

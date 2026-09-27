@@ -1,10 +1,10 @@
+import { Fragment } from 'react'
 import type { Locale } from '../content/i18n/types'
 import type { ContentBundle } from '../content/types'
 import { experienceDuration } from '../content/profile'
 import { periodLabel } from '../content/stats'
 import { activity } from '../content/contributions'
 import { translate } from '../locale'
-import mcpData from '../content/mcp.generated.json'
 import { pathFor } from '../route'
 import { Chrome } from '../components/Chrome'
 import { SectionLabel } from '../components/SectionLabel'
@@ -32,6 +32,13 @@ export function Home({
   // clock during render, or prerender and hydration disagree (FR-047).
   const { years, months } = experienceDuration
   const period = periodLabel(stats)
+  /* Every project that carries a card, in the order `projects` lists them. */
+  const featured = content.projects.flatMap((project) =>
+    project.featured ? [{ project, card: project.featured }] : [],
+  )
+  /* Wraps both ways, so the arrows on the first and last cards never dead-end. */
+  const radioId = (i: number) =>
+    `featured-${featured[(i + featured.length) % featured.length].project.id}`
 
   return (
     <>
@@ -96,50 +103,86 @@ export function Home({
         <section className="section" id="featured">
           <div className="wrap">
             <SectionLabel id="section.featured" anchor="featured" locale={locale} />
-            <div className="p-5 rounded border border-[var(--border)] bg-[var(--surface)] space-y-4">
-              <div className="flex flex-wrap items-center justify-between gap-3">
-                <div className="flex items-center gap-2">
-                  <span className="font-mono text-xs px-2.5 py-0.5 rounded border border-[var(--accent)] text-[var(--accent)] font-semibold">
-                    H0wZy/mcp {mcpData.version}
-                  </span>
-                  <span className="text-xs font-mono text-[var(--dim)]">
-                    {locale === 'pt' ? 'Hub Multi-Agente & Go CLI' : 'Multi-Agent Hub & Go CLI'}
-                  </span>
-                </div>
-                <a
-                  href={pathFor({ page: 'mcp' }, locale)}
-                  className="font-mono text-xs text-[var(--accent)] hover:underline"
-                >
-                  {locale === 'pt' ? 'abrir showcase completo →' : 'open full showcase →'}
-                </a>
-              </div>
+            {/*
+              One card at a time, switched by a radio group rather than by
+              state: the checked radio's card shows (components.css), so the
+              strip works with scripting unavailable and costs no JavaScript.
+              Keyboard users get native radio behaviour (arrows move between
+              cards, a focused radio outlines its card); the numbered labels
+              are the same radios for a pointer, so they are hidden from
+              assistive technology rather than announced twice.
+            */}
+            {featured.map(({ project, card }, i) => {
+              const href = pathFor(project.showcase?.route ?? { page: 'work', id: project.id }, locale)
+              return (
+                <Fragment key={project.id}>
+                  {featured.length > 1 ? (
+                    <input
+                      type="radio"
+                      name="featured"
+                      id={radioId(i)}
+                      className="featured-radio visually-hidden"
+                      defaultChecked={i === 0}
+                      aria-label={translate(locale, 'featured.show', { name: card.name })}
+                    />
+                  ) : null}
+                  <div className="featured-card p-5 rounded border border-[var(--border)] bg-[var(--surface)] space-y-4">
+                    <div className="flex flex-wrap items-center justify-between gap-3">
+                      <div className="flex items-center gap-2">
+                        <span className="font-mono text-xs px-2.5 py-0.5 rounded border border-[var(--accent)] text-[var(--accent)] font-semibold">
+                          {card.version ? `${card.name} ${card.version}` : card.name}
+                        </span>
+                        <span className="text-xs font-mono text-[var(--dim)]">{card.tagline[locale]}</span>
+                      </div>
+                      <a href={href} className="font-mono text-xs text-[var(--accent)] hover:underline">
+                        {translate(locale, 'work.openShowcase')} →
+                      </a>
+                    </div>
 
-              <p className="prose text-sm text-[var(--fg)]">
-                {locale === 'pt'
-                  ? 'Centralize e distribua servidores MCP de alta performance conectando Claude Code, OpenAI Codex e Google Antigravity com TUI interativa em Go e execucao sub-50ms.'
-                  : 'Centralize and distribute high-performance MCP servers connecting Claude Code, OpenAI Codex, and Google Antigravity with interactive Go TUI and sub-50ms execution.'}
-              </p>
+                    <p className="prose text-sm text-[var(--fg)]">{card.pitch[locale]}</p>
 
-              <div className="flex flex-wrap items-center gap-2 text-xs font-mono text-[var(--term-user)]">
-                <span>Claude Code</span>
-                <span className="text-[var(--dim)]">↔</span>
-                <span>OpenAI Codex</span>
-                <span className="text-[var(--dim)]">↔</span>
-                <span>Google Antigravity</span>
-              </div>
+                    <div className="flex flex-wrap items-center gap-2 text-xs font-mono text-[var(--term-user)]">
+                      {card.chain[locale].map((step, j) => (
+                        <Fragment key={step}>
+                          {j > 0 ? <span className="text-[var(--dim)]">{card.joiner}</span> : null}
+                          <span>{step}</span>
+                        </Fragment>
+                      ))}
+                    </div>
 
-              <div className="pt-2 flex flex-wrap items-center gap-3">
-                <a
-                  href={pathFor({ page: 'mcp' }, locale)}
-                  className="btn text-xs font-mono"
-                >
-                  {locale === 'pt' ? 'Explorar H0wZy/mcp' : 'Explore H0wZy/mcp'} →
-                </a>
-                <code className="text-xs font-mono px-3 py-1.5 rounded bg-[var(--bg)] border border-[var(--line)] text-[var(--fg)] select-all">
-                  npx @h0wzy/mcp
-                </code>
-              </div>
-            </div>
+                    <div className="pt-2 flex flex-wrap items-center justify-between gap-3">
+                      <div className="flex flex-wrap items-center gap-3">
+                        <a href={href} className="btn text-xs font-mono">
+                          {translate(locale, 'featured.explore', { name: card.name })} →
+                        </a>
+                        <code className="text-xs font-mono px-3 py-1.5 rounded bg-[var(--bg)] border border-[var(--line)] text-[var(--fg)] select-all">
+                          {card.command}
+                        </code>
+                      </div>
+                      {featured.length > 1 ? (
+                        <div className="pagination-list featured-pager" aria-hidden="true">
+                          <label className="pagination-link pagination-edge" htmlFor={radioId(i - 1)}>
+                            ←
+                          </label>
+                          {featured.map((other, j) => (
+                            <label
+                              key={other.project.id}
+                              className={j === i ? 'pagination-link is-current' : 'pagination-link'}
+                              htmlFor={radioId(j)}
+                            >
+                              {j + 1}
+                            </label>
+                          ))}
+                          <label className="pagination-link pagination-edge" htmlFor={radioId(i + 1)}>
+                            →
+                          </label>
+                        </div>
+                      ) : null}
+                    </div>
+                  </div>
+                </Fragment>
+              )
+            })}
           </div>
         </section>
 

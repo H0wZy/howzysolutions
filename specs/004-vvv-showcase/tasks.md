@@ -27,6 +27,13 @@
 - [x] T012 Artwork slots render nothing when absent; verify with and without a stand-in image (not committed).
 - [x] T013 When the owner delivers the images: convert to WebP, place under `public/vvv/`, declare them in the record.
 
+## Phase 4b: US6, featured strip on the home page (P2)
+
+- [x] T016 Add `Project.featured` to `src/content/types.ts`; give mcp (moved out of `Home.tsx`) and vvv a card.
+- [x] T017 Render the strip in `src/pages/Home.tsx`: a radio before each card, a pager of labels inside each card; styles in `src/styles/components.css`.
+- [x] T018 Walk the featured fields in `src/content/__tests__/punctuation.test.ts`.
+- [x] T019 Verify pointer, keyboard and PT at 390px (2026-09-27). Found, not caused: the home hero's `.sub.nowrap` line scrolls a 390px PT page sideways by 109px.
+
 ## Phase 5: Verification
 
 - [x] T014 `npm run build`, `npm test`, `npm run lint`; confirm the JavaScript total did not grow.

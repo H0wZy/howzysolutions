@@ -25,7 +25,7 @@ export const pt = {
 
   // Seções
   'section.terminal': 'o_terminal',
-  'section.featured': 'projeto_em_destaque',
+  'section.featured': 'projetos_em_destaque',
   'section.work': 'trabalhos_selecionados',
   'section.about': 'a_ideia_toda',
   'section.stats': 'atividade_medida',
@@ -54,6 +54,8 @@ export const pt = {
   'work.listingTitle': 'Todos os trabalhos',
   'work.showcase': 'Showcase',
   'work.openShowcase': 'abrir showcase',
+  'featured.explore': 'Explorar {name}',
+  'featured.show': 'Mostrar {name}',
 
   // Detalhe do projeto
   'project.problem': 'o_problema',
