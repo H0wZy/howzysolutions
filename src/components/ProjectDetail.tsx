@@ -127,6 +127,7 @@ export function ProjectDetail({
     <article className="detail">
       <header className="detail-head">
         <h1>{project.name}</h1>
+        {project.formerName ? <p className="detail-meta dim">old {project.formerName}</p> : null}
         <p className="detail-meta">
           <Badge>{translate(locale, PROJECT_KIND[project.kind])}</Badge>{' '}
           <Badge className={`badge-${project.state}`}>
