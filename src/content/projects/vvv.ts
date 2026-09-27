@@ -112,6 +112,21 @@ export const vvv: Project = {
     },
   ],
 
+  featured: {
+    name: 'vvv',
+    tagline: { en: 'Viral Video Visualizer', pt: 'Viral Video Visualizer' },
+    pitch: {
+      en: 'Turn a reference video into an original, production-ready video package, and measure every result before believing it: clips decoded, narration read back, a gate before anything is posted.',
+      pt: 'Transforme um vídeo de referência num pacote de vídeo original e pronto para produção, e meça cada resultado antes de acreditar nele: clipes decodificados, narração lida de volta, um portão antes de qualquer post.',
+    },
+    chain: {
+      en: ['reference', 'story', 'prompts', 'measured cut'],
+      pt: ['referência', 'história', 'prompts', 'corte medido'],
+    },
+    joiner: '→',
+    command: 'h3v analyze ./reference.mp4',
+  },
+
   showcase: {
     route: { page: 'vvv' },
     blurb: {

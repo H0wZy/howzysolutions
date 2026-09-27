@@ -109,6 +109,21 @@ export type Project = {
   images?: ProjectImage[]
   /** A designed page about this project, linked from its record (spec 004 FR-009). */
   showcase?: { route: Route; blurb: Localized }
+  /**
+   * A card on the home page's featured strip, in the order `projects` lists
+   * them (spec 004 US6). Links to the showcase when there is one, else to
+   * /works/<id>/.
+   */
+  featured?: {
+    /** Short display name, for the badge and the call to action. */
+    name: string
+    version?: string
+    tagline: Localized
+    pitch: Localized
+    chain: Localized<string[]>
+    joiner: '↔' | '→'
+    command: string
+  }
 }
 
 export type Contact = {

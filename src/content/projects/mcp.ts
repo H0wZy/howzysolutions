@@ -110,6 +110,22 @@ export const mcp: Project = {
     },
   ],
 
+  featured: {
+    name: 'H0wZy/mcp',
+    version: mcpData.version,
+    tagline: { en: 'Multi-Agent Hub & Go CLI', pt: 'Hub Multi-Agente & Go CLI' },
+    pitch: {
+      en: 'Centralize and distribute high-performance MCP servers connecting Claude Code, OpenAI Codex, and Google Antigravity with interactive Go TUI and sub-50ms execution.',
+      pt: 'Centralize e distribua servidores MCP de alta performance conectando Claude Code, OpenAI Codex e Google Antigravity com TUI interativa em Go e execução sub-50ms.',
+    },
+    chain: {
+      en: ['Claude Code', 'OpenAI Codex', 'Google Antigravity'],
+      pt: ['Claude Code', 'OpenAI Codex', 'Google Antigravity'],
+    },
+    joiner: '↔',
+    command: 'npx @h0wzy/mcp',
+  },
+
   showcase: {
     route: { page: 'mcp' },
     blurb: {

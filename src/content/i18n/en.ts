@@ -23,7 +23,7 @@ export const en = {
 
   // Sections
   'section.terminal': 'the_terminal',
-  'section.featured': 'featured_project',
+  'section.featured': 'featured_projects',
   'section.work': 'selected_work',
   'section.about': 'the_whole_idea',
   'section.stats': 'measured_activity',
@@ -63,6 +63,8 @@ export const en = {
   'work.listingTitle': 'All works',
   'work.showcase': 'Showcase',
   'work.openShowcase': 'open showcase',
+  'featured.explore': 'Explore {name}',
+  'featured.show': 'Show {name}',
 
   // Project detail
   'project.problem': 'the_problem',
