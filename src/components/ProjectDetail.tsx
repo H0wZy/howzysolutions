@@ -4,6 +4,7 @@ import type { Project, Technology } from '../content/types'
 import { PROJECT_KIND, PROJECT_STATE, STACK_GROUP } from '../content/types'
 import { periodLabel, stats, trackedTimeFor } from '../content/stats'
 import { SourceLink } from './SourceLink'
+import { Metrics } from './Metrics'
 import { translate } from '../locale'
 import { pathFor } from '../route'
 import { projectTopicAnchors } from '../navigation'
@@ -71,19 +72,7 @@ export function ProjectDetail({
         ))}
       </div>
     ),
-    metrics: project.metrics?.length ? (
-      <dl className="metrics">
-        {project.metrics.map((metric) => (
-          <div key={metric.label[locale]} className="metric">
-            <dt>{metric.label[locale]}</dt>
-            <dd>
-              <strong>{metric.value}</strong>
-              <span className="metric-source">{metric.source[locale]}</span>
-            </dd>
-          </div>
-        ))}
-      </dl>
-    ) : null,
+    metrics: project.metrics?.length ? <Metrics metrics={project.metrics} locale={locale} /> : null,
     development: project.development[locale].map((paragraph) => (
       <p key={paragraph.slice(0, 40)}>{paragraph}</p>
     )),
@@ -141,23 +130,16 @@ export function ProjectDetail({
         </p>
       </header>
 
-      {project.id === 'mcp' ? (
+      {project.showcase ? (
         <div className="p-4 rounded bg-[var(--surface)] border border-[var(--accent)] flex flex-wrap items-center justify-between gap-3 mb-6">
           <div>
             <strong className="text-sm text-[var(--fg)] block font-mono">
-              {locale === 'pt' ? 'Showcase Interativo & Live Hub' : 'Interactive Showcase & Live Hub'}
+              {translate(locale, 'work.showcase')}
             </strong>
-            <span className="text-xs text-[var(--dim)]">
-              {locale === 'pt'
-                ? 'Acesse a demonstracao visual com TUI, bridges de IA, conectores e documentacao.'
-                : 'Access the visual preview with TUI, AI bridges, connector widgets and docs.'}
-            </span>
+            <span className="text-xs text-[var(--dim)]">{project.showcase.blurb[locale]}</span>
           </div>
-          <a
-            href={pathFor({ page: 'mcp' }, locale)}
-            className="btn text-xs font-mono"
-          >
-            {locale === 'pt' ? 'Abrir Showcase' : 'Open Showcase'} →
+          <a href={pathFor(project.showcase.route, locale)} className="btn text-xs font-mono">
+            {translate(locale, 'work.openShowcase')} →
           </a>
         </div>
       ) : null}

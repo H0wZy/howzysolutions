@@ -1,96 +1,122 @@
 import type { Project } from '../types'
 
+/*
+ * Facts measured in the vvv repository on 2026-09-27 (spec 004, FR-010): git
+ * history, specs/, schemas/, tests/ and src/h3v/cli.py, counted rather than
+ * recalled. The repository is private, so nothing here links to it, and nothing
+ * names an account, a device, a proxy or a spend figure (spec 004, FR-004).
+ */
 export const vvv: Project = {
   id: 'vvv',
   name: 'vvv (Viral Video Visualizer)',
   formerName: 'viralvideogen',
   kind: 'product',
   state: 'functional',
-  period: { start: '2026-08-16', end: '2026-08-18' },
-  commits: 38,
-  /* WakaTime's own project name, which the rename did not change. It joins to
-     src/content/wakatime.generated.json, so it follows that snapshot rather
-     than this record's id. */
+  period: { start: '2026-07-03', end: '2026-09-27' },
+  commits: 338,
+  /* The name most of this project's tracked time sits under. Since the
+     2026-09-21 rename the snapshot also holds a small 'vvv' project, which this
+     single-name join does not count yet (spec 004 follow-up). */
   wakatimeProject: 'viralvideogen',
 
   summary: {
-    en: 'A CLI pipeline turning a reference video into a production-ready storytelling package, whose defining rule is that it never believes a result it has not measured.',
-    pt: 'Pipeline CLI que transforma um vídeo de referência num pacote de storytelling pronto para produção, cuja regra definidora é nunca acreditar num resultado que não mediu.',
+    en: 'A CLI pipeline that turns a reference video into an original, production-ready video package for two accounts, a US storytelling channel and a Brazilian TikTok Shop, and never believes a result it has not measured.',
+    pt: 'Pipeline CLI que transforma um vídeo de referência num pacote de vídeo original e pronto para produção, para duas contas, um canal de storytelling nos EUA e uma loja no TikTok Shop Brasil, e nunca acredita num resultado que não mediu.',
   },
 
   problem: {
-    en: 'Producing emotional storytelling video for TikTok with character consistency and retention is repetitive, manual and expensive: every prompt mistake is a paid call wasted, and a character whose face changes between scenes destroys the whole video.',
-    pt: 'Produzir vídeo de storytelling emocional para TikTok com consistência de personagem e retenção é trabalho manual repetitivo e caro: cada erro de prompt é uma chamada paga desperdiçada, e personagem que muda de rosto entre cenas destrói o vídeo inteiro.',
+    en: 'Making short video with AI is cheap per attempt and expensive in aggregate. Every wrong prompt is a paid call, a character whose face changes between scenes ruins a story, and a product video that shows something unlike the real product is a misleading offer. The failures that cost the most are the ones that look like success.',
+    pt: 'Fazer vídeo curto com IA é barato por tentativa e caro no conjunto. Cada prompt errado é uma chamada paga, um personagem que muda de rosto entre cenas estraga a história, e um vídeo de produto que mostra algo diferente do produto real é uma oferta enganosa. As falhas que mais custam são as que parecem sucesso.',
   },
 
   capabilities: {
     en: [
-      'Video intelligence: scene detection, keyframe extraction, audio transcription and visual analysis, selecting representative frames instead of sending every frame to a model.',
-      'Story intelligence: narrative structure, character archetypes, an original story rather than a renamed character with translated dialogue, and a retention strategy built on open loops and emotional escalation.',
-      'A character bible and a visual bible fixing immutable traits per recurring character and the environment’s visual language.',
-      'A deliberate split between the image prompt, which defines visual state, and the animation prompt, which defines what changes over time. That separation is what makes character consistency controllable.',
-      'A publishing gate that measures the final video, reads the attested environment, and refuses when something blocks. It never publishes on its own.',
-      'Thirteen versioned JSON Schema files, one per persisted shape, as machine-readable contracts.',
+      'Video intelligence: scene detection, keyframe extraction, local transcription and visual analysis, choosing representative frames instead of sending every frame to a model.',
+      'Story intelligence: an original story built from the reference’s structure (hook, open loops, twist, payoff), with character and visual bibles fixing what must not change between scenes.',
+      'Two prompts per scene: the image prompt defines the visual state, the animation prompt what changes over time.',
+      'Measured assembly: returned clips are decoded and timed, narration is transcribed back against the script and checked for voice drift, and the cut is joined with levels matched.',
+      'A Brazilian TikTok Shop lane: product videos gated by product, claim and compliance checks, and a client for TikTok Shop’s Affiliate Creator API, run by the operator or on a schedule.',
+      'A pre-publish gate that measures the final video, labels each finding verified or attested, and never posts by itself.',
     ],
     pt: [
-      'Video intelligence: detecção de cena, extração de keyframes, transcrição de áudio e análise visual, selecionando frames representativos em vez de mandar todo frame para um modelo.',
-      'Story intelligence: estrutura narrativa, arquétipos de personagem, história original em vez de personagem renomeado com diálogo traduzido, e estratégia de retenção com open loops e escalada emocional.',
-      'Character bible e visual bible fixando características imutáveis por personagem recorrente e a linguagem visual do ambiente.',
-      'Separação deliberada entre prompt de imagem, que define o estado visual, e prompt de animação, que define o que muda no tempo. Essa separação é o que torna a consistência de personagem controlável.',
-      'Publishing gate que mede o vídeo final, lê o ambiente atestado e recusa quando algo bloqueia. Nunca publica sozinho.',
-      'Treze arquivos JSON Schema versionados, um por shape persistida, como contratos machine-readable.',
+      'Video intelligence: detecção de cena, extração de keyframes, transcrição local e análise visual, escolhendo frames representativos em vez de mandar todo frame para um modelo.',
+      'Story intelligence: uma história original construída a partir da estrutura da referência (gancho, open loops, virada, desfecho), com character e visual bibles fixando o que não pode mudar entre cenas.',
+      'Dois prompts por cena: o de imagem define o estado visual, o de animação o que muda no tempo.',
+      'Montagem medida: clipes devolvidos são decodificados e cronometrados, a narração é transcrita de volta contra o roteiro e checada contra deriva de voz, e o corte é unido com os níveis igualados.',
+      'Uma faixa de TikTok Shop Brasil: vídeos de produto barrados por checagens de produto, alegação e compliance, e um cliente da Affiliate Creator API do TikTok Shop, acionado pelo operador ou por agendamento.',
+      'Um portão de pré-publicação que mede o vídeo final, rotula cada achado como verificado ou atestado, e nunca publica sozinho.',
     ],
   },
 
-  stack: [{ group: 'other', items: ['python', 'typer', 'pydantic', 'opencv', 'whisper', 'anthropic-sdk', 'pytest', 'spec-kit'] }],
+  stack: [
+    { group: 'backend', items: ['python', 'go', 'typer', 'pydantic', 'sqlalchemy', 'postgres'] },
+    { group: 'infra', items: ['github-actions', 'terraform'] },
+    { group: 'other', items: ['opencv', 'whisper', 'anthropic-sdk', 'mcp', 'pytest', 'spec-kit'] },
+  ],
 
   development: {
     en: [
-      'Spec-driven, fourteen specifications in two days. The architecture has one clear rule: the pipeline layer orchestrates, one module per CLI command following read-check-write; the domain packages beside it make no I/O decisions; models is the only place a persisted shape is declared; and every persisted shape has a contract in schemas.',
-      'There is no `generate` command that runs the whole chain. Three stages make paid model calls, and the operational decision is that stories are written by hand in chat and enter through a promote step, the unpaid path.',
-      '`record` does not accept a declared result as truth. A video job reported as completed against a local file is decoded before being believed: a file that is not a readable video demotes the job to missing, and a file that is has its measured duration recorded, replacing the declared one. The reason is on the record: the repository’s own first render plan logged a job as completed against a PNG, and an exists-check believed it. Anything with nothing local to measure is stored as reported, because inventing a measurement would be the same failure in the opposite direction.',
-      '`assemble` sums measured duration, not requested duration. A gap over one second becomes a warning, because a provider returning five-second clips for eight-second requests passes every check in the pipeline and produces a video under the minimum length.',
-      'Deterministic, LLM-free commands never modify their source file. They write a new file alongside it. Storage is split by nature: code, config, schemas, tests and light manifests in git; video, image, frames, audio and renders synced outside it.',
+      'Spec-driven: 37 specifications, each a spec, a plan and its tasks. The pipeline layer orchestrates, one module per command following read, check, write; the domain packages beside it make no I/O decisions; every persisted shape has a JSON Schema contract.',
+      '`record` does not take a reported result on faith. A clip reported as completed is decoded first: a file that is not a readable video becomes missing, and one that is has its measured duration recorded in place of the claimed one. The rule exists because the first render plan logged a PNG as a finished video, and an exists-check believed it.',
+      'A native Go launcher opens the interactive harness in milliseconds and runs the scheduled publishing worker, which holds a single-instance lock and never fires a job late; every other command passes through to the Python CLI.',
     ],
     pt: [
-      'Spec-driven, catorze specs em dois dias. A arquitetura tem uma regra clara: a camada de pipeline orquestra, um módulo por comando CLI seguindo ler-checar-escrever; os pacotes de domínio ao lado não tomam decisão de I/O; models é o único lugar onde uma shape persistida é declarada; e toda shape persistida tem contrato em schemas.',
-      'Não existe um comando `generate` que roda a cadeia inteira. Três estágios fazem chamada paga a modelo, e a decisão operacional é que histórias são escritas à mão no chat e entram por um passo de promoção, o caminho não pago.',
-      'O `record` não aceita resultado declarado como verdade. Um job de vídeo reportado como completo contra um arquivo local é decodificado antes de ser acreditado: arquivo que não é vídeo legível rebaixa o job para ausente, e arquivo que é tem sua duração medida gravada, substituindo a declarada. A razão está registrada: o primeiro render plan do próprio repositório gravou um job como completo contra um PNG, e um exists-check acreditou. O que não tem nada local para medir é gravado como reportado, porque inventar medição seria a mesma falha na direção oposta.',
-      'O `assemble` soma a duração medida, não a pedida. Um gap acima de um segundo vira warning, porque um provedor devolvendo clipes de cinco segundos para pedidos de oito passa por todo check do pipeline e produz um vídeo abaixo do mínimo.',
-      'Comandos determinísticos e sem LLM nunca modificam o arquivo de origem. Escrevem um arquivo novo ao lado. O armazenamento é separado por natureza: código, config, schemas, testes e manifestos leves no git; vídeo, imagem, frames, áudio e renders sincronizados fora dele.',
+      'Spec-driven: 37 specs, cada uma com spec, plano e tarefas. A camada de pipeline orquestra, um módulo por comando seguindo ler, checar, escrever; os pacotes de domínio ao lado não tomam decisão de I/O; toda shape persistida tem um contrato JSON Schema.',
+      'O `record` não aceita resultado reportado como verdade. Um clipe reportado como completo é decodificado antes: arquivo que não é vídeo legível vira ausente, e o que é tem a duração medida gravada no lugar da declarada. A regra existe porque o primeiro render plan gravou um PNG como vídeo pronto, e um exists-check acreditou.',
+      'Um launcher nativo em Go abre o harness interativo em milissegundos e roda o worker de publicação agendada, que segura um lock de instância única e nunca dispara um job atrasado; todo outro comando passa para a CLI em Python.',
     ],
   },
 
   limitations: {
     en: [
-      'No end-to-end command exists, and that is deliberate rather than missing: three stages cost money per call, so the chain is driven stage by stage.',
-      'Publishing is never automatic. The final post is manual, on a phone. The gate reports ready or blocked, and a human acts on it.',
-      'A remote result with no local artifact is stored as reported, not as measured. The distinction is kept in the data rather than smoothed over.',
-      'Not deployed anywhere: it is a local CLI, run by its author.',
+      'No end-to-end command, on purpose: three stages make paid model calls, so the chain is driven stage by stage.',
+      'The storytelling account is posted by hand, after the gate reports ready.',
+      'The TikTok Shop publishing path is built and tested against a fake client; no live post has been recorded yet.',
+      'A remote result with no local file is stored as reported, not as measured.',
+      'Local only, from a private repository; not offered to the public.',
     ],
     pt: [
-      'Não existe comando fim-a-fim, e isso é deliberado e não uma falta: três estágios custam dinheiro por chamada, então a cadeia é conduzida estágio a estágio.',
-      'A publicação nunca é automática. O post final é manual, no telefone. O gate reporta pronto ou bloqueado, e um humano age sobre isso.',
-      'Resultado remoto sem artefato local é gravado como reportado, não como medido. A distinção fica no dado em vez de ser suavizada.',
-      'Sem deploy em lugar nenhum: é uma CLI local, rodada pelo autor.',
+      'Sem comando fim a fim, de propósito: três estágios fazem chamada paga a modelo, então a cadeia é conduzida estágio a estágio.',
+      'A conta de storytelling é publicada à mão, depois que o portão reporta pronto.',
+      'O caminho de publicação no TikTok Shop está construído e testado contra um cliente falso; nenhum post real foi registrado ainda.',
+      'Resultado remoto sem arquivo local é gravado como reportado, não como medido.',
+      'Só local, a partir de um repositório privado; não é oferecido ao público.',
     ],
   },
 
   metrics: [
     {
-      label: { en: 'Specifications in two days', pt: 'Specs em dois dias' },
-      value: '14',
-      source: { en: 'specs/, 38 commits 2026-08-16 to 2026-08-18', pt: 'specs/, 38 commits de 16/08/2026 a 18/08/2026' },
+      label: { en: 'Specifications', pt: 'Specs' },
+      value: '37',
+      source: { en: 'specs/, 2026-07-03 to 2026-09-27', pt: 'specs/, 03/07/2026 a 27/09/2026' },
     },
     {
       label: { en: 'Machine-readable contracts', pt: 'Contratos machine-readable' },
-      value: '13',
+      value: '28',
       source: { en: 'schemas/, one JSON Schema per persisted shape', pt: 'schemas/, um JSON Schema por shape persistida' },
+    },
+    {
+      label: { en: 'Test functions', pt: 'Funções de teste' },
+      value: '1782',
+      source: { en: 'tests/, Python, 2026-09-27; 21 more in Go', pt: 'tests/, Python, 27/09/2026; mais 21 em Go' },
+    },
+    {
+      label: { en: 'CLI commands', pt: 'Comandos da CLI' },
+      value: '71',
+      source: { en: 'src/h3v/cli.py, 2026-09-27', pt: 'src/h3v/cli.py, 27/09/2026' },
     },
     {
       label: { en: 'Lint gate', pt: 'Portão de lint' },
       value: '9.9 / 10',
-      source: { en: 'pylint fail-under threshold', pt: 'limiar fail-under do pylint' },
+      source: { en: 'pylint fail-under, enforced in CI', pt: 'fail-under do pylint, exigido no CI' },
     },
   ],
+
+  showcase: {
+    route: { page: 'vvv' },
+    blurb: {
+      en: 'The designed summary: what it does, the rule behind it, and the two accounts it serves.',
+      pt: 'O resumo desenhado: o que faz, a regra por trás, e as duas contas que atende.',
+    },
+  },
 }

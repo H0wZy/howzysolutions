@@ -61,6 +61,8 @@ export const en = {
   'work.pageNext': 'next page',
   'work.allWork': 'all works',
   'work.listingTitle': 'All works',
+  'work.showcase': 'Showcase',
+  'work.openShowcase': 'open showcase',
 
   // Project detail
   'project.problem': 'the_problem',

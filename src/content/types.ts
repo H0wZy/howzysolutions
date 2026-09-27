@@ -8,6 +8,7 @@
 
 import type { Locale, Localized } from './i18n/types'
 import type { StringKey } from './i18n/en'
+import type { Route } from '../route'
 
 /* -- Vocabularies --------------------------------------------------------- */
 
@@ -106,6 +107,8 @@ export type Project = {
   /** Joins to a name in the statistics snapshot. */
   wakatimeProject?: string
   images?: ProjectImage[]
+  /** A designed page about this project, linked from its record (spec 004 FR-009). */
+  showcase?: { route: Route; blurb: Localized }
 }
 
 export type Contact = {
@@ -191,6 +194,59 @@ export type LegalDocument = {
     summary: Localized<string[]>
     sections: LegalSection[]
   }>
+}
+
+/* -- Showcase pages (spec 004) --------------------------------------------- */
+
+/**
+ * One piece of artwork. Optional wherever it appears: a slot with nothing
+ * declared renders nothing (FR-006).
+ *
+ * `src` is a path under public/ and outside /assets/, because that folder is
+ * cached as immutable for a year on the promise that Vite hashed its names, and
+ * these files are not hashed. Width and height reserve the box before the bytes
+ * arrive.
+ */
+export type ShowcaseArt = {
+  src: string
+  width: number
+  height: number
+  alt: Localized
+}
+
+/** What every showcase section carries: its `##` label (also its rail entry) and its heading. */
+type ShowcaseSection = { label: Localized; heading: Localized }
+
+/**
+ * A designed summary of one project, served as a static document. The project's
+ * facts (name, period, commits, metrics) are read from its record through
+ * `projectId` and never restated: this holds only the page's own copy.
+ */
+export type Showcase = {
+  projectId: string
+  meta: { title: Localized; description: Localized }
+  hero: {
+    label: Localized
+    kicker: Localized
+    /** One entry per display line. */
+    title: Localized<string[]>
+    summary: Localized
+    art?: ShowcaseArt
+  }
+  pipeline: ShowcaseSection & {
+    intro: Localized
+    lines: Array<{ command: string; note: Localized }>
+  }
+  stages: ShowcaseSection & {
+    items: Array<{ verb: Localized; heading: Localized; body: Localized }>
+  }
+  rule: ShowcaseSection & { body: Localized; points: Localized<string[]>; art?: ShowcaseArt }
+  lanes: ShowcaseSection & {
+    items: Array<{ name: Localized; body: Localized }>
+    art?: ShowcaseArt
+  }
+  numbers: ShowcaseSection & { note: Localized }
+  faq: ShowcaseSection & { items: Array<{ question: Localized; answer: Localized }> }
 }
 
 /*

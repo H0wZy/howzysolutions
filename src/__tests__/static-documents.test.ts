@@ -41,9 +41,30 @@ describe('the legal documents stay out of the client bundle', () => {
     expect(read('../main.tsx')).toMatch(/isStaticDocument/)
     for (const { pathname } of routes()) {
       const { route } = locationFor(pathname)
-      const legal = ['privacy', 'terms', 'legalApp'].includes(route.page)
-      expect(isStaticDocument(route), pathname).toBe(legal)
+      const known = ['privacy', 'terms', 'legalApp', 'vvv'].includes(route.page)
+      expect(isStaticDocument(route), pathname).toBe(known)
     }
+  })
+})
+
+/*
+ * The vvv showcase (spec 004) is the same bargain: about 4.6 KB gzipped if it
+ * were hydrated like /mcp/, against 2.36 KB of headroom on the day it was
+ * written. It only fits because nothing on the client imports it.
+ */
+describe('the showcase stays out of the client bundle', () => {
+  it('is not imported by App', () => {
+    expect(app).not.toMatch(/pages\/Showcase|showcase-vvv/)
+  })
+
+  it('is rendered by the server entry instead', () => {
+    const entry = read('../entry-server.tsx')
+    expect(entry).toMatch(/from '\.\/pages\/Showcase'/)
+    expect(entry).toMatch(/from '\.\/content\/showcase-vvv'/)
+  })
+
+  it.each(LOCALES)('%s: is emitted as a real document', (locale) => {
+    expect(routes().map((r) => r.pathname)).toContain(pathFor({ page: 'vvv' }, locale))
   })
 })
 

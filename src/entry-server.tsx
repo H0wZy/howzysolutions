@@ -1,11 +1,13 @@
 import { renderToString } from 'react-dom/server'
 import App from './App'
 import { Legal } from './pages/Legal'
+import { Showcase } from './pages/Showcase'
 import { content, privacy, terms } from './content'
+import { vvvShowcase } from './content/showcase-vvv'
 import { LOCALES, type Locale } from './content/i18n/types'
 import { translate } from './content/i18n/translate'
 import { workPage } from './content/types'
-import { locationFor, pathFor, type Route } from './route'
+import { isStaticDocument, locationFor, pathFor, type Route } from './route'
 
 /**
  * Every route this site emits as a real document, in every locale (FR-006,
@@ -28,6 +30,7 @@ export function routes(): Array<{ pathname: string; locale: Locale }> {
       (LEGAL[doc].projects ?? []).map((app) => ({ page: 'legalApp' as const, doc, id: app.id })),
     ),
     { page: 'mcp' },
+    { page: 'vvv' },
     ...Array.from({ length: total }, (_, i) => ({ page: 'workIndex' as const, number: i + 1 })),
     ...content.projects.map((p) => ({ page: 'work' as const, id: p.id })),
   ]
@@ -120,6 +123,13 @@ export function metaFor(pathname: string): PageMeta {
       ...social,
     }
   }
+  if (route.page === 'vvv') {
+    return {
+      title: `${vvvShowcase.meta.title[locale]} · ${content.profile.name}`,
+      description: vvvShowcase.meta.description[locale],
+      ...social,
+    }
+  }
   return {
     title: `${content.profile.name} · ${translate(locale, 'hero.role')}`,
     description: content.profile.tagline[locale],
@@ -137,21 +147,26 @@ export function metaFor(pathname: string): PageMeta {
 export function render(pathname: string): string {
   const { route, locale } = locationFor(pathname)
   /*
-   * The legal documents render here rather than inside App, and nothing on the
-   * client imports them (src/main.tsx does not hydrate these routes). They are
-   * static prose with no handler on them, so shipping the component and both
-   * records in the entry chunk bought nothing and cost about 3 KB gzipped
-   * against a budget with none to spare.
+   * The static documents render here rather than inside App, and nothing on
+   * the client imports them (src/main.tsx does not hydrate these routes). They
+   * are prose with no handler on them, so shipping their components and records
+   * in the entry chunk would buy nothing and cost kilobytes against a budget
+   * with none to spare. Dispatched through `isStaticDocument`, the same test
+   * the client uses, so the two cannot disagree about which pages are static.
    */
-  if (route.page === 'privacy' || route.page === 'terms' || route.page === 'legalApp') {
+  if (isStaticDocument(route)) {
     return renderToString(
-      <Legal
-        content={content}
-        kind={route.page === 'legalApp' ? route.doc : route.page}
-        appId={route.page === 'legalApp' ? route.id : undefined}
-        locale={locale}
-        pathname={pathname}
-      />,
+      route.page === 'vvv' ? (
+        <Showcase showcase={vvvShowcase} content={content} locale={locale} pathname={pathname} />
+      ) : (
+        <Legal
+          content={content}
+          kind={route.page === 'legalApp' ? route.doc : route.page}
+          appId={route.page === 'legalApp' ? route.id : undefined}
+          locale={locale}
+          pathname={pathname}
+        />
+      ),
     )
   }
   return renderToString(<App pathname={pathname} />)
