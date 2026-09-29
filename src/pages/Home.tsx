@@ -57,8 +57,12 @@ export function Home({
               <p className="tagline">
                 <Typewriter phrases={profile.taglines[locale]} />
               </p>
-              <p className="sub nowrap">
-                {translate(locale, 'hero.role')} · {profile.location[locale]}
+              {/* Each half stays whole and the line may break between them: the whole line
+                  as one nowrap run was 109px wider than a 390px Portuguese screen. */}
+              <p className="sub">
+                <span className="nowrap">{translate(locale, 'hero.role')}</span>
+                {' · '}
+                <span className="nowrap">{profile.location[locale]}</span>
               </p>
               {/*
                 FR-028: experience and tracked time are separate measurements over

@@ -38,3 +38,11 @@
 
 - [x] T014 `npm run build`, `npm test`, `npm run lint`; confirm the JavaScript total did not grow.
 - [x] T015 (2026-09-27: desktop 1440px both locales; 360px and 390px in a same-origin iframe, no horizontal overflow) Inspect `/vvv/`, `/pt/vvv/`, `/works/vvv/`, `/works/mcp/` at 360px and 1440px, with scripting disabled for `/vvv/`.
+
+## Phase 6: the code review's findings (2026-09-29)
+
+- [x] T020 Per-app legal pages carry the general sections that bind the app (`withApp`); `LegalDocument.projects` required.
+- [x] T021 `project.formerName` through the dictionary; terminal `open`/`projects` and did-you-mean accept the old name; WakaTime time summed across a rename.
+- [x] T022 `/mcp/`: no browser call to GitHub, named copy buttons with a status region and a visible failure, menu semantics and Escape, strings in `mcp-page.ts`, tools table shared with `/mcp.md`, wordmark as text, unhashed icons out of `/assets/`.
+- [x] T023 Small ones: PT terms path and `legal.updated`, stale comments, the home hero line that overflowed a 390px PT screen, `check-bundle.mjs` checks the built scripts for static-document prose.
+- [ ] T024 Not done, measured: splitting the static documents into their own entry so they stop downloading the whole bundle. Two files cost +1.03 KB gzip (120.47 KB of 120), three cost +1.58 KB. It needs the non-default GitHub years moved to static JSON (about 2.4 KB), the route CLAUDE.md already names, and is its own feature.

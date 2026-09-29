@@ -57,6 +57,31 @@ for (const f of files) {
   )
 }
 
+/*
+ * The static documents stay out of the client bundle (spec 004, and the legal
+ * pages before it). static-documents.test.ts checks that App does not import
+ * them; this checks the built artifact, which is what a visitor downloads: a
+ * sentence only the legal records and the /vvv/ record contain must not be in
+ * any script. Each sentinel must also be in the page it came from, or it has
+ * gone stale and would pass forever without testing anything.
+ */
+const STATIC_ONLY = [
+  { text: '13.709/2018', page: 'privacy-policy/index.html' },
+  { text: 'Original out.', page: 'vvv/index.html' },
+]
+const scripts = files.map((f) => readFileSync(join(assets, f.name), 'utf8')).join('\n')
+for (const { text, page } of STATIC_ONLY) {
+  const html = existsSync(join(root, 'dist', page)) ? readFileSync(join(root, 'dist', page), 'utf8') : ''
+  if (!html.includes(text)) {
+    console.error(`x bundle: sentinel "${text}" is not in dist/${page}, so it no longer guards anything`)
+    process.exit(1)
+  }
+  if (scripts.includes(text)) {
+    console.error(`x bundle: "${text}" from dist/${page} is in the client bundle; a static document leaked in`)
+    process.exit(1)
+  }
+}
+
 if (kb > BUDGET_KB) {
   console.error(
     `x bundle: ${kb.toFixed(2)} KB gzipped over a ${BUDGET_KB} KB budget by ${(-headroom).toFixed(2)} KB`,
