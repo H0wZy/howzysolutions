@@ -13,11 +13,8 @@
  */
 import '@fontsource-variable/jetbrains-mono/index.css'
 import './index.css'
-import { hydrateRoot } from 'react-dom/client'
-import { HydratedApp } from './HydratedApp'
 import { initReveal } from './enhance/reveal'
 import { initSectionRail } from './enhance/section-rail'
-import { mountTerminal } from './enhance/terminal/mount'
 import { initThemeControl } from './enhance/theme-control'
 import { initLocaleControl } from './enhance/locale-control'
 import { smoothScrollBy } from './enhance/scroll'
@@ -57,15 +54,14 @@ function enhance() {
   initSectionRail()
   initThemeControl(locale)
   initLocaleControl()
-
-  const t = document.querySelector<HTMLElement>('[data-term]')
-  if (t) mountTerminal(t, { history: [], locale })
 }
 
 if (root && !isStaticDocument(locationFor(pathname).route)) {
   // HydratedApp owns the effect that guarantees `enhance` runs after the
-  // hydration commit rather than alongside it. See its header for why.
-  hydrateRoot(root, <HydratedApp pathname={pathname} onHydrated={enhance} />)
+  // hydration commit rather than alongside it. See its header for why. React,
+  // the pages and the terminal are their own chunk (src/hydrate.tsx), which
+  // the static documents below never download.
+  void import('./hydrate').then((m) => m.hydrate(root, pathname, locale, enhance))
 } else {
   /*
    * A legal document, or no #root at all. Both are complete without React:

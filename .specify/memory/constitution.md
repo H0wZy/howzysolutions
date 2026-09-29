@@ -1,6 +1,32 @@
 <!--
 SYNC IMPACT REPORT
 ==================
+Version change: 2.1.1 -> 2.2.0
+Rationale: MINOR. The initial-JavaScript budget is raised from 120 KB to 125 KB gzipped, on
+a measurement of the change that needs the room, taken before this amendment was written.
+Nothing else in the budget section moves.
+
+The change: the client is split into an entry and an app chunk (src/main.tsx, src/hydrate.tsx)
+so the static documents (the legal pages and the /vvv/ showcase, which have nothing for React
+to attach to) stop downloading React, the pages and the terminal. Measured 2026-09-29 on the
+production build: a static document now loads 8.28 KB gzipped instead of 119.44 KB, and every
+document that hydrates loads entry + app = 120.47 KB, because two files compress worse than
+one (+1.03 KB); a third file cost +1.58 KB and was not adopted. At 119.44 KB the old ceiling
+had 0.56 KB of headroom and could not hold the split.
+
+125 KB is that measurement plus about 4.5 KB, not a round number picked in advance: a
+proposal to raise it to 200 KB was declined because 80 KB of unmeasured room is how a budget
+stops being one. The alternative that keeps 120 KB, moving the non-default GitHub years to
+static JSON (about 2.4 KB), remains available and is the first thing to reach for before
+this ceiling is raised again.
+
+Amended (2.2.0):
+  - Technology & Design Constraints -> Performance budgets: 120 KB -> 125 KB, with the
+    measurement above. LCP, CLS and Lighthouse targets are unchanged.
+
+----------------------------------------------------------------------
+Previous entry
+----------------------------------------------------------------------
 Version change: 2.1.0 -> 2.1.1
 Rationale: PATCH. A deployment fact corrected; no principle, budget or gate changed.
 The site ships to howzysolutions.com on Cloudflare Workers (static assets, no script)
@@ -278,9 +304,11 @@ visitor IPs to another party, and can go down independently of the site.
 
 **Performance budgets.** Measured on the production build, mobile throttling:
 
-- Initial JavaScript transferred: **≤ 120 KB gzipped**, excluding any lazily imported
-  WebGL renderer. Last measured **104.76 KB** on 2026-08-27, hydrated, with Tailwind and the
-  breadcrumb primitive. **15.24 KB of headroom, which is roughly two more components.**
+- Initial JavaScript transferred: **≤ 125 KB gzipped**, excluding any lazily imported
+  WebGL renderer. Last measured **120.47 KB** on 2026-09-29 for a document that hydrates
+  (entry + app chunk), **8.28 KB** for a static document (entry only). **4.53 KB of headroom.**
+  The gate sums every script in `dist/assets`, which is the conservative reading: it counts
+  the app chunk for pages that never load it.
 - Largest Contentful Paint: **≤ 1.8 s**. Cumulative Layout Shift: **≤ 0.05**.
 - Lighthouse mobile: **≥ 95** Performance, **100** Accessibility.
 - Every route MUST be usable at 60 fps while scrolling on a mid-range phone.
@@ -370,4 +398,4 @@ that cannot be justified against Principle II MUST be removed before merge. Perf
 budgets are re-measured on the production build before any deploy that changes the bundle.
 This document is re-read at the start of each new feature spec.
 
-**Version**: 2.1.1 | **Ratified**: 2026-08-19 | **Last Amended**: 2026-09-19
+**Version**: 2.2.0 | **Ratified**: 2026-08-19 | **Last Amended**: 2026-09-29

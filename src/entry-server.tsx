@@ -172,4 +172,4 @@ export function render(pathname: string): string {
   return renderToString(<App pathname={pathname} />)
 }
 
-export { LOCALES }
+export { LOCALES, isStaticDocument, locationFor }

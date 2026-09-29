@@ -37,8 +37,9 @@ These are the ones a change is most likely to break without noticing.
   `scripts/check-contrast.mjs`, which verifies 26 token pairs against their WCAG
   floor and follows the shadcn variable mapping.
 - **The JavaScript budget is a gate.** `scripts/check-bundle.mjs` fails the
-  build above 120 KB gzipped. Last measured 110.15 KB, so there is under 10 KB
-  of headroom: check before adding a dependency, not after.
+  build above 125 KB gzipped. Last measured 120.47 KB for a document that
+  hydrates and 8.28 KB for a static one, so there is 4.5 KB of headroom: check
+  before adding a dependency, not after.
 - **Nothing under `App` may call `new Date()` during render.** The site
   hydrates, so a value derived from the clock disagrees between prerender and
   the browser. Build-time values come from `src/content/build.generated.json`.
