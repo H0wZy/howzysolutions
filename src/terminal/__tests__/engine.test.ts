@@ -144,6 +144,11 @@ describe('execute — effects are described, never performed', () => {
     })
   })
 
+  it('opens the renamed project by its current name', () => {
+    expect(execute('open vvv', ctx()).effect).toEqual({ type: 'navigate', href: '/works/vvv/' })
+    expect(execute('projects vvv', ctx()).status).toBe(0)
+  })
+
   it('opens a renamed project by its old name, and suggests it for a typo', () => {
     expect(execute('open viralvideogen', ctx()).effect).toEqual({
       type: 'navigate',
