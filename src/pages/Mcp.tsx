@@ -1,63 +1,22 @@
-import { useEffect, useState } from 'react'
+import { useState, type CSSProperties, type ReactNode } from 'react'
 import type { Locale } from '../content/i18n/types'
 import type { ContentBundle } from '../content/types'
 import mcpData from '../content/mcp.generated.json'
+import tools from '../content/mcp-tools.json'
+import { mcpPage as t, type TransportMode } from '../content/mcp-page'
 import { Chrome } from '../components/Chrome'
+import { CopyIcon } from '../components/CopyIcon'
 import { SectionRail, type RailEntry } from '../components/SectionRail'
 import { Footer } from '../components/Footer'
 
 const TOC_ENTRIES: RailEntry[] = [
-  { id: 'overview', label: { en: 'Overview', pt: 'Visao Geral' } },
-  { id: 'connector', label: { en: 'Connect Agent', pt: 'Conectar Agente' } },
-  { id: 'quickstart', label: { en: 'Quickstart & CLI', pt: 'Inicio Rapido & CLI' } },
-  { id: 'tools', label: { en: 'Agent Delegation', pt: 'Delegacao' } },
-  { id: 'packages', label: { en: 'npm Packages', pt: 'Pacotes npm' } },
-  { id: 'bridges', label: { en: 'Supported AI CLIs', pt: 'CLIs de IA' } },
-  { id: 'binaries', label: { en: 'Standalone Binaries', pt: 'Binarios Avulsos' } },
-]
-
-type TransportMode = 'streamable' | 'sse' | 'cli'
-
-const AGENT_TOOLS = [
-  {
-    a: 'ask',
-    d: { en: 'Inquiries and second opinions', pt: 'Consultas e segunda opiniao' },
-    p: { en: 'Ask Antigravity for a second opinion on this database schema.', pt: 'Peca uma segunda opiniao ao Antigravity sobre este schema de banco.' },
-  },
-  {
-    a: 'review',
-    d: { en: 'Code and security reviews', pt: 'Code review e seguranca' },
-    p: { en: 'Review my git diff using Codex for security edge cases.', pt: 'Faca um review do meu git diff usando Codex para checar seguranca.' },
-  },
-  {
-    a: 'brainstorm',
-    d: { en: 'Architectural trade-offs', pt: 'Trade-offs arquiteturais' },
-    p: { en: 'Brainstorm caching strategies with Codex comparing Redis and Cloudflare KV.', pt: 'Faca um brainstorming com Codex comparando Redis e Cloudflare KV para cache.' },
-  },
-  {
-    a: 'plan',
-    d: { en: 'Implementation roadmaps', pt: 'Planos de implementacao' },
-    p: { en: 'Generate an implementation plan with Antigravity to refactor auth.', pt: 'Gere um plano de implementacao com Antigravity para refatorar auth.' },
-  },
-]
-
-const QUICK_CMDS = [
-  { l: '# 1. Instant execution:', c: 'npx @h0wzy/mcp', k: 'cmd-npx' },
-  { l: '# 2. Global install:', c: 'npm install -g @h0wzy/mcp && hmcp', k: 'cmd-npm' },
-  { l: '# 3. From source (Go):', c: 'go run ./cli setup-path && hmcp', k: 'cmd-go' },
-]
-
-const MODES: { id: TransportMode; l: string; t: string }[] = [
-  { id: 'streamable', l: 'Streamable', t: 'Modern Streamable HTTP endpoint' },
-  { id: 'sse', l: 'SSE', t: 'Legacy HTTP + SSE endpoint' },
-  { id: 'cli', l: 'CLI', t: 'Zero-install CLI execution' },
-]
-
-const PACKAGES = [
-  { n: '', d: 'Interactive Go CLI runner and hub orchestrator' },
-  { n: '-shared', d: 'Cross-platform utilities and JSON-RPC stdio engine' },
-  { n: '-server-antigravity', d: 'Google Antigravity MCP Server connecting to Gemini 3.1' },
-  { n: '-server-codex', d: 'OpenAI Codex MCP Server connecting to GPT-5.6 / GPT-6' },
+  { id: 'overview', label: t.toc.overview },
+  { id: 'connector', label: t.toc.connector },
+  { id: 'quickstart', label: t.toc.quickstart },
+  { id: 'tools', label: t.toc.tools },
+  { id: 'packages', label: t.toc.packages },
+  { id: 'bridges', label: t.toc.bridges },
+  { id: 'binaries', label: t.toc.binaries },
 ]
 
 const BINARIES = [
@@ -67,74 +26,58 @@ const BINARIES = [
   { p: 'macOS (amd64)', f: 'darwin-amd64' },
 ]
 
-const BRIDGES = [
-  {
-    n: 'Claude Code',
-    b: 'Anthropic',
-    d: {
-      en: 'Bridge in ~/.claude.json to invoke codex and agy.',
-      pt: 'Bridge em ~/.claude.json para invocar codex e agy.',
-    },
-  },
-  {
-    n: 'OpenAI Codex CLI',
-    b: 'GPT-5.6 / GPT-6',
-    d: {
-      en: 'Bridge for Codex CLI with safety and timeout.',
-      pt: 'Bridge para CLI Codex com protecao e timeout.',
-    },
-  },
-  {
-    n: 'Google Antigravity',
-    b: 'Gemini 3.1',
-    d: {
-      en: 'Connects agy CLI and IDE via mcp_config.json.',
-      pt: 'Conecta agy CLI e IDE via mcp_config.json.',
-    },
-  },
-]
+/*
+ * The hmcp wordmark, as text. It was an SVG with a four-stop purple gradient,
+ * which no token can reach and the design direction forbids; as text it takes
+ * --accent like everything else and needs no file.
+ */
+const BANNER = [
+  '██╗  ██╗ ██████╗ ██╗    ██╗███████╗██╗   ██╗   ███╗   ███╗ ██████╗██████╗ ',
+  '██║  ██║██╔═══██╗██║    ██║╚══███╔╝╚██╗ ██╔╝   ████╗ ████║██╔════╝██╔══██╗',
+  '███████║██║   ██║██║ █╗ ██║  ███╔╝   ╚████╔╝   ██╔████╔██║██║     ██████╔╝',
+  '██╔══██║██║   ██║██║███╗██║ ███╔╝     ╚██╔╝    ██║╚██╔╝██║██║     ██╔═══╝ ',
+  '██║  ██║╚██████╔╝╚███╔███╔╝███████╗    ██║     ██║ ╚═╝ ██║╚██████╗██║     ',
+  '╚═╝  ╚═╝ ╚═════╝  ╚══╝╚══╝ ╚══════╝    ╚═╝     ╚═╝     ╚═╝ ╚═════╝╚═╝     ',
+].join('\n')
 
-const CLAUDE_STEPS = {
-  en: ['Run: claude mcp add h0wzy-mcp -- npx -y @h0wzy/mcp', 'Claude Code invokes codex and agy autonomously.'],
-  pt: ['Execute: claude mcp add h0wzy-mcp -- npx -y @h0wzy/mcp', 'Claude Code invoca codex e agy com autonomia.'],
-}
-
-function ActionIcon({ ok }: { ok: boolean }) {
-  return (
-    <svg className="size-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      {ok ? <path d="m20 6-11 11-5-5" className="text-[var(--accent)]" /> : <path d="M16 4H4v12m4-8h12v12H8z" />}
-    </svg>
-  )
-}
-
+/** A brand mark that keeps its own colours. */
 function ImgIcon({ src }: { src: string }) {
   return <img src={src} alt="" aria-hidden="true" className="size-3.5 shrink-0" width={14} height={14} />
 }
 
+/** A single-colour glyph painted in the text's colour, so hover and tokens reach it. */
+function MaskIcon({ src }: { src: string }) {
+  return <span className="icon-mask" style={{ '--icon': `url(${src})` } as CSSProperties} aria-hidden="true" />
+}
+
+const GITHUB_ICON = <MaskIcon src="/brand/icons/github.svg" />
+
+/**
+ * `what` names the thing copied, for a screen reader: five buttons that all
+ * announce "Copy" cannot be told apart, and the visible word alone cannot say
+ * which one is which. The visible label still changes to "Copied!"; the
+ * announcement itself comes from the page's status region.
+ */
 function CopyBtn({
   copied,
   onClick,
   locale,
-  label,
+  what,
 }: {
   copied: boolean
   onClick: () => void
   locale: Locale
-  label?: string
+  what: string
 }) {
-  const isPt = locale === 'pt'
   return (
     <button
       type="button"
       onClick={onClick}
       className="shrink-0 px-2.5 py-1.5 rounded border border-[var(--border)] bg-[var(--surface)] text-[var(--dim)] hover:text-[var(--accent)] hover:border-[var(--accent)] transition-colors cursor-pointer inline-flex items-center gap-1.5 focus-visible:ring-1 focus-visible:ring-[var(--accent)]"
-      title={copied ? (isPt ? 'Copiado!' : 'Copied!') : (isPt ? 'Copiar' : 'Copy')}
-      aria-label={isPt ? 'Copiar' : 'Copy'}
     >
-      <ActionIcon ok={copied} />
-      <span className="text-[11px] font-mono">
-        {copied ? (isPt ? 'Copiado' : 'Copied') : label || (isPt ? 'Copiar' : 'Copy')}
-      </span>
+      <CopyIcon ok={copied} />
+      <span className="text-[11px] font-mono">{copied ? t.copied[locale] : t.copy[locale]}</span>
+      <span className="visually-hidden">{what}</span>
     </button>
   )
 }
@@ -150,34 +93,57 @@ export function Mcp({
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const [copiedKey, setCopiedKey] = useState<string | null>(null)
   const [mode, setMode] = useState<TransportMode>('streamable')
-  const [stars, setStars] = useState<number | null>(null)
+  const [status, setStatus] = useState({ text: '', fail: false })
 
-  useEffect(() => {
-    fetch('https://api.github.com/repos/H0wZy/mcp')
-      .then((res) => (res.ok ? res.json() : null))
-      .then((d) => typeof d?.stargazers_count === 'number' && setStars(d.stargazers_count))
-      .catch(() => {})
-  }, [])
+  const announce = (text: string, fail = false) => {
+    setStatus({ text, fail })
+    setTimeout(() => setStatus((cur) => (cur.text === text ? { text: '', fail: false } : cur)), 4000)
+  }
 
-  const copyFullMarkdown = async () => {
+  const flash = (key: string) => {
+    setCopiedKey(key)
+    announce(t.copied[locale])
+    setTimeout(() => setCopiedKey((cur) => (cur === key ? null : cur)), 3000)
+  }
+
+  /* A rejected write (no permission, an unfocused document, an in-app webview)
+     or a missing clipboard API both land here, and both say so on screen. */
+  const triggerCopy = async (text: string, key: string) => {
     try {
-      const res = await fetch(locale === 'pt' ? '/pt/mcp.md' : '/mcp.md')
-      if (res.ok) {
-        await navigator.clipboard.writeText(await res.text())
-        setCopiedKey('page-md')
-        setDropdownOpen(false)
-        setTimeout(() => setCopiedKey((cur) => (cur === 'page-md' ? null : cur)), 3000)
-      }
+      await navigator.clipboard.writeText(text)
+      flash(key)
     } catch {
-      // Fallback
+      announce(t.copyFailed[locale], true)
     }
   }
 
-  const triggerCopy = (text: string, key: string) => {
-    navigator.clipboard.writeText(text).then(() => {
-      setCopiedKey(key)
-      setTimeout(() => setCopiedKey((cur) => (cur === key ? null : cur)), 3000)
-    })
+  const mdUrl = locale === 'pt' ? '/pt/mcp.md' : '/mcp.md'
+
+  /*
+   * The clipboard write starts inside the click and the fetch is handed to it
+   * as a promise: Safari rejects a write that only begins after an awaited
+   * fetch, because by then the user gesture has expired. Where ClipboardItem is
+   * missing the plain path runs, and where both fail the Markdown opens in a
+   * tab, the same fallback the CV page uses.
+   */
+  const copyFullMarkdown = async () => {
+    const markdown = () =>
+      fetch(mdUrl).then((res) => {
+        if (!res.ok) throw new Error(String(res.status))
+        return res.text()
+      })
+    try {
+      if (typeof ClipboardItem !== 'undefined' && navigator.clipboard?.write) {
+        const blob = markdown().then((text) => new Blob([text], { type: 'text/plain' }))
+        await navigator.clipboard.write([new ClipboardItem({ 'text/plain': blob })])
+      } else {
+        await navigator.clipboard.writeText(await markdown())
+      }
+      flash('page-md')
+      setDropdownOpen(false)
+    } catch {
+      window.open(mdUrl, '_blank')
+    }
   }
 
   const connectorUrl =
@@ -187,6 +153,23 @@ export function Mcp({
         ? 'https://mcp.howzysolutions.com/sse'
         : 'npx @h0wzy/mcp'
 
+  const menu: { href: string; label: string; icon: ReactNode; border?: boolean }[] = [
+    {
+      href: mdUrl,
+      label: t.viewMarkdown[locale],
+      icon: <span className="text-[10px] px-1 py-0.5 rounded border border-[var(--accent)] font-bold">M↓</span>,
+    },
+    { href: 'https://claude.ai/new?q=H0wZy/mcp', label: t.openClaude[locale], icon: <ImgIcon src="/brand/icons/claude.svg" /> },
+    { href: 'https://chatgpt.com/?q=H0wZy/mcp', label: t.openChatgpt[locale], icon: <ImgIcon src="/brand/icons/chatgpt.svg" /> },
+    {
+      href: 'https://www.npmjs.com/package/@h0wzy/mcp',
+      label: t.viewNpm[locale],
+      icon: <ImgIcon src="/brand/icons/npm.svg" />,
+      border: true,
+    },
+    { href: 'https://github.com/H0wZy/mcp', label: t.githubRepoLink[locale], icon: GITHUB_ICON },
+  ]
+
   return (
     <>
       <Chrome locale={locale} pathname={pathname} />
@@ -195,7 +178,14 @@ export function Mcp({
         <SectionRail entries={TOC_ENTRIES} locale={locale} />
 
         <div className="document-body">
-          {/* Header Bar */}
+          {/* Where "Copied!" is announced, and where a blocked copy says so in sight. */}
+          <p
+            role="status"
+            className={status.fail ? 'wrap text-xs text-[var(--danger)] pt-3' : 'visually-hidden'}
+          >
+            {status.text}
+          </p>
+
           <header className="section">
             <div className="wrap flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-[var(--line)]">
               <div className="flex items-center gap-3 font-mono">
@@ -206,60 +196,63 @@ export function Mcp({
               </div>
 
               <div className="flex items-center gap-2 relative">
-                {/* GitHub Star Button */}
+                {/* The star count is the build's, from scripts/fetch-mcp.mjs: the page
+                    asks GitHub for nothing, so a visit tells GitHub nothing. */}
                 <a
                   href="https://github.com/H0wZy/mcp"
                   target="_blank"
                   rel="noreferrer"
                   className="chrome-btn inline-flex items-center gap-2 text-xs font-mono"
-                  title="GitHub repository"
+                  title={t.githubRepo[locale]}
                 >
-                  <ImgIcon src="/assets/icons/github.svg" />
+                  {GITHUB_ICON}
                   <span>GitHub</span>
-                  <span className="text-[var(--accent)] font-semibold">★ {stars !== null ? stars : mcpData.stars}</span>
+                  <span className="text-[var(--accent)] font-semibold">★ {mcpData.stars}</span>
                 </a>
 
-                {/* Shadcn-inspired Copy Page Dropdown */}
-                <div className="relative inline-flex items-center">
+                <div
+                  className="relative inline-flex items-center"
+                  onBlur={(e) => {
+                    if (!e.currentTarget.contains(e.relatedTarget as Node)) setDropdownOpen(false)
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Escape') setDropdownOpen(false)
+                  }}
+                >
                   <button
                     type="button"
                     onClick={copyFullMarkdown}
                     className="chrome-btn inline-flex items-center gap-2 text-xs bg-[var(--surface)] hover:text-[var(--accent)] rounded-r-none border-r-0"
-                    title={locale === 'pt' ? 'Copiar pagina inteira como Markdown' : 'Copy entire page as Markdown'}
+                    title={t.copyPageTitle[locale]}
                   >
-                    <ActionIcon ok={copiedKey === 'page-md'} />
-                    <span>
-                      {copiedKey === 'page-md'
-                        ? (locale === 'pt' ? 'Copiado!' : 'Copied!')
-                        : (locale === 'pt' ? 'Copiar Pagina' : 'Copy Page')}
-                    </span>
+                    <CopyIcon ok={copiedKey === 'page-md'} />
+                    <span>{copiedKey === 'page-md' ? t.copied[locale] : t.copyPage[locale]}</span>
                   </button>
                   <button
                     type="button"
                     onClick={() => setDropdownOpen(!dropdownOpen)}
                     className="chrome-btn px-2 text-xs bg-[var(--surface)] hover:text-[var(--accent)] rounded-l-none"
+                    aria-haspopup="menu"
                     aria-expanded={dropdownOpen}
-                    title={locale === 'pt' ? 'Mais opcoes' : 'More options'}
+                    aria-label={t.moreOptions[locale]}
                   >
-                    <span>▾</span>
+                    <span aria-hidden="true">▾</span>
                   </button>
 
                   {dropdownOpen ? (
-                    <div className="absolute right-0 top-full mt-2 w-52 rounded border border-[var(--border)] bg-[var(--surface)] shadow-2xl p-1 z-50 flex flex-col gap-0.5 text-xs font-mono">
-                      {[
-                        { href: locale === 'pt' ? '/pt/mcp.md' : '/mcp.md', label: locale === 'pt' ? 'Ver como Markdown' : 'View as Markdown', icon: <span className="text-[10px] px-1 py-0.5 rounded border border-[var(--accent)] font-bold">M↓</span>, onClick: () => setDropdownOpen(false) },
-                        { href: 'https://claude.ai/new?q=H0wZy/mcp', label: 'Open in Claude ↗', icon: <ImgIcon src="/assets/icons/claude.svg" /> },
-                        { href: 'https://chatgpt.com/?q=H0wZy/mcp', label: 'Open in ChatGPT ↗', icon: <ImgIcon src="/assets/icons/chatgpt.svg" /> },
-                        { href: 'https://www.npmjs.com/package/@h0wzy/mcp', label: 'View on npm ↗', icon: <ImgIcon src="/assets/icons/npm.svg" />, border: true },
-                        { href: 'https://github.com/H0wZy/mcp', label: 'GitHub Repository ↗', icon: <ImgIcon src="/assets/icons/github.svg" /> },
-                      ].map((item) => (
+                    <div
+                      role="menu"
+                      className="absolute right-0 top-full mt-2 w-52 rounded border border-[var(--border)] bg-[var(--surface)] shadow-2xl p-1 z-50 flex flex-col gap-0.5 text-xs font-mono"
+                    >
+                      {menu.map((item) => (
                         <a
                           key={item.href}
+                          role="menuitem"
                           href={item.href}
                           target="_blank"
                           rel="noreferrer"
                           className={`text-left px-2.5 py-1.5 rounded hover:bg-[var(--line)] text-[var(--accent)] transition-colors flex items-center gap-2 ${item.border ? 'border-t border-[var(--line)] pt-1 mt-0.5' : ''}`}
-                          onClick={item.onClick}
+                          onClick={() => setDropdownOpen(false)}
                         >
                           {item.icon}
                           <span>{item.label}</span>
@@ -272,105 +265,70 @@ export function Mcp({
             </div>
           </header>
 
-
-          {/* Overview Section */}
           <section id="overview" className="section">
             <div className="wrap">
-              <h1 className="text-3xl font-bold tracking-tight text-[var(--fg)] mb-3">
-                {locale === 'pt' ? 'O que e H0wZy/mcp?' : 'What is H0wZy/mcp?'}
-              </h1>
-              <p className="sub text-lg text-[var(--dim)] mb-8">
-                {locale === 'pt'
-                  ? 'O Hub MCP Multi-Agente definitivo e CLI em Go conectando Claude Code, OpenAI Codex e Google Antigravity.'
-                  : 'The Ultimate Multi-Agent MCP Hub and Go CLI connecting Claude Code, OpenAI Codex, and Google Antigravity.'}
-              </p>
+              <h1 className="text-3xl font-bold tracking-tight text-[var(--fg)] mb-3">{t.title[locale]}</h1>
+              <p className="sub text-lg text-[var(--dim)] mb-8">{t.subtitle[locale]}</p>
 
-              {/* Real hmcp ASCII Banner & Terminal Preview */}
               <div className="rounded-lg bg-[var(--bg)] border border-[var(--border)] overflow-hidden shadow-2xl font-mono text-xs mt-8">
                 <div className="px-4 py-2.5 bg-[var(--surface)] border-b border-[var(--line)] flex items-center justify-between text-[11px]">
                   <div className="flex items-center gap-2">
                     <span className="text-[var(--term-user)] font-semibold">h0wzy@howzysolutions</span>
-                    <span className="text-[var(--dim)]">in</span>
+                    <span className="text-[var(--dim)]">{locale === 'pt' ? 'em' : 'in'}</span>
                     <span className="text-[var(--accent)]">~/mcp</span>
                   </div>
                 </div>
 
-                <div className="p-5 overflow-x-auto space-y-4">
+                <div className="p-5 space-y-4">
                   <div className="text-[var(--dim)]">
                     <span className="text-[var(--accent)] font-bold">❯ </span>
                     <span className="text-[var(--fg)] font-bold">hmcp</span>
                   </div>
 
-                  {/* Gradient ASCII Banner with Perfectly Aligned 74-col block font */}
-                  <img
-                    src="/assets/mcp-banner.svg"
-                    alt="H0wZy/mcp banner"
-                    className="h-auto max-w-full select-none"
-                    width={570}
-                    height={90}
-                  />
+                  <pre className="mcp-banner" role="img" aria-label={t.bannerAlt[locale]}>
+                    {BANNER}
+                  </pre>
 
                   <div className="space-y-1 text-xs pt-1">
-                    <div className="text-[var(--fg)] font-semibold">
-                      H0wZy/mcp {mcpData.version} • Multi-Agent MCP Hub
-                    </div>
-                    <div className="text-[var(--term-user)]">
-                      Claude Code ↔ OpenAI Codex ↔ Google Antigravity
-                    </div>
+                    <div className="text-[var(--fg)] font-semibold">H0wZy/mcp {mcpData.version} • Multi-Agent MCP Hub</div>
+                    <div className="text-[var(--term-user)]">Claude Code ↔ OpenAI Codex ↔ Google Antigravity</div>
                   </div>
                 </div>
               </div>
             </div>
           </section>
 
-          {/* Connector Widget */}
           <section id="connector" className="section">
             <div className="wrap">
-              <h2 className="text-xl font-semibold mb-2 text-[var(--fg)]">
-                {locale === 'pt' ? 'Conecte seu Agente de IA' : 'Connect Your AI Agent'}
-              </h2>
-              <p className="text-xs text-[var(--dim)] mb-4">
-                {locale === 'pt'
-                  ? 'Escolha seu cliente e conecte ao hub com Streamable HTTP moderno ou SSE legado.'
-                  : 'Select your client and connect to the hub via modern Streamable HTTP or legacy SSE.'}
-              </p>
+              <h2 className="text-xl font-semibold mb-2 text-[var(--fg)]">{t.connect.heading[locale]}</h2>
+              <p className="text-xs text-[var(--dim)] mb-4">{t.connect.intro[locale]}</p>
 
               <div className="p-5 rounded-lg bg-[var(--surface)] border border-[var(--border)] shadow-xl space-y-5">
-                {/* Agent selector tabs + Mode Switcher */}
                 <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-[var(--line)]">
-                  {/* Left: Agent tabs */}
                   <div className="flex flex-wrap items-center gap-3">
-                    {/* Active / Clickable: Claude Code */}
-                    <button
-                      type="button"
-                      className="px-2.5 py-1 rounded text-[11px] font-mono font-semibold transition-all border outline-none bg-[var(--line)] border-[var(--accent)] text-[var(--accent)] shadow-sm focus-visible:ring-2 focus-visible:ring-[var(--accent)] cursor-default"
-                    >
+                    <span className="px-2.5 py-1 rounded text-[11px] font-mono font-semibold border bg-[var(--line)] border-[var(--accent)] text-[var(--accent)] shadow-sm">
                       Claude Code
-                    </button>
+                    </span>
 
-                    {/* Disabled / Future: Codex & Antigravity */}
                     {(['Codex', 'Antigravity'] as const).map((name) => (
                       <button
                         key={name}
                         type="button"
                         disabled
                         className="px-2.5 py-1 rounded text-[11px] font-mono border border-dashed border-[var(--border)] text-[var(--dim)] opacity-50 cursor-not-allowed inline-flex items-center gap-1 select-none"
-                        title={locale === 'pt' ? 'TODO: Suporte em breve' : 'TODO: Coming soon'}
+                        title={t.connect.soon[locale]}
                       >
                         <span>{name}</span>
-                        <span className="text-[8.5px] uppercase px-1 rounded bg-[var(--line)] text-[var(--accent-2)]">
-                          TODO
-                        </span>
+                        <span className="text-[8.5px] uppercase px-1 rounded bg-[var(--line)] text-[var(--accent-2)]">TODO</span>
                       </button>
                     ))}
                   </div>
 
-                  {/* Right: Transport Mode Switcher */}
                   <div className="flex flex-wrap items-center gap-2">
-                    {MODES.map((t, idx) => {
-                      const isSelected = mode === t.id
+                    {t.connect.modes.map((m, idx) => {
+                      const isSelected = mode === m.id
                       return (
-                        <div key={t.id} className="inline-flex items-center gap-2">
+                        <div key={m.id} className="inline-flex items-center gap-2">
                           {idx > 0 && (
                             <span className="text-[var(--border)] text-[10px] select-none" aria-hidden="true">
                               •
@@ -378,15 +336,16 @@ export function Mcp({
                           )}
                           <button
                             type="button"
-                            onClick={() => setMode(t.id)}
+                            onClick={() => setMode(m.id)}
+                            aria-pressed={isSelected}
                             className={`px-2.5 py-1 rounded text-[11px] font-mono transition-all border outline-none cursor-pointer ${
                               isSelected
                                 ? 'bg-[var(--line)] border-[var(--accent)] text-[var(--accent)] font-semibold shadow-sm opacity-100'
                                 : 'bg-[var(--bg)]/60 border-[var(--border)] text-[var(--dim)] opacity-60 hover:opacity-100 hover:text-[var(--fg)] hover:border-[var(--accent)]/60'
                             } focus-visible:ring-2 focus-visible:ring-[var(--accent)] focus-visible:opacity-100`}
-                            title={t.t}
+                            title={m.title[locale]}
                           >
-                            {t.l}
+                            {m.label[locale]}
                           </button>
                         </div>
                       )
@@ -394,7 +353,6 @@ export function Mcp({
                   </div>
                 </div>
 
-                {/* Full-width Connector URL / Command display (never cut off) */}
                 <div className="p-3 rounded-md bg-[var(--bg)] border border-[var(--border)] font-mono text-xs flex flex-wrap items-center justify-between gap-3">
                   <div className="flex items-center gap-2 min-w-0 flex-1">
                     <span className="text-[var(--accent)] select-none font-bold">$</span>
@@ -404,32 +362,25 @@ export function Mcp({
                     copied={copiedKey === 'connector-url'}
                     onClick={() => triggerCopy(connectorUrl, 'connector-url')}
                     locale={locale}
+                    what={t.connect.copyConnector[locale]}
                   />
                 </div>
 
-                {/* 3 Steps */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-5 text-xs">
                   {[
                     {
-                      title:
-                        mode === 'cli'
-                          ? (locale === 'pt' ? 'Comando de execucao' : 'Run CLI command')
-                          : (locale === 'pt' ? 'Copie o endpoint' : 'Copy endpoint URL'),
-                      desc:
-                        mode === 'streamable'
-                          ? (locale === 'pt' ? 'Endpoint Streamable HTTP unificado recomendado pelo MCP.' : 'Unified Streamable HTTP endpoint recommended by modern MCP spec.')
-                          : mode === 'sse'
-                            ? (locale === 'pt' ? 'Endpoint SSE compativel com IDEs legadas.' : 'Legacy SSE endpoint for backwards-compatible IDEs.')
-                            : (locale === 'pt' ? 'Inicie instantaneamente sem instalacao previa via npx.' : 'Zero-installation runner via npx execution.'),
+                      title: mode === 'cli' ? t.connect.stepCommand[locale] : t.connect.stepEndpoint[locale],
+                      desc: t.connect[mode][locale],
                     },
                     {
-                      title: locale === 'pt' ? 'Configure no cliente' : 'Configure client',
-                      desc: CLAUDE_STEPS[locale][0],
+                      title: t.connect.stepConfigure[locale],
+                      desc: (
+                        <>
+                          {t.connect.run[locale]} <code className="select-all">{t.connect.claudeCommand}</code>
+                        </>
+                      ),
                     },
-                    {
-                      title: locale === 'pt' ? 'Pronto para usar' : 'Ready to use',
-                      desc: CLAUDE_STEPS[locale][1],
-                    },
+                    { title: t.connect.stepReady[locale], desc: t.connect.claudeReady[locale] },
                   ].map((s, i) => (
                     <div key={i} className="space-y-1.5">
                       <div className="flex items-center gap-2">
@@ -444,117 +395,94 @@ export function Mcp({
                 </div>
 
                 <div className="pt-3 border-t border-[var(--line)] flex flex-wrap items-center justify-between text-[11px] text-[var(--dim)]">
-                  <span>
-                    {locale === 'pt'
-                      ? 'Recomendado: use Streamable HTTP para servicos remotos e CLI Go para dev local.'
-                      : 'Recommended: use Streamable HTTP for remote services and Go CLI for local dev.'}
-                  </span>
-                  <a
-                    href="https://github.com/H0wZy/mcp"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="text-[var(--accent)] hover:underline"
-                  >
-                    GitHub Repository ↗
+                  <span>{t.connect.recommended[locale]}</span>
+                  <a href="https://github.com/H0wZy/mcp" target="_blank" rel="noreferrer" className="text-[var(--accent)] hover:underline">
+                    {t.githubRepoLink[locale]}
                   </a>
                 </div>
               </div>
             </div>
           </section>
 
-          {/* Quickstart & CLI with Copy Buttons */}
           <section id="quickstart" className="section">
             <div className="wrap">
-              <h2 className="text-xl font-semibold mb-4 text-[var(--fg)]">
-                {locale === 'pt' ? 'Inicio Rapido & CLI' : 'Quick Start & CLI'}
-              </h2>
+              <h2 className="text-xl font-semibold mb-4 text-[var(--fg)]">{t.quickstart.heading[locale]}</h2>
 
               <div className="flex flex-col gap-3 font-mono text-xs">
-                {QUICK_CMDS.map((item) => (
-                  <div key={item.k} className="p-3 rounded bg-[var(--surface)] border border-[var(--border)]">
+                {t.quickstart.commands.map((item) => (
+                  <div key={item.key} className="p-3 rounded bg-[var(--surface)] border border-[var(--border)]">
                     <div className="flex items-center justify-between gap-2 mb-1.5">
-                      <span className="text-[var(--dim)]">{item.l}</span>
+                      <span className="text-[var(--dim)]">{item.label[locale]}</span>
                       <button
                         type="button"
-                        onClick={() => triggerCopy(item.c, item.k)}
+                        onClick={() => triggerCopy(item.command, item.key)}
                         className="p-1 rounded border-0 outline-none bg-transparent text-[var(--dim)] hover:text-[var(--accent)] hover:bg-[var(--line)] transition-colors cursor-pointer"
-                        title={copiedKey === item.k ? 'Copied!' : 'Copy command'}
-                        aria-label="Copy command"
+                        aria-label={`${t.copy[locale]}: ${item.command}`}
                       >
-                        <ActionIcon ok={copiedKey === item.k} />
+                        <CopyIcon ok={copiedKey === item.key} />
                       </button>
                     </div>
-                    <code className="text-[var(--accent)] font-bold text-sm select-all block">{item.c}</code>
+                    <code className="text-[var(--accent)] font-bold text-sm select-all block">{item.command}</code>
                   </div>
                 ))}
               </div>
             </div>
           </section>
 
-          {/* Multi-Agent Delegation & Tools */}
           <section id="tools" className="section">
             <div className="wrap">
-              <h2 className="text-xl font-semibold mb-2 text-[var(--fg)]">
-                {locale === 'pt' ? 'Delegacao Multi-Agente & Ferramentas' : 'Multi-Agent Delegation & Tools'}
-              </h2>
-              <p className="text-xs text-[var(--dim)] mb-6">
-                {locale === 'pt'
-                  ? 'Como instruir o Claude Code a delegar ao Antigravity e Codex via 8 ferramentas espelhadas.'
-                  : 'How to prompt Claude Code to delegate to Antigravity and Codex across 8 mirrored tools.'}
-              </p>
+              <h2 className="text-xl font-semibold mb-2 text-[var(--fg)]">{t.tools.heading[locale]}</h2>
+              <p className="text-xs text-[var(--dim)] mb-6">{t.tools.intro[locale]}</p>
 
               <div className="space-y-4">
-                {AGENT_TOOLS.map((t) => {
-                  const isCopied = copiedKey === `p-${t.a}`
-                  return (
-                    <div
-                      key={t.a}
-                      className="p-4 rounded-lg bg-[var(--surface)] border border-[var(--border)] font-mono text-xs space-y-3"
-                    >
-                      <div className="flex flex-wrap items-center justify-between gap-2 pb-2.5 border-b border-[var(--line)]">
-                        <div className="flex flex-wrap items-center gap-2">
-                          <span className="px-2 py-0.5 rounded bg-[var(--bg)] border border-[var(--accent)] text-[var(--accent)] font-bold">
-                            {t.a}_antigravity
-                          </span>
-                          <span className="text-[var(--dim)]">↔</span>
-                          <span className="px-2 py-0.5 rounded bg-[var(--bg)] border border-[var(--accent-2)] text-[var(--accent-2)] font-bold">
-                            {t.a}_codex
-                          </span>
-                        </div>
-                        <span className="text-[11px] text-[var(--dim)]">{t.d[locale]}</span>
+                {tools.map((tool) => (
+                  <div
+                    key={tool.a}
+                    className="p-4 rounded-lg bg-[var(--surface)] border border-[var(--border)] font-mono text-xs space-y-3"
+                  >
+                    <div className="flex flex-wrap items-center justify-between gap-2 pb-2.5 border-b border-[var(--line)]">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="px-2 py-0.5 rounded bg-[var(--bg)] border border-[var(--accent)] text-[var(--accent)] font-bold">
+                          {tool.a}_antigravity
+                        </span>
+                        <span className="text-[var(--dim)]" aria-hidden="true">
+                          ↔
+                        </span>
+                        <span className="px-2 py-0.5 rounded bg-[var(--bg)] border border-[var(--accent-2)] text-[var(--accent-2)] font-bold">
+                          {tool.a}_codex
+                        </span>
                       </div>
-
-                      <div className="p-2.5 rounded bg-[var(--bg)] border border-[var(--border)] flex flex-wrap items-center justify-between gap-3">
-                        <div className="flex items-start gap-2 min-w-0 flex-1">
-                          <span className="text-[var(--accent)] select-none font-bold">❯</span>
-                          <span className="text-[var(--fg)] italic select-all leading-relaxed">
-                            &ldquo;{t.p[locale]}&rdquo;
-                          </span>
-                        </div>
-                        <CopyBtn
-                          copied={isCopied}
-                          onClick={() => triggerCopy(t.p[locale], `p-${t.a}`)}
-                          locale={locale}
-                        />
-                      </div>
+                      <span className="text-[11px] text-[var(--dim)]">{tool.d[locale]}</span>
                     </div>
-                  )
-                })}
+
+                    <div className="p-2.5 rounded bg-[var(--bg)] border border-[var(--border)] flex flex-wrap items-center justify-between gap-3">
+                      <div className="flex items-start gap-2 min-w-0 flex-1">
+                        <span className="text-[var(--accent)] select-none font-bold" aria-hidden="true">
+                          ❯
+                        </span>
+                        <span className="text-[var(--fg)] italic select-all leading-relaxed">
+                          &ldquo;{tool.p[locale]}&rdquo;
+                        </span>
+                      </div>
+                      <CopyBtn
+                        copied={copiedKey === `p-${tool.a}`}
+                        onClick={() => triggerCopy(tool.p[locale], `p-${tool.a}`)}
+                        locale={locale}
+                        what={`${t.tools.copyPrompt[locale]}: ${tool.a}`}
+                      />
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           </section>
 
-          {/* Official Packages */}
           <section id="packages" className="section">
             <div className="wrap">
               <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
                 <div>
-                  <h2 className="text-xl font-semibold text-[var(--fg)]">
-                    {locale === 'pt' ? 'Pacotes Oficiais npm' : 'Official npm Packages'}
-                  </h2>
-                  <p className="text-xs text-[var(--dim)]">
-                    {locale === 'pt' ? 'Publicados e versionados no registro publico do npm.' : 'Published and versioned on the public npm registry.'}
-                  </p>
+                  <h2 className="text-xl font-semibold text-[var(--fg)]">{t.packages.heading[locale]}</h2>
+                  <p className="text-xs text-[var(--dim)]">{t.packages.intro[locale]}</p>
                 </div>
                 <a
                   href="https://www.npmjs.com/~h0wzy"
@@ -567,11 +495,11 @@ export function Mcp({
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 font-mono text-xs">
-                {PACKAGES.map((pkg) => {
-                  const pkgName = `@h0wzy/mcp${pkg.n}`
+                {t.packages.items.map((pkg) => {
+                  const pkgName = `@h0wzy/mcp${pkg.suffix}`
                   return (
                     <a
-                      key={pkg.n}
+                      key={pkg.suffix}
                       href={`https://www.npmjs.com/package/${pkgName}`}
                       target="_blank"
                       rel="noreferrer"
@@ -581,9 +509,9 @@ export function Mcp({
                         <strong className="text-[var(--accent)] text-sm">{pkgName}</strong>
                         <span className="text-[var(--dim)] text-[11px]">{mcpData.version}</span>
                       </div>
-                      <p className="text-[var(--dim)] text-[11px] leading-relaxed">{pkg.d}</p>
+                      <p className="text-[var(--dim)] text-[11px] leading-relaxed">{pkg.description[locale]}</p>
                       <div className="text-[10px] text-[var(--dim)] pt-1 border-t border-[var(--line)]">
-                        Published via CI
+                        {t.packages.viaCi[locale]}
                       </div>
                     </a>
                   )
@@ -592,38 +520,30 @@ export function Mcp({
             </div>
           </section>
 
-          {/* Supported AI CLIs */}
           <section id="bridges" className="section">
             <div className="wrap">
-              <h2 className="text-xl font-semibold mb-4 text-[var(--fg)]">
-                {locale === 'pt' ? 'CLIs de IA Suportados' : 'Supported AI Developer CLIs'}
-              </h2>
+              <h2 className="text-xl font-semibold mb-4 text-[var(--fg)]">{t.bridges.heading[locale]}</h2>
 
               <div className="space-y-3 font-mono text-xs">
-                {BRIDGES.map((b) => (
-                  <div key={b.n} className="p-3 rounded border border-[var(--border)] bg-[var(--surface)]">
+                {t.bridges.items.map((b) => (
+                  <div key={b.name} className="p-3 rounded border border-[var(--border)] bg-[var(--surface)]">
                     <div className="flex items-center justify-between mb-1">
-                      <strong className="text-[var(--fg)] text-sm">{b.n}</strong>
-                      <span className="text-[var(--accent)] text-[11px]">{b.b}</span>
+                      <strong className="text-[var(--fg)] text-sm">{b.name}</strong>
+                      <span className="text-[var(--accent)] text-[11px]">{b.by}</span>
                     </div>
-                    <p className="text-[var(--dim)] leading-relaxed">{b.d[locale]}</p>
+                    <p className="text-[var(--dim)] leading-relaxed">{b.description[locale]}</p>
                   </div>
                 ))}
               </div>
             </div>
           </section>
 
-          {/* Standalone Binaries */}
           <section id="binaries" className="section">
             <div className="wrap">
               <h2 className="text-xl font-semibold mb-4 text-[var(--fg)]">
-                {locale === 'pt' ? `Binarios Avulsos (${mcpData.version})` : `Precompiled Standalone Binaries (${mcpData.version})`}
+                {t.binaries.heading[locale]} ({mcpData.version})
               </h2>
-              <p className="text-xs text-[var(--dim)] mb-4">
-                {locale === 'pt'
-                  ? 'Binarios nativos sem dependencias compilados para Windows, Linux e macOS.'
-                  : 'Zero-dependency native binaries compiled for Windows, Linux, and macOS.'}
-              </p>
+              <p className="text-xs text-[var(--dim)] mb-4">{t.binaries.intro[locale]}</p>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 font-mono text-xs">
                 {BINARIES.map((bin) => (
@@ -640,7 +560,6 @@ export function Mcp({
             </div>
           </section>
 
-          {/* Footer Component */}
           <Footer locale={locale} />
         </div>
       </main>

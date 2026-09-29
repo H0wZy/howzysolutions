@@ -35,6 +35,7 @@ export const privacy: LegalDocument = {
   sections: [
     {
       id: 'who-we-are',
+      withApp: true,
       heading: { en: 'Who we are', pt: 'Quem somos' },
       body: {
         en: [
@@ -61,6 +62,7 @@ export const privacy: LegalDocument = {
     },
     {
       id: 'your-rights',
+      withApp: true,
       heading: { en: 'Your rights', pt: 'Seus direitos' },
       body: {
         en: [
@@ -73,6 +75,7 @@ export const privacy: LegalDocument = {
     },
     {
       id: 'security',
+      withApp: true,
       heading: { en: 'Security', pt: 'Segurança' },
       body: {
         en: [
@@ -85,6 +88,7 @@ export const privacy: LegalDocument = {
     },
     {
       id: 'changes',
+      withApp: true,
       heading: { en: 'Changes', pt: 'Mudanças' },
       body: {
         en: [

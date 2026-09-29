@@ -1,0 +1,34 @@
+[
+  {
+    "a": "ask",
+    "d": { "en": "Inquiries and second opinions", "pt": "Consultas e segunda opinião" },
+    "p": {
+      "en": "Ask Antigravity for a second opinion on this database schema.",
+      "pt": "Peça uma segunda opinião ao Antigravity sobre este schema de banco."
+    }
+  },
+  {
+    "a": "review",
+    "d": { "en": "Code and security reviews", "pt": "Code review e segurança" },
+    "p": {
+      "en": "Review my git diff using Codex for security edge cases.",
+      "pt": "Faça um review do meu git diff usando Codex para checar segurança."
+    }
+  },
+  {
+    "a": "brainstorm",
+    "d": { "en": "Architectural trade-offs", "pt": "Trade-offs arquiteturais" },
+    "p": {
+      "en": "Brainstorm caching strategies with Codex comparing Redis and Cloudflare KV.",
+      "pt": "Faça um brainstorming com Codex comparando Redis e Cloudflare KV para cache."
+    }
+  },
+  {
+    "a": "plan",
+    "d": { "en": "Implementation roadmaps", "pt": "Planos de implementação" },
+    "p": {
+      "en": "Generate an implementation plan with Antigravity to refactor auth.",
+      "pt": "Gere um plano de implementação com Antigravity para refatorar auth."
+    }
+  }
+]

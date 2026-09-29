@@ -144,6 +144,17 @@ describe('execute — effects are described, never performed', () => {
     })
   })
 
+  it('opens a renamed project by its old name, and suggests it for a typo', () => {
+    expect(execute('open viralvideogen', ctx()).effect).toEqual({
+      type: 'navigate',
+      href: '/works/vvv/',
+    })
+    expect(execute('projects viralvideogen', ctx()).status).toBe(0)
+    expect(execute('open viralvideogn', ctx()).lines.map((l) => JSON.stringify(l)).join()).toContain(
+      'viralvideogen',
+    )
+  })
+
   it('returns a clear descriptor with no output', () => {
     const result = execute('clear', ctx())
     expect(result.effect).toEqual({ type: 'clear' })

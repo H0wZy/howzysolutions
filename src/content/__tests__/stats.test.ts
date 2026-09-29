@@ -64,6 +64,15 @@ describe('trackedTimeFor', () => {
     expect(trackedTimeFor('a-project-that-does-not-exist')).toBeUndefined()
   })
 
+  it('sums a renamed project tracked under two names, and ignores one the snapshot lacks', () => {
+    const [a, b] = stats.projects
+    if (!a || !b) return
+    const both = trackedTimeFor([a.name, b.name, 'never-tracked'])
+    expect(both?.seconds).toBe(a.seconds + b.seconds)
+    expect(trackedTimeFor([a.name, 'never-tracked'])).toEqual(a)
+    expect(trackedTimeFor(['never-tracked'])).toBeUndefined()
+  })
+
   it('finds the slice for a project that does have measured time', () => {
     const [first] = stats.projects
     if (!first) return // no projects in the committed artifact — nothing to assert

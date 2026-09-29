@@ -104,8 +104,12 @@ export type Project = {
   roadmap?: Localized<string[]>
   metrics?: Metric[]
   links?: ProjectLink[]
-  /** Joins to a name in the statistics snapshot. */
-  wakatimeProject?: string
+  /**
+   * Joins to a name in the statistics snapshot. A renamed project lists every
+   * name its time was tracked under, since WakaTime keys on the folder's name at
+   * the moment of tracking and does not merge a rename.
+   */
+  wakatimeProject?: string | string[]
   images?: ProjectImage[]
   /** A designed page about this project, linked from its record (spec 004 FR-009). */
   showcase?: { route: Route; blurb: Localized }
@@ -178,6 +182,12 @@ export type ContentBundle = {
 /** Prose paragraphs, then an optional list. `id` is the section's anchor. */
 export type LegalSection = {
   id: string
+  /**
+   * Also shown on each app's own page (/privacy-policy/vvv/). A store reviewing
+   * one app is given that URL and reads it as the whole document, so what the
+   * general sections promise (rights, security, changes) has to be there too.
+   */
+  withApp?: boolean
   heading: Localized
   body: Localized<string[]>
   items?: Localized<string[]>
@@ -191,17 +201,18 @@ export type LegalSection = {
  *
  * `projects` is the per-entry half: for the policy, one entry per project that
  * handles personal data beyond the website; for the terms, one per app that
- * needs terms of its own. An `id` is that entry's anchor on the index, and, on
- * the terms, its own page at /terms-of-service/<id>/. A document with no such
- * entries omits the field rather than carrying an empty list nobody can tell
- * from an oversight.
+ * needs terms of its own. An `id` is that entry's anchor on the index and its
+ * own page at /privacy-policy/<id>/ or /terms-of-service/<id>/. Required, and
+ * non-empty in both documents (static-documents.test.ts asserts it): a store
+ * review asks for an app's own URL, so a document without entries would have
+ * nothing to point it at.
  */
 export type LegalDocument = {
   /** ISO date, rendered as-is. Moves whenever the text does. */
   updated: string
   intro: Localized
   sections: LegalSection[]
-  projects?: Array<{
+  projects: Array<{
     id: string
     name: string
     tagline: Localized

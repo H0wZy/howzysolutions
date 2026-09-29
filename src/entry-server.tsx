@@ -9,14 +9,14 @@ import { translate } from './content/i18n/translate'
 import { workPage } from './content/types'
 import { isStaticDocument, locationFor, pathFor, type Route } from './route'
 
+/** The two legal records, keyed by the route page that renders each index. */
+const LEGAL = { privacy, terms } as const
+
 /**
  * Every route this site emits as a real document, in every locale (FR-006,
  * FR-016). English is unprefixed; Portuguese lives under /pt/. The listing
  * page count is derived from the data, never hardcoded (FR-020).
  */
-/** The two legal records, keyed by the route page that renders each index. */
-const LEGAL = { privacy, terms } as const
-
 export function routes(): Array<{ pathname: string; locale: Locale }> {
   const { total } = workPage(content.projects, 1)
   const pages: Route[] = [
@@ -27,7 +27,7 @@ export function routes(): Array<{ pathname: string; locale: Locale }> {
     // One document per app per record, because a store reviews one app and
     // asks for its own terms URL and its own policy URL.
     ...(['privacy', 'terms'] as const).flatMap((doc) =>
-      (LEGAL[doc].projects ?? []).map((app) => ({ page: 'legalApp' as const, doc, id: app.id })),
+      LEGAL[doc].projects.map((app) => ({ page: 'legalApp' as const, doc, id: app.id })),
     ),
     { page: 'mcp' },
     { page: 'vvv' },
@@ -103,7 +103,7 @@ export function metaFor(pathname: string): PageMeta {
     }
   }
   if (route.page === 'legalApp') {
-    const app = (LEGAL[route.doc].projects ?? []).find((a) => a.id === route.id)
+    const app = LEGAL[route.doc].projects.find((a) => a.id === route.id)
     const document = route.doc === 'privacy' ? 'privacy.title' : 'terms.title'
     return {
       title: `${app?.name ?? route.id} · ${translate(locale, document)} · ${content.profile.name}`,

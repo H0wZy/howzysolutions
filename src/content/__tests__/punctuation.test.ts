@@ -7,6 +7,8 @@ import { cv } from '../cv'
 import { privacy } from '../privacy'
 import { terms } from '../terms'
 import { vvvShowcase } from '../showcase-vvv'
+import { mcpPage } from '../mcp-page'
+import mcpTools from '../mcp-tools.json'
 import { LOCALES } from '../i18n/types'
 import type { Localized } from '../i18n/types'
 import { metaFor, routes } from '../../entry-server'
@@ -112,6 +114,9 @@ function visibleStrings(): Array<[where: string, text: string]> {
   walk('terms', terms)
   // The vvv showcase (spec 004): prose that exists nowhere else on the site.
   walk('showcase.vvv', vvvShowcase)
+  // The /mcp/ page's copy, and the tools table it shares with /mcp.md.
+  walk('mcpPage', mcpPage)
+  walk('mcpTools', mcpTools)
 
   return out
 }
@@ -162,6 +167,8 @@ describe('visitor-facing punctuation', () => {
   it('does not replace a dash with a double hyphen', () => {
     const offenders = strings
       .filter(([where]) => !where.startsWith('en.terminal') && !where.startsWith('pt.terminal'))
+      // A shell command's `--` is syntax (`claude mcp add x -- npx y`), not a dash.
+      .filter(([where]) => !/command$/i.test(where))
       .filter(([, text]) => /\s--\s/.test(text))
       .map(([where]) => where)
     expect(offenders, `double hyphen in: ${offenders.join(', ')}`).toEqual([])

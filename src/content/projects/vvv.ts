@@ -14,10 +14,9 @@ export const vvv: Project = {
   state: 'functional',
   period: { start: '2026-07-03', end: '2026-09-27' },
   commits: 338,
-  /* The name most of this project's tracked time sits under. Since the
-     2026-09-21 rename the snapshot also holds a small 'vvv' project, which this
-     single-name join does not count yet (spec 004 follow-up). */
-  wakatimeProject: 'viralvideogen',
+  /* WakaTime keys on the folder name at the moment of tracking, and the
+     2026-09-21 rename did not merge the two, so the time is the sum of both. */
+  wakatimeProject: ['viralvideogen', 'vvv'],
 
   summary: {
     en: 'A CLI pipeline that turns a reference video into an original, production-ready video package for two accounts, a US storytelling channel and a Brazilian TikTok Shop, and never believes a result it has not measured.',

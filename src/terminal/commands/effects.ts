@@ -2,7 +2,7 @@ import { LOCALES, isLocale } from '../../content/i18n/types'
 import { THEMES, isTheme } from '../../theme/types'
 import { pickJoke } from '../../theme/jokes'
 import { translate } from '../../content/i18n/translate'
-import { closest } from '../suggest'
+import { closest, projectNamed, projectNames } from '../suggest'
 import { fail, ok, text, type Command } from '../types'
 
 /**
@@ -80,9 +80,9 @@ export const open: Command = {
   run: ({ args, content, locale }) => {
     const id = args[0]
     if (!id) return fail([text(translate(locale, 'terminal.usage', { usage: open.usage }))], 2)
-    const project = content.projects.find((p) => p.id === id)
+    const project = projectNamed(content.projects, id)
     if (!project) {
-      const suggestion = closest(id, content.projects.map((p) => p.id))
+      const suggestion = closest(id, projectNames(content.projects))
       return fail([
         text(translate(locale, 'terminal.noSuchProject', { id }), 'error'),
         ...(suggestion

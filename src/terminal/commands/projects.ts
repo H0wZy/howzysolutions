@@ -1,7 +1,7 @@
 import { PROJECT_KIND, PROJECT_STATE, type Project } from '../../content/types'
 import type { Locale } from '../../content/i18n/types'
 import { translate } from '../../content/i18n/translate'
-import { closest } from '../suggest'
+import { closest, projectNamed, projectNames } from '../suggest'
 import { blank, fail, ok, table, text, type Command, type OutputLine } from '../types'
 
 export const projects: Command = {
@@ -46,9 +46,9 @@ export const projects: Command = {
 
     const id = args[0]
     if (id) {
-      const project = all.find((p) => p.id === id)
+      const project = projectNamed(all, id)
       if (!project) {
-        const suggestion = closest(id, all.map((p) => p.id))
+        const suggestion = closest(id, projectNames(all))
         return fail([
           text(translate(locale, 'terminal.noSuchProject', { id }), 'error'),
           ...(suggestion

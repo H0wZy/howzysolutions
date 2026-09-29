@@ -54,7 +54,7 @@ export function homeTopicAnchors(hasGithub: boolean): TopicAnchor[] {
 export function legalTopicAnchors(document: LegalDocument): TopicAnchor[] {
   return [
     ...document.sections.map((section) => ({ id: section.id, label: section.heading })),
-    ...(document.projects ?? []).flatMap((project) => [
+    ...document.projects.flatMap((project) => [
       { id: project.id, label: project.name },
       ...project.sections.map((section) => ({ id: section.id, label: section.heading })),
     ]),

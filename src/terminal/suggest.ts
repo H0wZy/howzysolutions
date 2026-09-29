@@ -37,6 +37,23 @@ export function closest(input: string, candidates: string[], maxDistance = 2): s
   return bestDistance <= maxDistance ? best : undefined
 }
 
+/**
+ * A project by its id or by the name it had before it was renamed, so a
+ * visitor who knows the old one still finds it (Project.formerName).
+ */
+export function projectNamed<T extends { id: string; formerName?: string }>(
+  projects: T[],
+  name: string,
+): T | undefined {
+  const wanted = name.toLowerCase()
+  return projects.find((p) => p.id === wanted || p.formerName?.toLowerCase() === wanted)
+}
+
+/** Every name a project answers to, for did-you-mean. */
+export function projectNames(projects: Array<{ id: string; formerName?: string }>): string[] {
+  return projects.flatMap((p) => (p.formerName ? [p.id, p.formerName] : [p.id]))
+}
+
 /** Candidates sharing a prefix, for tab completion. */
 export function completions(input: string, candidates: string[]): string[] {
   const lower = input.toLowerCase()

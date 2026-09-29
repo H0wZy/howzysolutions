@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import type { Locale } from '../../content/i18n/types'
 import { translate } from '../../locale'
+import { CopyIcon } from '../CopyIcon'
 
 export function CvHeaderActions({ locale }: { locale: Locale }) {
   const [open, setOpen] = useState(false)
@@ -26,6 +27,9 @@ export function CvHeaderActions({ locale }: { locale: Locale }) {
       onBlur={(e) => {
         if (!e.currentTarget.contains(e.relatedTarget as Node)) setOpen(false)
       }}
+      onKeyDown={(e) => {
+        if (e.key === 'Escape') setOpen(false)
+      }}
     >
       <button
         type="button"
@@ -33,22 +37,7 @@ export function CvHeaderActions({ locale }: { locale: Locale }) {
         className="chrome-btn inline-flex items-center gap-1.5 text-xs bg-[var(--surface)] hover:text-[var(--accent)] rounded-r-none border-r-0"
         title={translate(locale, 'cv.copyPage')}
       >
-        <svg
-          className="size-3.5 shrink-0"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          aria-hidden="true"
-        >
-          {copied ? (
-            <path d="m20 6-11 11-5-5" className="text-[var(--accent)]" />
-          ) : (
-            <path d="M16 4H4v12m4-8h12v12H8z" />
-          )}
-        </svg>
+        <CopyIcon ok={copied} />
         <span>{translate(locale, copied ? 'cv.copied' : 'cv.copyPage')}</span>
       </button>
 

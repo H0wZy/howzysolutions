@@ -94,7 +94,7 @@ export function Showcase({
   const record = pathFor({ page: 'work', id: showcase.projectId }, locale)
   /* A legal page is linked only when that record has a block for this app. */
   const legal = (['privacy', 'terms'] as const).filter((doc) =>
-    (doc === 'privacy' ? privacy : terms).projects?.some((app) => app.id === showcase.projectId),
+    (doc === 'privacy' ? privacy : terms).projects.some((app) => app.id === showcase.projectId),
   )
 
   return (
@@ -123,7 +123,9 @@ export function Showcase({
                   <p className="label">
                     {hero.kicker[locale]}
                     {project?.formerName ? (
-                      <span className="showcase-former">old {project.formerName}</span>
+                      <span className="showcase-former">
+                        {translate(locale, 'project.formerName', { name: project.formerName })}
+                      </span>
                     ) : null}
                   </p>
                   <h1 className="showcase-title">
