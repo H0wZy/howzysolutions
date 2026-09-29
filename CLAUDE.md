@@ -37,9 +37,11 @@ These are the ones a change is most likely to break without noticing.
   `scripts/check-contrast.mjs`, which verifies 25 token pairs against their WCAG
   floor (the empty-day grid fill is decorative) and follows the shadcn variable mapping.
 - **The JavaScript budget is a gate.** `scripts/check-bundle.mjs` fails the
-  build above 120 KB gzipped. Last measured 118.38 KB (2026-09-19, with the
-  GitHub activity section), so there is under 2 KB of headroom: check before
-  adding anything, not after. Each new contribution year adds about 1 KB (see
+  build above 120 KB gzipped. Last measured 119.44 KB (2026-09-29, with the
+  /vvv/ showcase, the featured strip and the localised /mcp/), so there is
+  0.56 KB of headroom: check before adding anything, not after. The gate also
+  fails if a static document's prose (the legal pages, /vvv/) shows up in a
+  script. Each new contribution year adds about 1 KB (see
   the GitHub artifact below).
 - **Nothing under `App` may call `new Date()` during render.** The site
   hydrates, so a value derived from the clock disagrees between prerender and
