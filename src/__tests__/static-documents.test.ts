@@ -68,6 +68,26 @@ describe('the showcase stays out of the client bundle', () => {
   })
 })
 
+/*
+ * What lets a static document skip React: the entry reaches the app only through
+ * a dynamic import, so the bundler makes it a chunk the static documents never
+ * fetch. A static `import` of any of these puts it back in the entry, and
+ * check-bundle.mjs would then fail on the built size; this names the cause.
+ */
+describe('the entry reaches the app only through a dynamic import', () => {
+  const main = read('../main.tsx')
+
+  it('does not import React, the app or the terminal statically', () => {
+    for (const banned of ['react-dom', 'HydratedApp', './App', 'enhance/terminal', './hydrate']) {
+      expect(main, banned).not.toMatch(new RegExp(`^import[^\n]*${banned}`, 'm'))
+    }
+  })
+
+  it('loads the app chunk with import()', () => {
+    expect(main).toMatch(/import\('\.\/hydrate'\)/)
+  })
+})
+
 describe('every legal route is a real prerendered document', () => {
   const emitted = new Set(routes().map((r) => r.pathname))
 

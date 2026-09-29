@@ -31,7 +31,7 @@ hermes-agent's art blends into its blue.
 | V. Bilingual parity | Every string is `Localized`; a missing locale is a type error. `lang` follows the URL as on every page. |
 | VI. Dark only, tokens | New type size is a token (`--fs-display`); no colour literal; the blend mode needs none. |
 | VII. Verified | `npm run build`, `npm test`, `npm run lint`; both locales inspected at 360px and 1440px. |
-| Budget: 120 KB JS | The page is a static document (same mechanism as the legal pages); the gate proves the total does not move. |
+| Budget: JS | The page is a static document (same mechanism as the legal pages); the gate proves the total does not move. The ceiling was 120 KB then and is 125 KB since 2026-09-29 (constitution 2.2.0). |
 | Privacy | No new third-party request. Artwork is self-hosted. |
 
 ## Design decisions

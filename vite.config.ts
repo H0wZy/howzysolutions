@@ -38,5 +38,11 @@ export default defineConfig({
   },
   build: {
     target: 'es2022',
+    // scripts/prerender.mjs reads it to preload the app chunk into the
+    // documents that hydrate, then deletes it: a build tool, not site content.
+    manifest: true,
+    // Every browser this targets has native modulepreload; the polyfill is
+    // bytes against a budget.
+    modulePreload: { polyfill: false },
   },
 })

@@ -81,7 +81,10 @@ export const howzysolutions: Project = {
     {
       label: { en: 'Budget', pt: 'Budget' },
       value: '120 KB',
-      source: { en: 'project constitution, performance budgets', pt: 'constituição do projeto, budgets de performance' },
+      source: {
+        en: 'project constitution, performance budgets, as they stood for that measurement; raised to 125 KB on 2026-09-29',
+        pt: 'constituição do projeto, budgets de performance, como estavam nessa medição; subiu para 125 KB em 29/09/2026',
+      },
     },
     {
       label: { en: 'Functional requirements', pt: 'Requisitos funcionais' },

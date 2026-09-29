@@ -37,12 +37,17 @@ These are the ones a change is most likely to break without noticing.
   `scripts/check-contrast.mjs`, which verifies 25 token pairs against their WCAG
   floor (the empty-day grid fill is decorative) and follows the shadcn variable mapping.
 - **The JavaScript budget is a gate.** `scripts/check-bundle.mjs` fails the
-  build above 120 KB gzipped. Last measured 119.44 KB (2026-09-29, with the
-  /vvv/ showcase, the featured strip and the localised /mcp/), so there is
-  0.56 KB of headroom: check before adding anything, not after. The gate also
-  fails if a static document's prose (the legal pages, /vvv/) shows up in a
-  script. Each new contribution year adds about 1 KB (see
-  the GitHub artifact below).
+  build above 125 KB gzipped (constitution 2.2.0, raised from 120 on
+  2026-09-29 on a measurement). Last measured 120.47 KB for a document that
+  hydrates (entry + app chunk) and 8.28 KB for a static one, so there is
+  4.5 KB of headroom: check before adding anything, not after. The client is
+  two files: the entry (`src/main.tsx`, the enhancements every page runs) and
+  the app (`src/hydrate.tsx`: React, the pages, the terminal), which
+  `scripts/prerender.mjs` preloads into the documents that hydrate and leaves
+  out of the static ones (legal pages, `/vvv/`). A third file cost 1.58 KB, so
+  do not split further. The gate also fails if a static document's prose is in
+  a script, or if the static entry outgrows 20 KB. Each new contribution year
+  adds about 1 KB (see the GitHub artifact below).
 - **Nothing under `App` may call `new Date()` during render.** The site
   hydrates, so a value derived from the clock disagrees between prerender and
   the browser. Build-time values come from `src/content/build.generated.json`.

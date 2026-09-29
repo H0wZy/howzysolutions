@@ -2,8 +2,9 @@
  * The JavaScript budget as a gate, not a note (spec 003 FR-050).
  *
  * The constitution's Performance budgets section caps initial JavaScript at
- * 120 KB gzipped. That number held for two years by being measured once, in
- * spec 001, and then never again — which was safe only while the client
+ * 125 KB gzipped (120 KB until 2026-09-29, constitution 2.2.0). The original
+ * number held for two years by being measured once, in spec 001, and then
+ * never again — which was safe only while the client
  * shipped no framework. It ships one now: measured 2026-08-27, the hydrated
  * site sits at 104.76 KB, leaving about 15 KB. That is roughly two more
  * components, so the next careless import is the one that matters and a human
@@ -16,8 +17,8 @@ import { gzipSync } from 'node:zlib'
 import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'node:path'
 
-/** Gzipped kilobytes of initial JavaScript. Constitution 2.1.0. */
-const BUDGET_KB = 120
+/** Gzipped kilobytes of initial JavaScript. Constitution 2.2.0. */
+const BUDGET_KB = 125
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 const assets = join(root, 'dist', 'assets')
@@ -78,6 +79,35 @@ for (const { text, page } of STATIC_ONLY) {
   }
   if (scripts.includes(text)) {
     console.error(`x bundle: "${text}" from dist/${page} is in the client bundle; a static document leaked in`)
+    process.exit(1)
+  }
+}
+
+/*
+ * The split is only worth what it saves the static documents. Their entry is
+ * the enhancements and nothing else, so if it grows past this, React or a page
+ * has been imported into it and every legal page pays for the app again.
+ * Likewise the app pages must preload the app chunk, or hydration waits a round
+ * trip behind the entry.
+ */
+const STATIC_ENTRY_MAX_KB = 20
+{
+  const page = readFileSync(join(root, 'dist', 'vvv', 'index.html'), 'utf8')
+  const src = page.match(/<script type="module"[^>]*src="\/assets\/([^"]+\.js)"/)?.[1]
+  const entry = files.find((f) => f.name === src)
+  if (!entry) {
+    console.error('x bundle: could not find the entry script /vvv/ loads')
+    process.exit(1)
+  }
+  const entryKb = entry.gzip / 1024
+  console.log(`  static document entry          gzip ${entryKb.toFixed(2)} KB (max ${STATIC_ENTRY_MAX_KB} KB)`)
+  if (entryKb > STATIC_ENTRY_MAX_KB) {
+    console.error(`x bundle: the static entry is ${entryKb.toFixed(2)} KB gzipped, over ${STATIC_ENTRY_MAX_KB} KB`)
+    process.exit(1)
+  }
+  const home = readFileSync(join(root, 'dist', 'index.html'), 'utf8')
+  if (!/rel="modulepreload"[^>]*hydrate-/.test(home)) {
+    console.error('x bundle: the home page does not preload the app chunk')
     process.exit(1)
   }
 }

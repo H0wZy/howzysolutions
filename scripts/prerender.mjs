@@ -6,7 +6,7 @@
  * prose is in the payload before any script runs. It is also why no routing
  * library ships — every URL is a file, in every language.
  */
-import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
+import { mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 import { writeAllMarkdown } from './generate-mcp-markdown.mjs'
@@ -130,6 +130,30 @@ if (!fontHref) {
   console.warn('! prerender: could not locate the Latin JetBrains Mono file to preload')
 }
 
+/*
+ * The client is two files: the entry (the enhancements every page runs) and the
+ * app (React, the pages and the terminal, src/hydrate.tsx). The static
+ * documents need only the entry, so the app is preloaded per document instead
+ * of fetched after the entry runs, which would put a round trip in front of
+ * hydration on every app page. Its hashed name comes from Vite's manifest.
+ */
+const manifest = JSON.parse(readFileSync(join(dist, '.vite', 'manifest.json'), 'utf8'))
+const appEntry = manifest['src/hydrate.tsx']
+if (!appEntry) {
+  console.error('x prerender: src/hydrate.tsx is not in the build manifest')
+  process.exit(1)
+}
+const appChunks = [appEntry, ...(appEntry.imports ?? []).map((key) => manifest[key]).filter((c) => c && !c.isEntry)].map(
+  (chunk) => `/${chunk.file}`,
+)
+
+function withAppPreload(html, pathname) {
+  const { route } = server.locationFor(pathname)
+  if (server.isStaticDocument(route)) return html
+  const links = appChunks.map((href) => `    <link rel="modulepreload" crossorigin href="${href}" />`)
+  return html.replace('</head>', `${links.join('\n')}\n  </head>`)
+}
+
 function withFontPreload(html) {
   if (!fontHref) return html
   const link = `    <link rel="preload" as="font" type="font/woff2" href="${fontHref}" crossorigin />`
@@ -177,6 +201,7 @@ for (const { pathname, locale } of allRoutes) {
   html = withLangs(html, pathname, meta.lang)
   html = withStructuredData(html, locale)
   html = withFontPreload(html)
+  html = withAppPreload(html, pathname)
 
   const outDir = pathname === '/' ? dist : join(dist, pathname)
   mkdirSync(outDir, { recursive: true })
@@ -191,5 +216,8 @@ writeFileSync(join(root, 'public', 'sitemap.xml'), sitemap, 'utf8')
 console.log(`ok emitted sitemap.xml for ${allRoutes.length} routes`)
 
 writeAllMarkdown()
+
+// The manifest was only for the preload above; it is not part of the site.
+rmSync(join(dist, '.vite'), { recursive: true, force: true })
 
 console.log(`\nok prerendered ${written} documents`)
