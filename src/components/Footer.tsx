@@ -3,9 +3,10 @@ import { translate } from '../locale'
 import { pathFor } from '../route'
 
 /**
- * The two legal documents live here rather than in the chrome bar: they are
- * what a reader looks for at the bottom of a page, and the bar is already at
- * the width where a fourth label wraps onto a second row (see `nav.work`).
+ * Both legal documents are linked here, where a reader looks for them at the
+ * bottom of a page. The privacy policy is also in the chrome bar (TOP_LEVEL in
+ * navigation.ts), which is already at the width where another label wraps onto
+ * a second row (see `nav.work`), so the terms are only here.
  */
 export function Footer({ locale }: { locale: Locale }) {
   return (

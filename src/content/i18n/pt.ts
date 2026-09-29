@@ -53,6 +53,7 @@ export const pt = {
   'work.allWork': 'todos os trabalhos',
   'work.listingTitle': 'Todos os trabalhos',
   'work.showcase': 'Showcase',
+  'project.formerName': 'antigo {name}',
   'work.openShowcase': 'abrir showcase',
   'featured.explore': 'Explorar {name}',
   'featured.show': 'Mostrar {name}',
@@ -264,7 +265,7 @@ export const pt = {
     'Os termos sob os quais a H0wZy Solutions publica este portfólio: uso aceitável, propriedade do trabalho mostrado, ausência de garantia e lei brasileira.',
 
   // Comuns aos dois documentos jurídicos
-  'legal.updated': 'Atualizada em {date}.',
+  'legal.updated': 'Última atualização em {date}.',
   'legal.contact': 'Contato:',
   'legal.general': 'ler os termos gerais',
   'legal.generalPolicy': 'ler a política geral',

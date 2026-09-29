@@ -12,6 +12,13 @@ import { dirname, join } from 'node:path'
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 const mcpArtifactPath = join(root, 'src', 'content', 'mcp.generated.json')
 
+/* The same four tools /mcp/ renders, read from the one file both share. */
+const tools = JSON.parse(readFileSync(join(root, 'src', 'content', 'mcp-tools.json'), 'utf8'))
+const toolRows = (lang) =>
+  tools
+    .map((t) => `| \`${t.a}_antigravity\` | \`${t.a}_codex\` | ${t.d[lang]} | "${t.p[lang]}" |`)
+    .join('\n')
+
 let version = 'v1.0.4'
 let commits = 36
 try {
@@ -43,9 +50,9 @@ license: MIT
 
 > O Hub MCP Multi-Agente definitivo e CLI em Go conectando Claude Code, OpenAI Codex e Google Antigravity.
 
-## Inicio Rapido
+## Início Rápido
 
-Execute diretamente sem instalacao previa:
+Execute diretamente sem instalação prévia:
 
 \`\`\`bash
 npx @h0wzy/mcp
@@ -67,7 +74,7 @@ Adicione o conector ao Claude Code:
 claude mcp add h0wzy-mcp -- npx -y @h0wzy/mcp
 \`\`\`
 
-Apos configurado, o Claude Code pode invocar ferramentas do OpenAI Codex e Google Antigravity de forma autonoma.
+Após configurado, o Claude Code pode invocar ferramentas do OpenAI Codex e Google Antigravity de forma autônoma.
 
 ### 2. Endpoints de Transporte
 
@@ -75,42 +82,39 @@ Apos configurado, o Claude Code pode invocar ferramentas do OpenAI Codex e Googl
 - **HTTP / SSE**: \`https://mcp.howzysolutions.com/sse\`
 - **CLI (Local Stdio)**: \`npx @h0wzy/mcp\`
 
-## Delegacao Multi-Agente & Ferramentas
+## Delegação Multi-Agente & Ferramentas
 
 Como instruir o Claude Code a delegar ao Antigravity e Codex via 8 ferramentas espelhadas:
 
 | Antigravity (Gemini 3.1) | Codex (GPT-5.6 / GPT-6) | Finalidade | Prompt Exemplo |
 | --- | --- | --- | --- |
-| \`ask_antigravity\` | \`ask_codex\` | Consultas e segunda opiniao | "Peca uma segunda opiniao ao Antigravity sobre este schema de banco." |
-| \`review_antigravity\` | \`review_codex\` | Code review e seguranca | "Faca um review do meu git diff usando Codex para checar seguranca." |
-| \`brainstorm_antigravity\` | \`brainstorm_codex\` | Trade-offs arquiteturais | "Faca um brainstorming com Codex comparando Redis e Cloudflare KV para cache." |
-| \`plan_antigravity\` | \`plan_codex\` | Planos de implementacao | "Gere um plano de implementacao com Antigravity para refatorar auth." |
+${toolRows('pt')}
 
 ## Pacotes do Monorepo
 
-| Pacote | Descricao | Versao |
+| Pacote | Descrição | Versão |
 | --- | --- | --- |
-| \`@h0wzy/mcp\` | Runner interativo em Go e orquestrador de hub | ${version} |
-| \`@h0wzy/mcp-shared\` | Utilitarios cross-platform e motor stdio JSON-RPC | ${version} |
-| \`@h0wzy/mcp-server-antigravity\` | Servidor MCP Google Antigravity conectando ao Gemini 3.1 | ${version} |
-| \`@h0wzy/mcp-server-codex\` | Servidor MCP OpenAI Codex conectando ao GPT-5.6 / GPT-6 | ${version} |
+| \`@h0wzy/mcp\` | Runner interativo em Go e orquestrador do hub | ${version} |
+| \`@h0wzy/mcp-shared\` | Utilitários cross-platform e motor stdio JSON-RPC | ${version} |
+| \`@h0wzy/mcp-server-antigravity\` | Servidor MCP do Google Antigravity conectando ao Gemini 3.1 | ${version} |
+| \`@h0wzy/mcp-server-codex\` | Servidor MCP do OpenAI Codex conectando ao GPT-5.6 / GPT-6 | ${version} |
 
-## Binarios Avulsos (${version})
+## Binários Avulsos (${version})
 
-Binarios compilados nativos em Go com zero dependencias de runtime:
+Binários nativos compilados em Go, sem dependências de runtime:
 
 - [Windows (amd64)](https://github.com/H0wZy/mcp/releases/download/${version}/h0wzy-mcp-windows-amd64.exe)
 - [Linux (amd64)](https://github.com/H0wZy/mcp/releases/download/${version}/h0wzy-mcp-linux-amd64)
 - [macOS (arm64 Apple Silicon)](https://github.com/H0wZy/mcp/releases/download/${version}/h0wzy-mcp-darwin-arm64)
 - [macOS (amd64 Intel)](https://github.com/H0wZy/mcp/releases/download/${version}/h0wzy-mcp-darwin-amd64)
 
-## Arquitetura & Metricas
+## Arquitetura & Métricas
 
 - **Commits**: ${commits} no historico git
-- **Versao**: ${version} no npm registry e GitHub Releases
+- **Versão**: ${version} no npm registry e GitHub Releases
 - **Agentes Suportados**: Claude Code, OpenAI Codex, Google Antigravity
-- **Performance**: Execucao CLI nativa sub-50ms com TUI interativa em Bubble Tea
-- **Resiliencia**: Captura inteligente de HTTP 429 e limites de cota
+- **Performance**: Execução CLI nativa sub-50ms com TUI interativa em Bubble Tea
+- **Resiliência**: Captura inteligente de HTTP 429 e limites de cota
 `
   }
 
@@ -167,10 +171,7 @@ How to prompt Claude Code to delegate to Antigravity and Codex across 8 mirrored
 
 | Antigravity (Gemini 3.1) | Codex (GPT-5.6 / GPT-6) | Purpose | Example Prompt |
 | --- | --- | --- | --- |
-| \`ask_antigravity\` | \`ask_codex\` | Inquiries and second opinions | "Ask Antigravity for a second opinion on this database schema." |
-| \`review_antigravity\` | \`review_codex\` | Code and security reviews | "Review my git diff using Codex for security edge cases." |
-| \`brainstorm_antigravity\` | \`brainstorm_codex\` | Architectural trade-offs | "Brainstorm caching strategies with Codex comparing Redis and Cloudflare KV." |
-| \`plan_antigravity\` | \`plan_codex\` | Implementation roadmaps | "Generate an implementation plan with Antigravity to refactor auth." |
+${toolRows('en')}
 
 ## Monorepo Packages
 

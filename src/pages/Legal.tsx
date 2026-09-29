@@ -102,21 +102,33 @@ export function Legal({
   const { document, title, group, general, cross } = KINDS[kind]
   const otherKind: LegalKind = kind === 'privacy' ? 'terms' : 'privacy'
   const email = content.profile.contacts.find((c) => c.kind === 'email')
-  const apps = document.projects ?? []
+  const apps = document.projects
   /* An id nothing matches falls back to the index rather than to an empty
-     page: the prerender only emits real ids, so this is the client's guard. */
+     page. The prerender only emits real ids, so this guards the Vite dev
+     server, which renders whatever path it is asked for. */
   const only = appId ? apps.find((app) => app.id === appId) : undefined
   const shown = only ? [only] : apps
+  /* An app's page keeps the general sections that bind the app too. */
+  const bound = only ? document.sections.filter((section) => section.withApp) : document.sections
   /* The other document's page for this same app, when it has one. Both records
      use the app's own id, so the pair can never point at different apps. */
-  const crossed = only && KINDS[otherKind].document.projects?.some((app) => app.id === only.id)
+  const crossed = only && KINDS[otherKind].document.projects.some((app) => app.id === only.id)
+
+  const generalSections = bound.map((section) => (
+    <section key={section.id} className="section" id={section.id}>
+      <div className="wrap">
+        <h2>{section.heading[locale]}</h2>
+        <Body section={section} locale={locale} />
+      </div>
+    </section>
+  ))
 
   return (
     <>
       <Chrome locale={locale} pathname={pathname} leafLabel={only?.name} />
       <main className="document-layout">
         <SectionRail
-          entries={legalTopicAnchors(only ? { ...document, sections: [], projects: [only] } : document)}
+          entries={legalTopicAnchors(only ? { ...document, sections: bound, projects: [only] } : document)}
           locale={locale}
         />
         <div className="document-body">
@@ -176,16 +188,7 @@ export function Legal({
             </div>
           </header>
 
-          {only
-            ? null
-            : document.sections.map((section) => (
-                <section key={section.id} className="section" id={section.id}>
-                  <div className="wrap">
-                    <h2>{section.heading[locale]}</h2>
-                    <Body section={section} locale={locale} />
-                  </div>
-                </section>
-              ))}
+          {!only ? generalSections : null}
 
           {shown.map((app) => {
             const record = content.projects.find((p) => p.id === app.id)
@@ -199,7 +202,6 @@ export function Legal({
                       · <span className="nowrap">{app.tagline[locale]}</span>
                     </span>
                   </h2>
-                  {record?.formerName ? <p className="sub dim">old {record.formerName}</p> : null}
                   {app.summary[locale].map((paragraph) => (
                     <p key={paragraph} className="prose">
                       {paragraph}
@@ -222,6 +224,7 @@ export function Legal({
               </section>
             )
           })}
+          {only ? generalSections : null}
           <Footer locale={locale} />
         </div>
       </main>

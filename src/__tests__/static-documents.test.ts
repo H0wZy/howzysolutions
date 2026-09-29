@@ -77,8 +77,8 @@ describe('every legal route is a real prerendered document', () => {
       ['terms', terms],
     ] as const) {
       expect(emitted).toContain(pathFor({ page: doc }, locale))
-      expect(document.projects?.length, `${doc} has no app block`).toBeGreaterThan(0)
-      for (const app of document.projects ?? []) {
+      expect(document.projects.length, `${doc} has no app block`).toBeGreaterThan(0)
+      for (const app of document.projects) {
         expect(emitted).toContain(pathFor({ page: 'legalApp', doc, id: app.id }, locale))
       }
     }
@@ -93,7 +93,7 @@ describe('both documents are complete in both locales', () => {
     expect(document.updated).toMatch(/^\d{4}-\d{2}-\d{2}$/)
     const blocks = [
       ...document.sections,
-      ...(document.projects ?? []).flatMap((entry) => entry.sections),
+      ...document.projects.flatMap((entry) => entry.sections),
     ]
     expect(blocks.length).toBeGreaterThan(0)
     for (const locale of LOCALES) {
@@ -110,7 +110,7 @@ describe('both documents are complete in both locales', () => {
     for (const document of [privacy, terms]) {
       const ids = [
         ...document.sections.map((s) => s.id),
-        ...(document.projects ?? []).flatMap((entry) => [
+        ...document.projects.flatMap((entry) => [
           entry.id,
           ...entry.sections.map((s) => s.id),
         ]),

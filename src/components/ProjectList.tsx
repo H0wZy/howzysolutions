@@ -42,7 +42,11 @@ export function ProjectList({ projects, locale }: { projects: Project[]; locale:
             <Badge>{translate(locale, PROJECT_KIND[project.kind])}</Badge>
             <StateBadge project={project} locale={locale} />
           </div>
-          {project.formerName ? <p className="detail-meta dim">old {project.formerName}</p> : null}
+          {project.formerName ? (
+            <p className="detail-meta dim">
+              {translate(locale, 'project.formerName', { name: project.formerName })}
+            </p>
+          ) : null}
           <p className="project-row-summary">{project.summary[locale]}</p>
           <div className="project-row-meta">
             <MetaList items={project.stack.flatMap((g) => g.items).slice(0, 5)} />

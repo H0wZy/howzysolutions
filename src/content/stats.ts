@@ -73,10 +73,29 @@ export function parseStats(input: unknown): CodingStatsSnapshot {
 
 export const stats: CodingStatsSnapshot = parseStats(raw)
 
-/** Measured time for one project, or undefined — never a zero (data-model rule). */
-export function trackedTimeFor(wakatimeProject?: string): StatSlice | undefined {
-  if (!wakatimeProject) return undefined
-  return stats.projects.find((p) => p.name === wakatimeProject)
+/** WakaTime's own wording: "125 hrs 19 mins". */
+function humanize(seconds: number): string {
+  const hours = Math.floor(seconds / 3600)
+  const mins = Math.floor((seconds % 3600) / 60)
+  return hours > 0 ? `${hours} hrs ${mins} mins` : `${mins} mins`
+}
+
+/**
+ * Measured time for one project, or undefined — never a zero (data-model rule).
+ * A project tracked under several names (a rename) is the sum of the ones the
+ * snapshot has; a name the snapshot lacks adds nothing rather than a zero.
+ */
+export function trackedTimeFor(wakatimeProject?: string | string[]): StatSlice | undefined {
+  const names = [wakatimeProject ?? []].flat()
+  const found = names.flatMap((name) => stats.projects.filter((p) => p.name === name))
+  if (found.length <= 1) return found[0]
+  const seconds = found.reduce((sum, p) => sum + p.seconds, 0)
+  return {
+    name: found[0].name,
+    percent: found.reduce((sum, p) => sum + p.percent, 0),
+    seconds,
+    text: humanize(seconds),
+  }
 }
 
 export type PeriodLabel = {

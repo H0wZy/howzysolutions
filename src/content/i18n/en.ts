@@ -62,6 +62,7 @@ export const en = {
   'work.allWork': 'all works',
   'work.listingTitle': 'All works',
   'work.showcase': 'Showcase',
+  'project.formerName': 'old {name}',
   'work.openShowcase': 'open showcase',
   'featured.explore': 'Explore {name}',
   'featured.show': 'Show {name}',

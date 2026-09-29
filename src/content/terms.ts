@@ -103,12 +103,13 @@ export const terms: LegalDocument = {
           'How personal data is handled is described in the privacy policy, at /privacy-policy/. That page is part of these terms.',
         ],
         pt: [
-          'O tratamento de dados pessoais está descrito na política de privacidade, em /privacy-policy/. Aquela página faz parte destes termos.',
+          'O tratamento de dados pessoais está descrito na política de privacidade, em /pt/privacy-policy/. Aquela página faz parte destes termos.',
         ],
       },
     },
     {
       id: 'changes',
+      withApp: true,
       heading: { en: 'Changes', pt: 'Mudanças' },
       body: {
         en: [
@@ -121,6 +122,7 @@ export const terms: LegalDocument = {
     },
     {
       id: 'applicable-law',
+      withApp: true,
       heading: { en: 'Applicable law', pt: 'Lei aplicável' },
       body: {
         en: [

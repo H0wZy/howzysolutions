@@ -1817,3 +1817,36 @@ button.pagination-link {
   cursor: pointer;
   user-select: none;
 }
+
+/* MCP page ------------------------------------------------------------------ */
+
+/*
+ * The hmcp wordmark is text in --accent. 74 columns are 44.4em wide, so the
+ * size follows the viewport until it reaches the 11.5px the old SVG drew it at,
+ * which keeps it inside a phone-width terminal box without a scrollbar. The
+ * line height is 1 so the rows of box-drawing glyphs meet; at the family's
+ * natural 1.32 they read as stripes (checked in the browser, 2026-09-29).
+ */
+.mcp-banner {
+  margin: 0;
+  color: var(--accent);
+  font-weight: 800;
+  font-size: min(11.5px, 1.7vw);
+  line-height: 1;
+  white-space: pre;
+  overflow: hidden;
+}
+
+/*
+ * A single-colour glyph painted in the surrounding text colour: the file only
+ * supplies the shape, so hover states and any change to a token reach it.
+ */
+.icon-mask {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  background-color: currentColor;
+  -webkit-mask: var(--icon) center / contain no-repeat;
+  mask: var(--icon) center / contain no-repeat;
+}
