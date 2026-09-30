@@ -95,6 +95,19 @@ import type { LegalDocument } from './types'
  * an encrypted name (no readable .dump, .sql, .tsv or .gz name), the live root holds
  * only crypt/, and the crypt remote still lists 52 entries. If a readable dump ever
  * turns up in the Drive trash again, this sentence is false again.
+ *
+ * Also 2026-09-30, after review. Measured by the reviewer: the server's disks are
+ * NOT encrypted (no crypt layer in lsblk, `dmsetup ls --target crypt` finds no
+ * device), so the general Security section no longer says "encrypted disk"; what is
+ * encrypted is the backup copy, before it leaves. The nightly copy covers EVERY
+ * database on the server (and pg_basebackup is a physical copy of the whole
+ * cluster), so the console's data leaves Brazil too, and the sentence that kept the
+ * console "apart" from the transfer was removed. The dump also carries the
+ * `tfstate` database, which holds infrastructure credentials in the clear, so
+ * "credentials are kept only on the operator's computer" was narrowed to the TikTok
+ * authorization tokens. Two rows in vvvmetadata match a token-like name and nobody
+ * has classified them as name or value; if the operator says value, the sentence on
+ * the tokens changes again.
  */
 export const privacy: LegalDocument = {
   updated: '2026-09-30',
@@ -126,13 +139,13 @@ export const privacy: LegalDocument = {
           'This site sets no cookies of its own and uses no third-party fonts. Your language choice and scroll position are kept in your browser\'s own storage and never leave it.',
           'The site is hosted on Cloudflare, which handles the technical data every request carries, such as IP address and browser, to deliver the pages and protect them from abuse. Cloudflare may set a strictly necessary security cookie when it has to check a request. We see only aggregate traffic figures, never individual visitors.',
           'The site also uses Cloudflare Web Analytics to count visits in aggregate. It works through a small script that your browser loads from static.cloudflareinsights.com on each page, so that address receives a request when you open one. Cloudflare states that this counting uses no cookies or local storage and does not fingerprint individuals. Our legal basis is legitimate interest (LGPD art. 7, IX): knowing how many people visit the site. What Cloudflare keeps about these requests, and for how long, is decided by Cloudflare and described in its privacy policy (cloudflare.com/privacypolicy). What we see is only the aggregate figures. This was added to this policy on 30 September 2026.',
-          'This counting is handled by Cloudflare, which operates outside Brazil, so the visit counts of this website leave the country. That applies to this website only. The vvv live console is a separate service with its own privacy policy, and its data is stored on our own server in Brazil.',
+          'This counting is handled by Cloudflare, which operates outside Brazil, so the visit counts of this website leave the country. The vvv live console is a separate service with its own privacy policy. Its data is stored on our own server in Brazil, but the nightly backup of that server covers it too, so an encrypted copy of it also goes to Google Drive, outside Brazil (see the vvv section below).',
         ],
         pt: [
           'Este site não grava cookies próprios e não usa fontes de terceiros. O idioma escolhido e a posição de rolagem ficam no armazenamento do próprio navegador e não saem dele.',
           'O site é hospedado na Cloudflare, que trata os dados técnicos de toda requisição, como endereço IP e navegador, para entregar as páginas e protegê-las de abuso. A Cloudflare pode gravar um cookie de segurança estritamente necessário quando precisa verificar uma requisição. Nós vemos só números agregados de tráfego, nunca visitantes individuais.',
           'O site também usa o Cloudflare Web Analytics para contar visitas de forma agregada. Ele funciona por um pequeno script que o seu navegador carrega de static.cloudflareinsights.com em cada página, então esse endereço recebe uma requisição quando você abre uma. A Cloudflare afirma que essa contagem não usa cookies nem armazenamento local e não identifica indivíduos por impressão digital. Nossa base legal é o legítimo interesse (LGPD, art. 7º, IX): saber quantas pessoas visitam o site. O que a Cloudflare guarda sobre essas requisições, e por quanto tempo, é decidido pela Cloudflare e descrito na política de privacidade dela (cloudflare.com/privacypolicy). O que nós vemos são só os números agregados. Isto foi acrescentado a esta política em 30 de setembro de 2026.',
-          'Essa contagem é feita pela Cloudflare, que opera fora do Brasil, então as contagens de visitas deste site saem do país. Isso vale só para este site. O console de lives do vvv é um serviço separado, com política de privacidade própria, e os dados dele ficam no nosso próprio servidor, no Brasil.',
+          'Essa contagem é feita pela Cloudflare, que opera fora do Brasil, então as contagens de visitas deste site saem do país. O console de lives do vvv é um serviço separado, com política de privacidade própria. Os dados dele ficam no nosso próprio servidor, no Brasil, mas a cópia de segurança noturna desse servidor também o cobre, então uma cópia criptografada dele vai igualmente para o Google Drive, fora do Brasil (veja a seção do vvv abaixo).',
         ],
       },
     },
@@ -155,10 +168,10 @@ export const privacy: LegalDocument = {
       heading: { en: 'Security', pt: 'Segurança' },
       body: {
         en: [
-          'Connections use HTTPS with TLS 1.2 or higher. The computer that runs our tools has an encrypted disk, and access to it is limited to the operator.',
+          'Connections use HTTPS with TLS 1.2 or higher. Access to the operator\'s computer and to our server is limited to the operator. What is encrypted is the backup copy that leaves our server, before it leaves; the server\'s own disks are not encrypted.',
         ],
         pt: [
-          'As conexões usam HTTPS com TLS 1.2 ou superior. O computador que roda nossas ferramentas tem o disco criptografado e o acesso é restrito ao operador.',
+          'As conexões usam HTTPS com TLS 1.2 ou superior. O acesso ao computador do operador e ao nosso servidor é restrito ao operador. O que é criptografado é a cópia de segurança que sai do nosso servidor, antes de sair; os discos do próprio servidor não são criptografados.',
         ],
       },
     },
@@ -223,13 +236,13 @@ export const privacy: LegalDocument = {
           body: { en: [], pt: [] },
           items: {
             en: [
-              'Storage: the data above, except credentials, is stored in a database on the operator\'s own server in Brazil and is not sold. Credentials are kept only on the operator\'s computer and are sent only to TikTok.',
-              'Backups: every night an encrypted copy of the database is sent to Google Drive, in the operator\'s own Google account. The copy is encrypted on our server before it leaves, file names included. Google Drive is operated outside Brazil, so the copy leaves the country.',
+              'Storage: the data above, except the TikTok authorization tokens, is stored in a database on the operator\'s own server in Brazil and is not sold. The tokens are kept only on the operator\'s computer and are sent only to TikTok.',
+              'Backups: every night an encrypted copy of all the databases on the operator\'s own server, this app\'s and others\', is sent to Google Drive, in the operator\'s own Google account. The copy is encrypted on our server before it leaves, file names included. Google Drive is operated outside Brazil, so the copy leaves the country.',
               'AI tools: the operator may use AI assistant tools, whose providers are in the United States, to run the app. Those tools can see product and post metadata. They do not receive credentials.',
             ],
             pt: [
-              'Armazenamento: os dados acima, exceto as credenciais, ficam num banco de dados no servidor do próprio operador, no Brasil, e não são vendidos. As credenciais ficam só no computador do operador e são enviadas apenas ao TikTok.',
-              'Cópias de segurança: toda noite uma cópia criptografada do banco de dados é enviada ao Google Drive, na conta Google do próprio operador. A cópia é criptografada no nosso servidor antes de sair, inclusive os nomes dos arquivos. O Google Drive opera fora do Brasil, então a cópia sai do país.',
+              'Armazenamento: os dados acima, exceto os tokens de autorização do TikTok, ficam num banco de dados no servidor do próprio operador, no Brasil, e não são vendidos. Os tokens ficam só no computador do operador e são enviados apenas ao TikTok.',
+              'Cópias de segurança: toda noite uma cópia criptografada de todos os bancos de dados do servidor do próprio operador, os deste app e os de outros, é enviada ao Google Drive, na conta Google do próprio operador. A cópia é criptografada no nosso servidor antes de sair, inclusive os nomes dos arquivos. O Google Drive opera fora do Brasil, então a cópia sai do país.',
               'Ferramentas de IA: o operador pode usar assistentes de IA, de empresas nos Estados Unidos, para operar o app. Essas ferramentas podem ver metadados de produtos e publicações. Elas não recebem credenciais.',
             ],
           },
