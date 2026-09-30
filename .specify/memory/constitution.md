@@ -30,8 +30,10 @@ Amended (2.3.0):
   - CLAUDE.md and AGENTS.md: the line "no analytics, no pixels" now names the exception, as the
     Governance section requires (a conflicting guidance file is corrected).
 
-Open, and not decided here: the legal basis under the LGPD and the retention of the counter's
-data. The privacy policy carries a marker for both until the operator answers.
+Decided the same day, recorded in the comment of src/content/privacy.ts and not repeated here:
+legal basis (legitimate interest, LGPD art. 7, IX, without a formal balancing test), no retention
+period declared, the transfer abroad declared and kept apart from the console, and no consent
+banner because no cookie is set. Not decided: the LGPD art. 33 mechanism for the transfer.
 
 ----------------------------------------------------------------------
 Previous entry
