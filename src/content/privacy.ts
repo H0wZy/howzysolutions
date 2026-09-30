@@ -85,6 +85,16 @@ import type { LegalDocument } from './types'
  * transfer, like the one for Cloudflare's counting, is NOT named: it has not been
  * decided, and naming one that is not in place would be worse than naming none.
  * Not verified by query: the database content itself (a probe of it was not run).
+ *
+ * "An encrypted copy" is true because of a cleanup, not by default. Until
+ * 2026-09-30 the nightly dumps (2026-09-22 to 2026-09-29) were sent unencrypted;
+ * the crypt remote was configured that day, and 35 unencrypted dump files were
+ * found in the Drive trash (38 entries in all). The operator emptied them the same
+ * day, and it was measured twice afterwards, at 2026-09-30T17:15Z by the assistant
+ * working on this file: the trash holds only the crypt/ folder and one folder with
+ * an encrypted name (no readable .dump, .sql, .tsv or .gz name), the live root holds
+ * only crypt/, and the crypt remote still lists 52 entries. If a readable dump ever
+ * turns up in the Drive trash again, this sentence is false again.
  */
 export const privacy: LegalDocument = {
   updated: '2026-09-30',
