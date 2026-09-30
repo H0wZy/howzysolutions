@@ -108,6 +108,12 @@ import type { LegalDocument } from './types'
  * authorization tokens. Two rows in vvvmetadata match a token-like name and nobody
  * has classified them as name or value; if the operator says value, the sentence on
  * the tokens changes again.
+ *
+ * The Security section says "only the operator has personal access" and names the
+ * automated deployment runner (the `ghrunner` service account on the server) as having
+ * access of its own, because "limited to the operator" while a runner can reach the
+ * server would be the same kind of false statement this file was corrected for. The
+ * operator's own computer is not described beyond access: its disk was never measured.
  */
 export const privacy: LegalDocument = {
   updated: '2026-09-30',
@@ -168,10 +174,10 @@ export const privacy: LegalDocument = {
       heading: { en: 'Security', pt: 'Segurança' },
       body: {
         en: [
-          'Connections use HTTPS with TLS 1.2 or higher. Access to the operator\'s computer and to our server is limited to the operator. What is encrypted is the backup copy that leaves our server, before it leaves; the server\'s own disks are not encrypted.',
+          'Connections use HTTPS with TLS 1.2 or higher. Only the operator has personal access to the operator\'s computer and to our server; an automated deployment runner on the server has access of its own. What is encrypted is the backup copy that leaves our server, before it leaves; the server\'s own disks are not encrypted.',
         ],
         pt: [
-          'As conexões usam HTTPS com TLS 1.2 ou superior. O acesso ao computador do operador e ao nosso servidor é restrito ao operador. O que é criptografado é a cópia de segurança que sai do nosso servidor, antes de sair; os discos do próprio servidor não são criptografados.',
+          'As conexões usam HTTPS com TLS 1.2 ou superior. Só o operador tem acesso pessoal ao computador do operador e ao nosso servidor; um executor automático de entrega (deploy) no servidor tem acesso próprio. O que é criptografado é a cópia de segurança que sai do nosso servidor, antes de sair; os discos do próprio servidor não são criptografados.',
         ],
       },
     },
