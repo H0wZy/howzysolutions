@@ -8,7 +8,7 @@ import { CONSOLE_PRIVACY_URL, CONSOLE_URL } from '../content/showcase-vvv-live'
 
 /*
  * vvv spec 039 FR-043, as amended on 2026-09-30: the console's page has no form,
- * sets no cookie, collects no personal data and loads with the console down.
+ * sets no cookie of its own, collects no personal data and loads with the console down.
  * The amendment exists because Cloudflare Web Analytics, which the operator
  * keeps on, adds a script at the edge that this repository does not contain.
  * These checks read the HTML the repository emits, so they can neither see that
@@ -25,6 +25,13 @@ describe.each(LOCALES)('/vvv/live/ in %s', (locale) => {
     expect(html).toMatch(/Cloudflare/)
     // The claims the page can no longer make while the counter is on.
     expect(html).not.toMatch(/runs no analytics|no analytics(?![a-z])(?! of its own)|não roda analytics|não carrega script, fonte ou imagem de outro site|collects nothing|não coleta nada/i)
+  })
+
+  it('claims no cookie of its own, never an absolute no-cookie the policy does not make', () => {
+    // The privacy policy reserves the strictly necessary security cookie Cloudflare may set, so a page
+    // that links to it cannot promise more. The counter's own no-cookie claim stays, attributed to Cloudflare.
+    expect(html).toMatch(/cookies? of its own|cookies? próprios?/)
+    expect(html).not.toMatch(/no cookie[.,]|sets no cookie and|sem cookie[.,]|não define cookie e/i)
   })
 
   it('has no form and no input to collect anything with', () => {
