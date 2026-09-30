@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import { LOCALES } from '../i18n/types'
 import { privacy } from '../privacy'
+import { render } from '../../entry-server'
+import { pathFor } from '../../route'
 
 /*
  * The site keeps Cloudflare Web Analytics on (constitution 2.3.0, 2026-09-30).
@@ -58,4 +60,23 @@ it('moved its date with the text', () => {
  */
 it('carries no unresolved marker for the operator', () => {
   expect(JSON.stringify(privacy)).not.toContain('decisão do operador')
+})
+
+/*
+ * The policy points the reader at Cloudflare's own policy, and that pointer has
+ * to be a link a visitor can follow. The address the browser calls for the
+ * counter is not a page, so it must stay text.
+ */
+describe.each(LOCALES)('privacy page links, %s', (locale) => {
+  const html = render(pathFor({ page: 'privacy' }, locale))
+
+  it('links the Cloudflare privacy policy, opening in a new tab', () => {
+    expect(html).toContain('<a href="https://cloudflare.com/privacypolicy" target="_blank" rel="noreferrer">cloudflare.com/privacypolicy</a>')
+  })
+
+  it('leaves the counter address as plain text', () => {
+    expect(html).toContain('static.cloudflareinsights.com')
+    expect(html).not.toMatch(/<a[^>]*>[^<]*static\.cloudflareinsights\.com/)
+    expect(html).not.toContain('href="https://static.cloudflareinsights.com')
+  })
 })
