@@ -69,6 +69,7 @@ for (const f of files) {
 const STATIC_ONLY = [
   { text: '13.709/2018', page: 'privacy-policy/index.html' },
   { text: 'Original out.', page: 'vvv/index.html' },
+  { text: 'Your live,', page: 'vvv/live/index.html' },
 ]
 const scripts = files.map((f) => readFileSync(join(assets, f.name), 'utf8')).join('\n')
 for (const { text, page } of STATIC_ONLY) {

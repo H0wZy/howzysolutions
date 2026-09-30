@@ -167,5 +167,8 @@ export function trailFor(route: Route, locale: Locale, leafLabel?: string): Crum
 
     case 'vvv':
       return [home, { label: 'vvv', href: null }]
+
+    case 'vvvLive':
+      return [home, { label: 'vvv', href: pathFor({ page: 'vvv' }, locale) }, { label: 'live', href: null }]
   }
 }
