@@ -110,6 +110,13 @@ describe.each(LOCALES)('general security section, %s', (locale) => {
     expect(text).not.toMatch(/has an encrypted disk|tem o disco criptografado|disk is encrypted/)
   })
 
+  it('says only the operator has personal access and does not hide the automated deployment runner', () => {
+    expect(text).toMatch(/Only the operator has personal access|Só o operador tem acesso pessoal/)
+    expect(text).toMatch(/automated deployment runner on the server has access of its own|executor automático de entrega \(deploy\) no servidor tem acesso próprio/)
+    // "Limited to the operator" with no mention of the runner is the claim this replaced.
+    expect(text).not.toMatch(/limited to the operator|restrito ao operador/)
+  })
+
   it('says what is encrypted is the backup copy, and that the server disks are not', () => {
     expect(text).toMatch(/backup copy that leaves our server|cópia de segurança que sai do nosso servidor/)
     expect(text).toMatch(/disks are not encrypted|discos do próprio servidor não são criptografados/)
