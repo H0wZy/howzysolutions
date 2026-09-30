@@ -23,9 +23,19 @@ import type { LegalDocument } from './types'
  * That project's section is the same text as vvv's
  * docs/tiktok-shop/partner-center/PRIVACY_POLICY.md; a change to either is a
  * change to both, and `updated` moves with it.
+ *
+ * 2026-09-30, section `this-website`: the sentence "This site runs no analytics,
+ * trackers or third-party fonts" was replaced by one that discloses Cloudflare
+ * Web Analytics. The earlier wording is the one TikTok Shop's Data Security and
+ * Privacy Review saw (approved 2026-09-23, sent with /privacy/), so `updated`
+ * moving from 2026-09-22 to 2026-09-30 is the before and after. The decision to
+ * keep the counter on is the operator's, recorded in the constitution (2.3.0).
+ * [decisão do operador: base legal e retenção] in the text below is a marker for
+ * the two legal answers this file does not contain; privacy-analytics.test.ts
+ * fails while it is there, so the policy cannot be published with it.
  */
 export const privacy: LegalDocument = {
-  updated: '2026-09-22',
+  updated: '2026-09-30',
 
   intro: {
     en: 'How H0wZy Solutions handles personal data: first on this website, then in each project that handles data of its own.',
@@ -51,12 +61,14 @@ export const privacy: LegalDocument = {
       heading: { en: 'This website', pt: 'Este site' },
       body: {
         en: [
-          'This site runs no analytics, trackers or third-party fonts, and sets no cookies of its own. Your language choice and scroll position are kept in your browser\'s own storage and never leave it.',
+          'This site sets no cookies of its own and uses no third-party fonts. Your language choice and scroll position are kept in your browser\'s own storage and never leave it.',
           'The site is hosted on Cloudflare, which handles the technical data every request carries, such as IP address and browser, to deliver the pages and protect them from abuse. Cloudflare may set a strictly necessary security cookie when it has to check a request. We see only aggregate traffic figures, never individual visitors.',
+          'The site also uses Cloudflare Web Analytics to count visits in aggregate. It works through a small script that your browser loads from static.cloudflareinsights.com on each page, so that address receives a request when you open one. Cloudflare states that this counting uses no cookies or local storage and does not fingerprint individuals. This was added to this policy on 30 September 2026. [decisão do operador: base legal e retenção]',
         ],
         pt: [
-          'Este site não usa analytics, rastreadores nem fontes de terceiros, e não grava cookies próprios. O idioma escolhido e a posição de rolagem ficam no armazenamento do próprio navegador e não saem dele.',
+          'Este site não grava cookies próprios e não usa fontes de terceiros. O idioma escolhido e a posição de rolagem ficam no armazenamento do próprio navegador e não saem dele.',
           'O site é hospedado na Cloudflare, que trata os dados técnicos de toda requisição, como endereço IP e navegador, para entregar as páginas e protegê-las de abuso. A Cloudflare pode gravar um cookie de segurança estritamente necessário quando precisa verificar uma requisição. Nós vemos só números agregados de tráfego, nunca visitantes individuais.',
+          'O site também usa o Cloudflare Web Analytics para contar visitas de forma agregada. Ele funciona por um pequeno script que o seu navegador carrega de static.cloudflareinsights.com em cada página, então esse endereço recebe uma requisição quando você abre uma. A Cloudflare afirma que essa contagem não usa cookies nem armazenamento local e não identifica indivíduos por impressão digital. Isto foi acrescentado a esta política em 30 de setembro de 2026. [decisão do operador: base legal e retenção]',
         ],
       },
     },
