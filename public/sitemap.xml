@@ -58,6 +58,13 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://howzysolutions.com/vvv/live/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://howzysolutions.com/vvv/live/" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://howzysolutions.com/pt/vvv/live/" />
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://howzysolutions.com/works/</loc>
     <xhtml:link rel="alternate" hreflang="en" href="https://howzysolutions.com/works/" />
     <xhtml:link rel="alternate" hreflang="pt" href="https://howzysolutions.com/pt/works/" />
@@ -187,6 +194,13 @@
     <loc>https://howzysolutions.com/pt/vvv/</loc>
     <xhtml:link rel="alternate" hreflang="en" href="https://howzysolutions.com/vvv/" />
     <xhtml:link rel="alternate" hreflang="pt" href="https://howzysolutions.com/pt/vvv/" />
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://howzysolutions.com/pt/vvv/live/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://howzysolutions.com/vvv/live/" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://howzysolutions.com/pt/vvv/live/" />
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>

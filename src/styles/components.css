@@ -1678,6 +1678,19 @@ button.pagination-link {
   justify-self: center;
 }
 
+/* A screenshot is real UI in colour: a hairline frame, no blend. */
+.showcase-shot {
+  margin: 1.6em 0 0;
+}
+
+.showcase-shot img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
 /* Wraps rather than scrolls: no horizontal scroll at 360px, and no scroll box
    a keyboard user would need to reach. */
 .showcase-term {

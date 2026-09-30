@@ -21,6 +21,8 @@ export type Route =
   | { page: 'mcp' }
   /** A designed summary of a project whose record lives at /works/vvv/. */
   | { page: 'vvv' }
+  /** The live console's page, under the showcase of the project it belongs to. */
+  | { page: 'vvvLive' }
 
 export type Location = { route: Route; locale: Locale }
 
@@ -55,6 +57,7 @@ export function parseRoute(rest: string): Route {
   }
   if (rest === '/mcp/' || rest === '/mcp') return { page: 'mcp' }
   if (rest === '/vvv/' || rest === '/vvv') return { page: 'vvv' }
+  if (rest === '/vvv/live/' || rest === '/vvv/live') return { page: 'vvvLive' }
   if (rest === '/works/' || rest === '/works') return { page: 'workIndex', number: 1 }
   const pageMatch = /^\/works\/(\d+)\/?$/.exec(rest)
   if (pageMatch) return { page: 'workIndex', number: Number(pageMatch[1]) }
@@ -75,6 +78,7 @@ const FIXED = {
   terms: '/terms-of-service/',
   mcp: '/mcp/',
   vvv: '/vvv/',
+  vvvLive: '/vvv/live/',
 } as const satisfies Record<string, string>
 
 /** The canonical path for a route in a given locale. */
@@ -99,7 +103,7 @@ export function pathFor(route: Route, locale: Locale): string {
  * src/App.tsx does not import them, which is what keeps them out of the client
  * bundle (src/entry-server.tsx renders them instead).
  */
-const STATIC_PAGES = ['privacy', 'terms', 'legalApp', 'vvv'] as const
+const STATIC_PAGES = ['privacy', 'terms', 'legalApp', 'vvv', 'vvvLive'] as const
 
 export function isStaticDocument(
   route: Route,

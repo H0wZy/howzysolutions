@@ -2,8 +2,10 @@ import { renderToString } from 'react-dom/server'
 import App from './App'
 import { Legal } from './pages/Legal'
 import { Showcase } from './pages/Showcase'
+import { LiveShowcase } from './pages/LiveShowcase'
 import { content, privacy, terms } from './content'
 import { vvvShowcase } from './content/showcase-vvv'
+import { vvvLive } from './content/showcase-vvv-live'
 import { LOCALES, type Locale } from './content/i18n/types'
 import { translate } from './content/i18n/translate'
 import { workPage } from './content/types'
@@ -31,6 +33,7 @@ export function routes(): Array<{ pathname: string; locale: Locale }> {
     ),
     { page: 'mcp' },
     { page: 'vvv' },
+    { page: 'vvvLive' },
     ...Array.from({ length: total }, (_, i) => ({ page: 'workIndex' as const, number: i + 1 })),
     ...content.projects.map((p) => ({ page: 'work' as const, id: p.id })),
   ]
@@ -130,6 +133,13 @@ export function metaFor(pathname: string): PageMeta {
       ...social,
     }
   }
+  if (route.page === 'vvvLive') {
+    return {
+      title: `${vvvLive.meta.title[locale]} · ${content.profile.name}`,
+      description: vvvLive.meta.description[locale],
+      ...social,
+    }
+  }
   return {
     title: `${content.profile.name} · ${translate(locale, 'hero.role')}`,
     description: content.profile.tagline[locale],
@@ -158,6 +168,8 @@ export function render(pathname: string): string {
     return renderToString(
       route.page === 'vvv' ? (
         <Showcase showcase={vvvShowcase} content={content} locale={locale} pathname={pathname} />
+      ) : route.page === 'vvvLive' ? (
+        <LiveShowcase locale={locale} pathname={pathname} />
       ) : (
         <Legal
           content={content}

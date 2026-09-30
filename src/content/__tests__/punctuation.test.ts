@@ -7,6 +7,7 @@ import { cv } from '../cv'
 import { privacy } from '../privacy'
 import { terms } from '../terms'
 import { vvvShowcase } from '../showcase-vvv'
+import { vvvLive } from '../showcase-vvv-live'
 import { mcpPage } from '../mcp-page'
 import mcpTools from '../mcp-tools.json'
 import { LOCALES } from '../i18n/types'
@@ -114,6 +115,7 @@ function visibleStrings(): Array<[where: string, text: string]> {
   walk('terms', terms)
   // The vvv showcase (spec 004): prose that exists nowhere else on the site.
   walk('showcase.vvv', vvvShowcase)
+  walk('showcase.vvvLive', vvvLive)
   // The /mcp/ page's copy, and the tools table it shares with /mcp.md.
   walk('mcpPage', mcpPage)
   walk('mcpTools', mcpTools)

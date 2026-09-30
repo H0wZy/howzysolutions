@@ -41,7 +41,7 @@ describe('the legal documents stay out of the client bundle', () => {
     expect(read('../main.tsx')).toMatch(/isStaticDocument/)
     for (const { pathname } of routes()) {
       const { route } = locationFor(pathname)
-      const known = ['privacy', 'terms', 'legalApp', 'vvv'].includes(route.page)
+      const known = ['privacy', 'terms', 'legalApp', 'vvv', 'vvvLive'].includes(route.page)
       expect(isStaticDocument(route), pathname).toBe(known)
     }
   })

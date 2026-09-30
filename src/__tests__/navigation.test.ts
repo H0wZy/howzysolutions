@@ -71,6 +71,7 @@ describe('every trail', () => {
     { page: 'legalApp', doc: 'terms', id: 'vvv' },
     { page: 'mcp' },
     { page: 'vvv' },
+    { page: 'vvvLive' },
   ]
 
   it.each(LOCALES)('%s: marks exactly one crumb as the current page (FR-069)', (locale) => {
