@@ -143,6 +143,7 @@ describe.each(LOCALES)('vvv AI tools item, %s', (locale) => {
   it('says they run commands on the computer and on the server with the operator own access', () => {
     expect(item).toMatch(/run commands on the operator.s computer and on our server|executam comandos no computador do operador e no nosso servidor/)
     expect(item).toMatch(/using the operator.s own access|usando o acesso do próprio operador/)
+    expect(item).toMatch(/which includes administrator rights on the server|que inclui direitos de administrador no servidor/)
   })
 
   it('says they can reach the databases and files and can read the data there', () => {
@@ -152,7 +153,15 @@ describe.each(LOCALES)('vvv AI tools item, %s', (locale) => {
 
   it('no longer lets "no credentials" stand in for the rest, and keeps the United States', () => {
     expect(item).not.toMatch(/can see product and post metadata|podem ver metadados de produtos e publicações/)
-    expect(item).toMatch(/handed a credential to keep|uma credencial para guardar/)
+    expect(item).not.toMatch(/not handed a credential|não recebem uma credencial/)
     expect(item).toMatch(/United States|Estados Unidos/)
+  })
+
+  it('says nothing is handed over to keep, but the commands can use the credentials the computer already has', () => {
+    expect(item).toMatch(/Nothing is handed to these companies to keep, but the commands the assistants run can use the credentials the computer already has|Nada é entregue a essas empresas para guardar, mas os comandos que os assistentes executam podem usar as credenciais que o computador já tem/)
+  })
+
+  it('says what an assistant reads is sent to the company that provides it, to be processed', () => {
+    expect(item).toMatch(/what it reads is sent to the company that provides it, to be processed|o que ela lê é enviado à empresa que a fornece, para ser processado/)
   })
 })
