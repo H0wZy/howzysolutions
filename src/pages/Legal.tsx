@@ -66,18 +66,39 @@ const KINDS = {
 
 export type LegalKind = keyof typeof KINDS
 
+/**
+ * A domain followed by a path is a page a visitor can open, so it becomes a
+ * link; a bare domain is not. That is the rule that keeps
+ * `static.cloudflareinsights.com`, the address the browser calls for the visit
+ * counter, as plain text while `cloudflare.com/privacypolicy` is clickable. An
+ * e-mail address never matches. The records stay plain strings.
+ */
+const PAGE_URL = /((?<![\w@./-])(?:[a-z0-9-]+\.)+[a-z]{2,}\/[^\s),;]*[^\s),;.])/gi
+
+function withLinks(text: string) {
+  return text.split(PAGE_URL).map((part, i) =>
+    i % 2 ? (
+      <a key={i} href={`https://${part}`} target="_blank" rel="noreferrer">
+        {part}
+      </a>
+    ) : (
+      part
+    ),
+  )
+}
+
 function Body({ section, locale }: { section: LegalSection; locale: Locale }) {
   return (
     <>
       {section.body[locale].map((paragraph) => (
         <p key={paragraph} className="prose">
-          {paragraph}
+          {withLinks(paragraph)}
         </p>
       ))}
       {section.items ? (
         <ul className="prose">
           {section.items[locale].map((item) => (
-            <li key={item}>{item}</li>
+            <li key={item}>{withLinks(item)}</li>
           ))}
         </ul>
       ) : null}
