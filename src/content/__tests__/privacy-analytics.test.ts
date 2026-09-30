@@ -22,6 +22,25 @@ describe.each(LOCALES)('privacy policy, this-website section, %s', (locale) => {
     expect(text).not.toMatch(/runs no analytics|não usa analytics/i)
   })
 
+  it('states the legal basis the operator chose', () => {
+    expect(text).toMatch(/legitimate interest \(LGPD art\. 7, IX\)|legítimo interesse \(LGPD, art\. 7º, IX\)/)
+  })
+
+  it('declares no retention period at all', () => {
+    // A number here goes stale silently when Cloudflare changes it. Say what we control, point at them.
+    expect(text).not.toMatch(/\d+\s*(days?|dias?|hours?|horas?|months?|meses)/i)
+    expect(text).toContain('cloudflare.com/privacypolicy')
+  })
+
+  it('declares the transfer abroad and keeps the console apart from it', () => {
+    const [before, after] = text.split(/outside Brazil|fora do Brasil/)
+    expect(after, 'the transfer sentence is missing').toBeDefined()
+    // The console sentence follows the transfer sentence directly, in the same section.
+    expect(after).toMatch(/console/)
+    expect(after).toMatch(/in Brazil|no Brasil/)
+    expect(before).not.toMatch(/console/)
+  })
+
   it('attributes the no-cookie claim to Cloudflare and claims nothing about tracking across sites', () => {
     expect(text).toMatch(/Cloudflare (states|afirma)/)
     expect(text).not.toMatch(/across (other )?sites|entre sites/i)
@@ -33,10 +52,9 @@ it('moved its date with the text', () => {
 })
 
 /*
- * The two legal answers the operator has not given (legal basis under the LGPD,
- * and retention) are marked in the text. This fails while the marker is there,
- * on purpose: a public policy must not ship a note to its author. Resolve the
- * marker, not the test.
+ * A marker `[decisão do operador: ...]` stood in the text until the operator
+ * answered the legal questions (2026-09-30). This stays as a gate: a public
+ * policy must not ship a note to its author. Resolve a marker, not the test.
  */
 it('carries no unresolved marker for the operator', () => {
   expect(JSON.stringify(privacy)).not.toContain('decisão do operador')
