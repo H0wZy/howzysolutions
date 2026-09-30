@@ -168,8 +168,14 @@ describe.each(LOCALES)('vvv AI tools item, %s', (locale) => {
     expect(item).not.toMatch(/United States|Estados Unidos|China|chin[eê]s|Kimi|Moonshot|OpenAI|Anthropic|Google/i)
   })
 
-  it('says nothing is handed over to keep, but the commands can use the credentials the computer already has', () => {
-    expect(item).toMatch(/Nothing is handed to these companies to keep, but the commands the assistants run can use the credentials the computer already has|Nada é entregue a essas empresas para guardar, mas os comandos que os assistentes executam podem usar as credenciais que o computador já tem/)
+  it('says no credential is handed over to keep, but the commands can use the credentials the computer already has', () => {
+    expect(item).toMatch(/No credential is handed to these companies to keep, but the commands the assistants run can use the credentials the computer already has|Nenhuma credencial é entregue a essas empresas para guardar, mas os comandos que os assistentes executam podem usar as credenciais que o computador já tem/)
+    // "Nothing is handed to keep" read as the companies keeping nothing of what they receive.
+    expect(item).not.toMatch(/Nothing is handed to these companies|Nada é entregue a essas empresas/)
+  })
+
+  it('says how long each company keeps what it receives is decided by that company', () => {
+    expect(item).toMatch(/How long each company keeps what it receives is decided by that company|Por quanto tempo cada empresa guarda o que recebe é decidido por ela/)
   })
 
   it('says what an assistant reads is sent to the company that provides it, to be processed', () => {

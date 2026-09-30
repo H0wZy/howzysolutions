@@ -159,6 +159,14 @@ import type { LegalDocument } from './types'
  * the tokens are kept on the operator's computer (approved by the operator the same day), and
  * says "the app sends them only to TikTok" instead of "they are sent only to TikTok", since
  * an assistant reading that file sends what it reads to its provider.
+ *
+ * "No credential is handed to these companies to keep" (not "nothing is handed"): read right
+ * after "what it reads is sent to the company", "nothing is handed to keep" sounded like the
+ * companies keep nothing of what they receive, and they keep it for as long as their own rules
+ * say. The item therefore also says that how long each company keeps what it receives is
+ * decided by that company, the same pattern the policy uses for Cloudflare. A sentence offering
+ * to say which country to whoever asks was suggested in review and left out on purpose: it
+ * would create a duty the operator has not taken on.
  */
 export const privacy: LegalDocument = {
   updated: '2026-09-30',
@@ -289,12 +297,12 @@ export const privacy: LegalDocument = {
             en: [
               'Storage: the data above, except the TikTok authorization tokens, is stored in a database on the operator\'s own server in Brazil and is not sold. The tokens are kept only on the operator\'s computer, and the app sends them only to TikTok. Because the AI assistants act with the operator\'s access, commands they run can also read the file where the tokens are kept on that computer.',
               'Backups: every night an encrypted copy of all the databases on the operator\'s own server, this app\'s and others\', is sent to Google Drive, in the operator\'s own Google account. The copy is encrypted on our server before it leaves, file names included. Google Drive is operated outside Brazil, so the copy leaves the country.',
-              'AI tools: the operator uses AI assistants to run the system, not only to see metadata. They run commands on the operator\'s computer and on our server, using the operator\'s own access, which includes administrator rights on the server, so they can reach whatever that access reaches, including the databases and files on the server. An AI tool can therefore read the data stored there, and what it reads is sent to the company that provides it, to be processed. Nothing is handed to these companies to keep, but the commands the assistants run can use the credentials the computer already has. The companies that provide these tools are outside Brazil.',
+              'AI tools: the operator uses AI assistants to run the system, not only to see metadata. They run commands on the operator\'s computer and on our server, using the operator\'s own access, which includes administrator rights on the server, so they can reach whatever that access reaches, including the databases and files on the server. An AI tool can therefore read the data stored there, and what it reads is sent to the company that provides it, to be processed. No credential is handed to these companies to keep, but the commands the assistants run can use the credentials the computer already has. How long each company keeps what it receives is decided by that company. The companies that provide these tools are outside Brazil.',
             ],
             pt: [
               'Armazenamento: os dados acima, exceto os tokens de autorização do TikTok, ficam num banco de dados no servidor do próprio operador, no Brasil, e não são vendidos. Os tokens ficam só no computador do operador, e o app os envia apenas ao TikTok. Como os assistentes de IA agem com o acesso do operador, comandos deles também podem ler o arquivo onde os tokens ficam nesse computador.',
               'Cópias de segurança: toda noite uma cópia criptografada de todos os bancos de dados do servidor do próprio operador, os deste app e os de outros, é enviada ao Google Drive, na conta Google do próprio operador. A cópia é criptografada no nosso servidor antes de sair, inclusive os nomes dos arquivos. O Google Drive opera fora do Brasil, então a cópia sai do país.',
-              'Ferramentas de IA: o operador usa assistentes de IA para operar o sistema, não só para ver metadados. Eles executam comandos no computador do operador e no nosso servidor, usando o acesso do próprio operador, que inclui direitos de administrador no servidor, e por isso alcançam tudo o que esse acesso alcança, inclusive os bancos de dados e os arquivos do servidor. Uma ferramenta de IA pode, portanto, ler os dados guardados ali, e o que ela lê é enviado à empresa que a fornece, para ser processado. Nada é entregue a essas empresas para guardar, mas os comandos que os assistentes executam podem usar as credenciais que o computador já tem. As empresas que fornecem essas ferramentas ficam fora do Brasil.',
+              'Ferramentas de IA: o operador usa assistentes de IA para operar o sistema, não só para ver metadados. Eles executam comandos no computador do operador e no nosso servidor, usando o acesso do próprio operador, que inclui direitos de administrador no servidor, e por isso alcançam tudo o que esse acesso alcança, inclusive os bancos de dados e os arquivos do servidor. Uma ferramenta de IA pode, portanto, ler os dados guardados ali, e o que ela lê é enviado à empresa que a fornece, para ser processado. Nenhuma credencial é entregue a essas empresas para guardar, mas os comandos que os assistentes executam podem usar as credenciais que o computador já tem. Por quanto tempo cada empresa guarda o que recebe é decidido por ela. As empresas que fornecem essas ferramentas ficam fora do Brasil.',
             ],
           },
         },
