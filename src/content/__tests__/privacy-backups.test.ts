@@ -33,6 +33,10 @@ describe.each(LOCALES)('vvv retention, %s', (locale) => {
     expect(backups).toMatch(/can remain|podem continuar/)
   })
 
+  it('says who can open the folder, since that is one of the things the operator measured', () => {
+    expect(backups).toMatch(/only the operator and the server can open|só o operador e o servidor conseguem abrir/)
+  })
+
   it('invents no number of days for the backups', () => {
     // None exists; a number here would be a promise the backup job does not keep.
     expect(backups).not.toMatch(/[0-9]+ *(days?|dias?|months?|meses|years?|anos?)/i)
@@ -62,8 +66,21 @@ describe.each(LOCALES)('vvv storage, %s', (locale) => {
     expect(stored).not.toMatch(/stored on the operator.s computer|ficam no computador do operador/)
   })
 
-  it('keeps credentials on the operator computer only, and sent only to TikTok', () => {
-    expect(stored).toMatch(/Credentials are kept only on the operator.s computer|As credenciais ficam só no computador do operador/)
+  it('keeps the TikTok tokens on the operator computer only, and sent only to TikTok, without promising it of every credential', () => {
+    expect(stored).toMatch(/except the TikTok authorization tokens|exceto os tokens de autorização do TikTok/)
+    expect(stored).toMatch(/The tokens are kept only on the operator.s computer|Os tokens ficam só no computador do operador/)
+    // The dump also carries a database of infrastructure credentials, so nothing here says credentials in general.
+    expect(stored).not.toMatch(/[Cc]redentials are kept only|credenciais ficam só/)
+  })
+
+  it('says the copy covers all the databases on the server, not one', () => {
+    expect(backups).toMatch(/all the databases|todos os bancos de dados/)
+  })
+
+  it('says every night, in the operator own Google account, and that file names are encrypted too', () => {
+    expect(backups).toMatch(/every night|toda noite/)
+    expect(backups).toMatch(/in the operator.s own Google account|na conta Google do próprio operador/)
+    expect(backups).toMatch(/file names included|inclusive os nomes dos arquivos/)
   })
 
   it('names Google Drive, says the copy is encrypted before it leaves, and says it leaves Brazil', () => {
@@ -76,5 +93,25 @@ describe.each(LOCALES)('vvv storage, %s', (locale) => {
   it('names no LGPD art. 33 mechanism for either transfer', () => {
     // Undecided on purpose. A mechanism named here would be one that is not in place.
     expect(text).not.toMatch(/art\. ?33|cláusulas|clauses|adequa|adequacy|consent|consentimento/i)
+  })
+})
+
+/*
+ * The general Security section used to say the computer has an encrypted disk. The server's disks
+ * are not encrypted (measured by the reviewer), so the only thing it may say is encrypted is the
+ * backup copy that leaves.
+ */
+const security = privacy.sections.find((s) => s.id === 'security')!
+
+describe.each(LOCALES)('general security section, %s', (locale) => {
+  const text = security.body[locale].join(' ')
+
+  it('no longer claims an encrypted disk', () => {
+    expect(text).not.toMatch(/has an encrypted disk|tem o disco criptografado|disk is encrypted/)
+  })
+
+  it('says what is encrypted is the backup copy, and that the server disks are not', () => {
+    expect(text).toMatch(/backup copy that leaves our server|cópia de segurança que sai do nosso servidor/)
+    expect(text).toMatch(/disks are not encrypted|discos do próprio servidor não são criptografados/)
   })
 })

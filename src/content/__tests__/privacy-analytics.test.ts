@@ -34,13 +34,18 @@ describe.each(LOCALES)('privacy policy, this-website section, %s', (locale) => {
     expect(text).toContain('cloudflare.com/privacypolicy')
   })
 
-  it('declares the transfer abroad and keeps the console apart from it', () => {
+  it('declares the counting transfer abroad, and says the console data is covered by the backup that leaves too', () => {
     const [before, after] = text.split(/outside Brazil|fora do Brasil/)
     expect(after, 'the transfer sentence is missing').toBeDefined()
-    // The console sentence follows the transfer sentence directly, in the same section.
+    // The counting sentence comes first and does not mention the console.
+    expect(before).not.toMatch(/console/)
+    // The console sentence says where its data lives and that its backup copy leaves the country too.
     expect(after).toMatch(/console/)
     expect(after).toMatch(/in Brazil|no Brasil/)
-    expect(before).not.toMatch(/console/)
+    expect(after).toMatch(/Google Drive/)
+    expect(after).toMatch(/also goes|vai igualmente/)
+    // The earlier wording kept the console out of the transfer; it was wrong once the dump covered every database.
+    expect(text).not.toMatch(/applies to this website only|vale só para este site/)
   })
 
   it('attributes the no-cookie claim to Cloudflare and claims nothing about tracking across sites', () => {
