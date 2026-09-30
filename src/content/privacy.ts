@@ -121,6 +121,12 @@ import type { LegalDocument } from './types'
  * must not suggest is encryption at rest of the server's disks, which there is none of.
  * It now says the backup copy is encrypted before it leaves, the disks are not, and
  * points to the console's own policy for what the console encrypts.
+ *
+ * ONE SENTENCE DIFFERS ON PURPOSE from vvv's docs/tiktok-shop/partner-center/PRIVACY_POLICY.md:
+ * the encryption sentence in Security. Here "the console" is defined on the same page; the
+ * mirror is the TikTok app's policy and never says what the console is, so it says "the vvv
+ * live console, a separate service of ours" and "its own database". Every other mirrored
+ * sentence is identical; when comparing the two, do not treat this one as a divergence.
  */
 export const privacy: LegalDocument = {
   updated: '2026-09-30',
