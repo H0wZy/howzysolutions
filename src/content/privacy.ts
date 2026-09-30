@@ -72,6 +72,19 @@ import type { LegalDocument } from './types'
  * disposal period. No number of days is stated for them because none exists.
  * The same paragraph lives in vvv's docs/tiktok-shop/partner-center/PRIVACY_POLICY.md,
  * and a change to either is a change to both (see the note above).
+ *
+ * 2026-09-30, section `vvv-storage`: "data is stored on the operator's computer
+ * in Brazil" was out of date. Measured that day: the metadata database runs on
+ * the operator's own server (Brazil by IP geolocation of the server), a nightly
+ * dump of every database on that server goes to a Google Drive folder through an
+ * rclone crypt remote (file and directory names encrypted; the remote root holds
+ * only crypt/), so the copy leaves Brazil. Credentials: the TikTok tokens are
+ * written only to .env on the operator's computer (pipeline/tiktok_authorize.py),
+ * the table platform_connections documents "No token is stored", and no env file
+ * on the server carries the token keys. The LGPD art. 33 mechanism for this
+ * transfer, like the one for Cloudflare's counting, is NOT named: it has not been
+ * decided, and naming one that is not in place would be worse than naming none.
+ * Not verified by query: the database content itself (a probe of it was not run).
  */
 export const privacy: LegalDocument = {
   updated: '2026-09-30',
@@ -200,11 +213,13 @@ export const privacy: LegalDocument = {
           body: { en: [], pt: [] },
           items: {
             en: [
-              'Storage: data is stored on the operator\'s computer in Brazil and is not sold. Credentials never leave that computer except to be sent to TikTok.',
+              'Storage: the data above, except credentials, is stored in a database on the operator\'s own server in Brazil and is not sold. Credentials are kept only on the operator\'s computer and are sent only to TikTok.',
+              'Backups: every night an encrypted copy of the database is sent to Google Drive, in the operator\'s own Google account. The copy is encrypted on our server before it leaves, file names included. Google Drive is operated outside Brazil, so the copy leaves the country.',
               'AI tools: the operator may use AI assistant tools, whose providers are in the United States, to run the app. Those tools can see product and post metadata. They do not receive credentials.',
             ],
             pt: [
-              'Armazenamento: os dados ficam no computador do operador, no Brasil, e não são vendidos. As credenciais só saem desse computador para serem enviadas ao TikTok.',
+              'Armazenamento: os dados acima, exceto as credenciais, ficam num banco de dados no servidor do próprio operador, no Brasil, e não são vendidos. As credenciais ficam só no computador do operador e são enviadas apenas ao TikTok.',
+              'Cópias de segurança: toda noite uma cópia criptografada do banco de dados é enviada ao Google Drive, na conta Google do próprio operador. A cópia é criptografada no nosso servidor antes de sair, inclusive os nomes dos arquivos. O Google Drive opera fora do Brasil, então a cópia sai do país.',
               'Ferramentas de IA: o operador pode usar assistentes de IA, de empresas nos Estados Unidos, para operar o app. Essas ferramentas podem ver metadados de produtos e publicações. Elas não recebem credenciais.',
             ],
           },
