@@ -1,6 +1,43 @@
 <!--
 SYNC IMPACT REPORT
 ==================
+Version change: 2.2.0 -> 2.3.0
+Rationale: MINOR. One recorded exception is added to the Privacy guidance; no principle is
+removed and no compliant code is invalidated. The operator decided it, on 2026-09-30.
+
+The change: Cloudflare Web Analytics, the aggregate visit counter that the host injects at the
+edge of howzysolutions.com (a script from static.cloudflareinsights.com on every page, not
+present in this repository), is allowed and disclosed. It was found on 2026-09-30, while the
+/vvv/live/ page was being verified on its public URL: the browser requested it although the
+site's privacy policy said the site runs no analytics. The operator chose to keep it on
+because they want the site's visit counts, and to make the documents say so instead of
+switching it off.
+
+What is measured and what is not: no cookie is set on the page (document.cookie empty, read in
+a browser on 2026-09-30). That the counter uses no cookies or local storage and does not
+fingerprint individuals is Cloudflare's own statement (cloudflare.com/web-analytics/, read
+2026-09-30); this project did not measure it. It is not a claim about tracking across sites,
+which Cloudflare does not make on that page.
+
+Why an exception and not a reading: the old wording ("No third-party analytics ... MUST NOT
+ship visitor data to a third party") is not met by this counter, because a page view reaches
+Cloudflare. It was not reinterpreted to fit; it was amended, with the condition below.
+
+Amended (2.3.0):
+  - Technology & Design Constraints -> Privacy: the exception, and the condition that it is
+    disclosed in the privacy policy in both locales (src/content/privacy.ts, section
+    this-website, updated 2026-09-30). The rest of the paragraph is unchanged.
+  - CLAUDE.md and AGENTS.md: the line "no analytics, no pixels" now names the exception, as the
+    Governance section requires (a conflicting guidance file is corrected).
+
+Decided the same day, recorded in the comment of src/content/privacy.ts and not repeated here:
+legal basis (legitimate interest, LGPD art. 7, IX, without a formal balancing test), no retention
+period declared, the transfer abroad declared and kept apart from the console, and no consent
+banner because no cookie is set. Not decided: the LGPD art. 33 mechanism for the transfer.
+
+----------------------------------------------------------------------
+Previous entry
+----------------------------------------------------------------------
 Version change: 2.1.1 -> 2.2.0
 Rationale: MINOR. The initial-JavaScript budget is raised from 120 KB to 125 KB gzipped, on
 a measurement of the change that needs the room, taken before this amendment was written.
@@ -356,6 +393,12 @@ that costs all the credibility the rest of the portfolio is trying to build.
 SDKs. If usage measurement becomes necessary it MUST be cookieless and MUST NOT ship
 visitor data to a third party.
 
+*Recorded exception (2.3.0, 2026-09-30, the operator's decision):* Cloudflare Web Analytics,
+the aggregate visit counter the host injects at the edge, stays on. It ships page views to
+Cloudflare, so it is an exception to the sentence above and not an instance of it. It is
+allowed on the condition that the privacy policy discloses it in both locales. Nothing else
+is excepted: a further counter, tag manager or pixel needs its own amendment.
+
 ## Development Workflow & Quality Gates
 
 **Spec-driven.** Non-trivial work starts as a spec-kit feature: `/speckit-specify` →
@@ -398,4 +441,4 @@ that cannot be justified against Principle II MUST be removed before merge. Perf
 budgets are re-measured on the production build before any deploy that changes the bundle.
 This document is re-read at the start of each new feature spec.
 
-**Version**: 2.2.0 | **Ratified**: 2026-08-19 | **Last Amended**: 2026-09-29
+**Version**: 2.3.0 | **Ratified**: 2026-08-19 | **Last Amended**: 2026-09-30

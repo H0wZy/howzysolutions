@@ -57,7 +57,9 @@ These are the ones a change is most likely to break without noticing.
 - **No em dash, en dash, ` - ` or ` -- ` in visitor-facing prose.**
   `punctuation.test.ts` walks the dictionaries, the project records and the CV
   record.
-- **Fonts are self-hosted.** No third-party font CDN, no analytics, no pixels.
+- **Fonts are self-hosted.** No third-party font CDN, no analytics, no pixels. One recorded
+  exception: Cloudflare Web Analytics, injected at the edge and disclosed in the privacy
+  policy (constitution 2.3.0). The site's own HTML loads nothing from another origin.
 
 ## Generated artifacts
 
