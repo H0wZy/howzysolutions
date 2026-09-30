@@ -66,6 +66,12 @@ describe.each(LOCALES)('vvv storage, %s', (locale) => {
     expect(stored).not.toMatch(/stored on the operator.s computer|ficam no computador do operador/)
   })
 
+  it('says the assistants can also read the file where the tokens are kept, and that the app sends them only to TikTok', () => {
+    expect(stored).toMatch(/the app sends them only to TikTok|o app os envia apenas ao TikTok/)
+    expect(stored).toMatch(/commands they run can also read the file where the tokens are kept on that computer|comandos deles também podem ler o arquivo onde os tokens ficam nesse computador/)
+    expect(stored).toMatch(/Because the AI assistants act with the operator.s access|Como os assistentes de IA agem com o acesso do operador/)
+  })
+
   it('keeps the TikTok tokens on the operator computer only, and sent only to TikTok, without promising it of every credential', () => {
     expect(stored).toMatch(/except the TikTok authorization tokens|exceto os tokens de autorização do TikTok/)
     expect(stored).toMatch(/The tokens are kept only on the operator.s computer|Os tokens ficam só no computador do operador/)
@@ -151,10 +157,15 @@ describe.each(LOCALES)('vvv AI tools item, %s', (locale) => {
     expect(item).toMatch(/can therefore read the data stored there|pode, portanto, ler os dados guardados ali/)
   })
 
-  it('no longer lets "no credentials" stand in for the rest, and keeps the United States', () => {
+  it('no longer lets "no credentials" stand in for the rest, and says the providers are outside Brazil', () => {
     expect(item).not.toMatch(/can see product and post metadata|podem ver metadados de produtos e publicações/)
     expect(item).not.toMatch(/not handed a credential|não recebem uma credencial/)
-    expect(item).toMatch(/United States|Estados Unidos/)
+    expect(item).toMatch(/outside Brazil|fora do Brasil/)
+  })
+
+  it('names no country, company or product for where the providers are', () => {
+    // A country here stops being true the day the operator subscribes to a tool from another one.
+    expect(item).not.toMatch(/United States|Estados Unidos|China|chin[eê]s|Kimi|Moonshot|OpenAI|Anthropic|Google/i)
   })
 
   it('says nothing is handed over to keep, but the commands can use the credentials the computer already has', () => {
