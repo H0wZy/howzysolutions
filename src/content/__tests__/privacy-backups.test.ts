@@ -126,3 +126,33 @@ describe.each(LOCALES)('general security section, %s', (locale) => {
     expect(text).toMatch(/disks are not encrypted|discos do próprio servidor não são criptografados/)
   })
 })
+
+/*
+ * The "AI tools" item used to say the tools "can see product and post metadata" and "do not
+ * receive credentials": true to the letter and misleading in effect, because the assistants run
+ * commands on the operator computer and on the server with the operator access. It now says so.
+ */
+describe.each(LOCALES)('vvv AI tools item, %s', (locale) => {
+  const item = storage.items![locale].find((i) => /^(AI tools|Ferramentas de IA):/.test(i))
+
+  it('says the assistants operate the system, not only see metadata', () => {
+    expect(item, 'the AI tools item is missing').toBeDefined()
+    expect(item).toMatch(/to run the system, not only to see metadata|para operar o sistema, não só para ver metadados/)
+  })
+
+  it('says they run commands on the computer and on the server with the operator own access', () => {
+    expect(item).toMatch(/run commands on the operator.s computer and on our server|executam comandos no computador do operador e no nosso servidor/)
+    expect(item).toMatch(/using the operator.s own access|usando o acesso do próprio operador/)
+  })
+
+  it('says they can reach the databases and files and can read the data there', () => {
+    expect(item).toMatch(/the databases and files on the server|os bancos de dados e os arquivos do servidor/)
+    expect(item).toMatch(/can therefore read the data stored there|pode, portanto, ler os dados guardados ali/)
+  })
+
+  it('no longer lets "no credentials" stand in for the rest, and keeps the United States', () => {
+    expect(item).not.toMatch(/can see product and post metadata|podem ver metadados de produtos e publicações/)
+    expect(item).toMatch(/handed a credential to keep|uma credencial para guardar/)
+    expect(item).toMatch(/United States|Estados Unidos/)
+  })
+})

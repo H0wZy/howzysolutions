@@ -127,6 +127,16 @@ import type { LegalDocument } from './types'
  * mirror is the TikTok app's policy and never says what the console is, so it says "the vvv
  * live console, a separate service of ours" and "its own database". Every other mirrored
  * sentence is identical; when comparing the two, do not treat this one as a divergence.
+ *
+ * 2026-09-30, `vvv-storage`, the "AI tools" item (the operator's decision): it used to say the
+ * tools "can see product and post metadata" and "do not receive credentials", true to the
+ * letter and misleading in effect. Measured: AI assistants run commands on the operator's
+ * computer and on the server with the operator's own access (their SSH key and sudo), so
+ * they reach the databases and files there, and commands they run can read whatever that
+ * access reads, the TikTok tokens in the PC's .env included. The item now says that, keeps
+ * "not handed a credential to keep" (still true, no longer standing in for the rest), and
+ * keeps the United States. No LGPD art. 33 mechanism is named: undecided, now for three
+ * transfers (Cloudflare's counting, the Google Drive copy, these providers).
  */
 export const privacy: LegalDocument = {
   updated: '2026-09-30',
@@ -257,12 +267,12 @@ export const privacy: LegalDocument = {
             en: [
               'Storage: the data above, except the TikTok authorization tokens, is stored in a database on the operator\'s own server in Brazil and is not sold. The tokens are kept only on the operator\'s computer and are sent only to TikTok.',
               'Backups: every night an encrypted copy of all the databases on the operator\'s own server, this app\'s and others\', is sent to Google Drive, in the operator\'s own Google account. The copy is encrypted on our server before it leaves, file names included. Google Drive is operated outside Brazil, so the copy leaves the country.',
-              'AI tools: the operator may use AI assistant tools, whose providers are in the United States, to run the app. Those tools can see product and post metadata. They do not receive credentials.',
+              'AI tools: the operator uses AI assistants to run the system, not only to see metadata. They run commands on the operator\'s computer and on our server, using the operator\'s own access, which includes administrator rights on the server, so they can reach whatever that access reaches, including the databases and files on the server. An AI tool can therefore read the data stored there. They are not handed a credential to keep. The companies that provide these tools are in the United States.',
             ],
             pt: [
               'Armazenamento: os dados acima, exceto os tokens de autorização do TikTok, ficam num banco de dados no servidor do próprio operador, no Brasil, e não são vendidos. Os tokens ficam só no computador do operador e são enviados apenas ao TikTok.',
               'Cópias de segurança: toda noite uma cópia criptografada de todos os bancos de dados do servidor do próprio operador, os deste app e os de outros, é enviada ao Google Drive, na conta Google do próprio operador. A cópia é criptografada no nosso servidor antes de sair, inclusive os nomes dos arquivos. O Google Drive opera fora do Brasil, então a cópia sai do país.',
-              'Ferramentas de IA: o operador pode usar assistentes de IA, de empresas nos Estados Unidos, para operar o app. Essas ferramentas podem ver metadados de produtos e publicações. Elas não recebem credenciais.',
+              'Ferramentas de IA: o operador usa assistentes de IA para operar o sistema, não só para ver metadados. Eles executam comandos no computador do operador e no nosso servidor, usando o acesso do próprio operador, que inclui direitos de administrador no servidor, e por isso alcançam tudo o que esse acesso alcança, inclusive os bancos de dados e os arquivos do servidor. Uma ferramenta de IA pode, portanto, ler os dados guardados ali. Elas não recebem uma credencial para guardar. As empresas que fornecem essas ferramentas ficam nos Estados Unidos.',
             ],
           },
         },
