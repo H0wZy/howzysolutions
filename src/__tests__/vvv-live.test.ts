@@ -27,11 +27,26 @@ describe.each(LOCALES)('/vvv/live/ in %s', (locale) => {
     expect(html).not.toMatch(/runs no analytics|no analytics(?![a-z])(?! of its own)|não roda analytics|não carrega script, fonte ou imagem de outro site|collects nothing|não coleta nada/i)
   })
 
-  it('claims no cookie of its own, never an absolute no-cookie the policy does not make', () => {
+  it('claims no cookie of its own, in the title and in the body, never an absolute no-cookie', () => {
     // The privacy policy reserves the strictly necessary security cookie Cloudflare may set, so a page
-    // that links to it cannot promise more. The counter's own no-cookie claim stays, attributed to Cloudflare.
-    expect(html).toMatch(/cookies? of its own|cookies? próprios?/)
-    expect(html).not.toMatch(/no cookie[.,]|sets no cookie and|sem cookie[.,]|não define cookie e/i)
+    // that links to it cannot promise more. The qualifier must be in both places (title and body), and
+    // any other 'no cookie' wording, singular or plural, is a claim of ours the policy does not make.
+    // Cloudflare's own 'no cookies or local storage' is allowed: it is attributed, and tested below.
+    const own = locale === 'en' ? /cookies? of its own/gi : /cookies? próprios?/gi
+    const absolute =
+      locale === 'en'
+        ? /\bno cookies?\b(?! of its own| or local storage)|\bnever sets? (?:a |any )?cookies?/i
+        : /\bsem cookies?\b(?! próprios?| nem armazenamento)|\bnão (?:define|grava|usa) cookies?\b(?! próprios?| nem armazenamento)|\bnunca define cookies?/i
+    expect(html.match(own)?.length ?? 0).toBeGreaterThanOrEqual(2)
+    expect(html).not.toMatch(absolute)
+  })
+
+  it('attributes the no-cookie claim about the counter to Cloudflare instead of stating it as ours', () => {
+    const attributed =
+      locale === 'en'
+        ? /Cloudflare states that this counting uses no cookies or local storage/
+        : /A Cloudflare afirma que essa contagem não usa cookies nem armazenamento local/
+    expect(html).toMatch(attributed)
   })
 
   it('has no form and no input to collect anything with', () => {
