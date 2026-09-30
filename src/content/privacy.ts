@@ -60,6 +60,18 @@ import type { LegalDocument } from './types'
  *
  * The privacy policy stays linked from the footer of every page and from the
  * chrome bar, so the disclosure is one click from anywhere.
+ *
+ * 2026-09-30, section `vvv-retention`: "Everything else: deleted within 30 days"
+ * promised total deletion, and it was not true. The data is deleted from the
+ * database in time, but the nightly encrypted dump goes to a cloud folder and is
+ * not pruned there (infra/bin/h3v-backup.sh in H0wZy/vvv deletes only the local
+ * copy, after 14 days; 52 files were in the remote on that day, the oldest from
+ * 2026-09-22). The operator chose to keep the backups so the system can be
+ * restored, not to prune them, so the text was changed to say what is true: the
+ * deletion covers the active systems, and the encrypted backups have no defined
+ * disposal period. No number of days is stated for them because none exists.
+ * The same paragraph lives in vvv's docs/tiktok-shop/partner-center/PRIVACY_POLICY.md,
+ * and a change to either is a change to both (see the note above).
  */
 export const privacy: LegalDocument = {
   updated: '2026-09-30',
@@ -212,12 +224,14 @@ export const privacy: LegalDocument = {
             en: [
               'Tokens: deleted as soon as the creator revokes access.',
               'Post records: kept for at most 12 months.',
-              'Everything else: deleted within 30 days of revocation, the end of the service, or a verified request.',
+              'Everything else: deleted from our active systems within 30 days of revocation, the end of the service, or a verified request.',
+              'Backups: the deletion above covers our active systems. Encrypted backup copies are kept so the system can be restored, and no disposal period is set for them, so deleted data can remain in them. The copies are encrypted and kept in a folder that only the operator and the server can open.',
             ],
             pt: [
               'Tokens: apagados assim que o criador revoga o acesso.',
               'Registros de publicação: guardados por no máximo 12 meses.',
-              'Todo o resto: apagado em até 30 dias após a revogação, o fim do serviço ou um pedido verificado.',
+              'Todo o resto: apagado dos nossos sistemas ativos em até 30 dias após a revogação, o fim do serviço ou um pedido verificado.',
+              'Cópias de segurança: o apagamento acima vale para os nossos sistemas ativos. Cópias de segurança criptografadas são mantidas para permitir a restauração do sistema, e não há prazo de descarte definido para elas, então dados apagados podem continuar nelas. As cópias ficam criptografadas, numa pasta que só o operador e o servidor conseguem abrir.',
             ],
           },
         },
