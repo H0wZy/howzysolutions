@@ -5,10 +5,15 @@ import type { ShowcaseArt } from './types'
  * The /vvv/live/ page (vvv spec 039, FR-043): the live console, presented.
  *
  * A static document like /vvv/, imported by src/entry-server.tsx and nothing on
- * the client. It collects no data and loads nothing from another origin: every
- * image is a file under public/vvv/live/, and the only link that leaves the
- * site is the one to the console, which sends nothing until it is followed.
- * The page does not depend on the console being up.
+ * the client. It has no form and sets no cookie, and the page's own HTML loads
+ * nothing from another origin: every image is a file under public/vvv/live/,
+ * and the only links that leave the site are the two to the console, which are
+ * followed by the visitor. The page does not depend on the console being up.
+ *
+ * One thing is added at the edge and is not in this repository: Cloudflare Web
+ * Analytics, which the operator keeps on to count visits (vvv spec 039 FR-043,
+ * amended 2026-09-30). The privacy copy below says so, and vvv-live.test.ts
+ * fails if it stops saying so.
  *
  * The screenshots were taken from a local build of the console with a test
  * shop and made-up numbers. Nothing here promises reach, sales or income, and
@@ -46,8 +51,8 @@ export const vvvLive = {
     },
     signIn: { en: 'Sign in', pt: 'Entrar' },
     signInNote: {
-      en: 'The link leaves this site. Nothing is sent before you follow it.',
-      pt: 'O link sai deste site. Nada é enviado antes de você segui-lo.',
+      en: 'The link takes you to the console. Nothing is sent to it before you follow it.',
+      pt: 'O link leva ao console. Nada é enviado a ele antes de você segui-lo.',
     },
     art: {
       src: '/vvv/live/dashboard.webp',
@@ -180,10 +185,13 @@ export const vvvLive = {
 
   privacy: {
     label: { en: 'this_page', pt: 'esta_página' },
-    heading: { en: 'This page collects nothing.', pt: 'Esta página não coleta nada.' },
+    heading: {
+      en: 'No form, no cookie. Visits are counted in aggregate.',
+      pt: 'Sem formulário, sem cookie. As visitas são contadas de forma agregada.',
+    },
     body: {
-      en: 'It has no form, sets no cookie, runs no analytics and loads no script, font or image from another site. It renders on its own, whether or not the console is running. The console has its own privacy policy, which says what it collects once you sign in.',
-      pt: 'Não tem formulário, não define cookie, não roda analytics e não carrega script, fonte ou imagem de outro site. Ela abre sozinha, com o console no ar ou não. O console tem a própria política de privacidade, que diz o que ele coleta depois que você entra.',
+      en: 'This page has no form, sets no cookie and has no analytics of its own. The site is hosted on Cloudflare, which counts visits in aggregate with a small script it loads from static.cloudflareinsights.com. Cloudflare states that this counting uses no cookies or local storage and does not fingerprint individuals. Nothing else on the page comes from another site, and it renders on its own, whether or not the console is running. The console has its own privacy policy, which says what it collects once you sign in.',
+      pt: 'Esta página não tem formulário, não define cookie e não tem analytics próprio. O site fica hospedado na Cloudflare, que conta as visitas de forma agregada com um pequeno script carregado de static.cloudflareinsights.com. A Cloudflare afirma que essa contagem não usa cookies nem armazenamento local e não identifica indivíduos por impressão digital. Nada mais na página vem de outro site, e ela abre sozinha, com o console no ar ou não. O console tem a própria política de privacidade, que diz o que ele coleta depois que você entra.',
     },
     policy: { en: 'Console privacy policy', pt: 'Política de privacidade do console' },
   },
