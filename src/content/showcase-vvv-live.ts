@@ -5,7 +5,7 @@ import type { ShowcaseArt } from './types'
  * The /vvv/live/ page (vvv spec 039, FR-043): the live console, presented.
  *
  * A static document like /vvv/, imported by src/entry-server.tsx and nothing on
- * the client. It has no form and sets no cookie, and the page's own HTML loads
+ * the client. It has no form and sets no cookie of its own, and the page's own HTML loads
  * nothing from another origin: every image is a file under public/vvv/live/,
  * and the only links that leave the site are the two to the console, which are
  * followed by the visitor. The page does not depend on the console being up.
@@ -186,12 +186,12 @@ export const vvvLive = {
   privacy: {
     label: { en: 'this_page', pt: 'esta_página' },
     heading: {
-      en: 'No form, no cookie. Visits are counted in aggregate.',
-      pt: 'Sem formulário, sem cookie. As visitas são contadas de forma agregada.',
+      en: 'No form, no cookie of its own. Visits are counted in aggregate.',
+      pt: 'Sem formulário, sem cookie próprio. As visitas são contadas de forma agregada.',
     },
     body: {
-      en: 'This page has no form, sets no cookie and has no analytics of its own. The site is hosted on Cloudflare, which counts visits in aggregate with a small script it loads from static.cloudflareinsights.com. Cloudflare states that this counting uses no cookies or local storage and does not fingerprint individuals. Nothing else on the page comes from another site, and it renders on its own, whether or not the console is running. The console has its own privacy policy, which says what it collects once you sign in.',
-      pt: 'Esta página não tem formulário, não define cookie e não tem analytics próprio. O site fica hospedado na Cloudflare, que conta as visitas de forma agregada com um pequeno script carregado de static.cloudflareinsights.com. A Cloudflare afirma que essa contagem não usa cookies nem armazenamento local e não identifica indivíduos por impressão digital. Nada mais na página vem de outro site, e ela abre sozinha, com o console no ar ou não. O console tem a própria política de privacidade, que diz o que ele coleta depois que você entra.',
+      en: 'This page has no form, sets no cookies of its own and has no analytics of its own. The site is hosted on Cloudflare, which counts visits in aggregate with a small script it loads from static.cloudflareinsights.com. Cloudflare states that this counting uses no cookies or local storage and does not fingerprint individuals. Nothing else on the page comes from another site, and it renders on its own, whether or not the console is running. The console has its own privacy policy, which says what it collects once you sign in.',
+      pt: 'Esta página não tem formulário, não define cookies próprios e não tem analytics próprio. O site fica hospedado na Cloudflare, que conta as visitas de forma agregada com um pequeno script carregado de static.cloudflareinsights.com. A Cloudflare afirma que essa contagem não usa cookies nem armazenamento local e não identifica indivíduos por impressão digital. Nada mais na página vem de outro site, e ela abre sozinha, com o console no ar ou não. O console tem a própria política de privacidade, que diz o que ele coleta depois que você entra.',
     },
     policy: { en: 'Console privacy policy', pt: 'Política de privacidade do console' },
   },
