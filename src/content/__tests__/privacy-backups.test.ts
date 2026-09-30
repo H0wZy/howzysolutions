@@ -117,6 +117,10 @@ describe.each(LOCALES)('general security section, %s', (locale) => {
     expect(text).not.toMatch(/limited to the operator|restrito ao operador/)
   })
 
+  it('does not read as only the backup being encrypted: the console encrypts data inside its database', () => {
+    expect(text).toMatch(/the console encrypts some personal data inside its database|o console criptografa alguns dados pessoais dentro do banco dele/)
+  })
+
   it('says what is encrypted is the backup copy, and that the server disks are not', () => {
     expect(text).toMatch(/backup copy that leaves our server|cópia de segurança que sai do nosso servidor/)
     expect(text).toMatch(/disks are not encrypted|discos do próprio servidor não são criptografados/)

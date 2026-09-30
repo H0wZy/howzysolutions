@@ -114,6 +114,13 @@ import type { LegalDocument } from './types'
  * access of its own, because "limited to the operator" while a runner can reach the
  * server would be the same kind of false statement this file was corrected for. The
  * operator's own computer is not described beyond access: its disk was never measured.
+ *
+ * The encryption sentence was reworded because "what is encrypted is the backup copy"
+ * can be read as "only the backup is encrypted". That is not so: the console encrypts
+ * e-mail addresses and the authenticator secret inside its database. What the sentence
+ * must not suggest is encryption at rest of the server's disks, which there is none of.
+ * It now says the backup copy is encrypted before it leaves, the disks are not, and
+ * points to the console's own policy for what the console encrypts.
  */
 export const privacy: LegalDocument = {
   updated: '2026-09-30',
@@ -174,10 +181,10 @@ export const privacy: LegalDocument = {
       heading: { en: 'Security', pt: 'Segurança' },
       body: {
         en: [
-          'Connections use HTTPS with TLS 1.2 or higher. Only the operator has personal access to the operator\'s computer and to our server; an automated deployment runner on the server has access of its own. What is encrypted is the backup copy that leaves our server, before it leaves; the server\'s own disks are not encrypted.',
+          'Connections use HTTPS with TLS 1.2 or higher. Only the operator has personal access to the operator\'s computer and to our server; an automated deployment runner on the server has access of its own. The backup copy that leaves our server is encrypted before it leaves. The server\'s own disks are not encrypted, but the console encrypts some personal data inside its database (see its own policy).',
         ],
         pt: [
-          'As conexões usam HTTPS com TLS 1.2 ou superior. Só o operador tem acesso pessoal ao computador do operador e ao nosso servidor; um executor automático de entrega (deploy) no servidor tem acesso próprio. O que é criptografado é a cópia de segurança que sai do nosso servidor, antes de sair; os discos do próprio servidor não são criptografados.',
+          'As conexões usam HTTPS com TLS 1.2 ou superior. Só o operador tem acesso pessoal ao computador do operador e ao nosso servidor; um executor automático de entrega (deploy) no servidor tem acesso próprio. A cópia de segurança que sai do nosso servidor é criptografada antes de sair. Os discos do próprio servidor não são criptografados, mas o console criptografa alguns dados pessoais dentro do banco dele (veja a política própria dele).',
         ],
       },
     },
