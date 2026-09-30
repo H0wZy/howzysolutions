@@ -23,9 +23,46 @@ import type { LegalDocument } from './types'
  * That project's section is the same text as vvv's
  * docs/tiktok-shop/partner-center/PRIVACY_POLICY.md; a change to either is a
  * change to both, and `updated` moves with it.
+ *
+ * 2026-09-30, section `this-website`: the sentence "This site runs no analytics,
+ * trackers or third-party fonts" was replaced by one that discloses Cloudflare
+ * Web Analytics. The earlier wording is the one TikTok Shop's Data Security and
+ * Privacy Review saw (approved 2026-09-23, sent with /privacy/), so `updated`
+ * moving from 2026-09-22 to 2026-09-30 is the before and after. The decision to
+ * keep the counter on is the operator's, recorded in the constitution (2.3.0).
+ *
+ * The four legal decisions behind that paragraph, all 2026-09-30, made by the
+ * operator (the first two delegated to the assistant working for them):
+ *
+ *  1. Legal basis: legitimate interest, LGPD art. 7, IX. No formal balancing
+ *     test (LIA) was written. The counting is aggregate and sets no cookie, so
+ *     the risk to a visitor is minimal, and a formal document nobody reads is
+ *     cost without gain. This is a decision, not an omission: if the ANPD ever
+ *     asks, this is the reasoning, and a LIA can be written then.
+ *  2. Retention: NO period is declared. A period stated here ("7 days") stops
+ *     being true the day Cloudflare changes it, and nobody would notice, which
+ *     is how "runs no analytics" stayed wrong. The policy says only what the
+ *     operator controls (aggregate figures) and attributes the rest to
+ *     Cloudflare, with a pointer to its privacy policy. Do not copy a number
+ *     from Cloudflare's documentation into the text.
+ *  3. International transfer: declared, and kept apart from the console. The
+ *     site's counting is handled by Cloudflare outside Brazil; the vvv live
+ *     console (vvvapp) stores its data on the operator's own server in Brazil.
+ *     The two sentences sit side by side so nobody reads the first as meaning
+ *     the console's data leaves the country. The LGPD art. 33 mechanism that
+ *     legitimates the transfer is NOT named here; it has not been decided.
+ *  4. Consent banner: none. Web Analytics sets no cookie, so a banner saying
+ *     "this site uses cookies" would be false, which is the defect this change
+ *     exists to remove; and setting a cookie only to justify a banner would
+ *     buy an obligation with no metric. Revisit if click-level measurement
+ *     (which needs a cookie or storage) is ever added: then a banner is back
+ *     on the table.
+ *
+ * The privacy policy stays linked from the footer of every page and from the
+ * chrome bar, so the disclosure is one click from anywhere.
  */
 export const privacy: LegalDocument = {
-  updated: '2026-09-22',
+  updated: '2026-09-30',
 
   intro: {
     en: 'How H0wZy Solutions handles personal data: first on this website, then in each project that handles data of its own.',
@@ -51,12 +88,16 @@ export const privacy: LegalDocument = {
       heading: { en: 'This website', pt: 'Este site' },
       body: {
         en: [
-          'This site runs no analytics, trackers or third-party fonts, and sets no cookies of its own. Your language choice and scroll position are kept in your browser\'s own storage and never leave it.',
+          'This site sets no cookies of its own and uses no third-party fonts. Your language choice and scroll position are kept in your browser\'s own storage and never leave it.',
           'The site is hosted on Cloudflare, which handles the technical data every request carries, such as IP address and browser, to deliver the pages and protect them from abuse. Cloudflare may set a strictly necessary security cookie when it has to check a request. We see only aggregate traffic figures, never individual visitors.',
+          'The site also uses Cloudflare Web Analytics to count visits in aggregate. It works through a small script that your browser loads from static.cloudflareinsights.com on each page, so that address receives a request when you open one. Cloudflare states that this counting uses no cookies or local storage and does not fingerprint individuals. Our legal basis is legitimate interest (LGPD art. 7, IX): knowing how many people visit the site. What Cloudflare keeps about these requests, and for how long, is decided by Cloudflare and described in its privacy policy (cloudflare.com/privacypolicy). What we see is only the aggregate figures. This was added to this policy on 30 September 2026.',
+          'This counting is handled by Cloudflare, which operates outside Brazil, so the visit counts of this website leave the country. That applies to this website only. The vvv live console is a separate service with its own privacy policy, and its data is stored on our own server in Brazil.',
         ],
         pt: [
-          'Este site não usa analytics, rastreadores nem fontes de terceiros, e não grava cookies próprios. O idioma escolhido e a posição de rolagem ficam no armazenamento do próprio navegador e não saem dele.',
+          'Este site não grava cookies próprios e não usa fontes de terceiros. O idioma escolhido e a posição de rolagem ficam no armazenamento do próprio navegador e não saem dele.',
           'O site é hospedado na Cloudflare, que trata os dados técnicos de toda requisição, como endereço IP e navegador, para entregar as páginas e protegê-las de abuso. A Cloudflare pode gravar um cookie de segurança estritamente necessário quando precisa verificar uma requisição. Nós vemos só números agregados de tráfego, nunca visitantes individuais.',
+          'O site também usa o Cloudflare Web Analytics para contar visitas de forma agregada. Ele funciona por um pequeno script que o seu navegador carrega de static.cloudflareinsights.com em cada página, então esse endereço recebe uma requisição quando você abre uma. A Cloudflare afirma que essa contagem não usa cookies nem armazenamento local e não identifica indivíduos por impressão digital. Nossa base legal é o legítimo interesse (LGPD, art. 7º, IX): saber quantas pessoas visitam o site. O que a Cloudflare guarda sobre essas requisições, e por quanto tempo, é decidido pela Cloudflare e descrito na política de privacidade dela (cloudflare.com/privacypolicy). O que nós vemos são só os números agregados. Isto foi acrescentado a esta política em 30 de setembro de 2026.',
+          'Essa contagem é feita pela Cloudflare, que opera fora do Brasil, então as contagens de visitas deste site saem do país. Isso vale só para este site. O console de lives do vvv é um serviço separado, com política de privacidade própria, e os dados dele ficam no nosso próprio servidor, no Brasil.',
         ],
       },
     },
