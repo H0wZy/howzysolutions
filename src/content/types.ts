@@ -271,6 +271,24 @@ export type Showcase = {
     items: Array<{ name: Localized; body: Localized }>
     art?: ShowcaseArt
   }
+  /** The Mythic Dither visual direction: six app concepts, each a Greek figure and one colour token. */
+  mythic?: ShowcaseSection & {
+    intro: Localized<string[]>
+    /** What is real and what is concept, said once, next to the list. */
+    status: Localized
+    board: ShowcaseArt
+    boardCaption: Localized
+    apps: Array<{
+      /** Names the `--myth-*` token and the `.myth-*` modifier class. */
+      tone: 'hermes' | 'hecate' | 'orfeu' | 'hefesto' | 'mnemosine' | 'atlas'
+      name: string
+      figure: Localized
+      hex: string
+      role: Localized
+      icon: ShowcaseArt
+      art: ShowcaseArt
+    }>
+  }
   numbers: ShowcaseSection & { note: Localized }
   faq: ShowcaseSection & { items: Array<{ question: Localized; answer: Localized }> }
 }

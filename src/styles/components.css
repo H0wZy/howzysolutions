@@ -1798,6 +1798,126 @@ button.pagination-link {
   margin: 0.8em 0 0;
 }
 
+/*
+ * Mythic Dither section. The board is in colour, so no blend: a hairline frame.
+ * Each app row is a figure on the navy ink panel plus a 3px bar in its own
+ * token; the bar and the swatch are the only places the six colours appear.
+ */
+.myth-board {
+  margin: 1.8em 0 0;
+}
+
+.myth-board img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.myth-board figcaption {
+  margin-top: 0.6em;
+  font-size: var(--fs-sm);
+}
+
+.myth-status {
+  margin: 1.6em 0 0;
+  color: var(--dim);
+  font-size: var(--fs-sm);
+}
+
+.myth-apps {
+  list-style: none;
+  margin: 0.8em 0 0;
+  padding: 0;
+}
+
+.myth-app {
+  --tone: var(--myth-hermes);
+  display: grid;
+  grid-template-columns: 84px minmax(0, 1fr);
+  gap: 18px;
+  align-items: start;
+  padding: 16px 0 16px 16px;
+  border-top: 1px solid var(--line);
+  border-left: 3px solid var(--tone);
+}
+
+.myth-hermes {
+  --tone: var(--myth-hermes);
+}
+.myth-hecate {
+  --tone: var(--myth-hecate);
+}
+.myth-orfeu {
+  --tone: var(--myth-orfeu);
+}
+.myth-hefesto {
+  --tone: var(--myth-hefesto);
+}
+.myth-mnemosine {
+  --tone: var(--myth-mnemosine);
+}
+.myth-atlas {
+  --tone: var(--myth-atlas);
+}
+
+.myth-figure {
+  display: block;
+  width: 84px;
+  height: 126px;
+  object-fit: contain;
+  background: var(--myth-ink);
+  border-radius: var(--radius-sm);
+}
+
+.myth-copy h3 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.myth-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 7px;
+  flex: none;
+}
+
+.myth-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0.4em 0 0.5em;
+  font-size: var(--fs-sm);
+}
+
+.myth-swatch {
+  width: 10px;
+  height: 10px;
+  background: var(--tone);
+}
+
+.myth-copy p:last-child {
+  margin: 0;
+  max-width: 62ch;
+}
+
+@media (min-width: 640px) {
+  .myth-app {
+    grid-template-columns: 112px minmax(0, 1fr);
+    gap: 28px;
+  }
+
+  .myth-figure {
+    width: 112px;
+    height: 168px;
+  }
+}
+
 @media (min-width: 640px) {
   .showcase-stages,
   .showcase-lanes {

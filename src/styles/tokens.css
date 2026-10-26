@@ -48,6 +48,19 @@
   --danger: #e0705f;
   --line: #232019;
   --border: #6b6250;
+  /*
+   * VVV Mythic Dither (showcase /vvv/, section visual_direction): one colour per
+   * app concept. Used as 3px bars and swatches, never as small text: blue and
+   * purple clear 3:1 on --bg but not 4.5:1. --myth-ink is the navy the
+   * engravings sit on; it is a panel ground, so it is decorative.
+   */
+  --myth-ink: #0b0d17;
+  --myth-hermes: #2462f4;
+  --myth-hecate: #f22996;
+  --myth-orfeu: #15cdbb;
+  --myth-hefesto: #8c57f6;
+  --myth-mnemosine: #a4e635;
+  --myth-atlas: #ff5d33;
 }
 
 /*

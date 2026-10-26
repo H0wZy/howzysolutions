@@ -89,7 +89,7 @@ export function Showcase({
   locale: Locale
   pathname: string
 }) {
-  const { hero, pipeline, stages, rule, lanes, numbers, faq } = showcase
+  const { hero, mythic, pipeline, stages, rule, lanes, numbers, faq } = showcase
   const project = content.projects.find((p) => p.id === showcase.projectId)
   const record = pathFor({ page: 'work', id: showcase.projectId }, locale)
   /* A legal page is linked only when that record has a block for this app. */
@@ -104,6 +104,7 @@ export function Showcase({
         <SectionRail
           entries={[
             { id: 'overview', label: hero.label },
+            ...(mythic ? [{ id: 'mythic', label: mythic.label }] : []),
             { id: 'pipeline', label: pipeline.label },
             { id: 'stages', label: stages.label },
             { id: 'rule', label: rule.label },
@@ -153,6 +154,63 @@ export function Showcase({
               </div>
             </div>
           </header>
+
+          {mythic ? (
+            <Section id="mythic" label={mythic.label} heading={mythic.heading} locale={locale}>
+              {mythic.intro[locale].map((paragraph) => (
+                <p key={paragraph} className="prose">
+                  {paragraph}
+                </p>
+              ))}
+              <figure className="myth-board">
+                <img
+                  src={mythic.board.src}
+                  width={mythic.board.width}
+                  height={mythic.board.height}
+                  alt={mythic.board.alt[locale]}
+                  loading="lazy"
+                  decoding="async"
+                />
+                <figcaption className="dim">{mythic.boardCaption[locale]}</figcaption>
+              </figure>
+              <p className="myth-status">{mythic.status[locale]}</p>
+              <ul className="myth-apps">
+                {mythic.apps.map((app) => (
+                  <li key={app.tone} className={`myth-app myth-${app.tone}`}>
+                    <img
+                      className="myth-figure"
+                      src={app.art.src}
+                      width={app.art.width}
+                      height={app.art.height}
+                      alt={app.art.alt[locale]}
+                      loading="lazy"
+                      decoding="async"
+                    />
+                    <div className="myth-copy">
+                      <h3>
+                        <img
+                          className="myth-icon"
+                          src={app.icon.src}
+                          width={32}
+                          height={32}
+                          alt={app.icon.alt[locale]}
+                          loading="lazy"
+                          decoding="async"
+                        />
+                        {app.name}
+                      </h3>
+                      <p className="myth-meta dim">
+                        {app.figure[locale]}
+                        <span className="myth-swatch" aria-hidden="true" />
+                        {app.hex}
+                      </p>
+                      <p>{app.role[locale]}</p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </Section>
+          ) : null}
 
           <Section id="pipeline" label={pipeline.label} heading={pipeline.heading} locale={locale}>
             <p className="prose">{pipeline.intro[locale]}</p>
