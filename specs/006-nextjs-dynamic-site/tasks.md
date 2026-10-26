@@ -44,13 +44,13 @@
   wrangler versions upload` page and its alias syntax) and add the branch-preview step to `check-next` as a
   non-production upload (FR-014); write the exact command into quickstart.md section 8. Needs no secret beyond the
   existing `CLOUDFLARE_API_TOKEN`; if the first upload needs the Worker to exist, the step is skipped until T038.
-- [ ] T009 [P] Correct `.specify/memory/constitution.md`: the footer line reads `Version: 2.3.0 | Last Amended: 2026-09-30`
+- [x] T009 [P] Correct `.specify/memory/constitution.md`: the footer line reads `Version: 2.3.0 | Last Amended: 2026-09-30`
   while the Sync Impact Report says 3.0.0; set it to `3.0.0 | Ratified: 2026-08-19 | Last Amended: 2026-10-26`.
   In `AGENTS.md` the sentence "prerendered to 26 real documents" disagrees with `public/sitemap.xml` (40
   `<loc>` entries, contracts/routes.md); check how the 26 was counted and correct the sentence.
 
 ---
-
+  - Done 2026-10-26 by the orchestrator: footer now `Version: 3.0.0 | Last Amended: 2026-10-26`; AGENTS.md and CLAUDE.md say 40 documents (sitemap.xml has 40 locs).
 ## Phase 2: User Story 1, parity (P1) MVP
 
 **Goal**: the 40 documents of today's sitemap, served by Next.js on a preview hostname, identical in visible

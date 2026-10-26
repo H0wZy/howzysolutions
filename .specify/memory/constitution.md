@@ -472,4 +472,4 @@ that cannot be justified against Principle II MUST be removed before merge. Perf
 budgets are re-measured on the production build before any deploy that changes the bundle.
 This document is re-read at the start of each new feature spec.
 
-**Version**: 2.3.0 | **Ratified**: 2026-08-19 | **Last Amended**: 2026-09-30
+**Version**: 3.0.0 | **Ratified**: 2026-08-19 | **Last Amended**: 2026-10-26

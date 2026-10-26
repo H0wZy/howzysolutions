@@ -23,7 +23,7 @@ corrected. Read it before starting a feature.
 > until spec 006 reaches parity; `scripts/check-bundle.mjs` stays as a measurement of that
 > build, not as a constitutional gate.
 
-A static site, prerendered to 26 real documents and hydrated on the client.
+A static site, prerendered to 40 real documents and hydrated on the client.
 There is no client-side router: every route is a file, and navigation is a link.
 
 - **Stack**: React 19, TypeScript, Vite 8, Vitest 3. Tailwind 4 over the tokens
