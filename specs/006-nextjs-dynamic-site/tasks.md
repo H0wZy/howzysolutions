@@ -19,24 +19,29 @@
 
 ## Phase 1: Setup (shared, blocks everything)
 
-- [ ] T001 Create `next/` with exact pins from research.md (a): run `npm init` in `next/`, then
+- [x] T001 Create `next/` with exact pins from research.md (a): run `npm init` in `next/`, then
   `npx vinext init --platform=cloudflare --legacy-wrangler-cloudflare-init --skip-check --force --cdn-cache=none --data-cache=none --image-optimization=none`;
   pin every dependency without `^`; commit `next/package.json` and `next/package-lock.json` (FR-002). Record in
   research.md (a) the release date of typescript-eslint 8.72.0 (`npm view typescript-eslint time --json`) and the
   eslint pin chosen against `eslint-config-next@16.4.3`; close open item 1.
-- [ ] T002 [P] Write `next/tsconfig.json`: strict, `paths` for `@/*`, `@content/*` to `../src/content/*`, `@legacy/*`
+  - Done 2026-10-26: `next/` created: `npm init`, then `npx vinext@1.3.1 init` with the legacy flags; every dependency pinned without `^` (research.md (a)); genuine `next/package-lock.json` from `npm install`; `npm run build` exits 0. `vinext init` wrote a bare `cloudflare()` plugin because `app/` did not exist; fixed in `next/vite.config.ts` (research.md (b), spike finding 3). typescript-eslint 8.72.0 released 2026-10-19, eslint 10.13.0 chosen, open item 1 closed.
+- [x] T002 [P] Write `next/tsconfig.json`: strict, `paths` for `@/*`, `@content/*` to `../src/content/*`, `@legacy/*`
   to `../src/*` (plan D3); `npm run typecheck` (`tsc --noEmit`) passes on the empty app.
-- [ ] T003 [P] Write `next/eslint.config.mjs` (eslint, typescript-eslint 8.72.0, eslint-config-next 16.4.3) with
+  - Done 2026-10-26: `next/tsconfig.json` with `@/*`, `@content/*` to `../src/content/*` and `@legacy/*` to `../src/*`; `npm run typecheck` exits 0 (TypeScript 6.0.3).
+- [x] T003 [P] Write `next/eslint.config.mjs` (eslint, typescript-eslint 8.72.0, eslint-config-next 16.4.3) with
   `npm run lint`; port the Vite site's rules: no `any`, no unexplained non-null assertion, no literal colour in a
   component file (constitution VI and VII).
-- [ ] T004 [P] Write `next/vitest.config.ts` (Vitest 5.0.5, node environment, same `@` aliases as T002) with
+  - Done 2026-10-26: `next/eslint.config.mjs` (eslint 10.13.0, typescript-eslint 8.72.0, `eslint-config-next/core-web-vitals`); no-explicit-any, no-non-null-assertion and a colour-literal rule for `src/app` and `src/components`, each proven to fire on a deliberate bad file; `npm run lint` exits 0.
+- [x] T004 [P] Write `next/vitest.config.ts` (Vitest 5.0.5, node environment, same `@` aliases as T002) with
   `npm test`; add one passing test that imports `@content/index` so the alias is proven.
+  - Done 2026-10-26: `next/vitest.config.ts` (Vitest 5.0.5, node environment, same aliases); `src/__tests__/alias.test.ts` imports `@content/index` and `@legacy/route`; `npm test` passes.
 - [ ] T005 [MANUAL] Owner: open Zero Trust in the Cloudflare dashboard and confirm the Access Free plan figure
   (spec says 50 users; not re-verified, research.md (c)); read the account's `workers.dev` subdomain and tell the
   agent so D6's hostname can be written into quickstart.md. Closes open item 3 (Access half).
-- [ ] T006 Prove how local secrets reach the Worker under the Vite plugin path: create `next/.dev.vars.example` with
+- [x] T006 Prove how local secrets reach the Worker under the Vite plugin path: create `next/.dev.vars.example` with
   every name in contracts/api.md section 6 and fake values; add `next/.dev.vars`, `next/.wrangler/`, `next/dist/` and
   `next/public/` (except `.gitkeep`) to `.gitignore`; correct quickstart.md section 2 if the filename differs.
+  - Done 2026-10-26: `next/.dev.vars.example` lists every name of api.md section 6 with fake values; `.gitignore` lists `next/.dev.vars`, `next/.wrangler/`, `next/dist/` and `next/public/*` (except `.gitkeep`), checked with `git check-ignore`. The Vite plugin path reads `next/.dev.vars` (build prints `Using secrets defined in .dev.vars`, `wrangler dev` served the value); filename unchanged in quickstart.md section 2, which now says so. Proof in research.md (b).
 - [ ] T007 [P] Add job `check-next` to `.github/workflows/ci.yml`: `npm ci`, `lint`, `typecheck`, `npm test`,
   `build:vinext`, then the gates as they appear (T014, T024 to T028). Runs on every push and pull request, working
   directory `next/`. It has no deploy step yet.
@@ -61,32 +66,36 @@ text, `lang`, title, canonical, hreflang and description (spec US1, SC-001), wit
 
 ### Foundations of the port
 
-- [ ] T010 [US1] Write `next/scripts/sync-public.mjs` (copies `../public/**` into `next/public/`, run by `prebuild`
+- [x] T010 [US1] Write `next/scripts/sync-public.mjs` (copies `../public/**` into `next/public/`, run by `prebuild`
   and `predev`, fails if a source file is missing) and add a root script `data` to `package.json` holding the
   generator half of the existing `build` (`stamp-build`, `fetch-wakatime`, `fetch-github`, `fetch-mcp`,
   `generate-mcp-markdown`, `extract-cv`, `generate-cv-markdown`) so `next/` can call it (FR-005). Test: after
   `npm run prebuild` the file count of `next/public` equals the source count.
-- [ ] T011 [US1] Write `next/src/app/globals.css` importing `../../../src/styles/tokens.css`, `base.css` and
+  - Done 2026-10-26: `next/scripts/sync-public.mjs` (hooks `predev`, `prebuild`, `predev:vinext`, `prebuild:vinext`); after `npm run prebuild` `next/public` holds 43 files, `../public` holds 43; fails on a missing source or a count mismatch. Root script `data` added to `package.json`; the `build` script is unchanged.
+- [x] T011 [US1] Write `next/src/app/globals.css` importing `../../../src/styles/tokens.css`, `base.css` and
   `components.css` by relative path; run `npx shadcn@4.22.1 init` writing `next/components.json` and map shadcn's
   CSS variables to the tokens (no new colour literal); self-host JetBrains Mono from
   `@fontsource-variable/jetbrains-mono` (already a Vite dependency) as `woff2` with `font-display: swap`, no
   `next/font/google` (constitution Typography).
-- [ ] T012 [US1] SPIKE. In `next/`, build one throwaway page set that exercises everything the check did not
+  - Done 2026-10-26: `next/src/app/globals.css` imports the three shared stylesheets by relative path; font imported from `layout.tsx` (a CSS `@import` loses the font url base under PostCSS); six `woff2` files emitted, `font-display: swap`, no `next/font/google`. Deviation: `npx shadcn@4.22.1 init` is interactive (preset prompt) and hung with `--yes` in a non-interactive shell, so `next/components.json` was written by hand from the Vite site's and `src/lib/utils.ts` copied; the token mapping already lives in `src/styles/tokens.css`. No colour literal added.
+- [x] T012 [US1] SPIKE. In `next/`, build one throwaway page set that exercises everything the check did not
   scan: a route handler reading D1, KV and R2 through `cloudflare:workers`; `proxy.ts` with a matcher; `[locale]`
   with `generateStaticParams`; `rewrites()` plus `trailingSlash: true`; `app/sitemap.xml/route.ts`; a form server
   action; and a `worker.ts` entry that wraps `vinext/server/fetch-handler` and exports `scheduled`. Run it with
   `wrangler dev` and `curl` each. Write the verdict per feature into research.md (b) (this closes the
   conditional in decision R1) and update plan D4. If any needed feature fails, switch to
   `@opennextjs/cloudflare` 1.20.13, record why, and rewrite quickstart sections 6 and 7 in this task.
+  - Done 2026-10-26: Spike run in the scratchpad, not in the repository. Every feature passed under vinext 1.3.1 (route handler with D1, KV, R2; `proxy.ts`; `[locale]`; rewrites with trailing slash; sitemap route; form action; `worker.ts` with `scheduled`; 404). R1 stands, OpenNext not taken. Verdict table in research.md (b); plan D4 and R1 updated. quickstart sections 6 and 7 need no rewrite. Open risks for T013 and T027: no prerender by default, and about 142 KB gzipped JavaScript on a page with no client component.
 - [ ] T013 [US1] Static Assets without the Worker: list only the dynamic prefixes in `run_worker_first`
   (plan D5) in `next/wrangler.jsonc` and prove with `wrangler dev` request logs that `/cv/` is answered by assets;
   record the result in research.md (c) consequence 5 and close open item 4.
-- [ ] T014 [US1] Write `next/scripts/parity-diff.mjs` and `next/scripts/parity-allow.json` exactly as contracts/routes.md
+- [x] T014 [US1] Write `next/scripts/parity-diff.mjs` and `next/scripts/parity-allow.json` exactly as contracts/routes.md
   section 5 specifies (status, `lang`, `title`, visible text with script/style/template/noscript removed and
   whitespace collapsed, canonical, hreflang, description; `sitemap.xml` and `robots.txt` byte for byte; exit 1 on
   any difference printing the URL and the first 80 differing characters). Unit-test the normaliser and the diff
   printer in `next/src/__tests__/parity-diff.test.ts` with two hand-written HTML pairs, one equal and one not.
   Add it to `check-next` once T039 gives it a target.
+  - Done 2026-10-26: `next/scripts/parity-diff.mjs`, `parity-allow.json` (empty list) and `parity-diff.d.mts`; 6 unit tests in `next/src/__tests__/parity-diff.test.ts` (equal pair, unequal pair, printer, allow list); CLI checked against two local servers: identical gives exit 0, different gives exit 1 with URL and the first 80 differing characters, bad arguments exit 2. Not yet added to `check-next` (needs T039).
 - [ ] T015 [US1] Build the route layer in `next/src/app`: `[locale]/layout.tsx` (sets `<html lang>`), the locale
   segment with `generateStaticParams` returning `en` and `pt`, `rewrites()` so unprefixed paths are English and
   `/en/...` redirects to the unprefixed form, the page-kind switch reusing `@legacy/route`'s `Route` union, and

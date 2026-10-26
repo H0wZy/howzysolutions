@@ -1,0 +1,14 @@
+/*
+ * Same layer order and the same decision as the Vite site's src/index.css:
+ * Tailwind theme and utilities, NO preflight (styles/base.css is this site's reset).
+ * Every colour comes from the shared tokens; nothing here declares one (constitution VI).
+ * The @layer line comes first and the imports are consecutive because PostCSS (the
+ * Tailwind path vinext uses, research.md (a)) rejects anything else.
+ * JetBrains Mono is imported in layout.tsx: a CSS @import here loses the font url() base.
+ */
+@layer theme, base, components, utilities;
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/utilities.css' layer(utilities);
+@import '../../../src/styles/tokens.css';
+@import '../../../src/styles/base.css';
+@import '../../../src/styles/components.css';

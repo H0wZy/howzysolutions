@@ -33,7 +33,8 @@ secrets; admin behind Cloudflare Access with the assertion verified by the Worke
   `.../vinext-init-legacy.log` and `.../vinext-build-legacy.log`; the scaffolds are `.../006-scaffold/` and
   `.../006-vinext-legacy/` in the same directory. The legacy build exited 0 (`vite v8.3.5`, `built in 850ms`,
   server `index.js` 309.96 kB, gzip 97.26 kB).
-- **Why this is conditional**: the check scanned an empty scaffold. Task T012 builds a spike that exercises
+- **Spike result (T012, 2026-10-26)**: every feature passed under vinext 1.3.1; the verdict table is in research.md (b), "The spike (T012)". Two caveats are open risks, not reasons to switch: pages are not prerendered unless `prerender: true` plus the static-assets adapter is configured (and then the Worker still serves them from `ASSETS`), and a page with no client component still ships about 142 KB gzipped of JavaScript. The text below is the plan as it stood before the spike.
+- **Why this was conditional**: the check scanned an empty scaffold. Task T012 builds a spike that exercises
   route handlers with D1/KV/R2 bindings, `proxy.ts`, `[locale]` with `generateStaticParams`, `rewrites`,
   `trailingSlash`, a `scheduled` export, and a form server action. T012 writes its verdict into research.md
   (b). A failure on any item the site needs switches the adapter to `@opennextjs/cloudflare` 1.20.13 (peers
@@ -131,8 +132,9 @@ running server code on a site whose Vite predecessor had none (the Stack paragra
 - **D4. One bindings module and one entry.** `next/src/server/env.ts` is the only file that imports
   `cloudflare:workers`; every handler calls `getEnv()`. `next/worker.ts` is the `main` of the Worker: it
   delegates `fetch` to `vinext/server/fetch-handler` and exports `scheduled` for the outbox drain and purges
-  (api.md section 5). If vinext does not allow an entry wrapper, T012 records it and the cron moves to a
-  second tiny Worker `howzysolutions-cron` bound to the same D1 (decision made there, not now).
+  (api.md section 5). T012 confirmed the wrapper: `wrangler.jsonc` `main: "worker.ts"` importing the default export of
+  `vinext/server/fetch-handler` and exporting `scheduled` builds and fires (research.md (b)), so the second Worker
+  `howzysolutions-cron` is not needed.
 - **D5. Rendering split.** Per routes.md: the 40 parity documents are prerendered with `generateStaticParams`;
   the devlog, media and admin are dynamic; `/` becomes revalidated hourly only in the metrics slice. The
   generated `wrangler.jsonc` sends every request through the Worker (`run_worker_first: ["/*", ...]`); T013

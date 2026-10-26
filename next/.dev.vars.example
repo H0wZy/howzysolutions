@@ -1,0 +1,16 @@
+# Copy to .dev.vars (gitignored) for local work. Every value here is fake.
+# Names are contracts/api.md section 6. Bindings (DB, METRICS, MEDIA, RL_SUBMIT) live in wrangler.jsonc.
+ENVIRONMENT=development
+ADMIN_DEV_TOKEN=local-dev-only
+ADMIN_EMAIL=you@example.test
+IP_HASH_SALT=local-salt
+TURNSTILE_SECRET=fake-turnstile-secret
+NEXT_PUBLIC_TURNSTILE_SITE_KEY=fake-turnstile-site-key
+RESEND_API_KEY=re_local_unused
+RESEND_FROM=devlog@example.test
+RESEND_SEGMENT_ID=fake-segment-id
+OWNER_EMAIL=you@example.test
+TEAM_DOMAIN=https://example.cloudflareaccess.com
+POLICY_AUD=fake-aud-tag
+WAKATIME_API_KEY=fake-wakatime-key
+GITHUB_TOKEN=fake-github-token

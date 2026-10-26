@@ -51,8 +51,10 @@ RESEND_FROM=devlog@example.test
 OWNER_EMAIL=you@example.test
 ```
 
-`.dev.vars` is the file Wrangler reads for local secrets. Whether the Vite plugin path reads it the same way is
-confirmed in task T006, which also writes the exact filename into this file if it differs.
+`.dev.vars` is the file Wrangler reads for local secrets, and the Vite plugin path reads it the same way (task T006,
+research.md (b), "Local secrets under the Vite plugin path"): `vite build` prints `Using secrets defined in .dev.vars` and copies
+it to `dist/server/.dev.vars`, which `npm run start:vinext` then serves. The filename is the same, `next/.dev.vars`; a change to it
+needs a rebuild before `start:vinext` sees it.
 
 - The Turnstile test keys are published by Cloudflare for development. They were **not read** in this lane;
   task T045 reads them from the Turnstile docs, records the page and the date here, and replaces the

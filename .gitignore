@@ -43,3 +43,10 @@ scratch
 
 # Lighthouse reports
 howzysolutions.com-*.html
+
+# next/ (spec 006): local secrets, Wrangler state, build output, synced static files
+next/.dev.vars
+next/.wrangler/
+next/dist/
+next/public/*
+!next/public/.gitkeep

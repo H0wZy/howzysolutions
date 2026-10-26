@@ -32,13 +32,24 @@ that exist are named in the notes column so nobody picks them by accident.
 | vitest | 5.0.5 | 2026-10-15 | `npm view vitest dist-tags --json` and `npm view vitest time --json` | `latest`. The Vite site uses `^3.2.7`; `V4` tag is 4.1.12. Peer `vite ^6.4.0 \|\| ^7.0.0 \|\| ^8.0.0`, engines node `^22.12.0 \|\| ^24.0.0 \|\| >=26.0.0`. `beta` (5.1.0-beta.1) and `rc` tags exist and are not used. |
 | @cloudflare/vitest-pool-workers | 0.23.0 | 2026-10-07 | `npm view @cloudflare/vitest-pool-workers dist-tags time --json` | For tests that need real D1, KV, R2 bindings. Its vitest peer range was NOT read; task T020 reads it before adoption. |
 | typescript | 6.0.3 (pinned) | 2026-04-16 | `npm view typescript versions --json` and `npm view typescript time --json` | **`latest` is 7.0.2 (2026-07-08)** and is NOT pinned: `npm view typescript-eslint peerDependencies.typescript` returns `>=4.8.4 <6.1.0` for typescript-eslint 8.72.0 (the `latest`), so TypeScript 7 breaks lint. 6.0.3 is the newest 6.0.x. Revisit when typescript-eslint widens its range. |
-| typescript-eslint | 8.72.0 | not read | `npm view typescript-eslint dist-tags --json` | `latest`. Release date not read; T001 records it from `npm view typescript-eslint time --json`. |
+| typescript-eslint | 8.72.0 | 2026-10-19 | `npm view typescript-eslint dist-tags --json` and `npm view typescript-eslint time --json` (`"8.72.0": "2026-10-19T17:08:09.147Z"`, read by T001 on 2026-10-26) | `latest`. Peers `eslint ^8.57.0 \|\| ^9.0.0 \|\| ^10.0.0`, `typescript >=4.8.4 <6.1.0`. |
 | shadcn | 4.22.1 | 2026-10-18 | `npm view shadcn dist-tags --json` and `npm view shadcn time --json` | `latest`. A CLI, run with `npx shadcn@4.22.1`, never a runtime dependency. engines node `>=20.18.1`. `canary`, `rc` and `beta` tags exist and are not used. |
 | jose | 6.2.13 | 2026-10-20 | `npm view jose version` and `npm view jose time --json` | JWT verification for Cloudflare Access (see (e)). |
 | marked | 18.1.1 | 2026-10-12 | `npm view marked version` and `npm view marked time --json` | Markdown parser candidate for FR-012. It does not sanitise; see decision R6. |
 | sanitize-html | 2.18.1 | not read | `npm view sanitize-html version` | Sanitiser candidate for FR-012. Needs a Workers compatibility spike (task T055). |
-| eslint | 9 line used by `create-next-app` (`^9`) | not read | `cat package.json` of the scaffold | The Vite site runs eslint `^10.5.0`. The pin is chosen in T001 against `eslint-config-next@16.4.3` (peer `eslint >=9.0.0`). |
+| eslint | 10.13.0 | 2026-10-16 | `npm view eslint dist-tags --json` (`latest` 10.13.0; `maintenance` 9.39.5) and `npm view eslint time --json` | Chosen by T001 against `eslint-config-next@16.4.3` (peer `eslint >=9.0.0`, released 2026-10-23) and typescript-eslint 8.72.0 (peer includes `^10.0.0`). `npm install` printed no `ERESOLVE`, so no `--force` and no `--legacy-peer-deps`; the lint run passes. The 9 line was not needed. The Vite site stays on its own `^10.5.0`. |
 | node (runtime) | 24 | not read | `node -v` prints `v24.18.1`; `.github/workflows/ci.yml:23` uses `node-version: 24` | Wrangler needs `>=22`. |
+
+Pins T001 added beside the table (all exact in `next/package.json`, no `^` or `~`; resolved by `npm install` on 2026-10-26):
+`@eslint/js` 10.0.1 (2026-02-06), `globals` 17.13.0 (2026-10-01), `eslint-config-next` 16.4.3 (2026-10-23),
+`@types/node` 24.19.2 (the 24 line, matching the Node 24 runtime of CI), `@types/react` 19.3.0, `@types/react-dom` 19.3.0,
+`clsx` 2.1.1 (2024-04-23, the same major as the Vite site), `@fontsource-variable/jetbrains-mono` 5.3.0 (the Vite site's
+version), `@tailwindcss/postcss` 4.3.3, `tailwindcss` 4.3.3, `@vitejs/plugin-rsc` 0.5.38, `@vitejs/plugin-react` 6.1.2,
+`@cloudflare/vite-plugin` 1.65.0, `@vinext/cloudflare` 1.2.1, `react-server-dom-webpack` 19.3.1. `npm audit` in `next/` reports 9
+findings (8 moderate, 1 high), all transitive: `fflate` through `vinext` > `@vercel/og` > `satori`, and `undici` through
+`miniflare`. The only fixes npm offers are downgrades (`vinext@0.2.1`, `@cloudflare/vite-plugin@1.12.4`), which break FR-001 and
+FR-002, so none was applied; they are runtime-irrelevant for the Worker (the `satori` path is the OG image shim, which
+this site does not call) and are recorded here, not hidden.
 
 Raw output that decided the two non-obvious pins:
 
@@ -169,10 +180,68 @@ non-fatal. `npm ls` shows one `vite@8.3.5`, one `react@19.3.1` and `next@16.4.3`
 FR-001 chooses vinext "unless `npx vinext check` reports a gap the site needs". The check reported no gap
 (0 issues; 2 partial items, neither used by this site: `turbopack.rules`, `cacheComponents`). So the
 default holds, on the **legacy Wrangler init** because of FR-002 and FR-016, **conditional on the spike
-T012 passing**. If T012 finds a feature the site needs that vinext lacks, the fallback is
+T012 passing**. Resolved 2026-10-26: the spike passed every row (section "The spike (T012)" above), so the default holds and the fallback is not taken. If T012 had found a feature the site needs that vinext lacks, the fallback is
 `@opennextjs/cloudflare` 1.20.13 on the same Next.js 16.4.3 sources, and the application code does not
 change (route handlers, `app/` tree, content modules); only `vite.config.ts` and the binding accessor do.
 Writing bindings behind one module (`next/src/server/env.ts`, plan.md) is what keeps that fallback cheap.
+
+### The spike (T012), run 2026-10-26: verdict per feature
+
+Method: a throwaway app (not in the repository) copied from `next/` into the scratchpad,
+`.../scratchpad/spike-006/`, with the same `vite.config.ts`, pins and Wrangler 4.152.0. Built with `vite build`
+(exit 0), served with `npx wrangler dev --config dist/server/wrangler.json --port 8791 --persist-to .wr`, every row
+requested with `curl`. D1, KV and R2 were Wrangler's local simulations with placeholder ids (nothing remote). Nothing was
+deployed and no Cloudflare resource was created.
+
+| Feature the site needs | Verdict | Evidence (what was printed) |
+|---|---|---|
+| Route handler reading D1, KV and R2 through `import { env } from "cloudflare:workers"` | PASS | `GET /api/bindings/` returned `{"d1":{"one":1},"kv":"v","r2":"hello-r2",...}`. A server component with `export const dynamic = "force-dynamic"` read D1 and rendered `dyn answer=<!-- -->42`. |
+| `proxy.ts` with a matcher | PASS | The file lives at `src/proxy.ts` (`export function proxy`, `config.matcher`). `/admin/` and `/api/bindings/` answered with the header `x-spike-proxy` set by it; the other paths did not get it. |
+| `app/[locale]` with `generateStaticParams` | PASS to render, NOT prerendered by default | `/` and `/about/` gave `<html lang="en">`, `/pt/` gave `<html lang="pt">`. The build route table prints every page as `ƒ Dynamic`, `dist/client` holds no HTML, and pages answer `Cache-Control: no-store, must-revalidate` with `X-Vinext-Cache: MISS`: every request renders in the Worker. See the next section. |
+| `rewrites()` plus `trailingSlash: true` | PASS | `beforeFiles` rewrites `/` to `/en/` and `/:path((?!pt\|en\|api\|admin\|_next\|sitemap\\.xml).+)` to `/en/:path` served the English tree at unprefixed paths (`/about/` 200, `lang="en"`); `/pt/about/` 200. `/about` answered `308` with `Location: /about/`. |
+| Redirect `/en/...` to the unprefixed form | PASS only through `proxy.ts` | `redirects()` with `/en/:path*` to `/:path*` answered `308 Location: /about` (slash dropped) and so needed a second hop; with destination `/:path*/` it answered `Location: /about//`. A redirect written in `proxy.ts` (`NextResponse.redirect(url, 308)`, matcher `/en` and `/en/:path*`) answered `308 /about/` for `/en/about/`, `308 /` for `/en/`, `308 /pt/` for `/en/pt/` in one hop. `/en` itself goes `/en/` then `/`. The 30 legacy redirects (T022) must be tested against this slash behaviour. |
+| `app/sitemap.xml/route.ts` | PASS | `200`, `Content-Type: application/xml; charset=utf-8`; `od -c` of the body shows the file's bytes, ending in `</urlset>\n`, unchanged. Default `Cache-Control: s-maxage=31536000, stale-while-revalidate` for a `force-static` handler. |
+| Form server action | PASS, without JavaScript | The rendered `<form>` carries `<input type="hidden" name="$ACTION_ID_edf734547724#submit"/>`. A `curl -F msg=from-curl -F '$ACTION_ID_...='` POST to `/about/` (a rewritten URL) returned `200` and the Worker log printed `ACTION_RAN from-curl`. |
+| `worker.ts` wrapping `vinext/server/fetch-handler` and exporting `scheduled` | PASS | `wrangler.jsonc` `"main": "worker.ts"` with `import handler from "vinext/server/fetch-handler"; export default { fetch: handler.fetch, async scheduled(...) {...} }` built (exit 0) and served. `POST /cdn-cgi/handler/scheduled?cron=*/5+*+*+*+*` returned `200` and the log printed `SCHEDULED_FIRED */5 * * * * object` (the `env.DB` binding was present). `triggers.crons` is read from `wrangler.jsonc`. So the second cron Worker named in plan D4 is not needed. |
+| Unknown path is 404, never 200 | PASS | `/nonexistent/`, `/pt/nonexistent/` and `/nonexistent/deep/path/` all `404` with the body of `app/not-found.tsx`. That file must render its own `<html>` because `[locale]/layout.tsx` is the root layout and has no locale to read. |
+| Local secrets (T006) | PASS | See below. |
+
+Extra findings that change later tasks:
+
+1. **No prerender by default, and no static-asset serving of pages.** `vinext init` with `--cdn-cache=none` leaves every page
+   dynamic. The README (lines 768 and 807) names the way to prerender: `vinext({ prerender: true, cache: { cdn:
+   staticAssetsAdapter() } })` from `@vinext/cloudflare/cache/static-assets-adapter`. Built once in the spike with that
+   config it printed `Prerendered 3 routes (3 skipped, 4 errors)` and wrote hashed files such as
+   `dist/client/_vinext/static-cache/509cf1c2....html`: the HTML is not at the URL path, and the adapter reads it back through
+   the `ASSETS` binding, so the Worker still runs for every request and still counts against the 100,000 per day. The 4 errors were
+   the routes that read a binding (`Cloudflare bindings are unavailable during build-time prerendering`), as expected. Not
+   tested at runtime. Input for T013 (D5) and T016.
+2. **JavaScript on a page with no client component.** `GET /pt/`, a server component that prints one line, links three `<script
+   src>` chunks and two `modulepreload` links: 219,274 B (67,643 gzip), 121,416 B (35,915 gzip) and 126,803 B (37,962 gzip) plus
+   three of about 0.5 to 1.2 KB, about 142 KB gzipped in all, against 8.28 KB for a static document on the Vite site. The
+   "static, no JS" rows of routes.md cannot be kept as they are. Input for SC-004 and T027.
+3. **`vinext init` writes a bare `cloudflare()` plugin when `app/` does not exist yet.** With it the build adds a third
+   environment named after the Worker and fails with `Rolldown failed to resolve import "virtual:vite-rsc/encryption-key"`.
+   The fix, now in `next/vite.config.ts`, is `cloudflare({ viteEnvironment: { name: "rsc", childEnvironments: ["ssr"] } })`,
+   which is what the scaffold in (b) had.
+4. **PostCSS path.** Tailwind runs through `@tailwindcss/postcss` here, so `globals.css` must put `@layer ...;` first and keep every
+   `@import` consecutive, and a CSS `@import` of `@fontsource-variable/jetbrains-mono/index.css` loses the base of its
+   `url(./files/...)` (the build prints `didn't resolve at build time`). The font is imported from `layout.tsx` instead, which
+   emits the six `woff2` files into `_next/static/media`.
+
+**Verdict.** Every feature the site needs works under vinext 1.3.1 on the legacy Wrangler init. Decision R1 stands and the
+OpenNext fallback is not taken; `@opennextjs/cloudflare` stays recorded as the fallback only. Caveats 1 and 2 are open
+risks, not reasons to switch adapter (OpenNext would not remove either).
+
+### Local secrets under the Vite plugin path (T006)
+
+- The filename is `.dev.vars` in the directory of `wrangler.jsonc` (`next/`). During `vite build` the Cloudflare plugin printed
+  `Using secrets defined in .dev.vars`, and wrote a copy to `dist/server/.dev.vars` (values single-quoted).
+- `npx wrangler dev --config dist/server/wrangler.json` then served `secretFromDevVars: "local-dev-only"` and
+  `environment: "development"` from `env`, so `quickstart.md` section 2 is right, with one addition recorded there.
+- Consequence: `dist/server/.dev.vars` holds whatever `next/.dev.vars` held at build time. `next/dist/` is gitignored, and the value
+  appears nowhere else in `dist/` (`grep -rl local-dev-only dist` lists only that file). The `check-secrets` gate (T028) must treat that
+  file as expected-local and fail the CI build if it exists there (CI has no `.dev.vars`).
 
 ## (c) Workers Free limits
 
@@ -312,7 +381,7 @@ Oct 22, 2026"), fetched 2026-10-26.
 
 ## Open items this research could not close
 
-1. Release date of typescript-eslint 8.72.0, eslint pin: T001.
+1. ~~Release date of typescript-eslint 8.72.0, eslint pin: T001.~~ Closed 2026-10-26 by T001: 2026-10-19 and eslint 10.13.0 (table (a)).
 2. Whether `@cloudflare/vitest-pool-workers` 0.23.0 supports vitest 5.0.5: T020.
 3. Access Free 50-user figure and Resend free marketing contact ceiling: T005, T071 [MANUAL].
 4. Whether Static Assets can answer prerendered pages without the Worker under vinext: T013.
