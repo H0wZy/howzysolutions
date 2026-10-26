@@ -15,6 +15,14 @@ corrected. Read it before starting a feature.
 
 ## What this is
 
+> Constitution 3.0.0 (2026-10-26, the owner's authorization): the Vite stack pin, the
+> "no client-side router" rule, the 125 KB JavaScript budget with its gate, the
+> "no credential at runtime" rule and the blanket "no third-party SDK" sentence are removed.
+> Spec 006 (`specs/006-nextjs-dynamic-site/`) migrates the site to Next.js on Cloudflare
+> Workers with D1, KV and R2. The paragraphs below describe the Vite site that still ships
+> until spec 006 reaches parity; `scripts/check-bundle.mjs` stays as a measurement of that
+> build, not as a constitutional gate.
+
 A static site, prerendered to 26 real documents and hydrated on the client.
 There is no client-side router: every route is a file, and navigation is a link.
 

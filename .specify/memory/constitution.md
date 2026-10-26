@@ -1,6 +1,44 @@
 <!--
 SYNC IMPACT REPORT
 ==================
+Version change: 2.3.0 -> 3.0.0
+Rationale: MAJOR. Five constraints that block spec 006 (Next.js dynamic site) are removed on
+the owner's written authorization of 2026-10-26: "remova essa constituição que hoje nos trava.
+minha autorização." The constraints named to the owner, and removed here, are: the Vite stack
+pin, the "no client-side router" rule, the 125 KB initial-JavaScript ceiling with its gate and
+its no-raise rule, the "the running site MUST NOT hold a credential and MUST NOT call an
+authenticated third-party API" rule, and the blanket "no third-party SDKs" sentence of the
+Privacy paragraph. Nothing else moves: the seven Core Principles (content as data, minimum
+code, accessibility, renderer-agnostic core, bilingual parity, dark only, verified before
+merge), the design direction, colour, self-hosted fonts, honesty in metrics, the LCP, CLS,
+Lighthouse and 60 fps targets, the Cloudflare Web Analytics exception with its disclosure
+condition, and the workflow and pull-request gates all stay as written.
+
+Why MAJOR: compliant code is invalidated (the Vite prerender pipeline, the assets-only Worker,
+the build-time-only data rule) and a NON-NEGOTIABLE-adjacent budget is dropped rather than
+raised, which the previous rule forbade. The owner read the trade-off (parity work, Next
+runtime weight, Workers Free limits read on 2026-10-26) before authorizing.
+
+Amended (3.0.0):
+  - Technology & Design Constraints -> Stack: Next.js App Router (React 19, TypeScript strict,
+    Tailwind 4, shadcn/ui) on Cloudflare Workers with a Worker script, D1, KV and R2 bindings;
+    Next's router. Spec 006 holds the migration and its parity gate.
+  - Technology & Design Constraints -> Performance budgets: the JavaScript ceiling, its gate and
+    the no-raise rule are removed; the figure of each build is measured and recorded in the
+    spec that changes it. LCP, CLS, Lighthouse and 60 fps stay as targets.
+  - Technology & Design Constraints -> Secrets & external data: credentials live only in
+    Worker secrets; the Worker may call third-party APIs server-side with a cache and degrade to
+    the last cached value; nothing reaches the browser, the repository or a NEXT_PUBLIC_*
+    variable.
+  - Technology & Design Constraints -> Privacy: third-party scripts and processors are allowed
+    when the privacy policy discloses them in both locales (Turnstile, Resend); ad pixels and
+    tag managers stay out.
+  - CLAUDE.md and AGENTS.md of this repository: lines that restate the removed constraints are
+    corrected in the same change (Governance: a conflicting guidance file is corrected).
+
+----------------------------------------------------------------------
+Previous entry
+----------------------------------------------------------------------
 Version change: 2.2.0 -> 2.3.0
 Rationale: MINOR. One recorded exception is added to the Privacy guidance; no principle is
 removed and no compliant code is invalidated. The operator decided it, on 2026-09-30.
@@ -301,20 +339,21 @@ that survives contact with a solo maintainer's schedule.
 
 ## Technology & Design Constraints
 
-**Stack.** React 19 + TypeScript + Vite, prerendered to static documents and **hydrated on the
-client**. Routing is still solved with the platform — every route is a real emitted document and
-navigation is a link, with no client-side router. Tailwind is the styling layer over the tokens
-declared in `src/styles/tokens.css`, and `radix-ui` arrives with the shadcn breadcrumb primitive.
-Deployment is Cloudflare Workers serving `dist/` as static assets with no Worker script, custom
-domain `howzysolutions.com`.
+**Stack (3.0.0, owner's decision of 2026-10-26, spec 006).** Next.js App Router with React 19,
+TypeScript strict, Tailwind 4 over the tokens declared in `src/styles/tokens.css`, and
+shadcn/ui, deployed to Cloudflare Workers as a Worker with a script (vinext or the OpenNext
+adapter, chosen and recorded in spec 006's plan) and the D1, KV and R2 bindings the dynamic
+features need, custom domain `howzysolutions.com`. Routing is Next's. Public pages are
+server-rendered so they read without JavaScript (Principle III); client components only where
+there is interaction. Until spec 006 reaches parity on the 40 documents the Vite site serves
+today, the Vite build stays the one deployed at the domain; the switch is one change of
+`wrangler.jsonc`.
 
-*Principle II justification for these three, recorded rather than left in a pull request body*:
-no rung of the ladder failed. The breadcrumb is markup and the section rail's follow-along mark
-is an `IntersectionObserver` that `src/enhance/reveal.ts` already demonstrates in a framework-free
-module; the capability was reachable at 0 KB. What is bought at +71.28 KB gzipped is the
-toolchain, and the reason is that the author decided to work in it (spec 003, CL-005). For a
-personal portfolio that is a legitimate reason and a poor one to leave unwritten. It is not a
-precedent: the ladder still binds every dependency that arrives without an amendment behind it.
+*History*: from 1.0.0 to 2.3.0 the stack was React 19 + TypeScript + Vite prerendered to
+static documents with no client-side router and an assets-only Worker; the Principle II
+justification for buying the React toolchain (+71.28 KB gzipped, spec 003, CL-005) is kept in
+the git history of this file. The ladder of Principle II still binds every dependency that
+arrives without a reason written down.
 
 A dependency whose job is icons as a package remains forbidden. The shadcn breadcrumb generator
 emits `lucide-react` imports; they are replaced with inline SVG. Measured cost of keeping them
@@ -339,44 +378,34 @@ colour never means both "link" and "warning").
 `font-display: swap`. Third-party font CDNs MUST NOT be used: they cost a connection, leak
 visitor IPs to another party, and can go down independently of the site.
 
-**Performance budgets.** Measured on the production build, mobile throttling:
+**Performance targets (3.0.0).** Measured on the production build, mobile throttling:
 
-- Initial JavaScript transferred: **≤ 125 KB gzipped**, excluding any lazily imported
-  WebGL renderer. Last measured **120.47 KB** on 2026-09-29 for a document that hydrates
-  (entry + app chunk), **8.28 KB** for a static document (entry only). **4.53 KB of headroom.**
-  The gate sums every script in `dist/assets`, which is the conservative reading: it counts
-  the app chunk for pages that never load it.
 - Largest Contentful Paint: **≤ 1.8 s**. Cumulative Layout Shift: **≤ 0.05**.
 - Lighthouse mobile: **≥ 95** Performance, **100** Accessibility.
 - Every route MUST be usable at 60 fps while scrolling on a mid-range phone.
+- Initial JavaScript transferred: no fixed ceiling since 3.0.0 (the owner removed the 125 KB
+  budget, its gate and its no-raise rule on 2026-10-26). The figure of each build is still
+  measured and recorded in the spec that changes it, so a regression is a number someone can
+  read, not a surprise. Last figure under the old rule: 120.47 KB gzipped for a hydrating
+  document, 8.28 KB for a static one (2026-09-29).
 
-The JavaScript budget MUST be measured by an automated gate on every change that adds a
-component, and that gate MUST fail the build rather than print a warning. A ceiling nobody
-re-measures is decoration, and the headroom above is now small enough that one careless import
-consumes it.
+**Secrets & external data (3.0.0).** No API key, token, or credential may appear in the
+client bundle, in a `NEXT_PUBLIC_*` or `VITE_*` variable, in any response, or anywhere in
+this repository. Credentials live only in Worker secrets (`wrangler secret`) and GitHub
+Actions secrets.
 
-A change that breaks a budget MUST either be reworked or ship with the budget formally
-amended in this document. Budgets are not aspirations — and a budget MUST NOT be raised
-merely because a raise was anticipated. An amendment that loosens one MUST rest on a
-measurement of the change that needs the room, taken before the amendment is written.
+External data about the author (WakaTime coding statistics, GitHub activity) MAY be fetched
+by the Worker at request time, server-side, with the credential read from a Worker secret,
+cached (KV) for at least one hour, and never from the browser. Build-time fetching into a
+committed JSON artifact remains allowed and is the fallback.
 
-**Secrets & external data.** No API key, token, or credential may appear in the client
-bundle, in a `VITE_*` variable, or anywhere in this repository — Vite inlines build-time
-values into public JavaScript, so "not committed" is not the same as "not published".
-
-External data about the author (WakaTime coding statistics) MUST be fetched at **build
-time** by a script that reads the credential from the build environment (Cloudflare
-Workers Builds variable, GitHub Actions secret) and writes a plain JSON artifact consumed as
-ordinary content. The running site MUST NOT hold a credential and MUST NOT call an
-authenticated third-party API from the browser.
-
-Generated data artifacts MUST be committed. A failed, rate-limited, or unauthorized fetch
-MUST degrade to the last known good committed values — it MUST NOT fail the build and MUST
+A failed, rate-limited, or unauthorized fetch MUST degrade to the last known good value
+(cached or committed) with its timestamp; it MUST NOT fail the build or the request and MUST
 NOT render an empty or zeroed state to a visitor.
 
-*Rationale*: A leaked read key exposes the author's entire private coding history. Baking
-at build time removes the credential from the attack surface completely, and costs nothing
-a visitor would notice for data that changes daily.
+*Rationale*: A leaked read key exposes the author's entire private coding history. The key
+stays on the server; what changed on 2026-10-26 is that the server is now allowed to use it,
+because the site is dynamic.
 
 **Honesty in self-reported metrics.** Any number presented about the author — years of
 experience, hours coded, project count, language share — MUST state its source and the
@@ -389,9 +418,11 @@ corroborating the other.
 began. Showing the two side by side without their periods is the kind of small dishonesty
 that costs all the credibility the rest of the portfolio is trying to build.
 
-**Privacy.** No third-party analytics, tag managers, ad pixels, embedded fonts, or social
-SDKs. If usage measurement becomes necessary it MUST be cookieless and MUST NOT ship
-visitor data to a third party.
+**Privacy (3.0.0).** No ad pixels, tag managers, or analytics beyond the recorded exception
+below. A third-party script or processor that a feature needs (Cloudflare Turnstile on the
+forms, Resend as the email processor, since spec 006) is allowed on one condition: the
+privacy policy names it, what it receives and for how long, in both locales, in the same
+change that ships the feature. Fonts stay self-hosted (Typography above).
 
 *Recorded exception (2.3.0, 2026-09-30, the operator's decision):* Cloudflare Web Analytics,
 the aggregate visit counter the host injects at the edge, stays on. It ships page views to
