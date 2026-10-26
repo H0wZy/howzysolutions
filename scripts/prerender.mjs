@@ -10,6 +10,7 @@ import { mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 import { writeAllMarkdown } from './generate-mcp-markdown.mjs'
+import { replaceLiteral } from './build-safety.mjs'
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 const dist = join(root, 'dist')
@@ -48,12 +49,12 @@ function withMeta(html, { title, description, image, imageAlt }) {
   ].join('\n    ')
 
   return html
-    .replace(/<title>[\s\S]*?<\/title>/, `<title>${escapeAttr(title)}</title>`)
+    .replace(/<title>[\s\S]*?<\/title>/, () => `<title>${escapeAttr(title)}</title>`)
     .replace(
       /<meta\s+name="description"\s+content="[\s\S]*?"\s*\/?>/,
-      `<meta name="description" content="${escapeAttr(description)}" />`,
+      () => `<meta name="description" content="${escapeAttr(description)}" />`,
     )
-    .replace('</head>', `    ${social}\n  </head>`)
+    .replace('</head>', () => `    ${social}\n  </head>`)
 }
 
 /**
@@ -70,7 +71,7 @@ function withLangs(html, pathname, lang) {
     .join('\n')
   return html
     .replace(/<html lang="[^"]*"/, `<html lang="${lang}"`)
-    .replace('</head>', `${canonical}\n${links}\n  </head>`)
+    .replace('</head>', () => `${canonical}\n${links}\n  </head>`)
 }
 
 /**
@@ -106,7 +107,7 @@ function withStructuredData(html, locale) {
     ],
   }
   const scriptTag = `    <script type="application/ld+json">${JSON.stringify(schema)}</script>`
-  return html.replace('</head>', `${scriptTag}\n  </head>`)
+  return html.replace('</head>', () => `${scriptTag}\n  </head>`)
 }
 
 /**
@@ -151,13 +152,13 @@ function withAppPreload(html, pathname) {
   const { route } = server.locationFor(pathname)
   if (server.isStaticDocument(route)) return html
   const links = appChunks.map((href) => `    <link rel="modulepreload" crossorigin href="${href}" />`)
-  return html.replace('</head>', `${links.join('\n')}\n  </head>`)
+  return html.replace('</head>', () => `${links.join('\n')}\n  </head>`)
 }
 
 function withFontPreload(html) {
   if (!fontHref) return html
   const link = `    <link rel="preload" as="font" type="font/woff2" href="${fontHref}" crossorigin />`
-  return html.replace('</head>', `${link}\n  </head>`)
+  return html.replace('</head>', () => `${link}\n  </head>`)
 }
 
 function generateSitemap(routes) {
@@ -196,7 +197,7 @@ const allRoutes = server.routes()
 
 for (const { pathname, locale } of allRoutes) {
   const meta = server.metaFor(pathname)
-  let html = shell.replace(ROOT_DIV, `<div id="root">${server.render(pathname)}</div>`)
+  let html = replaceLiteral(shell, ROOT_DIV, `<div id="root">${server.render(pathname)}</div>`)
   html = withMeta(html, meta)
   html = withLangs(html, pathname, meta.lang)
   html = withStructuredData(html, locale)

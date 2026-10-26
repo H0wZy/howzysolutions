@@ -43,3 +43,7 @@ scratch
 
 # Lighthouse reports
 howzysolutions.com-*.html
+
+# Cloudflare plugin copies .dev.vars into dist/server; keep local secrets out of git
+**/.dev.vars*
+!**/.dev.vars.example

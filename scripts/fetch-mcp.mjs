@@ -13,6 +13,7 @@
 import { existsSync, readFileSync, writeFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'node:path'
+import { isValidReleaseTag } from './build-safety.mjs'
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 const ARTIFACT = join(root, 'src/content/mcp.generated.json')
@@ -107,6 +108,9 @@ async function main() {
   } catch (err) {
     console.warn(`! mcp github fetch failed (${err instanceof Error ? err.message : String(err)})`)
   }
+
+  // Both the API's tag_name and the npm version end up in markdown and JSON.
+  if (!isValidReleaseTag(releaseTag)) return warn(`release tag ${JSON.stringify(releaseTag)} failed validation`)
 
   const cleanVersion = releaseTag.startsWith('v') ? releaseTag : `v${releaseTag}`
 

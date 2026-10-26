@@ -29,6 +29,7 @@ import { existsSync, readFileSync, writeFileSync } from 'node:fs'
 import { homedir } from 'node:os'
 import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'node:path'
+import { dropBlocked } from './build-safety.mjs'
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 const ARTIFACT = join(root, 'src/content/wakatime.generated.json')
@@ -152,7 +153,8 @@ async function main() {
     editors: toSlices(data.editors),
     categories: toSlices(data.categories),
     // FR-026: the per-project breakdown is only present on the authenticated call.
-    projects: toSlices(data.projects),
+    // Minus the blocklist: a project the owner no longer has never reaches the page.
+    projects: dropBlocked(toSlices(data.projects)),
     isFallback: false,
   }
 
