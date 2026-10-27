@@ -15,8 +15,10 @@ describe('pinned Node version', () => {
     expect(pinned).toMatch(/^\d+\.\d+\.\d+$/)
   })
 
-  it('matches package.json engines.node', () => {
-    expect(JSON.parse(read('package.json')).engines.node).toBe(pinned)
+  it('is the floor in package.json engines.node and its lockfile', () => {
+    const pkg = JSON.parse(read('package.json'))
+    expect(pkg.engines.node).toBe(`>=${pinned}`)
+    expect(JSON.parse(read('package-lock.json')).packages[''].engines).toEqual(pkg.engines)
   })
 
   it('is what every CI setup-node reads', () => {
