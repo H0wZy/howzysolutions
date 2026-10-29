@@ -20,7 +20,7 @@ npm run preview  # serve the built dist/
 ## Deploy
 
 Live at <https://howzysolutions.com>, served by Cloudflare as an assets-only Worker (`wrangler.jsonc`).
-Every push to `main`, plus a daily run, goes through `.github/workflows/ci.yml`: lint, tests, a build
+Every push to `main`, plus a weekly run, goes through `.github/workflows/ci.yml`: lint, tests, a build
 with fresh data, then `wrangler deploy`. It needs the repository secrets `CLOUDFLARE_API_TOKEN` and
 `WAKATIME_API_KEY`; `GITHUB_TOKEN` is the one Actions provides. By hand:
 

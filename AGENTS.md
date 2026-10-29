@@ -98,8 +98,8 @@ and the long cache on `/assets/*`.
 
 Pushing to `main` deploys: `.github/workflows/ci.yml` runs lint and tests,
 then builds with fresh GitHub, WakaTime and CV data (it checks out
-`H0wZy/curriculum-vitae`) and runs `wrangler deploy`. A daily 06:00 BRT run
-does the same, so the activity grid never freezes on the last commit. By hand:
+`H0wZy/curriculum-vitae`) and runs `wrangler deploy`. A weekly Monday 06:17 BRT run
+does the same, so the activity grid freezes for at most a week. By hand:
 
 ```bash
 npm run build && npx wrangler deploy

@@ -1,6 +1,6 @@
 # Checks every push and pull request; deploys main to howzysolutions.com.
 #
-# The daily run exists for the data, not the code: the activity grid, the
+# The weekly run exists for the data, not the code: the activity grid, the
 # WakaTime figures and the CV are captured at build time, so a site nobody
 # pushes to would otherwise freeze on the day of its last commit.
 name: ci
@@ -9,7 +9,7 @@ on:
   push:
   pull_request:
   schedule:
-    - cron: '0 9 * * *' # 06:00 in Londrina (UTC-3)
+    - cron: '17 9 * * 1' # Mondays 06:17 in Londrina (UTC-3); weekly, not daily, to save Actions minutes
   workflow_dispatch:
   repository_dispatch:
     types: [cv_updated]
