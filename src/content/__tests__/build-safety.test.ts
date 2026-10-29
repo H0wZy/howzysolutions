@@ -3,23 +3,28 @@ import {
   WAKATIME_BLOCKLIST,
   dropBlocked,
   isValidReleaseTag,
+  nameDigest,
   replaceLiteral,
 } from '../../../scripts/build-safety.mjs'
 import raw from '../wakatime.generated.json'
 
 describe('WakaTime project blocklist', () => {
-  it('names the project the owner no longer has', () => {
-    expect(WAKATIME_BLOCKLIST).toContain('former-project')
+  it('lists the project the owner no longer has by digest, not by name', () => {
+    expect(WAKATIME_BLOCKLIST).toHaveLength(1)
+    for (const d of WAKATIME_BLOCKLIST) expect(d).toMatch(/^[0-9a-f]{64}$/)
+  })
+
+  it('digests a name with SHA-256', () => {
+    expect(nameDigest('example-gone')).toBe('66f113bbba56b94972489f7827a4dd8cae6f0cd2890987ffce676c01b670a8ef')
   })
 
   it('dropBlocked removes the blocked names and keeps the rest', () => {
-    const slices = [{ name: 'vvv' }, { name: 'former-project' }, { name: 'LeiDoCorreUE' }]
-    expect(dropBlocked(slices)).toEqual([{ name: 'vvv' }, { name: 'LeiDoCorreUE' }])
+    const slices = [{ name: 'vvv' }, { name: 'example-gone' }, { name: 'LeiDoCorreUE' }]
+    expect(dropBlocked(slices, [nameDigest('example-gone')])).toEqual([{ name: 'vvv' }, { name: 'LeiDoCorreUE' }])
   })
 
   it('the committed snapshot carries no blocked project', () => {
-    const leaked = raw.projects.map((p) => p.name).filter((n) => WAKATIME_BLOCKLIST.includes(n))
-    expect(leaked).toEqual([])
+    expect(dropBlocked(raw.projects)).toEqual(raw.projects)
   })
 })
 
