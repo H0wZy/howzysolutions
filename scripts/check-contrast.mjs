@@ -29,6 +29,13 @@ const FLOORS = {
   '--grid-2': 3,
   '--grid-3': 3,
   '--grid-4': 3,
+  /* Mythic Dither app colours: bars and swatches, never text. */
+  '--myth-hermes': 3,
+  '--myth-hecate': 3,
+  '--myth-orfeu': 3,
+  '--myth-hefesto': 3,
+  '--myth-mnemosine': 3,
+  '--myth-atlas': 3,
 }
 /**
  * Decorative only. Exempt by WCAG, and must never be used on a control boundary.
@@ -36,7 +43,7 @@ const FLOORS = {
  * cell's hidden sentence and its tooltip), so under WCAG 1.4.11 the swatch is
  * supplementary, and a focused cell's boundary is its --accent outline.
  */
-const DECORATIVE = new Set(['--line', '--surface', '--grid-0'])
+const DECORATIVE = new Set(['--line', '--surface', '--grid-0', '--myth-ink'])
 
 /**
  * Every block written under this selector. There are two: the palette, whose

@@ -49,6 +49,175 @@ export const vvvShowcase: Showcase = {
     },
   },
 
+  mythic: {
+    label: { en: 'visual_direction', pt: 'direção_visual' },
+    heading: {
+      en: 'Six figures from myth, six apps I want to build.',
+      pt: 'Seis figuras da mitologia, seis apps que quero construir.',
+    },
+    intro: {
+      en: [
+        'Around the pipeline I am drawing a family of six apps. Each one gets a figure from Greek myth and one signature color, in classical engraving with a dithered print texture on deep navy ink.',
+        'I picked myth because each figure already has a job. Hermes moves things, Orpheus makes sound, Atlas carries the weight. It is a design direction and a concept so far: the apps are in development, and the pipeline above is the part that exists today.',
+      ],
+      pt: [
+        'Em volta do pipeline estou desenhando uma família de seis apps. Cada um ganha uma figura da mitologia grega e uma cor de assinatura, em gravura clássica com textura de impressão em dither sobre um azul-marinho profundo.',
+        'Escolhi a mitologia porque cada figura já tem um ofício. Hermes leva as coisas de lá pra cá, Orfeu faz som, Atlas carrega o peso. Por enquanto é direção visual e conceito: os apps estão em desenvolvimento, e o pipeline acima é a parte que existe hoje.',
+      ],
+    },
+    status: {
+      en: 'Status: visual direction and concept, in development. The lines below say what each app is meant to do, not what already runs.',
+      pt: 'Status: direção visual e conceito, em desenvolvimento. As linhas abaixo dizem o que cada app pretende fazer, não o que já roda.',
+    },
+    board: {
+      src: '/vvv/mythic/brand-board.webp',
+      width: 1600,
+      height: 1000,
+      alt: {
+        en: 'The VVV brand board on navy ink: the headline The art of making things move, an engraving of Hermes on a blue panel, six app tiles with their colors, and the sunset palette.',
+        pt: 'A prancha da marca VVV sobre azul-marinho: o título The art of making things move, uma gravura de Hermes num painel azul, seis cards de app com suas cores e a paleta sunset.',
+      },
+    },
+    boardCaption: {
+      en: 'The brand board, as drawn so far.',
+      pt: 'A prancha da marca, como está desenhada até agora.',
+    },
+    apps: [
+      {
+        tone: 'hermes',
+        name: 'VVV Video Editor',
+        figure: { en: 'Hermes', pt: 'Hermes' },
+        hex: '#2462F4',
+        role: {
+          en: 'Timeline, cuts, transitions and narration. Hermes carries things from one place to another, which is what a cut does.',
+          pt: 'Timeline, cortes, transições e narração. Hermes leva coisas de um lugar a outro, que é o que um corte faz.',
+        },
+        icon: {
+          src: '/vvv/mythic/icons/vvv-video-editor-hermes.webp',
+          width: 64,
+          height: 64,
+          alt: { en: 'App icon for VVV Video Editor: Hermes in a winged helmet on a blue tile.', pt: 'Ícone do VVV Video Editor: Hermes de capacete alado sobre um quadrado azul.' },
+        },
+        art: {
+          src: '/vvv/mythic/figures/hermes.webp',
+          width: 240,
+          height: 360,
+          alt: { en: 'Engraving of Hermes in flight, winged helmet and sandals, a caduceus in one hand, blue drapery.', pt: 'Gravura de Hermes em voo, capacete e sandálias aladas, um caduceu na mão, panejamento azul.' },
+        },
+      },
+      {
+        tone: 'hecate',
+        name: 'VVV Effects Studio',
+        figure: { en: 'Hecate', pt: 'Hécate' },
+        hex: '#F22996',
+        role: {
+          en: 'Visual effects, compositing and masks. Hecate keeps the crossroads, where one image turns into another.',
+          pt: 'Efeitos visuais, composição e máscaras. Hécate guarda a encruzilhada, onde uma imagem vira outra.',
+        },
+        icon: {
+          src: '/vvv/mythic/icons/vvv-effects-studio-hecate.webp',
+          width: 64,
+          height: 64,
+          alt: { en: 'App icon for VVV Effects Studio: the triple goddess Hecate on a magenta tile.', pt: 'Ícone do VVV Effects Studio: a deusa tripla Hécate sobre um quadrado magenta.' },
+        },
+        art: {
+          src: '/vvv/mythic/figures/hecate.webp',
+          width: 240,
+          height: 360,
+          alt: { en: 'Engraving of Hecate, the triple goddess, crowned, with a torch and a crescent moon.', pt: 'Gravura de Hécate, a deusa tripla, coroada, com tocha e lua crescente.' },
+        },
+      },
+      {
+        tone: 'orfeu',
+        name: 'VVV Audio Studio',
+        figure: { en: 'Orpheus', pt: 'Orfeu' },
+        hex: '#15CDBB',
+        role: {
+          en: 'Editing, mixing, sound design, voice and tracks. Orpheus moved the world with a lyre.',
+          pt: 'Edição, mixagem, sound design, voz e trilhas. Orfeu movia o mundo com uma lira.',
+        },
+        icon: {
+          src: '/vvv/mythic/icons/vvv-audio-studio-orfeu.webp',
+          width: 64,
+          height: 64,
+          alt: { en: 'App icon for VVV Audio Studio: Orpheus with a lyre on a teal tile.', pt: 'Ícone do VVV Audio Studio: Orfeu com uma lira sobre um quadrado verde-azulado.' },
+        },
+        art: {
+          src: '/vvv/mythic/figures/orfeu.webp',
+          width: 240,
+          height: 360,
+          alt: { en: 'Engraving of Orpheus crowned with laurel, holding a lyre.', pt: 'Gravura de Orfeu coroado de louros, segurando uma lira.' },
+        },
+      },
+      {
+        tone: 'hefesto',
+        name: 'VVV 3D Studio',
+        figure: { en: 'Hephaestus', pt: 'Hefesto' },
+        hex: '#8C57F6',
+        role: {
+          en: 'Modeling, meshes, materials, scenes and 3D assets. Hephaestus is the god at the forge.',
+          pt: 'Modelagem, malhas, materiais, cenas e assets 3D. Hefesto é o deus da forja.',
+        },
+        icon: {
+          src: '/vvv/mythic/icons/vvv-3d-studio-hefesto.webp',
+          width: 64,
+          height: 64,
+          alt: { en: 'App icon for VVV 3D Studio: Hephaestus at the forge on a purple tile.', pt: 'Ícone do VVV 3D Studio: Hefesto na forja sobre um quadrado roxo.' },
+        },
+        art: {
+          src: '/vvv/mythic/figures/hefesto.webp',
+          width: 240,
+          height: 360,
+          alt: { en: 'Engraving of Hephaestus, muscular, hammer raised, working at the forge.', pt: 'Gravura de Hefesto, musculoso, martelo erguido, trabalhando na forja.' },
+        },
+      },
+      {
+        tone: 'mnemosine',
+        name: 'VVV Media Library',
+        figure: { en: 'Mnemosyne', pt: 'Mnemosine' },
+        hex: '#A4E635',
+        role: {
+          en: 'Search, organizing and managing media. Mnemosyne is memory, and a library is where memory lives.',
+          pt: 'Busca, organização e gestão de mídias. Mnemosine é a memória, e uma biblioteca é onde a memória mora.',
+        },
+        icon: {
+          src: '/vvv/mythic/icons/vvv-media-library-mnemosine.webp',
+          width: 64,
+          height: 64,
+          alt: { en: 'App icon for VVV Media Library: Mnemosyne with books on a lime tile.', pt: 'Ícone do VVV Media Library: Mnemosine com livros sobre um quadrado verde-limão.' },
+        },
+        art: {
+          src: '/vvv/mythic/figures/mnemosine.webp',
+          width: 203,
+          height: 360,
+          alt: { en: 'Engraving of Mnemosyne crowned with leaves, holding books and scrolls.', pt: 'Gravura de Mnemosine coroada de folhas, segurando livros e pergaminhos.' },
+        },
+      },
+      {
+        tone: 'atlas',
+        name: 'VVV Cloud',
+        figure: { en: 'Atlas', pt: 'Atlas' },
+        hex: '#FF5D33',
+        role: {
+          en: 'Sync, storage, backup and collaboration. Atlas holds up the whole sky so everything else can stay put.',
+          pt: 'Sincronização, armazenamento, backup e colaboração. Atlas segura o céu inteiro para o resto ficar no lugar.',
+        },
+        icon: {
+          src: '/vvv/mythic/icons/vvv-cloud-atlas.webp',
+          width: 64,
+          height: 64,
+          alt: { en: 'App icon for VVV Cloud: Atlas carrying a celestial globe on an orange tile.', pt: 'Ícone do VVV Cloud: Atlas carregando um globo celeste sobre um quadrado laranja.' },
+        },
+        art: {
+          src: '/vvv/mythic/figures/atlas.webp',
+          width: 192,
+          height: 360,
+          alt: { en: 'Engraving of Atlas kneeling under a celestial globe on his shoulders.', pt: 'Gravura de Atlas ajoelhado sob um globo celeste nos ombros.' },
+        },
+      },
+    ],
+  },
+
   pipeline: {
     label: { en: 'the_pipeline', pt: 'o_pipeline' },
     heading: {
