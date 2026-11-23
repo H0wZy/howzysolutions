@@ -1,7 +1,5 @@
 import { hydrateRoot } from 'react-dom/client'
 import { HydratedApp } from './HydratedApp'
-import { mountTerminal } from './enhance/terminal/mount'
-import type { Locale } from './content/i18n/types'
 
 /**
  * The client app, as a chunk of its own. src/main.tsx loads it only for the
@@ -11,25 +9,16 @@ import type { Locale } from './content/i18n/types'
  * modulepreload for this chunk in every document that needs it, so it
  * downloads beside the entry instead of after it.
  *
- * The terminal lives here rather than in a chunk of its own: only the home
- * page has one, but the home page hydrates anyway, and a third file cost 1.5 KB
- * of gzip (measured 2026-09-29) for no page that needs it separately.
+ * The home page used to hold the terminal and hydrate for it; since the rebrand
+ * (2026-11-23) it is a static document, so no page mounts the terminal and it is
+ * not imported here. The engine and its mount stay in src/ for when one returns.
  */
-export function hydrate(
-  root: HTMLElement,
-  pathname: string,
-  locale: Locale,
-  enhance: () => void,
-) {
+export function hydrate(root: HTMLElement, pathname: string, enhance: () => void) {
   hydrateRoot(
     root,
     <HydratedApp
       pathname={pathname}
-      onHydrated={() => {
-        enhance()
-        const term = document.querySelector<HTMLElement>('[data-term]')
-        if (term) mountTerminal(term, { history: [], locale })
-      }}
+      onHydrated={enhance}
     />,
   )
 }

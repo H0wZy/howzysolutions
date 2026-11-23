@@ -1,6 +1,5 @@
 import { content } from './content'
 import { locationFor } from './route'
-import { Home } from './pages/Home'
 import { Work } from './pages/Work'
 import { WorkIndex } from './pages/WorkIndex'
 import { Cv } from './pages/Cv'
@@ -27,5 +26,7 @@ export default function App({ pathname }: { pathname: string }) {
       />
     )
   }
-  return <Home content={content} locale={locale} pathname={pathname} />
+  // The home page and /services/ are static documents (src/route.ts) and are
+  // rendered by the server entry, never by this component.
+  return null
 }

@@ -12,6 +12,7 @@
  * survive being measured; see specs/003-cv-experience-page/research.md.
  */
 import '@fontsource-variable/jetbrains-mono/index.css'
+import '@fontsource-variable/schibsted-grotesk/index.css'
 import './index.css'
 import { initReveal } from './enhance/reveal'
 import { initSectionRail } from './enhance/section-rail'
@@ -41,7 +42,10 @@ const root = document.getElementById('root')
 function enhance() {
   document.addEventListener('click', (e) => {
     const a = (e.target as HTMLElement)?.closest<HTMLAnchorElement>('a')
-    const el = a?.hash ? document.getElementById(a.hash.slice(1)) : null
+    // Same page only: `/services/#contato` clicked on the home page must navigate,
+    // not scroll to a different element that happens to share the id.
+    const el =
+      a?.hash && a.pathname === window.location.pathname ? document.getElementById(a.hash.slice(1)) : null
     if (el) {
       e.preventDefault()
       smoothScrollBy(el.getBoundingClientRect().top - 80)
@@ -54,6 +58,11 @@ function enhance() {
   initSectionRail()
   initThemeControl(locale)
   initLocaleControl()
+  // The rebrand pages' motion and form are chunks of their own, fetched only by
+  // the page that has something for them to attach to.
+  const page = document.querySelector<HTMLElement>('.site')?.dataset.page
+  if (page === 'home') void import('./enhance/home').then((m) => m.initHome())
+  if (page === 'services') void import('./enhance/services').then((m) => m.initServices())
 }
 
 if (root && !isStaticDocument(locationFor(pathname).route)) {
@@ -61,7 +70,7 @@ if (root && !isStaticDocument(locationFor(pathname).route)) {
   // hydration commit rather than alongside it. See its header for why. React,
   // the pages and the terminal are their own chunk (src/hydrate.tsx), which
   // the static documents below never download.
-  void import('./hydrate').then((m) => m.hydrate(root, pathname, locale, enhance))
+  void import('./hydrate').then((m) => m.hydrate(root, pathname, enhance))
 } else {
   /*
    * A legal document, or no #root at all. Both are complete without React:

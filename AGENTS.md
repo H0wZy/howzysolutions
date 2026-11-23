@@ -100,9 +100,22 @@ All three must pass before a merge.
 
 ## Deploy
 
-`wrangler.jsonc` publishes `dist/` as an assets-only Cloudflare Worker (no
-script) on `howzysolutions.com`. `public/_headers` sets the security headers
-and the long cache on `/assets/*`.
+`wrangler.jsonc` publishes `dist/` as a Cloudflare Worker with static assets on
+`howzysolutions.com`. `public/_headers` sets the security headers and the long
+cache on `/assets/*`.
+
+The one script, `worker/index.ts`, answers only `POST /api/contact` (the form on
+`/services/`); `run_worker_first` is `["/api/*"]`, so every other request is the
+assets layer alone and `public/_redirects` keeps working. It checks Cloudflare
+Turnstile and mails the owner through Resend. Its three secrets are set once with
+`wrangler secret put RESEND_API_KEY`, `TURNSTILE_SECRET` and `CONTACT_TO`, never in
+a file; `CONTACT_FROM` is a plain var and its domain must be verified in Resend. The
+public Turnstile site key goes in `src/content/contact.ts`; while it is empty the
+form is not rendered and the page shows the email routes.
+
+The home page and `/services/` are static documents (no React) with the palette
+scoped to `.site` in `tokens.css`; their motion lives in `src/enhance/` as chunks
+only those pages fetch.
 
 Pushing to `main` deploys: `.github/workflows/ci.yml` runs lint and tests,
 then builds with fresh GitHub, WakaTime and CV data (it checks out

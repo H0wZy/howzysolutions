@@ -24,6 +24,25 @@
         } catch (e) {
           /* Private mode blocks storage; the lang attribute already stands. */
         }
+        /*
+         * The home page's intro, once per session: only on the home page, not on a
+         * deep link, not with reduced motion. The class is what shows the intro
+         * (site.css); src/enhance/home.ts runs it, and a CSS animation removes it
+         * on its own if that script never finishes.
+         */
+        try {
+          if (
+            (location.pathname === '/' || location.pathname === '/pt/') &&
+            !location.hash &&
+            !matchMedia('(prefers-reduced-motion: reduce)').matches &&
+            !sessionStorage.getItem('h0wzy.intro')
+          ) {
+            sessionStorage.setItem('h0wzy.intro', '1')
+            document.documentElement.classList.add('intro-on')
+          }
+        } catch (e) {
+          /* No storage, no intro: the page is complete without it. */
+        }
       })()
     </script>
   </head>

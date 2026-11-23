@@ -1,5 +1,7 @@
 import { renderToString } from 'react-dom/server'
 import App from './App'
+import { Home } from './pages/Home'
+import { Services } from './pages/Services'
 import { Legal } from './pages/Legal'
 import { Showcase } from './pages/Showcase'
 import { LiveShowcase } from './pages/LiveShowcase'
@@ -23,6 +25,7 @@ export function routes(): Array<{ pathname: string; locale: Locale }> {
   const { total } = workPage(content.projects, 1)
   const pages: Route[] = [
     { page: 'home' },
+    { page: 'services' },
     { page: 'cv' },
     { page: 'privacy' },
     { page: 'terms' },
@@ -69,6 +72,13 @@ export function metaFor(pathname: string): PageMeta {
     return {
       title: `${project.name} · ${content.profile.name}`,
       description: project.summary[locale],
+      ...social,
+    }
+  }
+  if (route.page === 'services') {
+    return {
+      title: `${translate(locale, 'services.meta.title')} · ${content.profile.name}`,
+      description: translate(locale, 'services.lead'),
       ...social,
     }
   }
@@ -142,7 +152,7 @@ export function metaFor(pathname: string): PageMeta {
   }
   return {
     title: `${content.profile.name} · ${translate(locale, 'hero.role')}`,
-    description: content.profile.tagline[locale],
+    description: translate(locale, 'home.hero.lede'),
     ...social,
   }
 }
@@ -166,7 +176,11 @@ export function render(pathname: string): string {
    */
   if (isStaticDocument(route)) {
     return renderToString(
-      route.page === 'vvv' ? (
+      route.page === 'home' ? (
+        <Home content={content} locale={locale} pathname={pathname} />
+      ) : route.page === 'services' ? (
+        <Services content={content} locale={locale} pathname={pathname} />
+      ) : route.page === 'vvv' ? (
         <Showcase showcase={vvvShowcase} content={content} locale={locale} pathname={pathname} />
       ) : route.page === 'vvvLive' ? (
         <LiveShowcase locale={locale} pathname={pathname} />

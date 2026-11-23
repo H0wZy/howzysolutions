@@ -11,6 +11,8 @@ import { DEFAULT_LOCALE, LOCALES, type Locale } from './content/i18n/types'
 
 export type Route =
   | { page: 'home' }
+  /** What I sell, one section per service, with the contact form. */
+  | { page: 'services' }
   | { page: 'workIndex'; number: number }
   | { page: 'work'; id: string }
   | { page: 'cv' }
@@ -47,6 +49,8 @@ export function parseRoute(rest: string): Route {
   // `/cv/`, not `/resume/`: the American term for a document this one is not
   // shaped like, and the word a recruiter scans for in both languages.
   if (rest === '/cv/' || rest === '/cv') return { page: 'cv' }
+  // English only, in both locales: the URL is not translated, `/servicos` 301s here.
+  if (rest === '/services/' || rest === '/services') return { page: 'services' }
   if (rest === '/privacy-policy/' || rest === '/privacy-policy') return { page: 'privacy' }
   if (rest === '/terms-of-service/' || rest === '/terms-of-service') return { page: 'terms' }
   // One mechanism for both documents: a store reviewing one app asks for that
@@ -73,6 +77,7 @@ export function locationFor(pathname: string): Location {
 /** Routes whose path carries nothing from the route but its name. */
 const FIXED = {
   home: '/',
+  services: '/services/',
   cv: '/cv/',
   privacy: '/privacy-policy/',
   terms: '/terms-of-service/',
@@ -103,7 +108,7 @@ export function pathFor(route: Route, locale: Locale): string {
  * src/App.tsx does not import them, which is what keeps them out of the client
  * bundle (src/entry-server.tsx renders them instead).
  */
-const STATIC_PAGES = ['privacy', 'terms', 'legalApp', 'vvv', 'vvvLive'] as const
+const STATIC_PAGES = ['home', 'services', 'privacy', 'terms', 'legalApp', 'vvv', 'vvvLive'] as const
 
 export function isStaticDocument(
   route: Route,

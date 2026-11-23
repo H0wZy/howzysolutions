@@ -70,6 +70,10 @@ const STATIC_ONLY = [
   { text: '13.709/2018', page: 'privacy-policy/index.html' },
   { text: 'Original out.', page: 'vvv/index.html' },
   { text: 'Your live,', page: 'vvv/live/index.html' },
+  // The rebrand pages (2026-11-23) are static too: their services record is in
+  // the document, and only the document.
+  { text: 'Telas Paraná · Selzler', page: 'index.html' },
+  { text: 'dashboards the client edits alone', page: 'services/index.html' },
 ]
 const scripts = files.map((f) => readFileSync(join(assets, f.name), 'utf8')).join('\n')
 for (const { text, page } of STATIC_ONLY) {
@@ -106,9 +110,11 @@ const STATIC_ENTRY_MAX_KB = 20
     console.error(`x bundle: the static entry is ${entryKb.toFixed(2)} KB gzipped, over ${STATIC_ENTRY_MAX_KB} KB`)
     process.exit(1)
   }
-  const home = readFileSync(join(root, 'dist', 'index.html'), 'utf8')
-  if (!/rel="modulepreload"[^>]*hydrate-/.test(home)) {
-    console.error('x bundle: the home page does not preload the app chunk')
+  // The home page was the app page until the rebrand made it static (2026-11-23),
+  // so the CV stands for "a page that hydrates" now.
+  const hydrating = readFileSync(join(root, 'dist', 'cv', 'index.html'), 'utf8')
+  if (!/rel="modulepreload"[^>]*hydrate-/.test(hydrating)) {
+    console.error('x bundle: the CV page does not preload the app chunk')
     process.exit(1)
   }
 }

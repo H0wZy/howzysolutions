@@ -126,6 +126,21 @@ function findLatinFontHref() {
   return css.match(/url\((\/assets\/jetbrains-mono-latin-wght-normal-[^)]+\.woff2)\)/)?.[1]
 }
 
+/**
+ * The rebrand pages' text face. Preloaded on those two pages only: the other
+ * routes are set in JetBrains Mono and would pay for a font they never paint.
+ */
+function findSiteFontHref() {
+  const cssHref = shell.match(/<link rel="stylesheet"[^>]*href="([^"]+\.css)"/)?.[1]
+  const css = cssHref ? readFileSync(join(dist, cssHref), 'utf8') : ''
+  return css.match(/url\((\/assets\/schibsted-grotesk-latin-wght-normal-[^)]+\.woff2)\)/)?.[1]
+}
+
+const siteFontHref = findSiteFontHref()
+if (!siteFontHref) {
+  console.warn('! prerender: could not locate the Latin Schibsted Grotesk file to preload')
+}
+
 const fontHref = findLatinFontHref()
 if (!fontHref) {
   console.warn('! prerender: could not locate the Latin JetBrains Mono file to preload')
@@ -155,10 +170,14 @@ function withAppPreload(html, pathname) {
   return html.replace('</head>', () => `${links.join('\n')}\n  </head>`)
 }
 
-function withFontPreload(html) {
-  if (!fontHref) return html
-  const link = `    <link rel="preload" as="font" type="font/woff2" href="${fontHref}" crossorigin />`
-  return html.replace('</head>', () => `${link}\n  </head>`)
+function withFontPreload(html, pathname) {
+  const { route } = server.locationFor(pathname)
+  const hrefs = [fontHref, route.page === 'home' || route.page === 'services' ? siteFontHref : undefined].filter(Boolean)
+  if (hrefs.length === 0) return html
+  const links = hrefs.map(
+    (href) => `    <link rel="preload" as="font" type="font/woff2" href="${href}" crossorigin />`,
+  )
+  return html.replace('</head>', () => `${links.join('\n')}\n  </head>`)
 }
 
 function generateSitemap(routes) {
@@ -201,7 +220,7 @@ for (const { pathname, locale } of allRoutes) {
   html = withMeta(html, meta)
   html = withLangs(html, pathname, meta.lang)
   html = withStructuredData(html, locale)
-  html = withFontPreload(html)
+  html = withFontPreload(html, pathname)
   html = withAppPreload(html, pathname)
 
   const outDir = pathname === '/' ? dist : join(dist, pathname)

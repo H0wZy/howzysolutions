@@ -153,3 +153,30 @@
   --dur-base: 280ms;
   --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
 }
+
+/*
+ * The home page and /services/ (rebrand, 2026-11-23). Scoped to `.site`, which
+ * wraps only those two pages (and to the body that holds one, for its ground), so every other route keeps the palette above
+ * untouched. Same rule as everywhere: this is the one file a colour is written
+ * in, and scripts/check-contrast.mjs reads this block against its own ground.
+ *
+ * --sig is the accent for lines and display type (large text, 3:1). Small text
+ * on it, such as a button label, needs --sig-fill, which is a shade deeper so
+ * white clears 4.5:1 (white on --sig itself is 4.32:1). --edge is the boundary
+ * of a field or a chip, a control, so it owes 3:1; --rule is a hairline, and
+ * decorative.
+ */
+.site,
+body:has(.site) {
+  --paper: #0e0e0f;
+  --ink: #ececee;
+  --mute: #9a9ba0;
+  --sig: #4d6bff;
+  --sig-fill: #4561ff;
+  --white: #ffffff;
+  --raise: #17171a;
+  --rule: #2a2b2e;
+  --edge: #6e6f74;
+  --void: #000000;
+  --font-sans: 'Schibsted Grotesk Variable', 'Helvetica Neue', Arial, sans-serif;
+}

@@ -86,6 +86,7 @@ export function projectTopicAnchors(project: Project, hasTrackedTime: boolean): 
  * up.
  */
 const TOP_LEVEL: { route: Route; labelKey: StringKey }[] = [
+  { route: { page: 'services' }, labelKey: 'nav.services' },
   { route: { page: 'workIndex', number: 1 }, labelKey: 'nav.work' },
   { route: { page: 'cv' }, labelKey: 'nav.cv' },
   { route: { page: 'privacy' }, labelKey: 'nav.privacy' },
@@ -132,6 +133,9 @@ export function trailFor(route: Route, locale: Locale, leafLabel?: string): Crum
      */
     case 'home':
       return [{ ...home, href: null }]
+
+    case 'services':
+      return [home, { labelKey: 'nav.services', href: null }]
 
     case 'workIndex':
       return [home, { labelKey: 'work.listingTitle', href: null }]

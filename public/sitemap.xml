@@ -9,6 +9,13 @@
     <priority>1.0</priority>
   </url>
   <url>
+    <loc>https://howzysolutions.com/services/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://howzysolutions.com/services/" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://howzysolutions.com/pt/services/" />
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://howzysolutions.com/cv/</loc>
     <xhtml:link rel="alternate" hreflang="en" href="https://howzysolutions.com/cv/" />
     <xhtml:link rel="alternate" hreflang="pt" href="https://howzysolutions.com/pt/cv/" />
@@ -147,6 +154,13 @@
     <xhtml:link rel="alternate" hreflang="pt" href="https://howzysolutions.com/pt/" />
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://howzysolutions.com/pt/services/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://howzysolutions.com/services/" />
+    <xhtml:link rel="alternate" hreflang="pt" href="https://howzysolutions.com/pt/services/" />
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
   </url>
   <url>
     <loc>https://howzysolutions.com/pt/cv/</loc>

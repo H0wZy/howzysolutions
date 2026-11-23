@@ -31,6 +31,14 @@
 /pt/work/ /pt/works/ 301
 /pt/work/* /pt/works/:splat 301
 
+# Services (rebrand, 2026-11-23). URLs are English in both locales, so the
+# Portuguese word is not a page: it 301s to the real one.
+# src/__tests__/redirects.test.ts checks them.
+/servicos /services/ 301
+/servicos/ /services/ 301
+/pt/servicos /pt/services/ 301
+/pt/servicos/ /pt/services/ 301
+
 # Clean PDF & Markdown routes for curriculum-vitae
 /cv.pdf /cv.pdf/eng 302
 /cv.pdf/ /cv.pdf/eng 302
