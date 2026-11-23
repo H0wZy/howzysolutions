@@ -1,31 +1,41 @@
-// A Worker with static assets: dist/ is served as-is, and the one script,
-// worker/index.ts, answers POST /api/contact (the contact form) and nothing else.
-// Docs: developers.cloudflare.com/workers/static-assets/
+// The site, as a Cloudflare Worker built by vinext (Next.js App Router on Vite).
+// `vite build` writes dist/client (the assets) and dist/server (the Worker), and
+// the Cloudflare Vite plugin derives dist/server/wrangler.json from this file:
+// `npm run deploy:vinext` reads that one. Docs: developers.cloudflare.com/workers/static-assets/
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "howzysolutions",
-  "main": "worker/index.ts",
+  "main": "vinext/server/fetch-handler",
   "compatibility_date": "2026-09-18",
   "assets": {
-    "directory": "./dist",
-    // /cv -> 307 -> /cv/, which serves dist/cv/index.html. Every internal link
-    // already ends in a slash, so a visitor never takes the extra hop.
-    "html_handling": "auto-trailing-slash",
-    // No 404.html is emitted yet, so an unknown path is a plain 404. Never
-    // "single-page-application": that answers every unknown path with the
-    // home page and a 200.
+    "directory": "./dist/client",
+    "binding": "ASSETS",
     "not_found_handling": "none",
-    // Only /api/* reaches the script. Everything else is answered by the assets
-    // layer alone, so public/_redirects and public/_headers keep working and the
-    // site costs no Worker invocation to read.
-    "run_worker_first": ["/api/*"]
+    // Prerendered documents are assets and the assets layer answers them without
+    // running the Worker; a request no asset matches (POST /api/contact) falls
+    // through to it. Only vinext's own cache route is forced to the Worker.
+    "run_worker_first": ["/_vinext/static-cache/*"]
   },
   "vars": {
-    // Not a secret. The sender shown on the mail; the domain must be verified in
-    // Resend. The three secrets are set with `wrangler secret put`, never here:
-    // RESEND_API_KEY, TURNSTILE_SECRET, CONTACT_TO.
+    // Not a secret. The sender shown on the contact mail; the domain must be
+    // verified in Resend. The three secrets are set once with `wrangler secret
+    // put`, never here: RESEND_API_KEY, TURNSTILE_SECRET, CONTACT_TO.
     "CONTACT_FROM": "howzysolutions <contact@howzysolutions.com>"
   },
+  // Neither exists yet: `wrangler d1 create howzysolutions` and `wrangler kv
+  // namespace create RATE_LIMIT` print the ids that replace these two, and
+  // `wrangler d1 migrations apply howzysolutions --remote` creates the table.
+  // Local runs (`wrangler dev`, the Vite plugin) use their own local state and
+  // never read the ids.
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "howzysolutions",
+      "database_id": "REPLACE_WITH_THE_ID_FROM_wrangler_d1_create",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "kv_namespaces": [{ "binding": "RATE_LIMIT", "id": "REPLACE_WITH_THE_ID_FROM_wrangler_kv_namespace_create" }],
   "routes": [{ "pattern": "howzysolutions.com", "custom_domain": true }],
   // One public origin. www is a redirect rule on the zone, not a second copy.
   "workers_dev": false,

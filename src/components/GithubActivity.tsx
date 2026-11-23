@@ -1,3 +1,5 @@
+'use client'
+
 import { Fragment, useRef, useState, useSyncExternalStore } from 'react'
 import type { CSSProperties, ReactNode } from 'react'
 import type { Locale } from '../content/i18n/types'

@@ -4,7 +4,7 @@ import type { ShowcaseArt } from './types'
 /*
  * The /vvv/live/ page (vvv spec 039, FR-043): the live console, presented.
  *
- * A static document like /vvv/, imported by src/entry-server.tsx and nothing on
+ * A static document like /vvv/, imported by src/views/Document.tsx and nothing on
  * the client. It has no form and sets no cookie of its own, and the page's own HTML loads
  * nothing from another origin: every image is a file under public/vvv/live/,
  * and the only links that leave the site are the two to the console, which are

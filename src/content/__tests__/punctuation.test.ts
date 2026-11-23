@@ -12,7 +12,7 @@ import { mcpPage } from '../mcp-page'
 import mcpTools from '../mcp-tools.json'
 import { LOCALES } from '../i18n/types'
 import type { Localized } from '../i18n/types'
-import { metaFor, routes } from '../../entry-server'
+import { metaFor, routes } from '../../site'
 
 /**
  * FR-001, FR-002. The em dash is the punctuation tic that makes generated prose

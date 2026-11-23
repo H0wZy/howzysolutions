@@ -1,7 +1,7 @@
 /**
  * Sends the contact form with fetch and shows the outcome in place. Without
  * this the form still posts to the Worker and is redirected back with the
- * outcome in the fragment (worker/index.ts); this only saves the reload.
+ * outcome in the fragment (src/server/contact.ts); this only saves the reload.
  *
  * It also loads Cloudflare Turnstile, the spam check, and only when the form is
  * about to be used: when it nears the screen or takes focus. A visitor who never
@@ -10,7 +10,7 @@
  * checks the answer is only ever in the Worker.
  */
 
-type Outcome = 'sent' | 'invalid' | 'spam' | 'failed'
+type Outcome = 'sent' | 'invalid' | 'spam' | 'rate' | 'failed'
 
 type Turnstile = {
   render: (el: HTMLElement, options: { sitekey: string; theme: 'dark'; language: string }) => string

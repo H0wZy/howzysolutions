@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { LOCALES } from '../i18n/types'
 import { privacy } from '../privacy'
-import { render } from '../../entry-server'
+import { render } from '../../__tests__/render'
 import { pathFor } from '../../route'
 
 /*

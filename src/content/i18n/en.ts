@@ -335,6 +335,7 @@ export const en = {
   'form.sent': 'Sent. I reply by email.',
   'form.invalid': 'Something is missing or over the limit. Check the fields and try again.',
   'form.spam': 'The spam check failed. Reload the page and try again.',
+  'form.rate': 'That is a few messages in a short time. Try again in an hour, or email me directly.',
   'form.failed': 'It did not go through. Try again, or email me directly.',
   'form.unavailable': 'The form is not open yet. Email me directly.',
   'form.noscript': 'The spam check needs JavaScript. Without it, email me directly.',

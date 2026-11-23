@@ -9,7 +9,7 @@ import { Footer } from '../components/Footer'
 
 /**
  * The live console's page (vvv spec 039 FR-043): a static document, rendered by
- * src/entry-server.tsx and never hydrated, like /vvv/. It collects nothing and
+ * src/views/Document.tsx and never hydrated, like /vvv/. It collects nothing and
  * requests nothing from another origin, so it loads with the console down.
  * Screenshots are real UI, so they are not blended into the ground the way the
  * line-work artwork on /vvv/ is (`showcase-shot`, not `showcase-art`).

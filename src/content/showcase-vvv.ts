@@ -5,7 +5,7 @@ import type { Showcase } from './types'
  * project's facts (period, commits, metrics) are read from
  * src/content/projects/vvv.ts, so the two pages cannot drift.
  *
- * Imported by src/entry-server.tsx and nothing on the client, which is what
+ * Imported by src/views/Document.tsx and nothing on the client, which is what
  * keeps this prose out of the JavaScript budget (FR-002). The repository is
  * private, so nothing here links into it or names an account, a device, a
  * proxy or a spend figure (FR-004). Every command in the transcript is one the

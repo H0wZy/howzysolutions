@@ -1,3 +1,5 @@
+'use client'
+
 import { useState } from 'react'
 import type { Locale } from '../../content/i18n/types'
 import { translate } from '../../locale'

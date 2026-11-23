@@ -306,6 +306,7 @@ export const pt = {
   'form.sent': 'Enviado. Respondo por e-mail.',
   'form.invalid': 'Falta algo ou passou do limite. Confira os campos e tente de novo.',
   'form.spam': 'A verificação anti-spam falhou. Recarregue a página e tente de novo.',
+  'form.rate': 'São várias mensagens em pouco tempo. Tente de novo daqui a uma hora, ou escreva direto para o meu e-mail.',
   'form.failed': 'Não foi. Tente de novo, ou escreva direto para o meu e-mail.',
   'form.unavailable': 'O formulário ainda não está aberto. Escreva direto para o meu e-mail.',
   'form.noscript': 'A verificação anti-spam precisa de JavaScript. Sem ele, escreva direto para o meu e-mail.',

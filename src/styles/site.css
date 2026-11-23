@@ -756,6 +756,7 @@ html.intro-on .site-intro.done {
 .contact[data-state='sent'] [data-status='sent'],
 .contact[data-state='invalid'] [data-status='invalid'],
 .contact[data-state='spam'] [data-status='spam'],
+.contact[data-state='rate'] [data-status='rate'],
 .contact[data-state='failed'] [data-status='failed'] {
   display: block;
 }

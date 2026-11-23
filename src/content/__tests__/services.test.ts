@@ -9,7 +9,8 @@ import { LOCALES } from '../i18n/types'
 import { projects } from '../projects'
 import { howSteps, services, workImages } from '../services'
 import { locationFor, pathFor } from '../../route'
-import { render, routes } from '../../entry-server'
+import { render } from '../../__tests__/render'
+import { routes } from '../../site'
 
 /**
  * The services record and the two pages built from it. What these hold is what
@@ -113,7 +114,7 @@ describe.each(LOCALES)('the home page and /services/, %s', (locale) => {
 
   it('renders the whole form, with the honeypot and the widget slot, once a key is set', () => {
     const form = renderToString(createElement(ContactForm, { locale, siteKey: 'test-key' }))
-    expect(form).toContain('action="/api/contact"')
+    expect(form).toContain('action="/api/contact/"')
     expect(form).toContain('data-sitekey="test-key"')
     for (const id of SERVICE_IDS) expect(form).toContain(`value="${id}"`)
     for (const field of ['name', 'email', 'problem', 'website', 'lang']) expect(form).toContain(`name="${field}"`)

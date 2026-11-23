@@ -5,12 +5,12 @@ import { services } from '../../content/services'
 import { Arrow } from './Arrow'
 
 /** What the Worker can answer with, and so what a visitor can be told. */
-const STATUSES = ['sent', 'invalid', 'spam', 'failed'] as const
+const STATUSES = ['sent', 'invalid', 'spam', 'rate', 'failed'] as const
 
 /**
- * The contact form. It posts to the Worker route (worker/index.ts) with or
+ * The contact form. It posts to the Worker route (src/app/api/contact/route.ts, src/server/contact.ts) with or
  * without scripting: the plain POST gets a 303 back to this page with the
- * outcome in the fragment, and the four status lines below are shown by `:target`
+ * outcome in the fragment, and the status lines below are shown by `:target`
  * (src/styles/site.css). With scripting, src/enhance/contact-form.ts sends it
  * with fetch instead and sets a data-state on the section, which shows the same
  * lines without leaving the page.

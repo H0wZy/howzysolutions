@@ -1,8 +1,8 @@
 /**
  * The home page's motion, as an enhancement: nothing here is needed to read or
- * use the page. It is a chunk of its own (src/main.tsx imports it only on the
+ * use the page. It is a chunk of its own (components/Enhance.tsx imports it only on the
  * home page) and runs after the document is complete. Each part finds its
- * elements by the data attributes src/pages/Home.tsx renders and does nothing
+ * elements by the data attributes src/views/Home.tsx renders and does nothing
  * when they are absent.
  *
  * With prefers-reduced-motion the intro never shows and the parallax and the

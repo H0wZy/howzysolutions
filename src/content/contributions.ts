@@ -1,11 +1,11 @@
 import type { ActivityMonth, ActivityPeriod, GithubActivity } from './types'
 import { LAST_YEAR, daysBetween } from './activity'
 // ponytail: every period (the rolling year and each contribution year) ships
-// in the entry chunk, about 1 KB gzipped per year. When check-bundle gets
+// in the entry chunk, about 1 KB gzipped per year. When check-bundle shows
 // close, move the non-default years to static files under public/ and fetch
 // them same-origin on a chip click. Not a dynamic import(): check-bundle sums
-// every .js in dist/assets, lazy chunks included, so that frees nothing.
-// Never raise the budget.
+// every .js under dist/client, lazy chunks included, so that frees nothing.
+// There is no ceiling since constitution 3.0.0, but the figure is read at every build.
 import raw from './github.generated.json'
 
 /**

@@ -1,6 +1,6 @@
 /**
  * The contact form's shared facts. No imports on purpose: the Worker in
- * worker/index.ts bundles this file too, and the limits are what keep the page
+ * src/server/contact.ts imports this file too, and the limits are what keep the page
  * and the server from disagreeing about what a valid submission is.
  */
 
@@ -17,7 +17,7 @@
 export const TURNSTILE_SITE_KEY = ''
 
 /** Where the form posts, and the one Worker route that exists. */
-export const CONTACT_ENDPOINT = '/api/contact'
+export const CONTACT_ENDPOINT = '/api/contact/'
 
 /** The services a visitor can tick. Ids match src/content/services.ts. */
 export const SERVICE_IDS = ['web', 'ai', 'infra', 'games'] as const

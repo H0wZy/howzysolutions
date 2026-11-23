@@ -24,9 +24,9 @@ import { legalTopicAnchors } from '../navigation'
  * there, they are linked, and the id is the same one that anchors the block on
  * the index.
  *
- * Nothing here is imported by src/App.tsx, and that is load-bearing rather
- * than incidental: these pages are prerendered and never hydrated (see
- * src/main.tsx), so neither the component nor either record ships in the
+ * Nothing here is imported by the client bundle, and that is load-bearing rather
+ * than incidental: these pages are prerendered server components, never hydrated (see
+ * src/views/Document.tsx), so neither the component nor either record ships in the
  * client bundle. A page of static prose with no event handler on it has no
  * reason to be sent twice. Anything interactive added here has to move both
  * files back into App and pay for itself against the JavaScript budget.

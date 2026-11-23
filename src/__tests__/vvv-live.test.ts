@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { describe, expect, it } from 'vitest'
-import { render } from '../entry-server'
+import { render } from './render'
 import { LOCALES } from '../content/i18n/types'
 import { pathFor } from '../route'
 import { CONSOLE_PRIVACY_URL, CONSOLE_URL } from '../content/showcase-vvv-live'
