@@ -114,7 +114,7 @@ including a static one, ships React DOM and the RSC client runtime (4 scripts), 
 download no React" optimisation of the Vite build (spec 003, 004) is gone. The lazy enhancement chunks
 for the home page and the services page are fetched only by those pages. There is no ceiling since
 constitution 3.0.0; `check-bundle` prints the figure and fails only on a credential (below).
-If this number needs to come down, the first lever is making the static documents plain HTML with no
+Accepted by the owner on 2026-11-23. If it ever needs to come down, the first lever is making the static documents plain HTML with no
 client runtime (a route group that opts out of hydration), which vinext does not offer yet.
 
 ## Contact form (US6)
@@ -182,5 +182,5 @@ parity step in CI are not built (they need Cloudflare resources and a stored bas
    three pictures and the other uses point at the live console picture. The LinkedIn URL in the footer is unverified.
 5. The constitution's "design direction" line still describes the earlier look; the new home and services
    follow the owner's brief instead. A one-line amendment would close the mismatch.
-6. Static documents now cost 134 KB of JavaScript each (see above); decide whether that is acceptable or
-   worth the opt-out work.
+6. Decided by the owner on 2026-11-23: the 134 KB of JavaScript on every document (static ones included) is
+   accepted. There is no ceiling since constitution 3.0.0, and the opt-out work is not planned.
