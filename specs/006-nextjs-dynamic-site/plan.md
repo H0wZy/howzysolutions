@@ -173,8 +173,8 @@ parity step in CI are not built (they need Cloudflare resources and a stored bas
 
 ## Open items for the owner
 
-1. Create the Cloudflare resources and put the ids in `wrangler.jsonc`: `wrangler d1 create howzysolutions`,
-   `wrangler kv namespace create RATE_LIMIT`, then `wrangler d1 migrations apply howzysolutions --remote`.
+1. Done 2026-11-23: D1 `howzysolutions` and KV `RATE_LIMIT` exist and their ids are in `wrangler.jsonc`.
+   Still to run: `wrangler d1 migrations apply howzysolutions --remote` (CI does it before deploy).
 2. `wrangler secret put RESEND_API_KEY`, `TURNSTILE_SECRET`, `CONTACT_TO`; verify the sending domain in Resend.
 3. Create the Turnstile widget and put its public site key in `src/content/contact.ts` (empty keeps the
    form hidden, by design).

@@ -22,20 +22,18 @@
     // put`, never here: RESEND_API_KEY, TURNSTILE_SECRET, CONTACT_TO.
     "CONTACT_FROM": "howzysolutions <contact@howzysolutions.com>"
   },
-  // Neither exists yet: `wrangler d1 create howzysolutions` and `wrangler kv
-  // namespace create RATE_LIMIT` print the ids that replace these two, and
-  // `wrangler d1 migrations apply howzysolutions --remote` creates the table.
-  // Local runs (`wrangler dev`, the Vite plugin) use their own local state and
-  // never read the ids.
+  // Created 2026-11-23. `wrangler d1 migrations apply howzysolutions --remote` creates the
+  // table (CI runs it before deploy). Local runs (`wrangler dev`, the Vite plugin) use their
+  // own local state and never read the ids.
   "d1_databases": [
     {
       "binding": "DB",
       "database_name": "howzysolutions",
-      "database_id": "REPLACE_WITH_THE_ID_FROM_wrangler_d1_create",
+      "database_id": "da6d9d06-2f0b-4176-8fd4-654c8f23a71c",
       "migrations_dir": "migrations"
     }
   ],
-  "kv_namespaces": [{ "binding": "RATE_LIMIT", "id": "REPLACE_WITH_THE_ID_FROM_wrangler_kv_namespace_create" }],
+  "kv_namespaces": [{ "binding": "RATE_LIMIT", "id": "12e302207e3e4f34b2a9a0bb289b9cca" }],
   "routes": [{ "pattern": "howzysolutions.com", "custom_domain": true }],
   // One public origin. www is a redirect rule on the zone, not a second copy.
   "workers_dev": false,

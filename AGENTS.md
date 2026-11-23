@@ -117,8 +117,8 @@ verified server-side, three messages per IP per hour (KV), the message in D1
 Its three secrets are set once with `wrangler secret put RESEND_API_KEY`,
 `TURNSTILE_SECRET` and `CONTACT_TO`, never in a file or a `NEXT_PUBLIC_*` variable;
 `CONTACT_FROM` is a plain var and its domain must be verified in Resend. The D1 and KV
-ids in `wrangler.jsonc` are placeholders until `wrangler d1 create` and `wrangler kv
-namespace create` are run. The public Turnstile site key goes in
+ids in `wrangler.jsonc` are the real ones (created 2026-11-23); the table is made by
+`wrangler d1 migrations apply howzysolutions --remote`, which CI runs before deploy. The public Turnstile site key goes in
 `src/content/contact.ts`; while it is empty the form is not rendered and the page shows
 the email routes.
 
