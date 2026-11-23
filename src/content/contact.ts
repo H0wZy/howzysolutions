@@ -9,12 +9,11 @@
  * that loads the widget, unlike the secret that checks the answer, which only
  * ever lives in `wrangler secret` (TURNSTILE_SECRET).
  *
- * Empty until the owner creates the widget for howzysolutions.com in the
- * Cloudflare dashboard and pastes the site key here. While it is empty the page
- * shows the plain email routes instead of a form that could never pass the
- * check, and the Worker fails closed without the secret.
+ * The widget for howzysolutions.com was created in the Cloudflare dashboard on 2026-11-23.
+ * If this is ever empty again the page shows the plain email routes instead of a form
+ * that could never pass the check, and the Worker fails closed without the secret.
  */
-export const TURNSTILE_SITE_KEY = ''
+export const TURNSTILE_SITE_KEY = '0x4AAAAAAGPQbhtycUvf1bQQ'
 
 /** Where the form posts, and the one Worker route that exists. */
 export const CONTACT_ENDPOINT = '/api/contact/'
