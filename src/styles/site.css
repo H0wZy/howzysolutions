@@ -189,7 +189,7 @@ html.intro-on .site-intro.done {
   right: 0;
   height: 44%;
   display: grid;
-  grid-template-columns: 1fr 1.3fr 0.9fr 1.1fr;
+  grid-template-columns: 1.3fr 0.9fr 1.1fr;
 }
 
 .strip a {

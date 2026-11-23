@@ -22,17 +22,6 @@ export type WorkImage = {
 }
 
 export const workImages = {
-  panel: {
-    src: '/home/work-1.webp',
-    width: 1170,
-    height: 410,
-    alt: {
-      en: 'The vvv dashboard showing sales totals for a test store',
-      pt: 'O painel do vvv mostrando totais de vendas de uma loja de teste',
-    },
-    caption: { en: 'vvv, dashboard (test data)', pt: 'vvv, painel (dados de teste)' },
-    projectId: 'vvv',
-  },
   pipeline: {
     src: '/home/work-2.webp',
     width: 720,
@@ -71,7 +60,7 @@ export const workImages = {
 export type WorkImageKey = keyof typeof workImages
 
 /** The order the home page's hero strip shows them in. */
-export const stripImages: WorkImageKey[] = ['panel', 'pipeline', 'identity', 'console']
+export const stripImages: WorkImageKey[] = ['pipeline', 'identity', 'console']
 
 export type Proof =
   /** A picture of the work, linked to its project. */
@@ -129,7 +118,7 @@ export const services: Service[] = [
     id: 'ai',
     title: { en: ['Automation', 'and AI'], pt: ['Automação', 'e IA'] },
     homeNote: 'vvv · MCP hub',
-    peek: 'panel',
+    peek: 'console',
     what: {
       en: 'Agents and pipelines that check what they produce before handing it over. No "the AI said it worked".',
       pt: 'Agentes e pipelines que conferem o que geram antes de entregar. Nada de "a IA disse que deu certo".',
@@ -148,7 +137,7 @@ export const services: Service[] = [
         tech: { en: 'OAuth', pt: 'OAuth' },
       },
     ],
-    proof: [{ image: 'panel' }, { image: 'pipeline' }, { label: 'MCP hub', projectId: 'mcp' }],
+    proof: [{ image: 'console' }, { image: 'pipeline' }, { label: 'MCP hub', projectId: 'mcp' }],
   },
   {
     id: 'infra',

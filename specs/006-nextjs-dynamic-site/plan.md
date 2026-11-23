@@ -88,7 +88,7 @@ from the committed generated artifacts, so data capture cannot move the numbers.
 | `wrangler dev` on the vinext build (workerd) | 42 compared, 0 differ (before the privacy change below) |
 | `wrangler dev`, final tree | 40 compared, 0 differ, 2 excluded (the two privacy pages, below); with no exclusion: 42 compared, 2 differ, only those two |
 
-The two privacy pages (`/privacy-policy/`, `/pt/privacy-policy/`) differ on purpose: FR-015 changed the
+After the picture was removed, the home, `/services/` and their `/pt/` twins also differ on purpose from the round-1 baseline (the caption "vvv, dashboard (test data)" is gone), so the final run excludes them with the two privacy pages: 36 compared, 0 differ, 6 excluded; with no exclusion 42 compared, 6 differ and only those six. The two privacy pages (`/privacy-policy/`, `/pt/privacy-policy/`) differ on purpose: FR-015 changed the
 contact-form section (storage in D1 for 90 days, the keyed IP hash, how to ask for deletion), and the diff
 shows exactly that paragraph and nothing else. The home page and `/services/` match the baseline because
 round 1 had already shipped them on Vite; the spec excludes the home from the diff because it is new design,
@@ -178,8 +178,8 @@ parity step in CI are not built (they need Cloudflare resources and a stored bas
 2. `wrangler secret put RESEND_API_KEY`, `TURNSTILE_SECRET`, `CONTACT_TO`; verify the sending domain in Resend.
 3. Create the Turnstile widget and put its public site key in `src/content/contact.ts` (empty keeps the
    form hidden, by design).
-4. `work-1.webp` carries a test figure on the home page that is not verified; the LinkedIn URL in the
-   footer is unverified.
+4. The dashboard picture with test figures (`work-1.webp`) was removed on 2026-11-23: the home strip now shows
+   three pictures and the other uses point at the live console picture. The LinkedIn URL in the footer is unverified.
 5. The constitution's "design direction" line still describes the earlier look; the new home and services
    follow the owner's brief instead. A one-line amendment would close the mismatch.
 6. Static documents now cost 134 KB of JavaScript each (see above); decide whether that is acceptable or
