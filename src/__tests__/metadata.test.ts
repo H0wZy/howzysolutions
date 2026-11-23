@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { metaFor, routes } from '../site'
+import { metaFor, routes } from '../entry-server'
 
 describe('social metadata', () => {
   it('uses the local brand card and a localized alternative on every route', () => {

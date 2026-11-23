@@ -225,50 +225,6 @@ if (palette) {
   }
 }
 
-/*
- * The home page and /services/ (rebrand, 2026-11-23) carry their own palette,
- * scoped to `.site` in tokens.css. Each row names the ground the colour is read
- * against: the page, or --raise where the contact block sits.
- */
-{
-  const site = parseBlock('.site')
-  const SITE = [
-    { name: '--ink', ground: '--paper', floor: 4.5 },
-    { name: '--mute', ground: '--paper', floor: 4.5 },
-    { name: '--ink', ground: '--raise', floor: 4.5 },
-    { name: '--mute', ground: '--raise', floor: 4.5 },
-    { name: '--ink', ground: '--void', floor: 4.5 },
-    { name: '--white', ground: '--sig-fill', floor: 4.5 },
-    // Display type, lines and the focus ring: large text and boundaries.
-    { name: '--sig', ground: '--paper', floor: 3 },
-    { name: '--sig', ground: '--raise', floor: 3 },
-    // A field's or a chip's boundary is a control.
-    { name: '--edge', ground: '--paper', floor: 3 },
-    { name: '--edge', ground: '--raise', floor: 3 },
-  ]
-  console.log('')
-  if (!site) {
-    console.error('x could not parse the .site token block in tokens.css')
-    failures++
-  } else {
-    for (const { name, ground, floor } of SITE) {
-      if (!(name in site) || !(ground in site)) {
-        console.error(`x site: ${name} or ${ground} is missing from the .site block`)
-        failures++
-        continue
-      }
-      const r = ratio(site[name], site[ground])
-      checked++
-      const pass = r >= floor
-      if (!pass) failures++
-      console.log(
-        `${pass ? 'ok' : 'XX'} site  ${name.padEnd(10)} ${site[name]} on ${site[ground]}  ` +
-          `${r.toFixed(2)}:1  (floor ${floor}:1)`,
-      )
-    }
-  }
-}
-
 if (failures > 0) {
   console.error(`\nx contrast check failed: ${failures} problem(s)`)
   process.exit(1)

@@ -169,7 +169,7 @@ import type { LegalDocument } from './types'
  * would create a duty the operator has not taken on.
  */
 export const privacy: LegalDocument = {
-  updated: '2026-11-23',
+  updated: '2026-09-30',
 
   intro: {
     en: 'How H0wZy Solutions handles personal data: first on this website, then in each project that handles data of its own.',
@@ -205,22 +205,6 @@ export const privacy: LegalDocument = {
           'O site é hospedado na Cloudflare, que trata os dados técnicos de toda requisição, como endereço IP e navegador, para entregar as páginas e protegê-las de abuso. A Cloudflare pode gravar um cookie de segurança estritamente necessário quando precisa verificar uma requisição. Nós vemos só números agregados de tráfego, nunca visitantes individuais.',
           'O site também usa o Cloudflare Web Analytics para contar visitas de forma agregada. Ele funciona por um pequeno script que o seu navegador carrega de static.cloudflareinsights.com em cada página, então esse endereço recebe uma requisição quando você abre uma. A Cloudflare afirma que essa contagem não usa cookies nem armazenamento local e não identifica indivíduos por impressão digital. Nossa base legal é o legítimo interesse (LGPD, art. 7º, IX): saber quantas pessoas visitam o site. O que a Cloudflare guarda sobre essas requisições, e por quanto tempo, é decidido pela Cloudflare e descrito na política de privacidade dela (cloudflare.com/privacypolicy). O que nós vemos são só os números agregados. Isto foi acrescentado a esta política em 30 de setembro de 2026.',
           'Essa contagem é feita pela Cloudflare, que opera fora do Brasil, então as contagens de visitas deste site saem do país. O console de lives do vvv é um serviço separado, com política de privacidade própria. Os dados dele ficam no nosso próprio servidor, no Brasil, mas a cópia de segurança noturna desse servidor também o cobre, então uma cópia criptografada dele vai igualmente para o Google Drive, fora do Brasil (veja a seção do vvv abaixo).',
-        ],
-      },
-    },
-    {
-      id: 'contact-form',
-      heading: { en: 'Contact form', pt: 'Formulário de contato' },
-      body: {
-        en: [
-          "The form on the services page sends what you type (your name, your email, the services you tick and your message) to a small script of ours on Cloudflare. The script saves the message in a Cloudflare D1 database for 90 days, together with a keyed hash of your IP address (never the address itself) that limits each address to three messages an hour, and emails the message to the operator through Resend. The database copy is deleted automatically after 90 days, and earlier if you ask: write to the address at the top of this page from the email you used and we delete it within 15 days. A copy that already reached the operator's inbox stays there until the operator deletes it, which we do on the same request, and Resend keeps its own delivery records for as long as it decides and describes in its own privacy policy.",
-          'To tell a person from a bot, the form uses Cloudflare Turnstile. Its script loads from challenges.cloudflare.com only when you get near the form, and Cloudflare receives the technical signals it needs for the check, such as your IP address and browser details. Our script then sends Cloudflare the token your browser produced and your IP address, to confirm it. What Cloudflare keeps, and for how long, is decided by Cloudflare and described in its privacy policy (cloudflare.com/privacypolicy).',
-          'Our legal basis is taking the steps you ask for before a contract (LGPD art. 7, V), and the legitimate interest in keeping the form free of spam (LGPD art. 7, IX). Resend and Cloudflare operate outside Brazil, so what you type in the form leaves the country. Without scripting the form cannot pass the check; write to the address at the top of this page instead. This section was added on 23 November 2026.',
-        ],
-        pt: [
-          'O formulário da página de serviços envia o que você digita (seu nome, seu e-mail, os serviços que você marca e a sua mensagem) para um pequeno script nosso na Cloudflare. O script guarda a mensagem num banco de dados Cloudflare D1 por 90 dias, junto com um hash com chave do seu endereço IP (nunca o endereço em si) que limita cada endereço a três mensagens por hora, e manda a mensagem por e-mail para o operador através da Resend. A cópia do banco é apagada automaticamente após 90 dias, e antes disso se você pedir: escreva para o endereço no topo desta página a partir do e-mail que usou e apagamos em até 15 dias. A cópia que já chegou à caixa de entrada do operador fica lá até o operador apagar, o que fazemos no mesmo pedido, e a Resend guarda os próprios registros de entrega pelo tempo que ela decide e descreve na política de privacidade dela.',
-          'Para distinguir uma pessoa de um robô, o formulário usa o Cloudflare Turnstile. O script dele só é carregado de challenges.cloudflare.com quando você chega perto do formulário, e a Cloudflare recebe os sinais técnicos de que precisa para a verificação, como o seu endereço IP e dados do navegador. Depois o nosso script envia à Cloudflare o token que o seu navegador produziu e o seu endereço IP, para confirmá-lo. O que a Cloudflare guarda, e por quanto tempo, é decidido pela Cloudflare e descrito na política de privacidade dela (cloudflare.com/privacypolicy).',
-          'Nossa base legal é a realização das providências que você pede antes de um contrato (LGPD, art. 7º, V) e o legítimo interesse em manter o formulário livre de spam (LGPD, art. 7º, IX). A Resend e a Cloudflare operam fora do Brasil, então o que você digita no formulário sai do país. Sem script o formulário não consegue passar na verificação; escreva para o endereço no topo desta página. Esta seção foi acrescentada em 23 de novembro de 2026.',
         ],
       },
     },

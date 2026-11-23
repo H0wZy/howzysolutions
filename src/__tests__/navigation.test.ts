@@ -63,7 +63,6 @@ describe('the breadcrumb trail', () => {
 describe('every trail', () => {
   const routes: Route[] = [
     { page: 'home' },
-    { page: 'services' },
     { page: 'workIndex', number: 1 },
     { page: 'work', id: 'telasparana' },
     { page: 'cv' },
@@ -117,7 +116,6 @@ describe('every trail', () => {
 describe('the top-level links in the chrome bar', () => {
   const routes: Route[] = [
     { page: 'home' },
-    { page: 'services' },
     { page: 'workIndex', number: 1 },
     { page: 'work', id: 'telasparana' },
     { page: 'cv' },
@@ -127,7 +125,6 @@ describe('the top-level links in the chrome bar', () => {
   ]
 
   const destinations: Route[] = [
-    { page: 'services' },
     { page: 'workIndex', number: 1 },
     { page: 'cv' },
     { page: 'privacy' },

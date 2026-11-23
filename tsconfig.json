@@ -1,47 +1,11 @@
 {
-  "compilerOptions": {
-    "target": "es2023",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
-    "module": "esnext",
-    "moduleResolution": "bundler",
-    "jsx": "react-jsx",
-    "strict": true,
-    "noEmit": true,
-    "incremental": true,
-    "isolatedModules": true,
-    "esModuleInterop": true,
-    "resolveJsonModule": true,
-    "skipLibCheck": true,
-    "verbatimModuleSyntax": true,
-    "erasableSyntaxOnly": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true,
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ],
-    "paths": {
-      "@/*": [
-        "./src/*"
-      ]
-    },
-    "allowJs": true
-  },
-  "include": [
-    "next-env.d.ts",
-    "src",
-    ".next/types/**/*.ts",
-    ".cloudflare/types/**/*.d.ts",
-    ".next/dev/types/**/*.ts"
+  "files": [],
+  "references": [
+    { "path": "./tsconfig.app.json" },
+    { "path": "./tsconfig.node.json" }
   ],
-  "exclude": [
-    "node_modules",
-    "dist"
-  ]
+  "_comment": "A solution file. compilerOptions.paths below is not used by tsc -b, which follows the references above; it is here so that tools reading tsconfig.json for aliases resolve @/* instead of writing to a literal @ directory (research D15).",
+  "compilerOptions": {
+    "paths": { "@/*": ["./src/*"] }
+  }
 }

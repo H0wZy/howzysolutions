@@ -15,8 +15,8 @@ import { Metrics } from '../components/Metrics'
  * terminal transcript, the stages, the rule, the lanes, the record's own
  * numbers, and a FAQ.
  *
- * A static document, like the legal pages: rendered by src/views/Document.tsx,
- * never imported by the client bundle, never hydrated. Nothing here has a handler
+ * A static document, like the legal pages: rendered by src/entry-server.tsx,
+ * never imported by src/App.tsx, never hydrated. Nothing here has a handler
  * (the FAQ is `<details>`), so the page costs the JavaScript budget nothing.
  * Anything interactive added here has to move the page into App and pay for
  * itself against the budget.

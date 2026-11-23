@@ -1,5 +1,3 @@
-'use client'
-
 import { useEffect, useMemo, useRef, useState } from 'react'
 import type { FocusEvent, KeyboardEvent } from 'react'
 import type { Locale } from '../content/i18n/types'

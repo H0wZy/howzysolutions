@@ -78,7 +78,7 @@ describe('every clock states what it counts', () => {
  * form and `Date.now()` return something that depends on when the code ran.
  */
 describe('nothing in the render tree reads the clock', () => {
-  const roots = ['src/views', 'src/components']
+  const roots = ['src/pages', 'src/components']
 
   /** Comments are prose about the rule, not applications of it. */
   function stripComments(source: string): string {

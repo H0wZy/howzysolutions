@@ -1,87 +1,129 @@
 /*
- * What a visitor downloads, measured and guarded (spec 006 SC-004, SC-005).
+ * The JavaScript budget as a gate, not a note (spec 003 FR-050).
  *
- * There is no JavaScript ceiling since constitution 3.0.0 (2026-10-26), so this
- * does not fail on size: it prints the initial JavaScript of the heaviest and the
- * lightest document, gzipped, so the figure is read at every build and recorded in
- * the spec that changes it. (The Vite build measured 8.28 KB for a static
- * document and 120.47 KB for a hydrating one.)
+ * The constitution's Performance budgets section caps initial JavaScript at
+ * 125 KB gzipped (120 KB until 2026-09-29, constitution 2.2.0). The original
+ * number held for two years by being measured once, in spec 001, and then
+ * never again — which was safe only while the client
+ * shipped no framework. It ships one now: measured 2026-08-27, the hydrated
+ * site sits at 104.76 KB, leaving about 15 KB. That is roughly two more
+ * components, so the next careless import is the one that matters and a human
+ * remembering to re-measure is not a control.
  *
- * It does fail on two things:
- *   1. a secret in anything the browser can fetch (SC-005): a Worker secret's
- *      name, or the shape of a Resend key, anywhere under dist/client;
- *   2. a build with no JavaScript at all, which is a broken build, not a small one.
- *
- * Runs after `npm run build` and inside `npm test` when dist/client exists.
- * vinext writes each prerendered document to dist/client/_vinext/static-cache.
+ * Runs at the end of `npm run build` and inside `npm test`. Exits non-zero.
  */
-import { readFileSync, readdirSync, existsSync, statSync } from 'node:fs'
+import { readFileSync, readdirSync, existsSync } from 'node:fs'
 import { gzipSync } from 'node:zlib'
 import { fileURLToPath } from 'node:url'
 import { dirname, join } from 'node:path'
 
+/** Gzipped kilobytes of initial JavaScript. Constitution 2.2.0. */
+const BUDGET_KB = 125
+
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
-const client = join(root, 'dist', 'client')
-const cache = join(client, '_vinext', 'static-cache')
+const assets = join(root, 'dist', 'assets')
 
-if (!existsSync(cache)) {
-  console.error('x bundle: dist/client/_vinext/static-cache not found, run the build before the gate')
+if (!existsSync(assets)) {
+  console.error('x bundle: dist/assets not found — run the build before the gate')
   process.exit(1)
 }
 
-const gzip = (file) => gzipSync(readFileSync(file), { level: 9 }).length
-const kb = (bytes) => (bytes / 1024).toFixed(2)
-
-// Initial JavaScript of a document: the scripts its HTML loads (async or preloaded), each once.
-const documents = readdirSync(cache)
-  .filter((name) => name.endsWith('.html'))
+const files = readdirSync(assets)
+  .filter((name) => name.endsWith('.js'))
   .map((name) => {
-    const html = readFileSync(join(cache, name), 'utf8')
-    const title = (html.match(/<title>([^<]*)/)?.[1] ?? name).replace(/&quot;/g, '"')
-    const scripts = [...new Set([...html.matchAll(/\bsrc="(\/_next\/static\/[^"]+\.js)"/g)].map((m) => m[1]))]
-    return { title, scripts, gzip: scripts.reduce((sum, s) => sum + gzip(join(client, s)), 0) }
+    const bytes = readFileSync(join(assets, name))
+    return { name, raw: bytes.length, gzip: gzipSync(bytes, { level: 9 }).length }
   })
-  .sort((a, b) => a.gzip - b.gzip)
+  .sort((a, b) => b.gzip - a.gzip)
 
-if (documents.length === 0 || documents.every((d) => d.scripts.length === 0)) {
-  console.error('x bundle: no document loads any JavaScript, that is a broken build')
+if (files.length === 0) {
+  console.error('x bundle: no JavaScript emitted — that is not a pass, it is a broken build')
   process.exit(1)
 }
 
-const chunkDir = join(client, '_next', 'static', 'chunks')
-const chunks = readdirSync(chunkDir).filter((n) => n.endsWith('.js'))
-const everything = chunks.reduce((sum, n) => sum + gzip(join(chunkDir, n)), 0)
-const lightest = documents[0]
-const heaviest = documents.at(-1)
-console.log(`  documents                      ${documents.length}`)
-console.log(`  lightest   gzip ${kb(lightest.gzip).padStart(8)} KB  ${lightest.scripts.length} scripts  ${lightest.title}`)
-console.log(`  heaviest   gzip ${kb(heaviest.gzip).padStart(8)} KB  ${heaviest.scripts.length} scripts  ${heaviest.title}`)
-console.log(`  all ${chunks.length} chunks   gzip ${kb(everything).padStart(8)} KB  (lazy enhancement chunks included)`)
+/*
+ * Everything in dist/assets counts. This site has no lazily imported chunk to
+ * exclude: the WebGL renderer the budget's exclusion clause was written for was
+ * withdrawn in spec 001 (CL-002). If one returns, this is the line that has to
+ * learn the difference, and it should fail loudly until it does rather than
+ * quietly stop counting something.
+ */
+const totalGzip = files.reduce((sum, f) => sum + f.gzip, 0)
+const kb = totalGzip / 1024
+const headroom = BUDGET_KB - kb
 
-// SC-005: no secret in anything the browser can fetch.
-const SECRET_NAMES = ['RESEND_API_KEY', 'TURNSTILE_SECRET', 'CONTACT_TO', 'WAKATIME_API_KEY', 'GITHUB_TOKEN']
-const SECRET_SHAPES = [/\bre_[A-Za-z0-9]{8,}_[A-Za-z0-9]{16,}\b/, /\bgh[pousr]_[A-Za-z0-9]{30,}\b/]
-const walk = (dir) =>
-  readdirSync(dir).flatMap((n) => {
-    const p = join(dir, n)
-    return statSync(p).isDirectory() ? walk(p) : [p]
-  })
-let leaks = 0
-for (const file of walk(client).filter((f) => /\.(js|html|css|json|txt|md|xml|rsc|webmanifest)$/.test(f))) {
-  const text = readFileSync(file, 'utf8')
-  for (const name of SECRET_NAMES) {
-    if (text.includes(name)) {
-      console.error(`x bundle: "${name}" is in ${file.slice(root.length + 1)}`)
-      leaks++
-    }
+for (const f of files) {
+  console.log(
+    `  ${f.name.padEnd(30)} raw ${(f.raw / 1024).toFixed(2)} KB   gzip ${(f.gzip / 1024).toFixed(2)} KB`,
+  )
+}
+
+/*
+ * The static documents stay out of the client bundle (spec 004, and the legal
+ * pages before it). static-documents.test.ts checks that App does not import
+ * them; this checks the built artifact, which is what a visitor downloads: a
+ * sentence only the legal records and the /vvv/ record contain must not be in
+ * any script. Each sentinel must also be in the page it came from, or it has
+ * gone stale and would pass forever without testing anything.
+ */
+const STATIC_ONLY = [
+  { text: '13.709/2018', page: 'privacy-policy/index.html' },
+  { text: 'Original out.', page: 'vvv/index.html' },
+  { text: 'Your live,', page: 'vvv/live/index.html' },
+]
+const scripts = files.map((f) => readFileSync(join(assets, f.name), 'utf8')).join('\n')
+for (const { text, page } of STATIC_ONLY) {
+  const html = existsSync(join(root, 'dist', page)) ? readFileSync(join(root, 'dist', page), 'utf8') : ''
+  if (!html.includes(text)) {
+    console.error(`x bundle: sentinel "${text}" is not in dist/${page}, so it no longer guards anything`)
+    process.exit(1)
   }
-  for (const shape of SECRET_SHAPES) {
-    if (shape.test(text)) {
-      console.error(`x bundle: ${shape} matches in ${file.slice(root.length + 1)}`)
-      leaks++
-    }
+  if (scripts.includes(text)) {
+    console.error(`x bundle: "${text}" from dist/${page} is in the client bundle; a static document leaked in`)
+    process.exit(1)
   }
 }
-if (leaks) process.exit(1)
 
-console.log(`ok bundle: no credential name or shape in dist/client (${walk(client).length} files scanned)`)
+/*
+ * The split is only worth what it saves the static documents. Their entry is
+ * the enhancements and nothing else, so if it grows past this, React or a page
+ * has been imported into it and every legal page pays for the app again.
+ * Likewise the app pages must preload the app chunk, or hydration waits a round
+ * trip behind the entry.
+ */
+const STATIC_ENTRY_MAX_KB = 20
+{
+  const page = readFileSync(join(root, 'dist', 'vvv', 'index.html'), 'utf8')
+  const src = page.match(/<script type="module"[^>]*src="\/assets\/([^"]+\.js)"/)?.[1]
+  const entry = files.find((f) => f.name === src)
+  if (!entry) {
+    console.error('x bundle: could not find the entry script /vvv/ loads')
+    process.exit(1)
+  }
+  const entryKb = entry.gzip / 1024
+  console.log(`  static document entry          gzip ${entryKb.toFixed(2)} KB (max ${STATIC_ENTRY_MAX_KB} KB)`)
+  if (entryKb > STATIC_ENTRY_MAX_KB) {
+    console.error(`x bundle: the static entry is ${entryKb.toFixed(2)} KB gzipped, over ${STATIC_ENTRY_MAX_KB} KB`)
+    process.exit(1)
+  }
+  const home = readFileSync(join(root, 'dist', 'index.html'), 'utf8')
+  if (!/rel="modulepreload"[^>]*hydrate-/.test(home)) {
+    console.error('x bundle: the home page does not preload the app chunk')
+    process.exit(1)
+  }
+}
+
+if (kb > BUDGET_KB) {
+  console.error(
+    `x bundle: ${kb.toFixed(2)} KB gzipped over a ${BUDGET_KB} KB budget by ${(-headroom).toFixed(2)} KB`,
+  )
+  console.error(
+    '  Rework the change, or amend the budget in .specify/memory/constitution.md with this',
+  )
+  console.error('  measurement in the amendment. Never exceed it silently.')
+  process.exit(1)
+}
+
+console.log(
+  `ok bundle ${kb.toFixed(2)} KB gzipped of ${BUDGET_KB} KB (${headroom.toFixed(2)} KB headroom)`,
+)

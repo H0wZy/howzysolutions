@@ -13,7 +13,7 @@ import { blank, link, ok, pairs, table, text, type Command, type OutputLine } fr
 /**
  * `cv` — the professional record, and the download.
  *
- * Reads content.cv, which is the same typed module src/views/Cv.tsx renders
+ * Reads content.cv, which is the same typed module src/pages/Cv.tsx renders
  * from. There is no second path to the facts, so the page and the terminal
  * cannot diverge (FR-067, SC-014).
  *

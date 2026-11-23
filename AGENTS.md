@@ -18,16 +18,15 @@ corrected. Read it before starting a feature.
 > Constitution 3.0.0 (2026-10-26, the owner's authorization): the Vite stack pin, the
 > "no client-side router" rule, the 125 KB JavaScript budget with its gate, the
 > "no credential at runtime" rule and the blanket "no third-party SDK" sentence are removed.
-> Spec 006 (`specs/006-nextjs-dynamic-site/`) moved the site to Next.js on Cloudflare
-> Workers (vinext, with D1 and KV). `plan.md` there records the choice and the measurements.
+> Spec 006 (`specs/006-nextjs-dynamic-site/`) migrates the site to Next.js on Cloudflare
+> Workers with D1, KV and R2. The paragraphs below describe the Vite site that still ships
+> until spec 006 reaches parity; `scripts/check-bundle.mjs` stays as a measurement of that
+> build, not as a constitutional gate.
 
-A Next.js App Router site, prerendered to 42 documents and a 404 and served by a Worker. One optional
-catch-all page (`src/app/[[...path]]`) renders `src/views/Document.tsx` for every URL
-`src/site.ts` lists, so the URL scheme, the `/pt/` twins and the trailing slashes are the ones
-the Vite build had. `npm run parity` proves it: lang, title and visible text per URL.
+A static site, prerendered to 26 real documents and hydrated on the client.
+There is no client-side router: every route is a file, and navigation is a link.
 
-- **Stack**: Next.js 16 (App Router), React 19, TypeScript strict, Vitest 3, built for Cloudflare
-  by vinext (`vite build`). Tailwind 4 over the tokens
+- **Stack**: React 19, TypeScript, Vite 8, Vitest 3. Tailwind 4 over the tokens
   in `src/styles/tokens.css`. shadcn supplies component markup; its variables
   resolve to those tokens and never declare colours of their own.
 - **Locales**: English canonical and unprefixed, Brazilian Portuguese under
@@ -45,17 +44,14 @@ These are the ones a change is most likely to break without noticing.
 - **No colour literal outside `tokens.css`.** `npm test` runs
   `scripts/check-contrast.mjs`, which verifies 26 token pairs against their WCAG
   floor and follows the shadcn variable mapping.
-- **The JavaScript figure is measured, not capped.** No ceiling since constitution 3.0.0, but
-  `scripts/check-bundle.mjs` runs at the end of the build and prints the initial JavaScript
-  of the lightest and heaviest document, and fails on a credential name or shape anywhere in
-  `dist/client`. Record the figure in the spec that changes it (spec 006 plan.md has the
-  Vite figures to compare: 8.28 KB for a static document, 120.47 KB for a hydrating one).
-  The home page and `/services/` take their motion from `src/enhance/` chunks that only
-  they fetch.
-- **Nothing a view renders may call `new Date()`.** Pages are prerendered and the client
-  hydrates them, so a value derived from the clock disagrees between the two.
-  Build-time values come from `src/content/build.generated.json`. A test enforces this
-  across `src/views` and `src/components`.
+- **The JavaScript budget is a gate.** `scripts/check-bundle.mjs` fails the
+  build above 125 KB gzipped. Last measured 120.47 KB for a document that
+  hydrates and 8.28 KB for a static one, so there is 4.5 KB of headroom: check
+  before adding a dependency, not after.
+- **Nothing under `App` may call `new Date()` during render.** The site
+  hydrates, so a value derived from the clock disagrees between prerender and
+  the browser. Build-time values come from `src/content/build.generated.json`.
+  A test enforces this across `src/pages` and `src/components`.
 - **The terminal engine imports no React, no renderer and no DOM.**
   `src/terminal/__tests__/purity.test.ts` fails if that changes.
 - **No em dash, en dash, ` - ` or ` -- ` in visitor-facing prose.**
@@ -104,31 +100,18 @@ All three must pass before a merge.
 
 ## Deploy
 
-`wrangler.jsonc` describes one Cloudflare Worker, built by vinext: `npm run build` (data
-capture, `tsc`, `vite build`, `check-bundle`) writes `dist/client` (assets) and
-`dist/server` (the Worker and its derived `wrangler.json`); `npm run deploy` ships that
-build. `public/_headers` sets the security headers and `public/_redirects` keeps working.
-`npm run preview` runs the build in workerd with local D1 and KV.
+`wrangler.jsonc` publishes `dist/` as an assets-only Cloudflare Worker (no
+script) on `howzysolutions.com`. `public/_headers` sets the security headers
+and the long cache on `/assets/*`.
 
-The contact form posts to `src/app/api/contact/route.ts`, which calls
-`src/server/contact.ts`: same-origin and size checks, a honeypot, Cloudflare Turnstile
-verified server-side, three messages per IP per hour (KV), the message in D1
-(`migrations/`, kept 90 days, purged on every submission), then mailed through Resend.
-Its three secrets are set once with `wrangler secret put RESEND_API_KEY`,
-`TURNSTILE_SECRET` and `CONTACT_TO`, never in a file or a `NEXT_PUBLIC_*` variable;
-`CONTACT_FROM` is a plain var and its domain must be verified in Resend. The D1 and KV
-ids in `wrangler.jsonc` are the real ones (created 2026-11-23); the table is made by
-`wrangler d1 migrations apply howzysolutions --remote`, which CI runs before deploy. The public Turnstile site key goes in
-`src/content/contact.ts`; while it is empty the form is not rendered and the page shows
-the email routes.
+Pushing to `main` deploys: `.github/workflows/ci.yml` runs lint and tests,
+then builds with fresh GitHub, WakaTime and CV data (it checks out
+`H0wZy/curriculum-vitae`) and runs `wrangler deploy`. A weekly Monday 06:17 BRT run
+does the same, so the activity grid freezes for at most a week. By hand:
 
-The home page and `/services/` are documents with the palette scoped to `.site` in
-`tokens.css`.
-
-Pushing to `main` deploys: `.github/workflows/ci.yml` runs lint and tests, then builds
-with fresh GitHub, WakaTime and CV data (it checks out `H0wZy/curriculum-vitae`), applies
-the D1 migrations and runs `npm run deploy`. A weekly Monday 06:17 BRT run does the same,
-so the activity grid freezes for at most a week.
+```bash
+npm run build && npx wrangler deploy
+```
 
 The privacy policy lives at `/privacy-policy/`, but TikTok Shop's Data
 Security and Privacy Review was sent with `/privacy/`. `public/_redirects`

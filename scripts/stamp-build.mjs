@@ -2,7 +2,7 @@
  * Writes the date this build ran, so that a value derived from "now" is
  * derived ONCE and both bundles carry the same answer.
  *
- * Why this exists: the site hydrates now. src/views/Home.tsx renders a
+ * Why this exists: the site hydrates now. src/pages/Home.tsx renders a
  * duration computed from profile.experienceStart, and the prerender pass and
  * the visitor's browser are different instants — separated by however long the
  * deploy sits. The moment those two straddle a month boundary, the server says

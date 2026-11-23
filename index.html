@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Marcos "H0wZy" Junior · Developer</title>
+    <meta
+      name="description"
+      content="Developer portfolio with real projects, their stacks, and their declared limitations."
+    />
+    <script>
+      /*
+       * Dark is the only theme (research D12). `data-theme="dark"` above is
+       * static, nothing resolves it. This blocking script now exists only to
+       * apply a stored locale before first paint, same reasoning as before:
+       * anything inside React runs after, and that would be the flash.
+       */
+      ;(function () {
+        try {
+          var locale = localStorage.getItem('h0wzy.locale')
+          if (locale === 'en' || locale === 'pt') document.documentElement.lang = locale
+        } catch (e) {
+          /* Private mode blocks storage; the lang attribute already stands. */
+        }
+      })()
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

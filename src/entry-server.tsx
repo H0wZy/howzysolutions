@@ -1,19 +1,15 @@
+import { renderToString } from 'react-dom/server'
+import App from './App'
+import { Legal } from './pages/Legal'
+import { Showcase } from './pages/Showcase'
+import { LiveShowcase } from './pages/LiveShowcase'
 import { content, privacy, terms } from './content'
 import { vvvShowcase } from './content/showcase-vvv'
 import { vvvLive } from './content/showcase-vvv-live'
 import { LOCALES, type Locale } from './content/i18n/types'
 import { translate } from './content/i18n/translate'
 import { workPage } from './content/types'
-import { locationFor, pathFor, type Route } from './route'
-
-/**
- * What the site knows about its own routes, with no rendering in it: the list of
- * documents, their locale twins and their metadata. The Next app builds its
- * static params, its metadata and its sitemap from this, and the tests assert
- * against it. It was the top half of src/entry-server.tsx under the Vite build.
- */
-
-export const ORIGIN = 'https://howzysolutions.com'
+import { isStaticDocument, locationFor, pathFor, type Route } from './route'
 
 /** The two legal records, keyed by the route page that renders each index. */
 const LEGAL = { privacy, terms } as const
@@ -27,7 +23,6 @@ export function routes(): Array<{ pathname: string; locale: Locale }> {
   const { total } = workPage(content.projects, 1)
   const pages: Route[] = [
     { page: 'home' },
-    { page: 'services' },
     { page: 'cv' },
     { page: 'privacy' },
     { page: 'terms' },
@@ -74,13 +69,6 @@ export function metaFor(pathname: string): PageMeta {
     return {
       title: `${project.name} · ${content.profile.name}`,
       description: project.summary[locale],
-      ...social,
-    }
-  }
-  if (route.page === 'services') {
-    return {
-      title: `${translate(locale, 'services.meta.title')} · ${content.profile.name}`,
-      description: translate(locale, 'services.lead'),
       ...social,
     }
   }
@@ -154,15 +142,46 @@ export function metaFor(pathname: string): PageMeta {
   }
   return {
     title: `${content.profile.name} · ${translate(locale, 'hero.role')}`,
-    description: translate(locale, 'home.hero.lede'),
+    description: content.profile.tagline[locale],
     ...social,
   }
 }
 
-/** The params of the catch-all segment: absent for `/`, one entry per path part. */
-export type PathParams = { path?: string[] }
-
-/** `['pt', 'works', 'vvv']` back to `/pt/works/vvv/`: every document's path ends in a slash. */
-export function pathnameOf(path?: string[]): string {
-  return path && path.length > 0 ? `/${path.join('/')}/` : '/'
+/*
+ * `renderToString`, not `renderToStaticMarkup`. Static markup is for HTML that
+ * will never be hydrated: it strips the boundary comments hydrateRoot uses to
+ * line the tree up, so hydrating it is how a page double-renders without ever
+ * logging a mismatch. The client hydrates now (src/main.tsx), so this pass has
+ * to emit markup that hydration can attach to.
+ */
+export function render(pathname: string): string {
+  const { route, locale } = locationFor(pathname)
+  /*
+   * The static documents render here rather than inside App, and nothing on
+   * the client imports them (src/main.tsx does not hydrate these routes). They
+   * are prose with no handler on them, so shipping their components and records
+   * in the entry chunk would buy nothing and cost kilobytes against a budget
+   * with none to spare. Dispatched through `isStaticDocument`, the same test
+   * the client uses, so the two cannot disagree about which pages are static.
+   */
+  if (isStaticDocument(route)) {
+    return renderToString(
+      route.page === 'vvv' ? (
+        <Showcase showcase={vvvShowcase} content={content} locale={locale} pathname={pathname} />
+      ) : route.page === 'vvvLive' ? (
+        <LiveShowcase locale={locale} pathname={pathname} />
+      ) : (
+        <Legal
+          content={content}
+          kind={route.page === 'legalApp' ? route.doc : route.page}
+          appId={route.page === 'legalApp' ? route.id : undefined}
+          locale={locale}
+          pathname={pathname}
+        />
+      ),
+    )
+  }
+  return renderToString(<App pathname={pathname} />)
 }
+
+export { LOCALES, isStaticDocument, locationFor }

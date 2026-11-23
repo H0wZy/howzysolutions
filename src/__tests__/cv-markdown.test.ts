@@ -8,9 +8,6 @@ const ptMdPath = join(root, 'public', 'cv.md', 'ptbr')
 const enPdfPath = join(root, 'public', 'cv.pdf', 'eng')
 const ptPdfPath = join(root, 'public', 'cv.pdf', 'ptbr')
 
-// A Windows checkout (autocrlf) turns the committed LF files into CRLF.
-const read = (path: string) => readFileSync(path, 'utf8').replaceAll('\r\n', '\n')
-
 describe('Static CV Markdown and PDF Generation', () => {
   it('generates public/cv.md/{eng,ptbr} and public/cv.pdf/{eng,ptbr}', () => {
     expect(existsSync(enMdPath)).toBe(true)
@@ -20,7 +17,7 @@ describe('Static CV Markdown and PDF Generation', () => {
   })
 
   it('includes valid YAML frontmatter in English', () => {
-    const content = read(enMdPath)
+    const content = readFileSync(enMdPath, 'utf8')
     expect(content.startsWith('---\n')).toBe(true)
     expect(content).toContain('title: Marcos Junior Bueno Selzler - Curriculum Vitae')
     expect(content).toContain('canonical: https://howzysolutions.com/cv')
@@ -30,7 +27,7 @@ describe('Static CV Markdown and PDF Generation', () => {
   })
 
   it('includes valid YAML frontmatter in Portuguese', () => {
-    const content = read(ptMdPath)
+    const content = readFileSync(ptMdPath, 'utf8')
     expect(content.startsWith('---\n')).toBe(true)
     expect(content).toContain('title: Marcos Junior Bueno Selzler - Curriculo')
     expect(content).toContain('canonical: https://howzysolutions.com/pt/cv')
@@ -39,8 +36,8 @@ describe('Static CV Markdown and PDF Generation', () => {
   })
 
   it('contains essential sections in both languages', () => {
-    const enContent = read(enMdPath)
-    const ptContent = read(ptMdPath)
+    const enContent = readFileSync(enMdPath, 'utf8')
+    const ptContent = readFileSync(ptMdPath, 'utf8')
 
     expect(enContent).toContain('## Professional Experience')
     expect(enContent).toContain('## Skills')

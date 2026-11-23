@@ -1,5 +1,3 @@
-'use client'
-
 import { useState, type CSSProperties, type ReactNode } from 'react'
 import type { Locale } from '../content/i18n/types'
 import type { ContentBundle } from '../content/types'

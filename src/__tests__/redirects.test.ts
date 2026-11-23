@@ -47,20 +47,6 @@ describe("the app's old URLs", () => {
   })
 })
 
-/**
- * /services/ is the one URL for the services page in both locales. The
- * Portuguese word 301s to it, so a link typed or shared that way still lands.
- */
-describe('the Portuguese /servicos link', () => {
-  it.each(LOCALES)('%s: 301s to the services route', (locale) => {
-    const target = pathFor({ page: 'services' }, locale)
-    const old = locale === 'en' ? '/servicos/' : `/${locale}/servicos/`
-    for (const from of [old, old.slice(0, -1)]) {
-      expect(rules, from).toContainEqual([from, target, '301'])
-    }
-  })
-})
-
 describe('the old /work/ links', () => {
   it.each(LOCALES)('%s: 301s to the works route', (locale) => {
     const target = pathFor({ page: 'workIndex', number: 1 }, locale)

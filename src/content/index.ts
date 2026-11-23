@@ -9,7 +9,7 @@ import { terms } from './terms'
 
 /*
  * The legal documents are deliberately NOT in here. They are prerendered by
- * src/views/Document.tsx and are server components, never hydrated, so putting them in
+ * src/entry-server.tsx and never hydrated (src/main.tsx), so putting them in
  * this object would ship two static prose pages to every visitor of every
  * other page, as JavaScript, for nothing. They are still exported below, for
  * the server render and for the tests.
